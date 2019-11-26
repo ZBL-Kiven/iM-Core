@@ -1,6 +1,5 @@
-package com.zj.im.net.helper;
+package com.zj.imcore.options;
 
-import com.zj.im.utils.log.NetRecordUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,7 +32,6 @@ public class TcpMessageUtility {
     }
 
     public static Map<String, Object> unpackMsg(byte[] rawMsg) throws IOException {
-        NetRecordUtils.recordLastModifyReceiveData(rawMsg.length);
         ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
         TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {
         };
@@ -51,7 +49,6 @@ public class TcpMessageUtility {
         byte[] head = convertMsgSizeToBytes(len);
         System.arraycopy(head, 0, pack, 0, MSG_HEAD_LENGTH);
         System.arraycopy(packedData, 0, pack, MSG_HEAD_LENGTH, len);
-        NetRecordUtils.recordLastModifySendData(pack.length);
         return pack;
     }
 }

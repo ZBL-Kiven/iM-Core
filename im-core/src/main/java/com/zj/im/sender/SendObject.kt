@@ -74,12 +74,12 @@ class SendObject private constructor(private val callId: String) {
         fun resend(onSendBefore: OnSendBefore? = null) {
             sendObject.onSendBefore = onSendBefore
             sendObject.isResend = true
-            ChatBase.options?.sendToSocket(sendObject)
+            ChatBase.sendToSocket(sendObject)
         }
 
         fun send(onSendBefore: OnSendBefore? = null) {
             sendObject.onSendBefore = onSendBefore
-            ChatBase.options?.sendToSocket(sendObject)
+            ChatBase.sendToSocket(sendObject)
         }
     }
 

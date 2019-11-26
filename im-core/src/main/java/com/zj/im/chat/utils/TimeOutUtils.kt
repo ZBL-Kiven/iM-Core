@@ -2,8 +2,10 @@ package com.zj.im.chat.utils
 
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.chat.core.DataStore
+import com.zj.im.chat.hub.StatusHub.isNetWorkAccess
+import com.zj.im.chat.hub.StatusHub.isRunning
+import com.zj.im.chat.hub.StatusHub.isTcpConnected
 import com.zj.im.chat.interfaces.BaseMsgInfo
-import com.zj.im.main.ChatBase
 import com.zj.im.utils.runSync
 import java.lang.Exception
 import java.util.*
@@ -30,8 +32,12 @@ internal object TimeOutUtils {
             timer?.schedule(DataTask(), 0, 1000)
         } else {
             if (resetTimerTask) {
-                timer = null
-                init()
+                try {
+                    timer?.cancel()
+                    timer = null
+                } finally {
+                    init()
+                }
             }
         }
     }
@@ -45,15 +51,11 @@ internal object TimeOutUtils {
         }
     }
 
-    fun putASentMessage(
-        callId: String,
-        params: Map<String, Any>,
-        timeOut: Long,
-        isResend: Boolean,
-        isIgnoreConnecting: Boolean = false
-    ) {
-        if (resetTimerTask) init()
-        sentMessages.runSync { it[callId] = SentMsgInfo(params, callId, timeOut, isResend, isIgnoreConnecting) }
+    fun putASentMessage(callId: String, params: Map<String, Any>, timeOut: Long, isResend: Boolean, isIgnoreConnecting: Boolean = false) {
+        sentMessages.runSync {
+            it[callId] = SentMsgInfo(params, callId, timeOut, isResend, isIgnoreConnecting)
+            if (resetTimerTask) init()
+        }
     }
 
     private class DataTask : TimerTask() {
@@ -61,7 +63,7 @@ internal object TimeOutUtils {
             sentMessages.runSync {
                 val rev = arrayListOf<String>()
                 it.forEach { (k, v) ->
-                    if (v.isIgnoreConnecting || (ChatBase.options?.isRunning() == true && (ChatBase.isNetWorkAccess && ChatBase.isTcpConnected))) {
+                    if (v.isIgnoreConnecting || (isRunning() && (isNetWorkAccess && isTcpConnected))) {
                         if (System.currentTimeMillis() - v.putTime >= v.timeOut) {
                             rev.add(k)
                         }
@@ -69,14 +71,7 @@ internal object TimeOutUtils {
                 }
                 if (rev.isNotEmpty()) rev.forEach { t ->
                     it.remove(t)?.let { value ->
-                        DataStore.put(
-                            BaseMsgInfo.sendingStateChange(
-                                SendMsgState.TIME_OUT,
-                                value.callId,
-                                value.params,
-                                value.isResend
-                            )
-                        )
+                        DataStore.put(BaseMsgInfo.sendingStateChange(SendMsgState.TIME_OUT, value.callId, value.params, value.isResend))
                     }
                 }
                 rev.clear()
@@ -93,12 +88,5 @@ internal object TimeOutUtils {
     }
 
 
-    private class SentMsgInfo(
-        val params: Map<String, Any>,
-        val callId: String,
-        val timeOut: Long,
-        val isResend: Boolean,
-        val isIgnoreConnecting: Boolean,
-        var putTime: Long = System.currentTimeMillis()
-    )
+    private class SentMsgInfo(val params: Map<String, Any>, val callId: String, val timeOut: Long, val isResend: Boolean, val isIgnoreConnecting: Boolean, var putTime: Long = System.currentTimeMillis())
 }

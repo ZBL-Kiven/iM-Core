@@ -1,11 +1,8 @@
 package com.zj.im.net.socket
 
 import com.zj.im.chat.exceptions.ExceptionHandler
-import com.zj.im.chat.core.DataStore
 import com.zj.im.chat.interfaces.RunningObserver
-import com.zj.im.chat.interfaces.BaseMsgInfo
 import com.zj.im.main.ChatBase
-import com.zj.im.net.helper.TcpMessageUtility
 import java.io.DataInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -52,11 +49,10 @@ internal object ReadSocketThread : RunningObserver() {
         val bufferBody = ByteArray(anInt)
         val dis = DataInputStream(`is`)
         dis.readFully(bufferBody)
-        val unpackMap = TcpMessageUtility.unpackMsg(bufferBody)
-        putReceivedDataFormServer(unpackMap)
+        putReceivedDataFormServer(bufferBody)
     }
 
-    private fun putReceivedDataFormServer(data: Map<String, Any>?) {
-        DataStore.put(BaseMsgInfo.receiveMsg(data))
+    private fun putReceivedDataFormServer(data: ByteArray) {
+        ChatBase.getServer("message received")?.receivedMessage(data)
     }
 }

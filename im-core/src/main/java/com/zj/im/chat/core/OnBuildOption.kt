@@ -1,13 +1,15 @@
+@file:Suppress("unused")
+
 package com.zj.im.chat.core
 
 import com.zj.im.chat.exceptions.ChatException
-import com.zj.im.chat.hub.MessageHubClient
-import com.zj.im.chat.hub.MessageHubServer
+import com.zj.im.chat.hub.ClientHub
+import com.zj.im.chat.hub.ServerHub
 
 /**
- * @property getClient return your custom client for sdk {@see MessageHubClient}
+ * @property getClient return your custom client for sdk {@see ClientHub}
  *
- * @property getServer return your custom server for sdk {@see MessageHubServer}
+ * @property getServer return your custom server for sdk {@see ServerHub}
  *
  * @property onError handler the sdk errors with runtime
  *
@@ -18,11 +20,11 @@ import com.zj.im.chat.hub.MessageHubServer
  * @property onLayerChanged it called when SDK was changed form foreground / background
  * */
 
-abstract class OnBuildOption<OUT : Any> {
+abstract class OnBuildOption {
 
-    abstract fun getClient(): MessageHubClient<OUT>
+    abstract fun getClient(): ClientHub
 
-    abstract fun getServer(): MessageHubServer
+    abstract fun getServer(): ServerHub
 
     abstract fun onError(e: ChatException)
 

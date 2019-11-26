@@ -1,6 +1,7 @@
 package com.zj.im.chat.interfaces
 
-import com.zj.im.main.ChatBase
+import com.zj.im.chat.hub.StatusHub.isNetWorkAccess
+import com.zj.im.chat.hub.StatusHub.isTcpConnected
 
 /**
  * Created by ZJJ
@@ -10,7 +11,7 @@ internal abstract class RunningObserver {
 
     protected abstract fun run(runningKey: String)
 
-    val isStopHandleMsg: Boolean; get() = !(ChatBase.isNetWorkAccess && ChatBase.isTcpConnected)
+    val isStopHandleMsg: Boolean; get() = !(isNetWorkAccess && isTcpConnected)
 
     open fun getTotal(): Int {
         return 0

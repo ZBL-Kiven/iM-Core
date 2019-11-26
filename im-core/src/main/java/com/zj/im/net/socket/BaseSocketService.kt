@@ -7,14 +7,11 @@ import android.os.Binder
 import android.os.IBinder
 import com.zj.im.chat.exceptions.ExceptionHandler
 import com.zj.im.chat.exceptions.NecessaryAttributeEmptyException
-import com.zj.im.chat.hub.MessageHubServer
+import com.zj.im.chat.hub.ServerHub
 import com.zj.im.chat.interfaces.ConnectCallBack
-import com.zj.im.chat.interfaces.HeartBeatsCallBack
-import com.zj.im.chat.interfaces.SendReplyCallBack
 import com.zj.im.main.ChatBase
 import com.zj.im.net.tasks.ConnectionTask
 import com.zj.im.net.tasks.SendMessageTask
-import com.zj.im.sender.SendObject
 import java.lang.NullPointerException
 import java.lang.ref.WeakReference
 import java.net.Socket
@@ -40,7 +37,7 @@ open class BaseSocketService : Service() {
 
     protected open var isShutdown = false
 
-    open fun initServer(getClient: () -> MessageHubServer) {
+    open fun initServer(getClient: () -> ServerHub) {
 
     }
 
@@ -53,7 +50,7 @@ open class BaseSocketService : Service() {
      */
     open fun connect(address: String?, port: Int?, socketTimeOut: Int?, callBack: ConnectCallBack?) {
         closeSocket()
-        synchronized(executorService) {
+        synchronized(this) {
             var throwable: Throwable?
             try {
                 socket = Socket()
@@ -61,8 +58,7 @@ open class BaseSocketService : Service() {
                 throwable = connectFuture.get()
                 if (throwable == null && socket != null && socket?.isConnected == true) {
                     ReadSocketThread.getSocket = setSocketToReadThread
-                } else
-                    throwable = NetworkErrorException("Socket is already closed")
+                } else throwable = NetworkErrorException("Socket is already closed")
             } catch (e: Exception) {
                 throwable = e
             }
@@ -71,31 +67,17 @@ open class BaseSocketService : Service() {
     }
 
     /**
-     * request heartbeats
-     *
      * @param params the params
      */
-    open fun onHeartBeatsRequest(params: Map<String, Any>?, callBack: HeartBeatsCallBack?) {
-        synchronized(executorService) {
-            val throwable = send(params)
-            callBack?.heartBeats(throwable == null, throwable)
-        }
-    }
-
-    /**
-     * request to send a msg to socket
-     *
-     * @param sendObject   the params
-     * @param callBack the callback with sent
-     */
-    open fun sendToSocket(sendObject: SendObject, callBack: SendReplyCallBack?) {
+    open fun sendToSocket(params: ByteArray, callBack: (Boolean, throwable: Throwable?) -> Unit) {
         synchronized(this) {
-            val throwable = send(sendObject.getParams())
-            callBack?.onReply(throwable == null, sendObject, throwable)
+            val throwable = send(params)
+            callBack(throwable == null, throwable)
         }
     }
 
-    private fun send(params: Map<String, Any>?): Throwable? {
+
+    private fun send(params: ByteArray): Throwable? {
         var throwable: Throwable? = null
         try {
             if (socket == null) throwable = NullPointerException("Socket is null or closed")
@@ -103,8 +85,7 @@ open class BaseSocketService : Service() {
                 if (!it.isClosed) {
                     val result: Future<Throwable>? = executorService.submit(SendMessageTask(WeakReference(socket), params))
                     throwable = result?.get()
-                } else
-                    throwable = NetworkErrorException("Socket is already closed")
+                } else throwable = NetworkErrorException("Socket is already closed")
             }
         } catch (e: Exception) {
             throwable = e

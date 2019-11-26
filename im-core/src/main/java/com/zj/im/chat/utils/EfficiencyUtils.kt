@@ -2,6 +2,7 @@ package com.zj.im.chat.utils
 
 import com.zj.im.chat.core.DataStore
 import com.zj.im.chat.enums.RuntimeEfficiency
+import com.zj.im.chat.hub.StatusHub.isRunningInBackground
 import com.zj.im.main.ChatBase
 import com.zj.im.sender.SendingPool
 
@@ -27,26 +28,26 @@ internal object EfficiencyUtils {
 
     fun checkEfficiency() {
         val total = DataStore.getTotal() + SendingPool.getTotal()
-        if (ChatBase.isRunningInBackground) {
+        if (isRunningInBackground) {
             when (total) {
                 in 0..level_SLEEP -> {
-                    ChatBase.options?.setFrequency(RuntimeEfficiency.SLEEP)
+                    ChatBase.setFrequency(RuntimeEfficiency.SLEEP)
                 }
                 in level_SLEEP..level_LOW -> {
-                    ChatBase.options?.setFrequency(RuntimeEfficiency.LOW)
+                    ChatBase.setFrequency(RuntimeEfficiency.LOW)
                 }
-                else -> ChatBase.options?.setFrequency(RuntimeEfficiency.OVERCLOCK)
+                else -> ChatBase.setFrequency(RuntimeEfficiency.OVERCLOCK)
             }
         } else {
             when (total) {
                 in 0..level_MEDIUM -> {
-                    ChatBase.options?.setFrequency(RuntimeEfficiency.MEDIUM)
+                    ChatBase.setFrequency(RuntimeEfficiency.MEDIUM)
                 }
                 in level_MEDIUM..level_HIGH -> {
-                    ChatBase.options?.setFrequency(RuntimeEfficiency.HIGH)
+                    ChatBase.setFrequency(RuntimeEfficiency.HIGH)
                 }
                 else -> {
-                    ChatBase.options?.setFrequency(RuntimeEfficiency.OVERCLOCK)
+                    ChatBase.setFrequency(RuntimeEfficiency.OVERCLOCK)
                 }
             }
         }

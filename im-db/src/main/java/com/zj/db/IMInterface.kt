@@ -26,7 +26,7 @@ import com.zj.im.utils.runSync
  * you can call pause/resume to modify the messagePool`s running state.
  * */
 
-abstract class IMInterface<OUT : Any> {
+abstract class IMInterface {
 
     val isRunningInBackground: Boolean
         get() = ChatBase.isRunningInBackground

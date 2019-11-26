@@ -1,7 +1,8 @@
 package com.zj.im.utils.log
 
 import com.zj.im.BuildConfig
-import com.zj.im.chat.utils.MainLooper
+import com.zj.im.chat.interfaces.MessageInterface
+import com.zj.im.main.ChatBase
 import com.zj.im.utils.full
 import com.zj.im.utils.log.logger.DataUtils
 import com.zj.im.utils.log.logger.LogCollectionUtils
@@ -27,17 +28,6 @@ internal object NetRecordUtils : LogCollectionUtils.Config() {
     override val debugEnable: () -> Boolean
         get() = { BuildConfig.DEBUG }
 
-    private val changedListeners = mutableMapOf<String, TCPNetRecordChangedListener>()
-
-    @JvmStatic
-    fun addRecordListener(name: String, tc: TCPNetRecordChangedListener) {
-        changedListeners[name] = tc
-    }
-
-    @JvmStatic
-    fun removeRecordListener(name: String) {
-        changedListeners.remove(name)
-    }
 
     private var accessAble = false
 
@@ -118,12 +108,8 @@ internal object NetRecordUtils : LogCollectionUtils.Config() {
         if (info != netWorkRecordInfo) netWorkRecordInfo = info
         info.lastModifyTime = full()
         val recordString = DataUtils.toString(info)
-        changedListeners.forEach { (_, v) ->
-            MainLooper.post {
-                v.onChanged(info)
-            }
-        }
         write(recordString, false)
+        ChatBase.onRecordChange(info)
     }
 
     private fun getNetRecordInfo(): NetWorkRecordInfo? {

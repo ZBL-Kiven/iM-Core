@@ -1,11 +1,9 @@
-package com.zj.im.chat.event
+package com.zj.im.chat.hub
 
 import com.zj.im.chat.utils.netUtils.NetWorkInfo
 import com.zj.im.chat.core.DataStore
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.chat.enums.SocketState
-import com.zj.im.chat.hub.MessageHubClient
-import com.zj.im.chat.hub.MessageHubServer
 import com.zj.im.chat.interfaces.BaseMsgInfo
 import com.zj.im.chat.interfaces.ConnectCallBack
 import com.zj.im.chat.interfaces.HeartBeatsCallBack
@@ -23,7 +21,7 @@ import com.zj.im.utils.log.logger.e
  *
  * any message must be handle form here
  */
-internal object MsgEventHub {
+internal object EventHub {
 
     fun put(data: BaseMsgInfo) {
         when (data.type) {
@@ -94,10 +92,7 @@ internal object MsgEventHub {
             })
         } else {
             getClient("heartbeats")?.nextHeartBeats()
-            e(
-                "MessageHubClient.startHeartBeats",
-                "heart-beats was not work on this time with null params"
-            )
+            e("ClientHub.startHeartBeats", "heart-beats was not work on this time with null params")
         }
     }
 
@@ -118,11 +113,11 @@ internal object MsgEventHub {
     }
 
 
-    private fun getServer(where: String): MessageHubServer? {
-        return ChatBase.options?.getServer(where)
+    private fun getServer(where: String): ServerHub? {
+        return ChatBase.getServer(where)
     }
 
-    private fun getClient(where: String): MessageHubClient<*>? {
-        return ChatBase.options?.getClient(where)
+    private fun getClient(where: String): ClientHub? {
+        return ChatBase.getClient(where)
     }
 }

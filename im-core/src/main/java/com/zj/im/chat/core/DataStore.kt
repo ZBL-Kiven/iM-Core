@@ -2,7 +2,7 @@
 
 package com.zj.im.chat.core
 
-import com.zj.im.chat.event.MsgEventHub
+import com.zj.im.chat.hub.EventHub
 import com.zj.im.chat.exceptions.ExceptionHandler
 import com.zj.im.chat.interfaces.BaseMsgInfo
 import com.zj.im.chat.interfaces.RunningObserver
@@ -32,7 +32,7 @@ internal object DataStore : RunningObserver() {
         runSync {
             if (!ChatBase.isFinishing(runningKey)) {
                 val info = pop()
-                if (info != null) MsgEventHub.put(info)
+                if (info != null) EventHub.put(info)
             }
         }
     }

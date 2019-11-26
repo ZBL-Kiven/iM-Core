@@ -4,6 +4,8 @@ import android.accounts.NetworkErrorException
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.chat.exceptions.ExceptionHandler
 import com.zj.im.chat.core.DataStore
+import com.zj.im.chat.hub.StatusHub.isNetWorkAccess
+import com.zj.im.chat.hub.StatusHub.isTcpConnected
 import com.zj.im.chat.interfaces.BaseMsgInfo
 import com.zj.im.chat.interfaces.SendReplyCallBack
 import com.zj.im.chat.utils.TimeOutUtils
@@ -29,11 +31,11 @@ internal object SendExecutors {
                 else -> {
                     NetRecordUtils.recordSendCount()
                     TimeOutUtils.putASentMessage(sendObject.getCallId(), sendObject.getParams(), sendObject.getTimeOut(), sendObject.isResend())
-                    ChatBase.options?.getServer("SendExecutors.send")?.sendToSocket(sendObject, object : SendReplyCallBack {
+                    ChatBase.getServer("SendExecutors.send")?.sendToSocket(sendObject, object : SendReplyCallBack {
                         override fun onReply(isSuccess: Boolean, sendObject: SendObject, e: Throwable?) {
                             try {
                                 if (!isSuccess) {
-                                    if (!(ChatBase.isNetWorkAccess && ChatBase.isTcpConnected)) {
+                                    if (!(isNetWorkAccess && isTcpConnected)) {
                                         TimeOutUtils.remove(sendObject.getCallId())
                                         DataStore.put(BaseMsgInfo.sendMsg(sendObject))
                                         return

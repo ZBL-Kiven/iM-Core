@@ -81,7 +81,7 @@ internal object SendingPool : RunningObserver() {
     private fun checkAndPop(isCancel: Boolean): Boolean {
         if (!isCancel) return true
         try {
-            return ChatBase.options?.buildOption?.checkNetWorkIsWorking() ?: true
+            return ChatBase.checkNetWorkIsWorking() ?: true
         } catch (ignored: Exception) {
             ExceptionHandler.postError(ignored)
         }
