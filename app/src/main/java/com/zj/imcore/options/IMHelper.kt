@@ -8,33 +8,30 @@ import com.zj.im.chat.hub.ClientHub
 import com.zj.im.chat.hub.ServerHub
 import com.zj.im.chat.interfaces.AnalyzingData
 import com.zj.im.chat.interfaces.IMInterface
+import com.zj.im.main.UIHelper
 
 object IMHelper : IMInterface() {
 
     fun init(app: Application) {
-        val option = BaseOption.create(app).logsCollectionAble { true }
-            .logsFileName("IM")
-            .logsFileName("aa")
-            .setLogsMaxRetain(3L*24*60*60*1000)
-            .build(object : OnBuildOption() {
-            override fun getClient(): ClientHub {
-                return IMClient()
-            }
+        val option = BaseOption.create(app).logsCollectionAble { true }.logsFileName("IM").logsFileName("aa").setLogsMaxRetain(3L * 24 * 60 * 60 * 1000).build(object : OnBuildOption() {
+                override fun getClient(): ClientHub {
+                    return IMClient()
+                }
 
-            override fun getServer(): ServerHub {
-                return IMServer()
-            }
+                override fun getServer(): ServerHub {
+                    return IMServer()
+                }
 
-            override fun onError(e: ChatException) {
+                override fun onError(e: ChatException) {
 
-            }
+                }
 
-        })
+            })
         initChat(option)
     }
 
     override fun onMsgPatch(data: AnalyzingData, onFinish: () -> Unit) {
-        println(" ----- ${data.getData()}")
+        UIHelper.postReceiveData(data)
         onFinish()
     }
 
