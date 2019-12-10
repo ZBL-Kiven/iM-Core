@@ -93,10 +93,12 @@ class ReceiveListener<IN, OUT : Any> constructor(private val name: String, priva
                 return
             }
             uiMaker?.let { maker ->
-                cast<Any, List<IN>>(data)?.let {
-                    maker.pushAll(it)
-                } ?: cast<Any, IN>(data)?.let {
-                    maker.push(it)
+                synchronized(maker) {
+                    cast<Any, List<IN>>(data)?.let {
+                        maker.pushAll(it)
+                    } ?: cast<Any, IN>(data)?.let {
+                        maker.push(it)
+                    }
                 }
             } ?: com.zj.im.log("the data may abandoned by a null ui-maker")
         }

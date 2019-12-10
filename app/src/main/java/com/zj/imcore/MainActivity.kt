@@ -10,8 +10,9 @@ import com.zj.imcore.options.IMClient
 import com.zj.imcore.options.IMClient.Companion.TCP_TIME_OUT
 import com.zj.imcore.options.IMHelper
 import com.zj.imcore.renderer.TestHandler
+import com.zj.imcore.mod.MsgInfo
+import com.zj.imcore.mod.MsgReceivedInfo
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,30 +33,38 @@ class MainActivity : AppCompatActivity() {
             main_status?.text = it.name
         }
 
-        val l = this.registerMsgReceivedListener<Int, String>("aaa").addHandler(TestHandler()).subscribe(object : DataListener<String>() {
-                override fun onReceived(data: String) {
-                    main_msgBar?.append("$data\n")
-                }
-            })
+        val l = this.registerMsgReceivedListener<MsgReceivedInfo, MsgInfo>("aaa").addHandler(TestHandler()).subscribe(object : DataListener<MsgInfo>() {
+            override fun onReceived(data: MsgInfo) {
+                main_rv_msgBar.adapter.data().add("aa", data)
+                main_rv_msgBar.stopScroll()
+                val p = main_rv_msgBar.adapter.data().maxCurDataPosition()
+                main_rv_msgBar.smoothScrollToPosition(p)
+            }
+        })
         l.lock(false)
     }
 
     private fun initView() {
+        main_rv_msgBar?.itemAnimator = null
         sendMsg?.setOnClickListener {
             val callId = IMClient.getRandomCallId()
             val vid = "=bvwBLyAvD"
             val timeOut = TCP_TIME_OUT
             val text = et?.text.toString()
-            SendObject.create(callId).put("type", "message").put("vchannel_id", vid).put("text", text).put("subtype", "normal").putAll(makeSentParams(callId)).timeOut(timeOut).build().send()
+            @Suppress("SpellCheckingInspection") SendObject.create(callId).put("type", "message").put("vchannel_id", vid).put("text", text).put("subtype", "normal").putAll(makeSentParams(callId)).timeOut(timeOut).build().send()
         }
         receiveMock?.setOnClickListener {
-            mutableListOf<Int>().apply {
-                val r = Random()
-                for (i in 0..10000) {
-                    add(r.nextInt(100000))
+            receiveMock?.isEnabled = false
+            mutableListOf<MsgReceivedInfo>().let {
+                val r = java.util.Random()
+                for (i in 0 until 10) {
+                    val msg = MsgInfo()
+                    msg.data = "this is data $i "
+                    it.add(MsgReceivedInfo(msg, r.nextBoolean(), System.currentTimeMillis() + i))
                 }
-                UIHelper.postReceiveData(this)
+                UIHelper.postReceiveData(it)
             }
+            receiveMock?.isEnabled = true
         }
     }
 

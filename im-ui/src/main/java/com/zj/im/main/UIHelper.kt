@@ -15,11 +15,19 @@ object UIHelper {
         }
 
     internal fun registerReceivedListener(name: String, l: ReceiveListener<*, *>) {
-        listeners?.put(name, l)
+        listeners?.let {
+            synchronized(it) {
+                it.put(name, l)
+            }
+        }
     }
 
     internal fun unRegisterReceivedListener(name: String) {
-        listeners?.remove(name)?.onDestroy()
+        listeners?.let {
+            synchronized(it) {
+                it.remove(name)?.onDestroy()
+            }
+        }
     }
 
     /**
@@ -29,8 +37,12 @@ object UIHelper {
      *
      * */
     fun postReceiveData(data: Any?) {
-        listeners?.forEach { (_, v) ->
-            v.postData(data)
+        listeners?.let {
+            synchronized(it) {
+                it.forEach { (_, v) ->
+                    v.postData(data)
+                }
+            }
         }
     }
 }

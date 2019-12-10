@@ -26,7 +26,7 @@ internal class UIStore<DATA, R, HANDLER : DataHandler<R>>(private val msgHandler
 
     fun put(data: DATA): Boolean {
         return uiQueue?.with {
-            if (it.offer(data)) {
+            if (it.offer(data) && !isDataHanding) {
                 notifyDataSetChanged()
                 true
             } else false
@@ -35,10 +35,12 @@ internal class UIStore<DATA, R, HANDLER : DataHandler<R>>(private val msgHandler
 
     fun putAll(data: Collection<DATA>): Boolean {
         return uiQueue?.with {
-            if (it.addAll(data)) {
-                notifyDataSetChanged()
-                return@with true
-            } else false
+            data.forEach {
+                if (!put(it)) {
+                    return@with false
+                }
+            }
+            true
         } ?: false
     }
 
