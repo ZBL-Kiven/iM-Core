@@ -1,4 +1,4 @@
-package com.zj.im.list.items;
+package com.zj.im.list.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -17,12 +17,12 @@ import com.zj.im.R;
 public class BubbleLayout extends FrameLayout {
     private Paint mPaint;
     private Path mPath;
-    private Look mLook;
-    private int mBubblePadding;
+    private Look look;
+    private int bubblePadding;
     private int mWidth, mHeight;
-    private int mLookPosition, mLookWidth, mLookLength;
-    private int mShadowColor, mShadowRadius, mShadowX, mShadowY;
-    private int mBubbleRadius, mBubbleColor;
+    private int lookPosition, lookWidth, lookLength;
+    private int shadowColor, shadowRadius, shadowX, shadowY;
+    private int bubbleRadius, bubbleColor;
     private Region mRegion = new Region();
 
     /**
@@ -78,19 +78,19 @@ public class BubbleLayout extends FrameLayout {
     }
 
     public void initPadding() {
-        int p = mBubblePadding * 2;
-        switch (mLook) {
+        int p = bubblePadding * 2;
+        switch (look) {
             case BOTTOM:
-                setPadding(p, p, p, mLookLength + p);
+                setPadding(p, p, p, lookLength + p);
                 break;
             case TOP:
-                setPadding(p, p + mLookLength, p, p);
+                setPadding(p, p + lookLength, p, p);
                 break;
             case LEFT:
-                setPadding(p + mLookLength, p, p, p);
+                setPadding(p + lookLength, p, p, p);
                 break;
             case RIGHT:
-                setPadding(p, p, p + mLookLength, p);
+                setPadding(p, p, p + lookLength, p);
                 break;
         }
     }
@@ -99,17 +99,17 @@ public class BubbleLayout extends FrameLayout {
      * initialization parameters
      */
     private void initAttr(TypedArray a) {
-        mLook = Look.getType(a.getInt(R.styleable.BubbleLayout_lookAt, Look.BOTTOM.value));
-        mLookPosition = a.getDimensionPixelOffset(R.styleable.BubbleLayout_lookPosition, 0);
-        mLookWidth = a.getDimensionPixelOffset(R.styleable.BubbleLayout_lookWidth, dpToPx(getContext(), 17F));
-        mLookLength = a.getDimensionPixelOffset(R.styleable.BubbleLayout_lookLength, dpToPx(getContext(), 17F));
-        mShadowRadius = a.getDimensionPixelOffset(R.styleable.BubbleLayout_shadowRadius, dpToPx(getContext(), 3.3F));
-        mShadowX = a.getDimensionPixelOffset(R.styleable.BubbleLayout_shadowX, dpToPx(getContext(), 1F));
-        mShadowY = a.getDimensionPixelOffset(R.styleable.BubbleLayout_shadowY, dpToPx(getContext(), 1F));
-        mBubbleRadius = a.getDimensionPixelOffset(R.styleable.BubbleLayout_bubbleRadius, dpToPx(getContext(), 7F));
-        mBubblePadding = a.getDimensionPixelOffset(R.styleable.BubbleLayout_bubblePadding, dpToPx(getContext(), 8));
-        mShadowColor = a.getColor(R.styleable.BubbleLayout_shadowColor, Color.GRAY);
-        mBubbleColor = a.getColor(R.styleable.BubbleLayout_bubbleColor, Color.WHITE);
+        look = Look.getType(a.getInt(R.styleable.BubbleLayout_lookAt, Look.BOTTOM.value));
+        lookPosition = a.getDimensionPixelOffset(R.styleable.BubbleLayout_lookPosition, 0);
+        lookWidth = a.getDimensionPixelOffset(R.styleable.BubbleLayout_lookWidth, dpToPx(getContext(), 17F));
+        lookLength = a.getDimensionPixelOffset(R.styleable.BubbleLayout_lookLength, dpToPx(getContext(), 17F));
+        shadowRadius = a.getDimensionPixelOffset(R.styleable.BubbleLayout_shadowRadius, dpToPx(getContext(), 3.3F));
+        shadowX = a.getDimensionPixelOffset(R.styleable.BubbleLayout_shadowX, dpToPx(getContext(), 1F));
+        shadowY = a.getDimensionPixelOffset(R.styleable.BubbleLayout_shadowY, dpToPx(getContext(), 1F));
+        bubbleRadius = a.getDimensionPixelOffset(R.styleable.BubbleLayout_bubbleRadius, dpToPx(getContext(), 7F));
+        bubblePadding = a.getDimensionPixelOffset(R.styleable.BubbleLayout_bubblePadding, dpToPx(getContext(), 8));
+        shadowColor = a.getColor(R.styleable.BubbleLayout_shadowColor, Color.GRAY);
+        bubbleColor = a.getColor(R.styleable.BubbleLayout_bubbleColor, Color.WHITE);
         a.recycle();
     }
 
@@ -134,27 +134,27 @@ public class BubbleLayout extends FrameLayout {
     }
 
     private void initData() {
-        mPaint.setPathEffect(new CornerPathEffect(mBubbleRadius));
-        mPaint.setShadowLayer(mShadowRadius, mShadowX, mShadowY, mShadowColor);
+        mPaint.setPathEffect(new CornerPathEffect(bubbleRadius));
+        mPaint.setShadowLayer(shadowRadius, shadowX, shadowY, shadowColor);
 
-        int mLeft = mBubblePadding + (mLook == Look.LEFT ? mLookLength : 0);
-        int mTop = mBubblePadding + (mLook == Look.TOP ? mLookLength : 0);
-        int mRight = mWidth - mBubblePadding - (mLook == Look.RIGHT ? mLookLength : 0);
-        int mBottom = mHeight - mBubblePadding - (mLook == Look.BOTTOM ? mLookLength : 0);
-        mPaint.setColor(mBubbleColor);
+        int mLeft = bubblePadding + (look == Look.LEFT ? lookLength : 0);
+        int mTop = bubblePadding + (look == Look.TOP ? lookLength : 0);
+        int mRight = mWidth - bubblePadding - (look == Look.RIGHT ? lookLength : 0);
+        int mBottom = mHeight - bubblePadding - (look == Look.BOTTOM ? lookLength : 0);
+        mPaint.setColor(bubbleColor);
 
         mPath.reset();
 
-        int topOffset = (topOffset = mLookPosition) + mLookLength > mBottom ? mBottom - mLookWidth : topOffset;
-        topOffset = topOffset > mBubblePadding ? topOffset : mBubblePadding;
-        int leftOffset = (leftOffset = mLookPosition) + mLookLength > mRight ? mRight - mLookWidth : leftOffset;
-        leftOffset = leftOffset > mBubblePadding ? leftOffset : mBubblePadding;
+        int topOffset = (topOffset = lookPosition) + lookLength > mBottom ? mBottom - lookWidth : topOffset;
+        topOffset = topOffset > bubblePadding ? topOffset : bubblePadding;
+        int leftOffset = (leftOffset = lookPosition) + lookLength > mRight ? mRight - lookWidth : leftOffset;
+        leftOffset = leftOffset > bubblePadding ? leftOffset : bubblePadding;
 
-        switch (mLook) {
+        switch (look) {
             case LEFT:
                 mPath.moveTo(mLeft, topOffset);
-                mPath.rLineTo(-mLookLength, mLookWidth / 2f);
-                mPath.rLineTo(mLookLength, mLookWidth / 2f);
+                mPath.rLineTo(-lookLength, lookWidth / 2f);
+                mPath.rLineTo(lookLength, lookWidth / 2f);
                 mPath.lineTo(mLeft, mBottom);
                 mPath.lineTo(mRight, mBottom);
                 mPath.lineTo(mRight, mTop);
@@ -162,8 +162,8 @@ public class BubbleLayout extends FrameLayout {
                 break;
             case TOP:
                 mPath.moveTo(leftOffset, mTop);
-                mPath.rLineTo(mLookWidth / 2f, -mLookLength);
-                mPath.rLineTo(mLookWidth / 2f, mLookLength);
+                mPath.rLineTo(lookWidth / 2f, -lookLength);
+                mPath.rLineTo(lookWidth / 2f, lookLength);
                 mPath.lineTo(mRight, mTop);
                 mPath.lineTo(mRight, mBottom);
                 mPath.lineTo(mLeft, mBottom);
@@ -171,8 +171,8 @@ public class BubbleLayout extends FrameLayout {
                 break;
             case RIGHT:
                 mPath.moveTo(mRight, topOffset);
-                mPath.rLineTo(mLookLength, mLookWidth / 2f);
-                mPath.rLineTo(-mLookLength, mLookWidth / 2f);
+                mPath.rLineTo(lookLength, lookWidth / 2f);
+                mPath.rLineTo(-lookLength, lookWidth / 2f);
                 mPath.lineTo(mRight, mBottom);
                 mPath.lineTo(mLeft, mBottom);
                 mPath.lineTo(mLeft, mTop);
@@ -180,8 +180,8 @@ public class BubbleLayout extends FrameLayout {
                 break;
             case BOTTOM:
                 mPath.moveTo(leftOffset, mBottom);
-                mPath.rLineTo(mLookWidth / 2f, mLookLength);
-                mPath.rLineTo(mLookWidth / 2f, -mLookLength);
+                mPath.rLineTo(lookWidth / 2f, lookLength);
+                mPath.rLineTo(lookWidth / 2f, -lookLength);
                 mPath.lineTo(mRight, mBottom);
                 mPath.lineTo(mRight, mTop);
                 mPath.lineTo(mLeft, mTop);
@@ -207,94 +207,94 @@ public class BubbleLayout extends FrameLayout {
     }
 
     public Look getLook() {
-        return mLook;
+        return look;
     }
 
     public int getLookPosition() {
-        return mLookPosition;
+        return lookPosition;
     }
 
     public int getLookWidth() {
-        return mLookWidth;
+        return lookWidth;
     }
 
     public int getLookLength() {
-        return mLookLength;
+        return lookLength;
     }
 
     public int getShadowColor() {
-        return mShadowColor;
+        return shadowColor;
     }
 
     public int getShadowRadius() {
-        return mShadowRadius;
+        return shadowRadius;
     }
 
     public int getShadowX() {
-        return mShadowX;
+        return shadowX;
     }
 
     public int getShadowY() {
-        return mShadowY;
+        return shadowY;
     }
 
     public int getBubbleRadius() {
-        return mBubbleRadius;
+        return bubbleRadius;
     }
 
     public int getBubbleColor() {
-        return mBubbleColor;
+        return bubbleColor;
     }
 
     public int getBubblePadding() {
-        return mBubblePadding;
+        return bubblePadding;
     }
 
-    public void setBubblePadding(int mBubblePadding) {
-        this.mBubblePadding = dpToPx(getContext(), mBubblePadding);
+    public void setBubblePadding(float mBubblePadding) {
+        this.bubblePadding = dpToPx(getContext(), mBubblePadding);
         initPadding();
     }
 
-    public void setBubbleColor(int mBubbleColor) {
-        this.mBubbleColor = mBubbleColor;
+    public void setBubbleColor(int bubbleColor) {
+        this.bubbleColor = bubbleColor;
     }
 
-    public void setLook(Look mLook) {
-        this.mLook = mLook;
+    public void setLook(Look look) {
+        this.look = look;
         initPadding();
     }
 
-    public void setLookPosition(int mLookPosition) {
-        this.mLookPosition = dpToPx(getContext(), mLookPosition);
+    public void setLookPosition(float lookPosition) {
+        this.lookPosition = dpToPx(getContext(), lookPosition);
     }
 
-    public void setLookWidth(int mLookWidth) {
-        this.mLookWidth = dpToPx(getContext(), mLookWidth);
+    public void setLookWidth(float lookWidth) {
+        this.lookWidth = dpToPx(getContext(), lookWidth);
     }
 
-    public void setLookLength(int mLookLength) {
-        this.mLookLength = dpToPx(getContext(), mLookLength);
+    public void setLookLength(float lookLength) {
+        this.lookLength = dpToPx(getContext(), lookLength);
         initPadding();
     }
 
-    public void setShadowColor(int mShadowColor) {
-        this.mShadowColor = mShadowColor;
+    public void setShadowColor(int shadowColor) {
+        this.shadowColor = shadowColor;
     }
 
-    public void setShadowRadius(int mShadowRadius) {
-        this.mShadowRadius = dpToPx(getContext(), mShadowRadius);
+    public void setShadowRadius(float shadowRadius) {
+        this.shadowRadius = dpToPx(getContext(), shadowRadius);
     }
 
-    public void setShadowX(int mShadowX) {
-        this.mShadowX = dpToPx(getContext(), mShadowX);
+    public void setShadowX(float shadowX) {
+        this.shadowX = dpToPx(getContext(), shadowX);
     }
 
-    public void setShadowY(int mShadowY) {
-        this.mShadowY = dpToPx(getContext(), mShadowY);
+    public void setShadowY(float shadowY) {
+        this.shadowY = dpToPx(getContext(), shadowY);
     }
 
-    public void setBubbleRadius(int mBubbleRadius) {
-        this.mBubbleRadius = dpToPx(getContext(), mBubbleRadius);
+    public void setBubbleRadius(float bubbleRadius) {
+        this.bubbleRadius = dpToPx(getContext(), bubbleRadius);
     }
 
     public static int dpToPx(Context context, float dipValue) {

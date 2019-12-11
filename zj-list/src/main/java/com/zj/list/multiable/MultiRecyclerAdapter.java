@@ -11,7 +11,7 @@ import com.zj.list.multiable.holder.MultiHolder;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public abstract class MultiRecyclerAdapter<T extends MultiAbleData<T>> extends RecyclerView.Adapter<MultiHolder> implements AdapterDataSet, OnAdapterInit<T> {
+public abstract class MultiRecyclerAdapter<T extends MultiAbleData<T>> extends RecyclerView.Adapter<MultiHolder> implements AdapterDataSet<T>, OnAdapterInit<T> {
 
     private MultiDataSource<T, MultiRecyclerAdapter<T>> multiDataSource;
 
@@ -37,7 +37,7 @@ public abstract class MultiRecyclerAdapter<T extends MultiAbleData<T>> extends R
 
     @Override
     public final void onBindViewHolder(@NonNull MultiHolder holder, int position, @Nullable List<Object> payloads) {
-        initData(holder.itemView, data().getDataWithPosition(position), payloads);
+        initData(holder.itemView, data().getDataWithPosition(position), position, payloads);
     }
 
     @Override
@@ -77,7 +77,6 @@ public abstract class MultiRecyclerAdapter<T extends MultiAbleData<T>> extends R
         notifyDataSetChanged();
     }
 
-
     @Override
     public void onDataCleared() {
         notifyDataSetChanged();
@@ -89,5 +88,9 @@ public abstract class MultiRecyclerAdapter<T extends MultiAbleData<T>> extends R
         if (end < count) {
             notifyItemRangeChanged(end, count);
         }
+    }
+
+    public void clear() {
+        multiDataSource.clearAll();
     }
 }

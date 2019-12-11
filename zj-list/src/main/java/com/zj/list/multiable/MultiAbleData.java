@@ -15,4 +15,5 @@ public interface MultiAbleData<T> extends Comparable<T> {
      * default {@link Object}
      */
     int hashCode();
+
 }

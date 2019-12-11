@@ -7,7 +7,7 @@ package com.zj.im.store.interfaces
  **/
 interface EventCallBack<DATA, R> {
 
-    fun handle(data: DATA?, theEndCall: (R?) -> Unit)
+    fun handle(data: DATA?, completed: (R?) -> Unit)
 
     fun compare(a: DATA, b: DATA): Int
 

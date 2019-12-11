@@ -3,6 +3,8 @@ package com.zj.imcore.renderer
 import com.zj.im.store.interfaces.EventCallBack
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.mod.MsgReceivedInfo
+import com.zj.imcore.userId
+import java.util.*
 
 class TestHandler : EventCallBack<MsgReceivedInfo, MsgInfo> {
 
@@ -14,11 +16,15 @@ class TestHandler : EventCallBack<MsgReceivedInfo, MsgInfo> {
         }
     }
 
-    override fun handle(data: MsgReceivedInfo?, theEndCall: (MsgInfo?) -> Unit) {
-        Thread.sleep(80)
+    override fun handle(data: MsgReceivedInfo?, completed: (MsgInfo?) -> Unit) {
         val d = data?.msgInfo
-        d?.createTs = data?.createTs
-        d?.isSelf = data?.isSelf ?: false
-        theEndCall(d)
+        d?.localCreatedTs = data?.createTs ?: 0
+        val r = Random()
+        if (r.nextInt(100) > 90) {
+            d?.subType = "000"
+            d?.text = "this is info type msg"
+        }
+        d?.uid = if (data?.isSelf == true) userId else "bbb"
+        completed(d)
     }
 }

@@ -1,8 +1,8 @@
 package com.zj.list.multiable;
 
-import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.zj.list.utlis.QuickSort;
 
 import java.util.*;
 
@@ -38,20 +38,10 @@ class DataSource<T extends MultiAbleData<T>> implements Comparable<DataSource> {
     }
 
     @Nullable
-    ArrayList<T> getData() {
-        ArrayList<T> lst = new ArrayList<>(data);
+    List<T> getData() {
+        List<T> lst = new ArrayList<>(data);
         if (lst.isEmpty()) return lst;
-        Comparator<T> c = new Comparator<T>() {
-            @Override
-            public int compare(T t0, T t1) {
-                return t0.compareTo(t1);
-            }
-        };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            lst.sort(c);
-        } else {
-            Collections.sort(lst, c);
-        }
+        QuickSort.sort(lst);
         return lst;
     }
 

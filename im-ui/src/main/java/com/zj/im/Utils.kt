@@ -41,3 +41,5 @@ fun <T, R> PriorityQueue<T>.with(block: (PriorityQueue<T>) -> R): R {
         return block(this)
     }
 }
+
+

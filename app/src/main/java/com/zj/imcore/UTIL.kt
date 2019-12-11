@@ -1,5 +1,7 @@
 package com.zj.imcore
 
+import java.util.*
+
 fun makeSentParams(callId: String, localFilePath: String? = null): Map<String, Any> {
     val map = hashMapOf<String, Any>()
     val uid = "=bwNpr"
@@ -8,4 +10,10 @@ fun makeSentParams(callId: String, localFilePath: String? = null): Map<String, A
     if (localFilePath != null) map["localFilePath"] = localFilePath
     map["uid"] = uid
     return map
+}
+
+val userId = "aaa"
+
+fun msgIsSelf(uid: String?): Boolean {
+    return uid == userId
 }

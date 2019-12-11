@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">im-ui</string>
+    <string name="sunday">星期日</string>
+    <string name="monday">星期一</string>
+    <string name="tuesday">星期二</string>
+    <string name="wednesday">星期三</string>
+    <string name="thursday">星期四</string>
+    <string name="friday">星期五</string>
+    <string name="saturday">星期六</string>
+    <string name="hour_time_format">HH:mm</string>
+    <string name="month_time_format">M 月 d 日 HH:mm</string>
+    <string name="year_time_format">yyyy 年 M 月 d 日 HH:mm</string>
+    <string name="yesterday">昨天</string>
+
 </resources>

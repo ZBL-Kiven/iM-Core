@@ -3,11 +3,10 @@ package com.zj.list.multiable;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
-import java.lang.ref.WeakReference;
 import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSet> {
+public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSet<R>> {
 
     public MultiDataSource(T adapter) {
         this.adapter = adapter;
@@ -17,7 +16,7 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
     private final LinkedHashMap<String, DataSource<R>> multiAbleDataSource;
     private final T adapter;
     private String curData;
-    private WeakReference<List<R>> cachedData;
+    private List<R> cachedData;
     private boolean notifyChanged = false;
 
     private LinkedHashMap<String, DataSource<R>> getSource() {
@@ -36,22 +35,24 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
     }
 
     @NonNull
-    private List<R> getCurrentData() {
-        if (notifyChanged || (cachedData == null || cachedData.get() == null || cachedData.get().isEmpty())) {
+    private List<R> getCurrentData(String n) {
+        if (notifyChanged || (cachedData == null || cachedData.isEmpty())) {
             DataSource<R> ds = getOrCreateDs(curData);
             if (ds != null) {
-                List<R> lst = ds.getData();
+                List<R> lst = adapter.onBuildData(ds.getData());
                 if (lst != null && !lst.isEmpty()) {
-                    cachedData = new WeakReference<>(lst);
+                    cachedData = lst;
                     notifyChanged = false;
-                    return lst;
                 }
             }
-        } else {
-            return cachedData.get();
         }
-        return new ArrayList<>();
+        return cachedData;
     }
+
+    private List<R> getDataList() {
+        return null;
+    }
+
 
     private boolean checkIsDefault() {
         return TextUtils.isEmpty(curData) || getSource().isEmpty();
@@ -73,11 +74,13 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
 
     public int getCount() {
         if (TextUtils.isEmpty(curData)) return 0;
-        return getCurrentData().size();
+        return getCurrentData("1111").size();
     }
 
     public R getDataWithPosition(int position) {
-        return getCurrentData().get(position);
+        List<R> curData = getCurrentData("2222");
+        if (position < 0 || position >= curData.size()) return null;
+        return curData.get(position);
     }
 
     boolean isDefaultData(String name) {
@@ -101,7 +104,7 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
                     notifyChanged = true;
                     boolean set = ds.put(r);
                     if (set && entry.getKey().equals(curData)) {
-                        int index = getCurrentData().lastIndexOf(r);
+                        int index = getCurrentData("3333").lastIndexOf(r);
                         adapter.onDataSet(index, payLoads);
                     } else {
                         hasExits = false;
@@ -171,7 +174,7 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
         DataSource<R> ds = getOrCreateDs(name);
         if (ds != null) {
             if (ds.getName().equals(curData)) {
-                int index = getCurrentData().indexOf(r);
+                int index = getCurrentData("4444").indexOf(r);
                 ds.remove(r);
                 notifyChanged = true;
                 adapter.onDataRemoved(index);
