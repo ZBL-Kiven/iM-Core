@@ -9,7 +9,6 @@ import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.views.ChatItemView
 import com.zj.list.multiable.MultiAbleData
 import com.zj.list.multiable.MultiRecyclerAdapter
-import com.zj.list.multiable.holder.MultiHolder
 
 abstract class ChatRecyclerView<T : MultiAbleData<T>> @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, defStyle: Int = 0) : RecyclerView(context, attr, defStyle) {
 

@@ -95,8 +95,20 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
                 return ChatOption.nicknameTextColor
             }
 
-            override fun getItemMargins(): Float {
-                return ChatOption.mItemMargins
+            override fun getItemMarginStart(): Float {
+                return ChatOption.mItemMarginStart
+            }
+
+            override fun getItemMarginEnd(): Float {
+                return ChatOption.mItemMarginEnd
+            }
+
+            override fun getItemMarginTop(): Float {
+                return ChatOption.mItemMarginTop
+            }
+
+            override fun getItemMarginBottom(): Float {
+                return ChatOption.mItemMarginBottom
             }
 
             override fun getNicknameStartMargins(): Float {

@@ -57,9 +57,11 @@ class ChatItemView(context: Context) : RelativeLayout(context) {
 
     internal fun initBase(options: ChatItemOptions) {
         val lp = FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        setPadding(10, 20, 10, 20)
-        val layoutMargins = dpToPx(options.getItemMargins())
-        lp.setMargins(layoutMargins, layoutMargins, layoutMargins, layoutMargins)
+        val layoutMarginStart = dpToPx(options.getItemMarginStart())
+        val layoutMarginEnd = dpToPx(options.getItemMarginEnd())
+        val layoutMarginTop = dpToPx(options.getItemMarginTop())
+        val layoutMarginBottom = dpToPx(options.getItemMarginBottom())
+        lp.setMargins(layoutMarginStart, layoutMarginTop, layoutMarginEnd, layoutMarginBottom)
         layoutParams = lp
     }
 

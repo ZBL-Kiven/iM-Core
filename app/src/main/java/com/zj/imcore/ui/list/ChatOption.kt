@@ -27,7 +27,10 @@ object ChatOption {
     var nicknameTextColor: Int = Color.BLACK
     var mNicknameStartMargins: Float = 8f
 
-    var mItemMargins: Float = 10f
+    var mItemMarginStart: Float = 10f
+    var mItemMarginEnd: Float = 10f
+    var mItemMarginTop: Float = 5f
+    var mItemMarginBottom: Float = 5f
     var mBubbleStartMargins: Float = 3f
     var mBubbleTopMargins: Float = 1f
 

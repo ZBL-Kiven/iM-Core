@@ -25,7 +25,10 @@ abstract class ChatItemOptions {
     /**
      * margins of full item
      */
-    abstract fun getItemMargins(): Float
+    abstract fun getItemMarginStart(): Float
+    abstract fun getItemMarginEnd(): Float
+    abstract fun getItemMarginTop(): Float
+    abstract fun getItemMarginBottom(): Float
 
     /**
      * options of bubble base
