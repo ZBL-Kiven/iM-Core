@@ -62,10 +62,10 @@ class ChatItemView(context: Context) : RelativeLayout(context) {
         val layoutMarginTop = dpToPx(options.getItemMarginTop())
         val layoutMarginBottom = dpToPx(options.getItemMarginBottom())
         lp.setMargins(layoutMarginStart, layoutMarginTop, layoutMarginEnd, layoutMarginBottom)
-        layoutParams = lp
-    }
-
-    internal fun initBaseBubbleView(orientation: Orientation, options: ChatItemOptions) {
+        if (tvTimeLine == null) {
+            tvTimeLine = TextView(context)
+            tvTimeLine?.id = R.id.im_chat_time_line
+        }
         if (ivAvatar == null) {
             ivAvatar = ImageView(context)
             ivAvatar?.id = R.id.im_chat_avatar
@@ -78,6 +78,14 @@ class ChatItemView(context: Context) : RelativeLayout(context) {
             tvName = TextView(context)
             tvName?.id = R.id.im_chat_nickname
         }
+        if (tvInfoLine == null) {
+            tvInfoLine = TextView(context)
+            tvInfoLine?.id = R.id.im_chat_info_line
+        }
+        layoutParams = lp
+    }
+
+    internal fun initBaseBubbleView(orientation: Orientation, options: ChatItemOptions) {
         if (curOrientation != orientation) {
             curOrientation = orientation
             reRelyViews(options)
@@ -86,10 +94,6 @@ class ChatItemView(context: Context) : RelativeLayout(context) {
     }
 
     internal fun initTimeLine(options: ChatItemOptions) {
-        if (tvTimeLine == null) {
-            tvTimeLine = TextView(context)
-            tvTimeLine?.id = R.id.im_chat_time_line
-        }
         val timeLineLp = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         timeLineLp.addRule(ALIGN_PARENT_TOP)
         timeLineLp.addRule(CENTER_HORIZONTAL)
@@ -101,10 +105,6 @@ class ChatItemView(context: Context) : RelativeLayout(context) {
     }
 
     internal fun initInfoLine(options: ChatItemOptions) {
-        if (tvInfoLine == null) {
-            tvInfoLine = TextView(context)
-            tvInfoLine?.id = R.id.im_chat_info_line
-        }
         val infoLineLp = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         infoLineLp.addRule(BELOW, R.id.im_chat_time_line)
         infoLineLp.addRule(CENTER_HORIZONTAL)
@@ -117,22 +117,17 @@ class ChatItemView(context: Context) : RelativeLayout(context) {
 
     internal fun removeTimeLine() {
         removeView(tvTimeLine)
-        tvTimeLine = null
     }
 
     internal fun removeInfoLine() {
         removeView(tvInfoLine)
-        tvInfoLine = null
     }
 
     internal fun removeBaseBubbleView() {
-        removeView(ivAvatar)
-        removeView(tvName)
-        removeView(bubbleLayout)
         bubbleLayout?.removeAllViews()
-        ivAvatar = null
-        tvName = null
-        bubbleLayout = null
+        removeView(bubbleLayout)
+        removeView(tvName)
+        removeView(ivAvatar)
         curOrientation = Orientation.NONE
     }
 

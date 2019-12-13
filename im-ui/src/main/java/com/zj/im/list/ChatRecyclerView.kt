@@ -9,6 +9,7 @@ import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.views.ChatItemView
 import com.zj.list.multiable.MultiAbleData
 import com.zj.list.multiable.MultiRecyclerAdapter
+import com.zj.list.multiable.holder.MultiHolder
 
 abstract class ChatRecyclerView<T : MultiAbleData<T>> @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, defStyle: Int = 0) : RecyclerView(context, attr, defStyle) {
 
@@ -54,6 +55,14 @@ abstract class ChatRecyclerView<T : MultiAbleData<T>> @JvmOverloads constructor(
 
             override fun onCreateView(parent: ViewGroup, viewType: Int): View {
                 return ChatItemView(context)
+            }
+
+            override fun onViewRecycled(holder: MultiHolder) {
+                super.onViewRecycled(holder)
+                (holder.itemView as? ChatItemView)?.let {
+                    it.removeBaseBubbleView()
+                    it.removeAllViews()
+                }
             }
 
             override fun initData(itemView: View, data: T, position: Int, payloads: MutableList<Any>?) {

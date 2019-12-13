@@ -3,6 +3,7 @@ package com.zj.imcore.mod
 import android.text.SpannableStringBuilder
 import com.google.gson.annotations.SerializedName
 import com.zj.im.chat.enums.SendMsgState
+import com.zj.im.img.CacheAble
 import com.zj.imcore.msgIsSelf
 import com.zj.list.multiable.MultiAbleData
 import org.msgpack.annotation.Ignore
@@ -10,7 +11,7 @@ import org.msgpack.annotation.Ignore
 import java.util.UUID
 
 @Suppress("unused", "SpellCheckingInspection")
-class MsgInfo : MultiAbleData<MsgInfo> {
+class MsgInfo : MultiAbleData<MsgInfo>, CacheAble {
 
     @SerializedName("vchannel_id")
     var vChannelId: String? = null
@@ -123,4 +124,15 @@ class MsgInfo : MultiAbleData<MsgInfo> {
     override fun hashCode(): Int {
         return key.hashCode()
     }
+
+    /** ----- 图片高效缓存 -----*/
+    override fun getCacheName(payloads: String?): String {
+        return uid ?: "defalt"
+    }
+
+    override fun getOriginalPath(payloads: String?): String {
+        return image?.url ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=226862559,425820995&fm=26&gp=0.jpg"
+    }
+
+    private var storageFolderPath: String = ""
 }

@@ -35,7 +35,7 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
     }
 
     @NonNull
-    private List<R> getCurrentData(String n) {
+    private List<R> getCurrentData() {
         if (notifyChanged || (cachedData == null || cachedData.isEmpty())) {
             DataSource<R> ds = getOrCreateDs(curData);
             if (ds != null) {
@@ -74,11 +74,11 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
 
     public int getCount() {
         if (TextUtils.isEmpty(curData)) return 0;
-        return getCurrentData("1111").size();
+        return getCurrentData().size();
     }
 
     public R getDataWithPosition(int position) {
-        List<R> curData = getCurrentData("2222");
+        List<R> curData = getCurrentData();
         if (position < 0 || position >= curData.size()) return null;
         return curData.get(position);
     }
@@ -94,7 +94,7 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
         adapter.onSourceSet(name);
     }
 
-    public boolean set(R r, String addWhereIfNotExits, Object payLoads) {
+    public boolean set(R r, String addWhereIfNotExits, String payLoads) {
         boolean hasExits = false;
         for (Map.Entry<String, DataSource<R>> entry : getSource().entrySet()) {
             DataSource<R> ds = getSource().get(entry.getKey());
@@ -104,7 +104,7 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
                     notifyChanged = true;
                     boolean set = ds.put(r);
                     if (set && entry.getKey().equals(curData)) {
-                        int index = getCurrentData("3333").lastIndexOf(r);
+                        int index = getCurrentData().lastIndexOf(r);
                         adapter.onDataSet(index, payLoads);
                     } else {
                         hasExits = false;
@@ -174,7 +174,7 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
         DataSource<R> ds = getOrCreateDs(name);
         if (ds != null) {
             if (ds.getName().equals(curData)) {
-                int index = getCurrentData("4444").indexOf(r);
+                int index = getCurrentData().indexOf(r);
                 ds.remove(r);
                 notifyChanged = true;
                 adapter.onDataRemoved(index);

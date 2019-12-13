@@ -297,8 +297,9 @@ public class BubbleLayout extends FrameLayout {
         this.bubbleRadius = dpToPx(getContext(), bubbleRadius);
     }
 
-    public static int dpToPx(Context context, float dipValue) {
+    public int dpToPx(Context context, float dipValue) {
         float scale = context.getApplicationContext().getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
+
 }

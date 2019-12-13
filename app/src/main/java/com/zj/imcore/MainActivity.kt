@@ -57,10 +57,10 @@ class MainActivity : AppCompatActivity() {
             receiveMock?.isEnabled = false
             mutableListOf<MsgReceivedInfo>().let {
                 val r = java.util.Random()
-                for (i in 0 until 5) {
+                for (i in 0 until 1) {
                     val msg = MsgInfo()
                     msg.text = "this is data $i "
-                    it.add(MsgReceivedInfo(msg, r.nextBoolean(), (System.currentTimeMillis() - 89400000L) + i))
+                    it.add(MsgReceivedInfo(msg, r.nextBoolean(), (System.currentTimeMillis()) + i))
                 }
                 UIHelper.postReceiveData(it)
             }

@@ -2,11 +2,14 @@ package com.zj.imcore.ui.model
 
 import android.content.Context
 import android.graphics.Color
-import android.view.ViewGroup
-import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.zj.im.img.cache.loader.AvatarLoadUtil
 import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.views.ChatItemView
+import com.zj.imcore.dpToPx
 import com.zj.imcore.mod.MsgInfo
+import com.zj.imcore.ui.enums.MsgType
+import com.zj.imcore.ui.list.ChatOption
 
 class ChatListModel : BaseChatModel<MsgInfo> {
 
@@ -15,11 +18,11 @@ class ChatListModel : BaseChatModel<MsgInfo> {
     }
 
     override fun isInitInfoView(data: MsgInfo): Boolean {
-        return !data.subType.isNullOrEmpty()
+        return MsgType.INFO.eq(data.subType)
     }
 
     override fun isInitBaseBubbleView(data: MsgInfo): Boolean {
-        return !isInitInfoView(data)
+        return MsgType.isMsg(data.subType)
     }
 
     override fun getOrientation(data: MsgInfo): ChatItemView.Orientation {
@@ -27,24 +30,41 @@ class ChatListModel : BaseChatModel<MsgInfo> {
     }
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
-        if (isInitTimeStampView(data)) {
-            val tsv = view.getTimeLineView()
-            tsv?.text = data.timeLineString
-        }
-        if (isInitInfoView(data)) {
-            view.getInfoLineView()?.text = data.text
-        }
-        if (isInitBaseBubbleView(data)) {
-            view.getBubbleLayout()?.let { p ->
-                if (p.childCount > 0) p.removeAllViews()
-                val tv = TextView(context)
-                tv.maxWidth = 700
-                tv.text = data.text
-                val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                p.addView(tv, lp)
+
+        fun loadAvatar() {
+            view.getAvatarView()?.let {
+                AvatarLoadUtil(context, dpToPx(context, ChatOption.avatarWidth), dpToPx(context, ChatOption.avatarHeight), data, "avatar").load { path ->
+                    Glide.with(context).load(path).into(it)
+                }
             }
-            view.getAvatarView()?.setBackgroundColor(Color.GRAY)
+        }
+
+        fun loadTimeLine() {
+            view.getTimeLineView()?.text = data.timeLineString
+        }
+
+        fun loadNickName() {
             view.getNicknameView()?.text = "${data.uid}"
+        }
+
+        if (!payloads.isNullOrEmpty()) {
+            if (payloads.contains(ModHub.REFRESH_AVATAR)) {
+                loadAvatar()
+            }
+            if (payloads.contains(ModHub.REFRESH_TIMELINE)) {
+                loadTimeLine()
+            }
+            if (payloads.contains(ModHub.REFRESH_NICKNAME)) {
+                loadNickName()
+            }
+            if (payloads.contains(ModHub.REFRESH_BUBBLE)) {
+                ModHub.getMode(data).initData(context, view, data, payloads)
+            }
+        } else {
+            loadAvatar()
+            loadTimeLine()
+            loadNickName()
+            ModHub.getMode(data).initData(context, view, data, payloads)
         }
     }
 }

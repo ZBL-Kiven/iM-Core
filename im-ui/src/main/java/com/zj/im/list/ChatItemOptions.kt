@@ -26,8 +26,11 @@ abstract class ChatItemOptions {
      * margins of full item
      */
     abstract fun getItemMarginStart(): Float
+
     abstract fun getItemMarginEnd(): Float
+
     abstract fun getItemMarginTop(): Float
+
     abstract fun getItemMarginBottom(): Float
 
     /**
@@ -84,6 +87,4 @@ abstract class ChatItemOptions {
     abstract fun getInfoLineTopMargin(): Float
 
     abstract fun getInfoLineBottomMargin(): Float
-
-    abstract fun getMaximumDiffDisplayTime(): Long
 }

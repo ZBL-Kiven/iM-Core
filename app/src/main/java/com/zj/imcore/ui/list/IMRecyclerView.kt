@@ -23,9 +23,9 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
     override fun onBuildData(data: MutableList<MsgInfo>?): MutableList<MsgInfo>? {
         if (data.isNullOrEmpty()) return null
         var lastTimeStamp = 0L
-        for (m in data) {
+        data.forEach { m ->
             val curStamp = m.localCreatedTs
-            val timeLineString = TimeLineInflateModel.inflateTimeLine(context, curStamp, lastTimeStamp, 4)
+            val timeLineString = TimeLineInflateModel.inflateTimeLine(context, curStamp, lastTimeStamp, ChatOption.maximumDiffDisplayTime)
             m.timeLineString = timeLineString
             lastTimeStamp = curStamp
         }
@@ -36,43 +36,43 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
         return object : ChatItemOptions() {
 
             override fun getShadowY(): Float {
-                return ChatOption.mShadowY
+                return ChatOption.shadowY
             }
 
             override fun getShadowX(): Float {
-                return ChatOption.mShadowX
+                return ChatOption.shadowX
             }
 
             override fun getShadowRadius(): Float {
-                return ChatOption.mShadowRadius
+                return ChatOption.shadowRadius
             }
 
             override fun getShadowColor(): Int {
-                return ChatOption.mShadowColor
+                return ChatOption.shadowColor
             }
 
             override fun getBubbleColor(): Int {
-                return if (data.isSelf()) ChatOption.mBubbleColorSelf else ChatOption.mBubbleColorOthers
+                return if (data.isSelf()) ChatOption.bubbleColorSelf else ChatOption.bubbleColorOthers
             }
 
             override fun getBubbleRadius(): Float {
-                return ChatOption.mBubbleRadius
+                return ChatOption.bubbleRadius
             }
 
             override fun getBubblePadding(): Float {
-                return ChatOption.mBubblePadding
+                return ChatOption.bubblePadding
             }
 
             override fun getLookLength(): Float {
-                return ChatOption.mLookLength
+                return ChatOption.lookLength
             }
 
             override fun getLookWidth(): Float {
-                return ChatOption.mLookWidth
+                return ChatOption.lookWidth
             }
 
             override fun getLookPosition(): Float {
-                return ChatOption.mLookPosition
+                return ChatOption.lookPosition
             }
 
             override fun getAvatarWidth(): Float {
@@ -96,67 +96,63 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
             }
 
             override fun getItemMarginStart(): Float {
-                return ChatOption.mItemMarginStart
+                return ChatOption.itemMarginStart
             }
 
             override fun getItemMarginEnd(): Float {
-                return ChatOption.mItemMarginEnd
+                return ChatOption.itemMarginEnd
             }
 
             override fun getItemMarginTop(): Float {
-                return ChatOption.mItemMarginTop
+                return ChatOption.itemMarginTop
             }
 
             override fun getItemMarginBottom(): Float {
-                return ChatOption.mItemMarginBottom
+                return ChatOption.itemMarginBottom
             }
 
             override fun getNicknameStartMargins(): Float {
-                return ChatOption.mNicknameStartMargins
+                return ChatOption.nicknameStartMargins
             }
 
             override fun getBubbleStartMargins(): Float {
-                return ChatOption.mBubbleStartMargins
+                return ChatOption.bubbleStartMargins
             }
 
             override fun getBubbleTopMargins(): Float {
-                return ChatOption.mBubbleTopMargins
+                return ChatOption.bubbleTopMargins
             }
 
             override fun getTimeLineTextSize(): Float {
-                return ChatOption.mTimeLineTextSize
+                return ChatOption.timeLineTextSize
             }
 
             override fun getTimeLineTextColor(): Int {
-                return ChatOption.mTimeLineTextColor
+                return ChatOption.timeLineTextColor
             }
 
             override fun getTimeLineTopMargin(): Float {
-                return ChatOption.mTimeLineTopMargin
+                return ChatOption.timeLineTopMargin
             }
 
             override fun getTimeLineBottomMargin(): Float {
-                return ChatOption.mTimeLineBottomMargin
+                return ChatOption.timeLineBottomMargin
             }
 
             override fun getInfoLineTextSize(): Float {
-                return ChatOption.mInfoLineTextSize
+                return ChatOption.infoLineTextSize
             }
 
             override fun getInfoLineTextColor(): Int {
-                return ChatOption.mInfoLineTextColor
+                return ChatOption.infoLineTextColor
             }
 
             override fun getInfoLineTopMargin(): Float {
-                return ChatOption.mInfoLineTopMargin
+                return ChatOption.infoLineTopMargin
             }
 
             override fun getInfoLineBottomMargin(): Float {
-                return ChatOption.mInfoLineBottomMargin
-            }
-
-            override fun getMaximumDiffDisplayTime(): Long {
-                return ChatOption.mMaximumDiffDisplayTime
+                return ChatOption.infoLineBottomMargin
             }
         }
     }
