@@ -1,15 +1,16 @@
-package com.zj.imcore.ui.model
+package com.zj.imcore.ui.list.model
 
 import android.content.Context
-import android.graphics.Color
 import com.bumptech.glide.Glide
-import com.zj.im.img.cache.loader.AvatarLoadUtil
+import com.zj.im.img.cache.ImageCacheUtil
+import com.zj.imcore.utils.img.loader.AvatarLoadUtil
 import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.views.ChatItemView
 import com.zj.imcore.dpToPx
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.ui.enums.MsgType
-import com.zj.imcore.ui.list.ChatOption
+import com.zj.imcore.ChatOption
+import com.zj.imcore.utils.img.ImageLoaderPayLoads
 
 class ChatListModel : BaseChatModel<MsgInfo> {
 
@@ -33,7 +34,7 @@ class ChatListModel : BaseChatModel<MsgInfo> {
 
         fun loadAvatar() {
             view.getAvatarView()?.let {
-                AvatarLoadUtil(context, dpToPx(context, ChatOption.avatarWidth), dpToPx(context, ChatOption.avatarHeight), data, "avatar").load { path ->
+                AvatarLoadUtil(context, dpToPx(context, ChatOption.avatarWidth), dpToPx(context, ChatOption.avatarHeight), ChatOption.avatarQuality, data, ImageCacheUtil.CENTER_CROP, ImageLoaderPayLoads.AVATAR).load { path ->
                     Glide.with(context).load(path).into(it)
                 }
             }
@@ -47,6 +48,11 @@ class ChatListModel : BaseChatModel<MsgInfo> {
             view.getNicknameView()?.text = "${data.uid}"
         }
 
+        fun loadBubble() {
+            view.getBubbleLayout()?.removeAllViews()
+            ModHub.getMode(data).initData(context, view, data, payloads)
+        }
+
         if (!payloads.isNullOrEmpty()) {
             if (payloads.contains(ModHub.REFRESH_AVATAR)) {
                 loadAvatar()
@@ -58,13 +64,13 @@ class ChatListModel : BaseChatModel<MsgInfo> {
                 loadNickName()
             }
             if (payloads.contains(ModHub.REFRESH_BUBBLE)) {
-                ModHub.getMode(data).initData(context, view, data, payloads)
+                loadBubble()
             }
         } else {
             loadAvatar()
             loadTimeLine()
             loadNickName()
-            ModHub.getMode(data).initData(context, view, data, payloads)
+            loadBubble()
         }
     }
 }

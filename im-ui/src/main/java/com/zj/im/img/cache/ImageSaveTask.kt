@@ -45,6 +45,9 @@ internal class ImageSaveTask(private val bmp: Bitmap, private val cacheFolderPat
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos)
             fos.close()
             fos.flush()
+            if (!bmp.isRecycled) {
+                bmp.recycle()
+            }
             file.path
         } catch (e: Exception) {
             e.printStackTrace()

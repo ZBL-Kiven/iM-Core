@@ -2,12 +2,7 @@ package com.zj.im.list.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.CornerPathEffect;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Region;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import com.zj.im.R;
@@ -24,6 +19,8 @@ public class BubbleLayout extends FrameLayout {
     private int shadowColor, shadowRadius, shadowX, shadowY;
     private int bubbleRadius, bubbleColor;
     private Region mRegion = new Region();
+    private Bitmap mBackground;
+    private PorterDuffXfermode porterDuffXFermode;
 
     /**
      * arrow pointing
@@ -71,9 +68,9 @@ public class BubbleLayout extends FrameLayout {
         setLayerType(LAYER_TYPE_SOFTWARE, null);
         setWillNotDraw(false);
         initAttr(context.obtainStyledAttributes(attrs, R.styleable.BubbleLayout, defStyleAttr, 0));
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
-        mPaint.setStyle(Paint.Style.FILL);
+        mPaint = new Paint();
         mPath = new Path();
+        porterDuffXFermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
         initPadding();
     }
 
@@ -134,17 +131,21 @@ public class BubbleLayout extends FrameLayout {
     }
 
     private void initData() {
-        mPaint.setPathEffect(new CornerPathEffect(bubbleRadius));
-        mPaint.setShadowLayer(shadowRadius, shadowX, shadowY, shadowColor);
-
         int mLeft = bubblePadding + (look == Look.LEFT ? lookLength : 0);
         int mTop = bubblePadding + (look == Look.TOP ? lookLength : 0);
         int mRight = mWidth - bubblePadding - (look == Look.RIGHT ? lookLength : 0);
         int mBottom = mHeight - bubblePadding - (look == Look.BOTTOM ? lookLength : 0);
-        mPaint.setColor(bubbleColor);
+        mPaint.reset();
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
+        mPaint.setPathEffect(new CornerPathEffect(bubbleRadius));
+        if (mBackground == null) {
+            if (shadowX > 0 && shadowY > 0 && shadowColor > 0)
+                mPaint.setShadowLayer(shadowRadius, shadowX, shadowY, shadowColor);
+            mPaint.setColor(bubbleColor);
+        }
 
         mPath.reset();
-
         int topOffset = (topOffset = lookPosition) + lookLength > mBottom ? mBottom - lookWidth : topOffset;
         topOffset = topOffset > bubblePadding ? topOffset : bubblePadding;
         int leftOffset = (leftOffset = lookPosition) + lookLength > mRight ? mRight - lookWidth : leftOffset;
@@ -195,7 +196,14 @@ public class BubbleLayout extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        canvas.save();
         canvas.drawPath(mPath, mPaint);
+        if (mBackground != null && !mBackground.isRecycled()) {
+            mPaint.setXfermode(porterDuffXFermode);
+            canvas.drawBitmap(mBackground, 0, 0, mPaint);
+            mPaint.setXfermode(null);
+        }
+        canvas.restore();
     }
 
     public Paint getPaint() {
@@ -295,6 +303,22 @@ public class BubbleLayout extends FrameLayout {
 
     public void setBubbleRadius(float bubbleRadius) {
         this.bubbleRadius = dpToPx(getContext(), bubbleRadius);
+    }
+
+    public void updateBackground(Bitmap bmp) {
+        this.mBackground = bmp;
+    }
+
+    public void clearProperties() {
+        shadowColor = 0;
+        shadowRadius = 0;
+        shadowX = 0;
+        shadowY = 0;
+        bubbleColor = 0;
+        mBackground = null;
+        setOnClickListener(null);
+        setOnLongClickListener(null);
+        setOnTouchListener(null);
     }
 
     public int dpToPx(Context context, float dipValue) {

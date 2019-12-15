@@ -1,10 +1,12 @@
-package com.zj.imcore.ui.list
+package com.zj.imcore
 
 import android.graphics.Color
 import android.widget.ImageView
 import com.zj.imcore.R
 
 object ChatOption {
+
+    var isPrintErrorAble = true
 
     var shadowY: Float = 5f
     var shadowX: Float = 5f
@@ -21,6 +23,8 @@ object ChatOption {
 
     var avatarWidth: Float = 40f
     var avatarHeight: Float = 40f
+    var avatarRadius: Float = 6f
+    var avatarQuality: Float = 1.0f
     var avatarScaleType: ImageView.ScaleType = ImageView.ScaleType.CENTER_CROP
 
     var nicknameTextSize: Float = 10f
@@ -51,5 +55,11 @@ object ChatOption {
      * */
     var NORMAL_MSG_MAX_WIDTH = 208f
 
-
+    /**
+     * img size , tentative (9:16) * 15
+     **/
+    var IMAGE_MSG_MAX_WIDTH = 145f
+    var IMAGE_MSG_MAX_HEIGHT = 217f
+    var IMAGE_MSG_MIN_SCALE = 0.23f
+    var IMAGE_MSG_QUALITY = .5f
 }

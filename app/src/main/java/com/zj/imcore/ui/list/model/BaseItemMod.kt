@@ -1,4 +1,4 @@
-package com.zj.imcore.ui.model
+package com.zj.imcore.ui.list.model
 
 import android.content.Context
 import com.zj.im.list.views.ChatItemView

@@ -1,10 +1,10 @@
 package com.zj.imcore.mod
 
-import android.text.SpannableStringBuilder
 import com.google.gson.annotations.SerializedName
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.img.CacheAble
 import com.zj.imcore.msgIsSelf
+import com.zj.imcore.utils.img.ImageLoaderPayLoads
 import com.zj.list.multiable.MultiAbleData
 import org.msgpack.annotation.Ignore
 
@@ -72,10 +72,6 @@ class MsgInfo : MultiAbleData<MsgInfo>, CacheAble {
     @SerializedName("local_created_ts")
     var localCreatedTs: Long = 0
 
-    //如果是发送的文件，需要保存文件的本地路径，用于重发
-    @SerializedName("local_file_path")
-    var localFilePath: String? = ""
-
     //发送时带的参数，用于 reply 回执
     @SerializedName("call_id")
     var callId: String? = null     //+
@@ -83,14 +79,27 @@ class MsgInfo : MultiAbleData<MsgInfo>, CacheAble {
     @SerializedName("key")
     var key: String = UUID.randomUUID().toString()
 
+
+    /**----- packing ignore -----*/
+
     //发送状态
+    @Ignore
     @SerializedName("sending_state")
     private var sendingState = "NONE"       // +
 
+    //如果是发送的文件，需要保存文件的本地路径，用于重发
+    @Ignore
+    @SerializedName("local_file_path")
+    var localFilePath: String? = ""
 
     /** -------- db ignore properties ------- */
+
     @Ignore
     var timeLineString: String? = null
+    @Ignore
+    var userAvatar: String? = null
+    @Ignore
+    var userNickname: String? = null
 
     /** -------- db ignore properties ------- */
 
@@ -125,13 +134,20 @@ class MsgInfo : MultiAbleData<MsgInfo>, CacheAble {
         return key.hashCode()
     }
 
-    /** ----- 图片高效缓存 -----*/
     override fun getCacheName(payloads: String?): String {
-        return uid ?: "defalt"
+        return when (payloads) {
+            ImageLoaderPayLoads.AVATAR -> uid ?: "defalt"
+            ImageLoaderPayLoads.CONVERSATION -> "conversation"
+            else -> ""
+        }
     }
 
     override fun getOriginalPath(payloads: String?): String {
-        return image?.url ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=226862559,425820995&fm=26&gp=0.jpg"
+        return when (payloads) {
+            ImageLoaderPayLoads.AVATAR -> userAvatar ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=226862559,425820995&fm=26&gp=0.jpg"
+            ImageLoaderPayLoads.CONVERSATION -> image?.url ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1061931856,2496159034&fm=26&gp=0.jpg"
+            else -> ""
+        }
     }
 
     private var storageFolderPath: String = ""

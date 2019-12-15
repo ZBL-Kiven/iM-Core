@@ -87,4 +87,9 @@ abstract class ChatItemOptions {
     abstract fun getInfoLineTopMargin(): Float
 
     abstract fun getInfoLineBottomMargin(): Float
+
+    /**
+     * debug line
+     * */
+    abstract fun isPrintErrorAble(): Boolean
 }

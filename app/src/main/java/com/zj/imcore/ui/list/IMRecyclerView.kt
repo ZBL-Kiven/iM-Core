@@ -7,8 +7,9 @@ import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.ChatRecyclerView
 import com.zj.im.list.utils.TimeLineInflateModel
 import com.zj.im.list.ChatItemOptions
+import com.zj.imcore.ChatOption
 import com.zj.imcore.mod.MsgInfo
-import com.zj.imcore.ui.model.ChatListModel
+import com.zj.imcore.ui.list.model.ChatListModel
 
 class IMRecyclerView @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, defStyle: Int = 0) : ChatRecyclerView<MsgInfo>(context, attr, defStyle) {
 
@@ -34,6 +35,10 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
 
     private fun initOptions(data: MsgInfo): ChatItemOptions {
         return object : ChatItemOptions() {
+
+            override fun isPrintErrorAble(): Boolean {
+                return ChatOption.isPrintErrorAble
+            }
 
             override fun getShadowY(): Float {
                 return ChatOption.shadowY

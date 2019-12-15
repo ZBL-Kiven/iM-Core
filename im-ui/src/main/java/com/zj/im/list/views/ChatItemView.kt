@@ -1,6 +1,7 @@
 package com.zj.im.list.views
 
 import android.content.Context
+import android.graphics.Color
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ class ChatItemView(context: Context) : RelativeLayout(context) {
     private var tvTimeLine: TextView? = null
     private var tvInfoLine: TextView? = null
     private var curOrientation = Orientation.NONE
+    private var printErrorAble = false
 
     fun getAvatarView(): ImageView? {
         return ivAvatar
@@ -55,7 +57,23 @@ class ChatItemView(context: Context) : RelativeLayout(context) {
         return curOrientation
     }
 
+    fun printErrorMsg(msg: String) {
+        if (printErrorAble) {
+            val tvError = TextView(context)
+            val errorLp = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+            errorLp.addRule(ALIGN_PARENT_BOTTOM)
+            errorLp.addRule(BELOW, R.id.im_chat_bubble)
+            errorLp.addRule(CENTER_HORIZONTAL)
+            errorLp.topMargin = dpToPx(15f)
+            tvError.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10f)
+            tvError.setTextColor(Color.RED)
+            tvError.text = msg
+            checkoutOrAdd(tvError, errorLp, this)
+        }
+    }
+
     internal fun initBase(options: ChatItemOptions) {
+        printErrorAble = options.isPrintErrorAble()
         val lp = FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         val layoutMarginStart = dpToPx(options.getItemMarginStart())
         val layoutMarginEnd = dpToPx(options.getItemMarginEnd())
@@ -133,6 +151,7 @@ class ChatItemView(context: Context) : RelativeLayout(context) {
 
     private fun initBubble(options: ChatItemOptions) {
         bubbleLayout?.let {
+            it.clearProperties()
             it.bubbleColor = getColor(options.getBubbleColor())
             it.shadowColor = getColor(options.getShadowColor())
             it.setBubbleRadius(options.getBubbleRadius())

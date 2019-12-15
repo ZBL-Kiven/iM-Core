@@ -1,8 +1,8 @@
-package com.zj.imcore.ui.model
+package com.zj.imcore.ui.list.model
 
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.ui.enums.MsgType
-import com.zj.imcore.ui.model.sub.*
+import com.zj.imcore.ui.list.model.sub.*
 import java.lang.NullPointerException
 
 object ModHub {

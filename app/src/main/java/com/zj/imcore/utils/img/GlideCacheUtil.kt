@@ -1,4 +1,4 @@
-package com.zj.im.img.cache
+package com.zj.imcore.utils.img
 
 import android.content.Context
 import android.os.Looper
