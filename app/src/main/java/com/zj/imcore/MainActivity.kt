@@ -2,12 +2,10 @@ package com.zj.imcore
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.SeekBar
 import com.zj.im.main.UIHelper
 import com.zj.im.registerMsgReceivedListener
-import com.zj.im.sender.SendObject
 import com.zj.im.store.interfaces.DataListener
-import com.zj.imcore.options.IMClient
-import com.zj.imcore.options.IMClient.Companion.TCP_TIME_OUT
 import com.zj.imcore.options.IMHelper
 import com.zj.imcore.renderer.TestHandler
 import com.zj.imcore.mod.MsgInfo
@@ -46,12 +44,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         main_rv_msgBar?.itemAnimator = null
+        main_sb?.setOnSeekBarChangeListener(object:SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if(fromUser) sendMsg?.setLevel(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+        })
         sendMsg?.setOnClickListener {
-            val callId = IMClient.getRandomCallId()
-            val vid = "=bvwBLyAvD"
-            val timeOut = TCP_TIME_OUT
-            val text = et?.text.toString()
-            @Suppress("SpellCheckingInspection") SendObject.create(callId).put("type", "message").put("vchannel_id", vid).put("text", text).put("subtype", "normal").putAll(makeSentParams(callId)).timeOut(timeOut).build().send()
+            it.postInvalidate()
+            //            val callId = IMClient.getRandomCallId()
+            //            val vid = "=bvwBLyAvD"
+            //            val timeOut = TCP_TIME_OUT
+            //            val text = et?.text.toString()
+            //            @Suppress("SpellCheckingInspection") SendObject.create(callId).put("type", "message").put("vchannel_id", vid).put("text", text).put("subtype", "normal").putAll(makeSentParams(callId)).timeOut(timeOut).build().send()
         }
         receiveMock?.setOnClickListener {
             receiveMock?.isEnabled = false

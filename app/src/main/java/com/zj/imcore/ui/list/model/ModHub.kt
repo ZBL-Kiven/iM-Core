@@ -1,7 +1,7 @@
 package com.zj.imcore.ui.list.model
 
 import com.zj.imcore.mod.MsgInfo
-import com.zj.imcore.ui.enums.MsgType
+import com.zj.imcore.enums.MsgType
 import com.zj.imcore.ui.list.model.sub.*
 import java.lang.NullPointerException
 

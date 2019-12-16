@@ -41,11 +41,11 @@ class ImageMod : BaseItemMod() {
 
                         override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                             val lp = pop.layoutParams
-                            println("a----- 111 $width   $height")
                             lp.width = width
                             lp.height = height
                             pop.layoutParams = lp
                             pop.updateBackground(resource)
+
                         }
                     })
                 }

@@ -21,11 +21,18 @@
     <com.zj.imcore.ui.list.IMRecyclerView
             android:id="@+id/main_rv_msgBar"
             android:layout_width="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     />
 
+    <com.zj.imcore.ui.list.views.VoiceView
+            android:id="@+id/sendMsg"
+            android:background="#facc"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+    />
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -35,22 +42,13 @@
             android:background="#acc"
             tools:context=".MainActivity">
 
-        <EditText
-                android:id="@+id/et"
+        <SeekBar
+                android:id="@+id/main_sb"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:textColor="#266"
-                android:textSize="14sp"
-                android:lines="1"
-                android:maxLines="1"
-                android:layout_margin="10dp"
-                tools:ignore="Autofill,LabelFor,TextFields"/>
-        <Button
-                android:id="@+id/sendMsg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@android:string/ok"/>
+                android:layout_height="match_parent"
+                android:max="100"
+        />
 
         <Button
                 android:id="@+id/receiveMock"

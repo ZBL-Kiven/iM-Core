@@ -1,4 +1,4 @@
-package com.zj.imcore.ui.enums
+package com.zj.imcore.enums
 
 @Suppress("unused")
 enum class MsgType(private val subName: String) {

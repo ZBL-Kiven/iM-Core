@@ -7,7 +7,11 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import com.zj.im.R;
 
-
+/**
+ * Created by ZJJ on 19/12/11"
+ * <p>
+ * custom bubble item layout
+ */
 @SuppressWarnings("unused")
 public class BubbleLayout extends FrameLayout {
     private Paint mPaint;

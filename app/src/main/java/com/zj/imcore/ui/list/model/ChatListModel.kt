@@ -8,7 +8,7 @@ import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.views.ChatItemView
 import com.zj.imcore.dpToPx
 import com.zj.imcore.mod.MsgInfo
-import com.zj.imcore.ui.enums.MsgType
+import com.zj.imcore.enums.MsgType
 import com.zj.imcore.ChatOption
 import com.zj.imcore.utils.img.ImageLoaderPayLoads
 

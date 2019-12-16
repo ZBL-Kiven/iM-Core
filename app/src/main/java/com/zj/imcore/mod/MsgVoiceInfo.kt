@@ -14,7 +14,7 @@ open class MsgVoiceInfo {
 
     //语音的时间长度
     @SerializedName("duration")
-    var duration: Double = 0.toDouble()
+    var duration: Long = 1892887
 
     //语音的下载地址
     @SerializedName("url")
