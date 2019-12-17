@@ -75,11 +75,8 @@ public class VoiceBottom extends AppCompatButton {
  
     private boolean isCancel(float x, float y) {
         //判断手的位置 是否移动到控件上/下方50的位置 进行取消(微信好像只判断移动到按钮上方)
-        if (y < getHeight() - 50 || y > getHeight() + 50) {
-            return true;
-        }
-        return false;
- 
+        return y < getHeight() - 50 || y > getHeight() + 50;
+
     }
  
     //改变按钮显示

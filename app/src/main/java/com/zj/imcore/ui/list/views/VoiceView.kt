@@ -1,6 +1,5 @@
 package com.zj.imcore.ui.list.views
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -28,15 +27,15 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private val paint = Paint()
     private val levelPaint = Paint()
     private val porterDuffPaint = Paint()
-    private var mWidth: Int = 0
-    private var mHeight: Int = 0
+    private var mWidth: Float = 0f
+    private var mHeight: Float = 0f
 
     private var mArcStrokeWidth = 2.5f
         get() = dpToPx(context, field) * 1.0f
     private var mArcStrokeMargin = 1.5f
         get() = dpToPx(context, field) * 1.0f
 
-    private var orientation = ORIENTATION_LEFT
+    private var orientation = ORIENTATION_RIGHT
 
     private var mArcCount = 5
     private var mAngleStart = 320f
@@ -66,12 +65,12 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 bottom = top + 2f * len
             }
             ORIENTATION_LEFT -> {
-                val len = i * (mArcStrokeWidth + mArcStrokeMargin) + mArcStrokeWidth
-                val lenF = (mArcCount - 1 - i) * (mArcStrokeWidth + mArcStrokeMargin) + mArcStrokeWidth
-                left = len
-                top = mHeight / 2f - lenF
+                val len = i * (mArcStrokeWidth + mArcStrokeMargin) + mArcStrokeMargin * 1.5f
+                val lenF = (mArcCount - 1 - i) * (mArcStrokeWidth + mArcStrokeMargin) + mArcStrokeMargin * 1.5f
+                left = lenF
+                top = mHeight / 2f - len
                 right = left + 2f * len
-                bottom = top + 2f * lenF
+                bottom = top + 2f * len
             }
             else -> throw IllegalArgumentException("orientation just support the one of ORIENTATION_LEFT ,ORIENTATION_RIGHT")
         }
@@ -124,9 +123,11 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         if (levelPath == null) levelPath = Path()
         levelPath?.reset()
 
-        for (i in 0 until mArcCount) {
+        val range = if (orientation == ORIENTATION_RIGHT) 0 until mArcCount else (mArcCount - 1).downTo(0)
+        for (i in range) {
             val r = getSingleArcRect(i)
-            path?.addArc(r, mAngleStart, mAngleSweep)
+            val angleStart = mAngleStart - (if (orientation == ORIENTATION_RIGHT) 0 else 180)
+            path?.addArc(r, angleStart, mAngleSweep)
         }
         if (curLevel > 0) {
             val levelRect = getLevelArcRect(mWidth * 1.0f, mHeight * 1.0f)
@@ -135,7 +136,9 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             if (w > 0 && h > 0) {
                 levelBmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)?.let {
                     val canvas = Canvas(it)
-                    canvas.drawCircle(levelRect.centerX(), levelRect.centerY(), levelRect.width() / 2, levelPaint())
+                    val p = if (orientation == ORIENTATION_RIGHT) PointF(0f, levelRect.centerY())
+                    else PointF(mWidth, levelRect.centerY())
+                    canvas.drawCircle(p.x, p.y, curLevel / 100f * (w * .6f), levelPaint())
                     it
                 }
             }
@@ -144,8 +147,8 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        this.mWidth = width
-        this.mHeight = height
+        this.mWidth = width * 1.0f
+        this.mHeight = height * 1.0f
         initData()
     }
 
@@ -157,7 +160,6 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         setMeasuredDimension(w, h)
     }
 
-    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         val rc = canvas?.saveLayer(0f, 0f, mWidth * 1.0f, mHeight * 1.0f, initPaint())
         this.path?.let {
@@ -171,8 +173,18 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         canvas?.restoreToCount(rc ?: 0)
     }
 
+
+    fun getOrientation(): Int {
+        return orientation
+    }
+
     fun setLevel(progress: Int) {
         curLevel = progress
+        postInvalidate()
+    }
+
+    fun setOrientation(orientation: Int) {
+        this.orientation = orientation
         postInvalidate()
     }
 

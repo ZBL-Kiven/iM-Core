@@ -10,6 +10,8 @@ import com.zj.imcore.options.IMHelper
 import com.zj.imcore.renderer.TestHandler
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.mod.MsgReceivedInfo
+import com.zj.imcore.ui.list.views.VoiceView.Companion.ORIENTATION_LEFT
+import com.zj.imcore.ui.list.views.VoiceView.Companion.ORIENTATION_RIGHT
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -44,9 +46,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         main_rv_msgBar?.itemAnimator = null
-        main_sb?.setOnSeekBarChangeListener(object:SeekBar.OnSeekBarChangeListener{
+        main_sb?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if(fromUser) sendMsg?.setLevel(progress)
+                if (fromUser) sendMsg?.setLevel(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -67,17 +69,22 @@ class MainActivity : AppCompatActivity() {
             //            @Suppress("SpellCheckingInspection") SendObject.create(callId).put("type", "message").put("vchannel_id", vid).put("text", text).put("subtype", "normal").putAll(makeSentParams(callId)).timeOut(timeOut).build().send()
         }
         receiveMock?.setOnClickListener {
-            receiveMock?.isEnabled = false
-            mutableListOf<MsgReceivedInfo>().let {
-                val r = java.util.Random()
-                for (i in 0 until 1) {
-                    val msg = MsgInfo()
-                    msg.text = "this is data $i "
-                    it.add(MsgReceivedInfo(msg, r.nextBoolean(), (System.currentTimeMillis()) + i))
-                }
-                UIHelper.postReceiveData(it)
-            }
-            receiveMock?.isEnabled = true
+            var or = sendMsg?.getOrientation()
+            or = if (or == ORIENTATION_LEFT) ORIENTATION_RIGHT
+            else ORIENTATION_LEFT
+            sendMsg.setOrientation(or)
+
+            //            receiveMock?.isEnabled = false
+            //            mutableListOf<MsgReceivedInfo>().let {
+            //                val r = java.util.Random()
+            //                for (i in 0 until 1) {
+            //                    val msg = MsgInfo()
+            //                    msg.text = "this is data $i "
+            //                    it.add(MsgReceivedInfo(msg, r.nextBoolean(), (System.currentTimeMillis()) + i))
+            //                }
+            //                UIHelper.postReceiveData(it)
+            //            }
+            //            receiveMock?.isEnabled = true
         }
     }
 
