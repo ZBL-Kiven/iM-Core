@@ -15,6 +15,7 @@ import java.lang.IllegalArgumentException
  *
  * Includes size and color
  * */
+@Suppress("unused")
 class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : View(context, attrs, defStyle) {
 
     companion object {
@@ -30,7 +31,7 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private var mWidth: Float = 0f
     private var mHeight: Float = 0f
 
-    private var mArcStrokeWidth = 2.5f
+    private var mArcStrokeWidth = 2f
         get() = dpToPx(context, field) * 1.0f
     private var mArcStrokeMargin = 1.5f
         get() = dpToPx(context, field) * 1.0f
@@ -38,8 +39,8 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     private var orientation = ORIENTATION_RIGHT
 
     private var mArcCount = 5
-    private var mAngleStart = 320f
-    private var mAngleSweep = 80f
+    private var mAngleStart = 325f
+    private var mAngleSweep = 70f
     private var defaultColor = Color.GRAY
     private var renderColor = Color.DKGRAY
 
@@ -176,6 +177,10 @@ class VoiceView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     fun getOrientation(): Int {
         return orientation
+    }
+
+    fun getLevel(): Int {
+        return curLevel
     }
 
     fun setLevel(progress: Int) {

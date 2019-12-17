@@ -4,9 +4,11 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="chat_background">#D7D7D7</color>
     <color name="chat_bubble_shadow">#FFDDDDDD</color>
     <color name="chat_bubble_other">#FFFFFFFF</color>
     <color name="chat_bubble_self">#FF54c732</color>
     <color name="chat_text_time_line">#D0707174</color>
     <color name="chat_text_info_line">#D0212A20</color>
+    <color name="chat_text">#212A20</color>
 </resources>

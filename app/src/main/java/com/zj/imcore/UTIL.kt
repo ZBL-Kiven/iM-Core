@@ -22,12 +22,6 @@ fun msgIsSelf(uid: String?): Boolean {
     return uid == userId
 }
 
-fun dpToPx(context: Context, dipValue: Float): Int {
-    val scale = context.applicationContext.resources.displayMetrics.density
-    return (dipValue * scale + 0.5f).toInt()
-}
-
-
 fun printViewTree(view: View) {
     fun printViews(view: View, sb: StringBuffer, i: Int = 0) {
         repeat((0 until i).count()) {

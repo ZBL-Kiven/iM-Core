@@ -2,16 +2,16 @@ package com.zj.imcore
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.SeekBar
 import com.zj.im.main.UIHelper
 import com.zj.im.registerMsgReceivedListener
+import com.zj.im.sender.SendObject
 import com.zj.im.store.interfaces.DataListener
 import com.zj.imcore.options.IMHelper
 import com.zj.imcore.renderer.TestHandler
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.mod.MsgReceivedInfo
-import com.zj.imcore.ui.list.views.VoiceView.Companion.ORIENTATION_LEFT
-import com.zj.imcore.ui.list.views.VoiceView.Companion.ORIENTATION_RIGHT
+import com.zj.imcore.options.IMClient
+import com.zj.imcore.options.IMClient.Companion.TCP_TIME_OUT
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -46,45 +46,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         main_rv_msgBar?.itemAnimator = null
-        main_sb?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) sendMsg?.setLevel(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-        })
         sendMsg?.setOnClickListener {
             it.postInvalidate()
-            //            val callId = IMClient.getRandomCallId()
-            //            val vid = "=bvwBLyAvD"
-            //            val timeOut = TCP_TIME_OUT
-            //            val text = et?.text.toString()
-            //            @Suppress("SpellCheckingInspection") SendObject.create(callId).put("type", "message").put("vchannel_id", vid).put("text", text).put("subtype", "normal").putAll(makeSentParams(callId)).timeOut(timeOut).build().send()
+            val callId = IMClient.getRandomCallId()
+            val vid = "=bvwBLyAvD"
+            val timeOut = TCP_TIME_OUT
+            val text = et?.text.toString()
+            @Suppress("SpellCheckingInspection") SendObject.create(callId).put("type", "message").put("vchannel_id", vid).put("text", text).put("subtype", "normal").putAll(makeSentParams(callId)).timeOut(timeOut).build().send()
         }
         receiveMock?.setOnClickListener {
-            var or = sendMsg?.getOrientation()
-            or = if (or == ORIENTATION_LEFT) ORIENTATION_RIGHT
-            else ORIENTATION_LEFT
-            sendMsg.setOrientation(or)
-
-            //            receiveMock?.isEnabled = false
-            //            mutableListOf<MsgReceivedInfo>().let {
-            //                val r = java.util.Random()
-            //                for (i in 0 until 1) {
-            //                    val msg = MsgInfo()
-            //                    msg.text = "this is data $i "
-            //                    it.add(MsgReceivedInfo(msg, r.nextBoolean(), (System.currentTimeMillis()) + i))
-            //                }
-            //                UIHelper.postReceiveData(it)
-            //            }
-            //            receiveMock?.isEnabled = true
+            receiveMock?.isEnabled = false
+            mutableListOf<MsgReceivedInfo>().let {
+                val r = java.util.Random()
+                for (i in 0 until 1) {
+                    val msg = MsgInfo()
+                    msg.text = "this is data $i "
+                    it.add(MsgReceivedInfo(msg, r.nextBoolean(), (System.currentTimeMillis()) + i))
+                }
+                UIHelper.postReceiveData(it)
+            }
+            receiveMock?.isEnabled = true
         }
     }
 

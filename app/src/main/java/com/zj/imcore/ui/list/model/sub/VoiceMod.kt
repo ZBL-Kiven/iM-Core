@@ -1,35 +1,69 @@
 package com.zj.imcore.ui.list.model.sub
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.zj.im.list.views.ChatItemView
 import com.zj.imcore.ChatOption
-import com.zj.imcore.dpToPx
+import com.zj.imcore.R
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.ui.list.model.BaseItemMod
 import com.zj.imcore.ui.list.views.VoiceView
-import java.text.SimpleDateFormat
-import java.util.*
 
 class VoiceMod : BaseItemMod() {
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
         view.getBubbleLayout()?.let { p ->
+            val voiceParent = RelativeLayout(context)
+            val rlp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+
             val voiceView = VoiceView(context)
-            val vlp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            voiceView.id = R.id.im_chat_item_bubble_voice
+            voiceView.setOrientation(if (data.isSelf()) VoiceView.ORIENTATION_LEFT else VoiceView.ORIENTATION_RIGHT)
+            val vlp = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             vlp.marginStart = dpToPx(context, 5f)
-            p.addView(voiceView)
+
             val tv = TextView(context)
-            tv.maxWidth = dpToPx(context, ChatOption.NORMAL_MSG_MAX_WIDTH)
+            tv.id = R.id.im_chat_item_bubble_voice_duration
             val time = data.voice?.duration ?: 0
-            val timeStr = SimpleDateFormat("mm : ss", Locale.getDefault()).format(Date(time))
+            val timeStr = getVoiceTimeStr(time)
             tv.text = timeStr
-            val lp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            lp.marginStart = dpToPx(context, 35f)
-            p.addView(tv, lp)
+            tv.maxWidth = dpToPx(context, ChatOption.NORMAL_MSG_MAX_WIDTH)
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, ChatOption.textSize)
+            tv.setTextColor(getColor(context, ChatOption.textColor))
+
+            val tlp = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            tlp.marginStart = dpToPx(context, 8f)
+            tlp.addRule(RelativeLayout.CENTER_VERTICAL)
+
+            if (data.isSelf()) {
+                tlp.rightMargin = dpToPx(context, 10f)
+                tlp.addRule(RelativeLayout.ALIGN_PARENT_START)
+                vlp.addRule(RelativeLayout.END_OF, R.id.im_chat_item_bubble_voice_duration)
+            } else {
+                tlp.leftMargin = dpToPx(context, 10f)
+                vlp.addRule(RelativeLayout.ALIGN_PARENT_START)
+                tlp.addRule(RelativeLayout.END_OF, R.id.im_chat_item_bubble_voice)
+            }
+            voiceParent.addView(tv, tlp)
+            voiceParent.addView(voiceView, vlp)
+            p.addView(voiceParent, rlp)
         }
+    }
+
+    private fun getVoiceTimeStr(duration: Long): String {
+        var seconds = duration / 1000f
+        val min = seconds / 60f
+        if (min > 1) {
+            seconds %= 60
+        }
+        if (min <= 0 && seconds <= 0) return "0\'\'"
+        return "${if (min.toInt() > 0) {
+            "${min.toInt()}\'"
+        } else ""} ${seconds.toInt()}\'\'"
     }
 }

@@ -9,7 +9,6 @@ import com.bumptech.glide.request.transition.Transition
 import com.zj.im.img.AutomationImageCalculateUtils
 import com.zj.im.img.cache.ImageCacheUtil
 import com.zj.im.list.views.ChatItemView
-import com.zj.imcore.dpToPx
 import com.zj.imcore.mod.MsgImageInfo
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.ChatOption

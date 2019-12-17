@@ -5,6 +5,7 @@ import com.zj.imcore.mod.MsgImageInfo
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.mod.MsgReceivedInfo
 import com.zj.imcore.enums.MsgType
+import com.zj.imcore.mod.MsgVoiceInfo
 import com.zj.imcore.userId
 import com.zj.imcore.utils.img.ImageLoaderPayLoads
 import java.util.*
@@ -36,6 +37,8 @@ class TestHandler : EventCallBack<MsgReceivedInfo, MsgInfo> {
             }
             3 -> {
                 d?.subType = MsgType.VOICE.name
+                d?.voice = MsgVoiceInfo()
+                d?.voice?.url = ""
             }
             2 -> {
                 d?.subType = MsgType.INFO.name
@@ -44,7 +47,6 @@ class TestHandler : EventCallBack<MsgReceivedInfo, MsgInfo> {
             else -> {
                 d?.subType = MsgType.NORMAL.name
             }
-
         }
         d?.uid = if (data?.isSelf == true) userId else "bbb"
         completed(d)

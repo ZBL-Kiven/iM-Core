@@ -6,6 +6,9 @@ import com.zj.imcore.R
 
 object ChatOption {
 
+    var textSize = 14f
+    var textColor = R.color.chat_text
+
     var isPrintErrorAble = true
 
     var shadowY: Float = 5f

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="im_chat_item_bubble_voice"/>
+    <item type="id" name="im_chat_item_bubble_voice_duration"/>
+</resources>
