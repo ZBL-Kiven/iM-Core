@@ -7,12 +7,17 @@ import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.zj.im.list.views.ChatItemView
-import com.zj.imcore.ChatOption
+import com.zj.imcore.ui.ChatOption
 import com.zj.imcore.R
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.ui.list.model.BaseItemMod
 import com.zj.imcore.ui.list.views.VoiceView
 
+/**
+ * Created by ZJJ on 19/12/12
+ *
+ * the voice type of msg view model
+ * */
 class VoiceMod : BaseItemMod() {
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
@@ -33,8 +38,8 @@ class VoiceMod : BaseItemMod() {
             val timeStr = getVoiceTimeStr(time)
             tv.text = timeStr
             tv.maxWidth = dpToPx(context, ChatOption.NORMAL_MSG_MAX_WIDTH)
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, ChatOption.textSize)
-            tv.setTextColor(getColor(context, ChatOption.textColor))
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, ChatOption.bubbleTextSize)
+            tv.setTextColor(getColor(context, ChatOption.bubbleTextColor))
 
             val tlp = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             tlp.marginStart = dpToPx(context, 8f)

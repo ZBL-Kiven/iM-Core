@@ -32,7 +32,7 @@
             android:orientation="horizontal"
             android:layout_gravity="bottom"
             android:background="#acc"
-            tools:context=".MainActivity">
+            tools:context=".ui.main.MainActivity">
 
         <EditText
                 android:id="@+id/et"

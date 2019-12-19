@@ -9,6 +9,10 @@ enum class MsgType(private val subName: String) {
         return name.equals(this.subName, true)
     }
 
+    override fun toString(): String {
+        return subName
+    }
+
     companion object {
         fun isMsg(name: String?): Boolean {
             return NORMAL.eq(name) || FILE.eq(name) || VOICE.eq(name) || STICKER.eq(name)

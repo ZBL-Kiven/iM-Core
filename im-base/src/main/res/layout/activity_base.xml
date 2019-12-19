@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zj.base.views.BaseTitleView
+        android:id="@+id/baseTitle"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/base_titleLine"
+
+        style="@style/BaseLine" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/base_flContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.zj.base.views.BaseLoadingView
+            android:id="@+id/base_blvLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </FrameLayout>
+</RelativeLayout>

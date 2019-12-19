@@ -11,5 +11,4 @@
     <string name="month_time_format">M 月 d 日 HH:mm</string>
     <string name="year_time_format">yyyy 年 M 月 d 日 HH:mm</string>
     <string name="yesterday">昨天</string>
-
 </resources>

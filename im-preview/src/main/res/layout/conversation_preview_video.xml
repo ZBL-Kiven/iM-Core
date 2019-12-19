@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/video_preview_PlayerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/video_preview_iv_play"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:padding="20dp"
+                android:background="@drawable/conversation_preview_video_btn_bg"
+                android:src="@drawable/conversation_preview_video_btn_play"
+                tools:ignore="ContentDescription"/>
+
+        <LinearLayout
+                android:id="@+id/video_preview__tools_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/conversation_preview_color_black_50"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/video_preview_tv_start"
+                    android:layout_width="wrap_content"
+                    android:text="@string/conversation_preview_video_str_default_time"
+                    android:textColor="@color/conversation_preview_color_gray_5"
+                    android:layout_height="wrap_content"/>
+
+            <SeekBar
+                    android:id="@+id/video_preview_sb"
+                    style="@style/CustomSeekBarStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    tools:progress="20"/>
+            <TextView
+                    android:id="@+id/video_preview_tv_end"
+                    android:layout_width="wrap_content"
+                    android:text="@string/conversation_preview_video_str_default_time"
+                    android:textColor="@color/conversation_preview_color_gray_5"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <com.zj.preview.views.PreviewBaseLoadingView
+            android:id="@+id/video_preview_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:loadingRes="@drawable/conversation_preview_loading_progressbar"
+            app:noDataRes="@mipmap/conversation_preview_video_loading_fail"
+            app:backgroundFill="@color/conversation_preview_color_loading_color_background"
+            app:backgroundOnAct="@color/conversation_preview_color_loading_background_float"
+            app:hintColor="@color/colorPrimary"
+            app:refreshTextColor="@color/conversation_preview_color_gray"
+            app:loadingText="@string/loading_video_progress"
+            app:refreshText="@string/loading_video_error_tint"
+            app:noDataText="@string/loading_video_error"/>
+</FrameLayout>

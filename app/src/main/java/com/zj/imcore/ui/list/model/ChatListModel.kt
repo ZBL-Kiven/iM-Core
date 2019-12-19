@@ -8,10 +8,15 @@ import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.views.ChatItemView
 import com.zj.imcore.mod.MsgInfo
 import com.zj.imcore.enums.MsgType
-import com.zj.imcore.ChatOption
+import com.zj.imcore.ui.ChatOption
 import com.zj.imcore.utils.img.ImageLoaderPayLoads
 import com.zj.imcore.utils.img.transactions.RoundCorner
 
+/**
+ * Created by ZJJ on 19/12/12
+ *
+ * extends to custom any msg item;
+ * */
 class ChatListModel : BaseChatModel<MsgInfo> {
 
     override fun isInitTimeStampView(data: MsgInfo): Boolean {

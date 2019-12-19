@@ -1,4 +1,4 @@
-package com.zj.imcore
+package com.zj.imcore.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,6 +6,8 @@ import com.zj.im.main.UIHelper
 import com.zj.im.registerMsgReceivedListener
 import com.zj.im.sender.SendObject
 import com.zj.im.store.interfaces.DataListener
+import com.zj.imcore.R
+import com.zj.imcore.makeSentParams
 import com.zj.imcore.options.IMHelper
 import com.zj.imcore.renderer.TestHandler
 import com.zj.imcore.mod.MsgInfo
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 main_rv_msgBar.adapter.data().add("aa", data)
                 main_rv_msgBar.stopScroll()
                 val p = main_rv_msgBar.adapter.data().maxCurDataPosition()
-                main_rv_msgBar.smoothScrollToPosition(p)
+                main_rv_msgBar.scrollToPosition(p)
             }
         })
         l.lock(false)
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             receiveMock?.isEnabled = false
             mutableListOf<MsgReceivedInfo>().let {
                 val r = java.util.Random()
-                for (i in 0 until 1) {
+                for (i in 0 until 10) {
                     val msg = MsgInfo()
                     msg.text = "this is data $i "
                     it.add(MsgReceivedInfo(msg, r.nextBoolean(), (System.currentTimeMillis()) + i))

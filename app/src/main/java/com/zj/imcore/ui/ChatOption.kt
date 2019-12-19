@@ -1,13 +1,26 @@
-package com.zj.imcore
+package com.zj.imcore.ui
 
 import android.graphics.Color
 import android.widget.ImageView
 import com.zj.imcore.R
 
+/**
+ * Created by ZJJ on 19/12/12
+ *
+ * the chat list item options ,
+ *
+ * configure almost all of properties for Bubble  here,
+ *
+ * attributes will be automatically converted to pixel units when used.
+ * */
 object ChatOption {
 
-    var textSize = 14f
-    var textColor = R.color.chat_text
+    var bubbleTextSize = 14f
+    var bubbleTextColor = R.color.chat_text
+
+    var videoPlayViewWidth = 33f
+    var videoPlayViewHeight = 33f
+    var videoPlayViewSource = R.mipmap.bubble_item_video_play
 
     var isPrintErrorAble = true
 
@@ -26,7 +39,7 @@ object ChatOption {
 
     var avatarWidth: Float = 40f
     var avatarHeight: Float = 40f
-    var avatarRadius: Float = 6f
+    var avatarRadius: Float = 3f
     var avatarQuality: Float = 1.0f
     var avatarScaleType: ImageView.ScaleType = ImageView.ScaleType.CENTER_CROP
 
@@ -59,10 +72,18 @@ object ChatOption {
     var NORMAL_MSG_MAX_WIDTH = 208f
 
     /**
-     * img size , tentative (9:16) * 15
+     * img size
      **/
     var IMAGE_MSG_MAX_WIDTH = 145f
     var IMAGE_MSG_MAX_HEIGHT = 217f
     var IMAGE_MSG_MIN_SCALE = 0.23f
     var IMAGE_MSG_QUALITY = .5f
+
+    /**
+     * sticker size
+     **/
+    var STICKER_MSG_MAX_WIDTH = 95f
+    var STICKER_MSG_MAX_HEIGHT = 147f
+    var STICKER_MSG_MIN_SCALE = 0.23f
+    var STICKER_MSG_QUALITY = .5f
 }

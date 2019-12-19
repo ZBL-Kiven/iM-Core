@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">zj_preview</string>
+    <string name="conversation_preview_video_str_default_time">00:00</string>
+
+    <string name="loading_no_data">No picture fond</string>
+    <string name="loading_progress">please wait…</string>
+    <string name="loading_refresh">Tap the screen to try again</string>
+    <string name="loading_video_progress">The video loading…</string>
+    <string name="loading_video_error">Video load fail</string>
+    <string name="loading_video_error_tint">file is damaged or the format is not supported</string>
+
+</resources>

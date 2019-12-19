@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="conversation_preview_color_blue_pale">#EDF0F7</color>
+    <color name="conversation_preview_color_primary">#36485E</color>
+    <color name="conversation_preview_color_white">#FFFFFF</color>
+    <color name="conversation_preview_color_gray">#A4A4A4</color>
+    <color name="conversation_preview_color_gray_5">#F5F5F5</color>
+    <color name="conversation_preview_color_black">#181F2A</color>
+    <color name="conversation_preview_color_black_50">#7f181F2A</color>
+    <color name="conversation_preview_color_black_d">#df000000</color>
+
+    <color name="conversation_preview_color_loading_background_float">#30000000</color>
+    <color name="conversation_preview_color_loading_color_background">#fff4f4f4</color>
+
+</resources>

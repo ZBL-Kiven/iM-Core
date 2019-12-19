@@ -145,7 +145,9 @@ class MsgInfo : MultiAbleData<MsgInfo>, CacheAble {
     override fun getOriginalPath(payloads: String?): String {
         return when (payloads) {
             ImageLoaderPayLoads.AVATAR -> userAvatar ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=226862559,425820995&fm=26&gp=0.jpg"
-            ImageLoaderPayLoads.CONVERSATION -> image?.url ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1061931856,2496159034&fm=26&gp=0.jpg"
+            ImageLoaderPayLoads.CONVERSATION_STICKER -> image?.url ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1028355655,2899485655&fm=26&gp=0.jpg"
+            ImageLoaderPayLoads.CONVERSATION_IMAGE -> file?.imageUrl ?: "http://img4.imgtn.bdimg.com/it/u=2853553659,1775735885&fm=26&gp=0.jpg"
+            ImageLoaderPayLoads.CONVERSATION_VIDEO -> file?.imageUrl ?: "http://img0.imgtn.bdimg.com/it/u=2458227883,4095122505&fm=26&gp=0.jpg"
             else -> ""
         }
     }

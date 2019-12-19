@@ -90,10 +90,6 @@ open class MsgFileInfo {
     @SerializedName("image_url")
     var imageUrl: String? = null
 
-    //文件的缩略图 URL (未用到)
-    @SerializedName("preview_url")
-    var previewUrl: String? = null
-
     //文件是否公开(未用到)
     @SerializedName("is_public")
     var isPublic: Boolean = false
@@ -104,5 +100,5 @@ open class MsgFileInfo {
 
     //文件的长度(视频文件用到)
     @SerializedName("duration")
-    var duration: Int = 0
+    var duration: Long = 0L
 }

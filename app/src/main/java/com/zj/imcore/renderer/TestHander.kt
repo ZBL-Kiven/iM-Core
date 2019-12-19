@@ -1,11 +1,9 @@
 package com.zj.imcore.renderer
 
 import com.zj.im.store.interfaces.EventCallBack
-import com.zj.imcore.mod.MsgImageInfo
-import com.zj.imcore.mod.MsgInfo
-import com.zj.imcore.mod.MsgReceivedInfo
+import com.zj.imcore.enums.MsgSubtype
 import com.zj.imcore.enums.MsgType
-import com.zj.imcore.mod.MsgVoiceInfo
+import com.zj.imcore.mod.*
 import com.zj.imcore.userId
 import com.zj.imcore.utils.img.ImageLoaderPayLoads
 import java.util.*
@@ -21,31 +19,52 @@ class TestHandler : EventCallBack<MsgReceivedInfo, MsgInfo> {
     }
 
     override fun handle(data: MsgReceivedInfo?, completed: (MsgInfo?) -> Unit) {
+        Thread.sleep(80)
         val d = data?.msgInfo
         d?.localCreatedTs = data?.createTs ?: 0
         val r = Random()
-        when (r.nextInt(5)) {
-            4 -> {
-                d?.subType = MsgType.STICKER.name
+        when (r.nextInt(6)) {
+            1 -> {
+                d?.subType = MsgType.STICKER.toString()
                 d?.text = "this is img type msg"
                 d?.image = MsgImageInfo().apply {
-                    this.url = d?.getOriginalPath(ImageLoaderPayLoads.CONVERSATION)
-                    this.width = 1920
-                    this.height = 1200
+                    this.url = d?.getOriginalPath(ImageLoaderPayLoads.CONVERSATION_STICKER)
+                    this.width = 400
+                    this.height = 400
                     this.size = 776380
                 }
             }
-            3 -> {
-                d?.subType = MsgType.VOICE.name
+            2 -> {
+                d?.subType = MsgType.VOICE.toString()
                 d?.voice = MsgVoiceInfo()
                 d?.voice?.url = ""
             }
-            2 -> {
-                d?.subType = MsgType.INFO.name
+            3 -> {
+                d?.subType = MsgType.INFO.toString()
                 d?.text = "this is an info type msg"
             }
+            4 -> {
+                d?.subType = MsgType.NORMAL.toString()
+            }
+            5 -> {
+                d?.subType = MsgType.FILE.toString()
+                d?.subTypeDetail = MsgSubtype.VIDEO.toString()
+                d?.file = MsgFileInfo().apply {
+                    this.imageUrl = d?.getOriginalPath(ImageLoaderPayLoads.CONVERSATION_VIDEO)
+                    this.width = 1024
+                    this.height = 775
+                    this.size = 776380
+                }
+            }
             else -> {
-                d?.subType = MsgType.NORMAL.name
+                d?.subType = MsgType.FILE.toString()
+                d?.subTypeDetail = MsgSubtype.IMAGE.toString()
+                d?.file = MsgFileInfo().apply {
+                    this.imageUrl = d?.getOriginalPath(ImageLoaderPayLoads.CONVERSATION_IMAGE)
+                    this.width = 670
+                    this.height = 471
+                    this.size = 776380
+                }
             }
         }
         d?.uid = if (data?.isSelf == true) userId else "bbb"
