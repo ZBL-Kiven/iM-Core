@@ -1,19 +1,19 @@
 <resources>
 
     <declare-styleable name="PreviewBaseLoadingView">
-        <attr name="backgroundFill" format="color"/>
-        <attr name="backgroundOnAct" format="color"/>
-        <attr name="loadingRes" format="reference"/>
-        <attr name="noDataRes" format="reference"/>
-        <attr name="noNetworkRes" format="reference"/>
-        <attr name="hintColor" format="color|reference"/>
-        <attr name="refreshTextColor" format="color|reference"/>
-        <attr name="loadingText" format="string"/>
-        <attr name="noDataText" format="string"/>
-        <attr name="networkErrorText" format="string"/>
-        <attr name="refreshText" format="string"/>
-        <attr name="showOnActDefault" format="boolean"/>
-        <attr name="refreshEnable" format="boolean"/>
+        <attr name="preview_backgroundFill" format="color"/>
+        <attr name="preview_backgroundOnAct" format="color"/>
+        <attr name="preview_loadingRes" format="reference"/>
+        <attr name="preview_noDataRes" format="reference"/>
+        <attr name="preview_noNetworkRes" format="reference"/>
+        <attr name="preview_hintColor" format="color|reference"/>
+        <attr name="preview_refreshTextColor" format="color|reference"/>
+        <attr name="preview_loadingText" format="string"/>
+        <attr name="preview_noDataText" format="string"/>
+        <attr name="preview_networkErrorText" format="string"/>
+        <attr name="preview_refreshText" format="string"/>
+        <attr name="preview_showOnActDefault" format="boolean"/>
+        <attr name="preview_refreshEnable" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="SquareImageView">

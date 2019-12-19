@@ -103,19 +103,19 @@ internal class PreviewBaseLoadingView @JvmOverloads constructor(context: Context
         if (attrs != null) {
             val array = context.obtainStyledAttributes(attrs, R.styleable.PreviewBaseLoadingView)
             try {
-                bgColor = array.getColor(R.styleable.PreviewBaseLoadingView_backgroundFill, ContextCompat.getColor(context, R.color.conversation_preview_color_loading_color_background))
-                bgColorOnAct = array.getColor(R.styleable.PreviewBaseLoadingView_backgroundOnAct, ContextCompat.getColor(context, R.color.conversation_preview_color_loading_background_float))
-                noDataRes = array.getResourceId(R.styleable.PreviewBaseLoadingView_noDataRes, -1)
-                noNetworkRes = array.getResourceId(R.styleable.PreviewBaseLoadingView_noNetworkRes, -1)
-                loadingRes = array.getResourceId(R.styleable.PreviewBaseLoadingView_loadingRes, -1)
-                hintTextColor = array.getColor(R.styleable.PreviewBaseLoadingView_hintColor, -1)
-                refreshTextColor = array.getColor(R.styleable.PreviewBaseLoadingView_refreshTextColor, -1)
-                loadingHint = array.getString(R.styleable.PreviewBaseLoadingView_loadingText) ?: ""
-                noDataHint = array.getString(R.styleable.PreviewBaseLoadingView_noDataText) ?: ""
-                networkErrorHint = array.getString(R.styleable.PreviewBaseLoadingView_networkErrorText) ?: ""
-                refreshHint = array.getString(R.styleable.PreviewBaseLoadingView_refreshText)
-                showOnActDefault = array.getBoolean(R.styleable.PreviewBaseLoadingView_showOnActDefault, false)
-                refreshEnable = array.getBoolean(R.styleable.PreviewBaseLoadingView_refreshEnable, true)
+                bgColor = array.getColor(R.styleable.PreviewBaseLoadingView_preview_backgroundFill, ContextCompat.getColor(context, R.color.conversation_preview_color_loading_color_background))
+                bgColorOnAct = array.getColor(R.styleable.PreviewBaseLoadingView_preview_backgroundOnAct, ContextCompat.getColor(context, R.color.conversation_preview_color_loading_background_float))
+                noDataRes = array.getResourceId(R.styleable.PreviewBaseLoadingView_preview_noDataRes, -1)
+                noNetworkRes = array.getResourceId(R.styleable.PreviewBaseLoadingView_preview_noNetworkRes, -1)
+                loadingRes = array.getResourceId(R.styleable.PreviewBaseLoadingView_preview_loadingRes, -1)
+                hintTextColor = array.getColor(R.styleable.PreviewBaseLoadingView_preview_hintColor, -1)
+                refreshTextColor = array.getColor(R.styleable.PreviewBaseLoadingView_preview_refreshTextColor, -1)
+                loadingHint = array.getString(R.styleable.PreviewBaseLoadingView_preview_loadingText) ?: ""
+                noDataHint = array.getString(R.styleable.PreviewBaseLoadingView_preview_noDataText) ?: ""
+                networkErrorHint = array.getString(R.styleable.PreviewBaseLoadingView_preview_networkErrorText) ?: ""
+                refreshHint = array.getString(R.styleable.PreviewBaseLoadingView_preview_refreshText)
+                showOnActDefault = array.getBoolean(R.styleable.PreviewBaseLoadingView_preview_showOnActDefault, false)
+                refreshEnable = array.getBoolean(R.styleable.PreviewBaseLoadingView_preview_refreshEnable, true)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {

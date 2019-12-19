@@ -9,7 +9,7 @@
              android:paddingLeft="10dp"
              android:paddingRight="10dp">
 
-    <com.zj.base.views.SimpleCusLayoutView
+    <com.zj.base.view.SimpleCusLayoutView
             android:id="@+id/base_title_vLeft"
             android:layout_width="25dp"
             android:layout_height="25dp"

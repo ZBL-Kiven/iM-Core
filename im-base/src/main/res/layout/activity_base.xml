@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <com.zj.base.views.BaseTitleView
-        android:id="@+id/baseTitle"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <com.zj.base.view.BaseTitleView
+            android:id="@+id/baseTitle"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"/>
 
     <View
-        android:id="@+id/base_titleLine"
-
-        style="@style/BaseLine" />
+            android:id="@+id/base_titleLine"
+            android:layout_alignBottom="@id/baseTitle"
+            style="@style/BaseLine"/>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <FrameLayout
             android:id="@+id/base_flContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <com.zj.base.views.BaseLoadingView
-            android:id="@+id/base_blvLoading"
-            android:layout_width="match_parent"
+            android:layout_below="@id/base_titleLine"
             android:layout_height="match_parent"/>
 
-    </FrameLayout>
+    <com.zj.loading.BaseLoadingView
+            android:id="@+id/base_blvLoading"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent" android:layout_alignTop="@+id/base_flContent"
+            android:layout_marginTop="0dp"/>
+
 </RelativeLayout>

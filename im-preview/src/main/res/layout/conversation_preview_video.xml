@@ -65,13 +65,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            app:loadingRes="@drawable/conversation_preview_loading_progressbar"
-            app:noDataRes="@mipmap/conversation_preview_video_loading_fail"
-            app:backgroundFill="@color/conversation_preview_color_loading_color_background"
-            app:backgroundOnAct="@color/conversation_preview_color_loading_background_float"
-            app:hintColor="@color/colorPrimary"
-            app:refreshTextColor="@color/conversation_preview_color_gray"
-            app:loadingText="@string/loading_video_progress"
-            app:refreshText="@string/loading_video_error_tint"
-            app:noDataText="@string/loading_video_error"/>
+            app:preview_loadingRes="@drawable/conversation_preview_loading_progressbar"
+            app:preview_noDataRes="@mipmap/conversation_preview_video_loading_fail"
+            app:preview_backgroundFill="@color/conversation_preview_color_loading_color_background"
+            app:preview_backgroundOnAct="@color/conversation_preview_color_loading_background_float"
+            app:preview_hintColor="@color/colorPrimary"
+            app:preview_refreshTextColor="@color/conversation_preview_color_gray"
+            app:preview_loadingText="@string/loading_video_progress"
+            app:preview_refreshText="@string/loading_video_error_tint"
+            app:preview_noDataText="@string/loading_video_error"/>
 </FrameLayout>
