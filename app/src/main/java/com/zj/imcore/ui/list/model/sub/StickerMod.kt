@@ -6,11 +6,11 @@ import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import com.zj.im.img.AutomationImageCalculateUtils
 import com.zj.im.list.views.ChatItemView
-import com.zj.imcore.ui.ChatOption
+import com.zj.im_model.Payloads
+import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.R
-import com.zj.imcore.mod.MsgInfo
+import com.zj.im_model.mod.MsgInfo
 import com.zj.imcore.ui.list.model.BaseItemMod
-import com.zj.imcore.utils.img.ImageLoaderPayLoads
 
 class StickerMod : BaseItemMod() {
 
@@ -47,7 +47,7 @@ class StickerMod : BaseItemMod() {
     }
 
     private fun getUrl(data: MsgInfo): String {
-        return data.getOriginalPath(ImageLoaderPayLoads.CONVERSATION_STICKER)
+        return data.getOriginalPath(Payloads.CONVERSATION_STICKER)
     }
 
     private fun calculateImgParams(context: Context, width: Int, height: Int): Pair<Boolean, Array<Int>> {

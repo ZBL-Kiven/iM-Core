@@ -6,7 +6,7 @@ import com.zj.list.utlis.QuickSort;
 
 import java.util.*;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 class DataSource<T extends MultiAbleData<T>> implements Comparable<DataSource> {
 
     private int weights;

@@ -1,12 +1,12 @@
 package com.zj.imcore.ui.list.model.sub
 
-import com.zj.imcore.mod.MsgInfo
-import com.zj.imcore.utils.img.ImageLoaderPayLoads
+import com.zj.im_model.Payloads
+import com.zj.im_model.mod.MsgInfo
 
 class ImageMod : BaseImageMod() {
 
     override fun getDataPayloads(data: MsgInfo): String {
-        return ImageLoaderPayLoads.CONVERSATION_IMAGE
+        return Payloads.CONVERSATION_IMAGE
     }
 
     override fun getWidth(data: MsgInfo): Int {

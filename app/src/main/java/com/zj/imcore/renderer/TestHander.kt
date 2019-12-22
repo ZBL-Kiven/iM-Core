@@ -1,11 +1,11 @@
 package com.zj.imcore.renderer
 
+import com.zj.im_model.mod.*
 import com.zj.im.store.interfaces.EventCallBack
+import com.zj.im_model.Payloads
 import com.zj.imcore.enums.MsgSubtype
 import com.zj.imcore.enums.MsgType
-import com.zj.imcore.mod.*
 import com.zj.imcore.userId
-import com.zj.imcore.utils.img.ImageLoaderPayLoads
 import java.util.*
 
 class TestHandler : EventCallBack<MsgReceivedInfo, MsgInfo> {
@@ -28,7 +28,7 @@ class TestHandler : EventCallBack<MsgReceivedInfo, MsgInfo> {
                 d?.subType = MsgType.STICKER.toString()
                 d?.text = "this is img type msg"
                 d?.image = MsgImageInfo().apply {
-                    this.url = d?.getOriginalPath(ImageLoaderPayLoads.CONVERSATION_STICKER)
+                    this.url = d?.getOriginalPath(Payloads.CONVERSATION_STICKER)
                     this.width = 400
                     this.height = 400
                     this.size = 776380
@@ -50,7 +50,7 @@ class TestHandler : EventCallBack<MsgReceivedInfo, MsgInfo> {
                 d?.subType = MsgType.FILE.toString()
                 d?.subTypeDetail = MsgSubtype.VIDEO.toString()
                 d?.file = MsgFileInfo().apply {
-                    this.imageUrl = d?.getOriginalPath(ImageLoaderPayLoads.CONVERSATION_VIDEO)
+                    this.imageUrl = d?.getOriginalPath(Payloads.CONVERSATION_VIDEO)
                     this.width = 1024
                     this.height = 775
                     this.size = 776380
@@ -60,7 +60,7 @@ class TestHandler : EventCallBack<MsgReceivedInfo, MsgInfo> {
                 d?.subType = MsgType.FILE.toString()
                 d?.subTypeDetail = MsgSubtype.IMAGE.toString()
                 d?.file = MsgFileInfo().apply {
-                    this.imageUrl = d?.getOriginalPath(ImageLoaderPayLoads.CONVERSATION_IMAGE)
+                    this.imageUrl = d?.getOriginalPath(Payloads.CONVERSATION_IMAGE)
                     this.width = 670
                     this.height = 471
                     this.size = 776380

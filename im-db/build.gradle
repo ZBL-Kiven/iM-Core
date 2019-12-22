@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 29
-
+    compileSdkVersion compile_sdk_version as int
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion min_sdk_version as int
+        targetSdkVersion target_sdk_version as int
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -16,6 +16,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api project(':im-model')
 }

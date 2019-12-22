@@ -10,10 +10,10 @@ internal class UIMaker<DATA, R, HANDLER : DataHandler<R>>(private val handler: H
     private var options: Options<DATA, R, HANDLER>? = null
 
     init {
-        if (eventCall == null) {
-            options = null
+        options = if (eventCall == null) {
+            null
         } else {
-            options = Options.create(handler, eventCall)
+            Options.create(handler, eventCall)
         }
     }
 

@@ -7,11 +7,11 @@ import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.zj.im.list.views.ChatItemView
-import com.zj.imcore.ui.ChatOption
+import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.R
-import com.zj.imcore.mod.MsgInfo
+import com.zj.im_model.mod.MsgInfo
 import com.zj.imcore.ui.list.model.BaseItemMod
-import com.zj.imcore.ui.list.views.VoiceView
+import com.zj.imcore.ui.views.VoiceView
 
 /**
  * Created by ZJJ on 19/12/12

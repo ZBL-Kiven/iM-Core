@@ -2,11 +2,13 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'kotlin-android-extensions'
+
 android {
-    compileSdkVersion 29
+    compileSdkVersion compile_sdk_version as int
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion min_sdk_version as int
+        targetSdkVersion target_sdk_version as int
         versionCode 1
         versionName "1.0"
     }
@@ -15,9 +17,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'junit:junit:4.12'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0-rc01'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api 'androidx.appcompat:appcompat:1.1.0'
+    api 'androidx.recyclerview:recyclerview:1.1.0'
     api project(":zj-list")
 }
 repositories {

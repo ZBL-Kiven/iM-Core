@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/app_act_sign_ll_content"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/app_act_sign_et_account_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="80dp"
+            app:errorEnabled="true"
+            app:startIconDrawable="@mipmap/account"
+            android:hint="@string/app_login_hint_account"
+            android:layout_marginBottom="5dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/app_act_sign_et_account"
+                style="@style/baseEtStyle"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/app_act_sign_et_password_layout"
+            style="@style/baseTextInputLayoutStyle"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            app:errorEnabled="true"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@mipmap/password"
+            app:passwordToggleTint="@color/app_base_text_color_666"
+            android:hint="@string/app_login_hint_password"
+            android:layout_marginBottom="5dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/app_act_sign_et_password"
+                style="@style/baseEtStyle"
+                android:inputType="textPassword"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/app_act_sign_et_password_ensure_layout"
+            style="@style/baseTextInputLayoutStyle"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            app:errorEnabled="true"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@mipmap/app_sign_icon_pwd_check"
+            app:passwordToggleTint="@color/app_base_text_color_666"
+            android:hint="@string/app_login_hint_password_ensure"
+            android:layout_marginBottom="5dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/app_act_sign_et_password_ensure"
+                style="@style/baseEtStyle"
+                android:inputType="textPassword"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+            android:id="@+id/app_act_sign_tv_goto_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="15dp"
+            android:padding="10dp"
+            android:drawableStart="@mipmap/app_login_icon_back"
+            android:drawablePadding="3dp"
+            android:text="@string/app_sign_text_go_login"
+            android:layout_marginStart="30dp"
+            android:textSize="@dimen/app_et_text_size_12"/>
+</LinearLayout>

@@ -5,9 +5,9 @@ import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.zj.im.list.views.ChatItemView
-import com.zj.imcore.ui.ChatOption
-import com.zj.imcore.mod.MsgInfo
-import com.zj.imcore.utils.img.ImageLoaderPayLoads
+import com.zj.im_model.Payloads
+import com.zj.imcore.ui.list.ChatOption
+import com.zj.im_model.mod.MsgInfo
 import com.zj.preview.PreviewActivity
 import com.zj.preview.mod.ConversationFileInfo
 import com.zj.preview.mod.SourceType
@@ -20,7 +20,7 @@ import com.zj.preview.mod.SourceType
 class VideoMod : BaseImageMod() {
 
     override fun getDataPayloads(data: MsgInfo): String {
-        return ImageLoaderPayLoads.CONVERSATION_VIDEO
+        return Payloads.CONVERSATION_VIDEO
     }
 
     override fun getWidth(data: MsgInfo): Int {
@@ -50,7 +50,7 @@ class VideoMod : BaseImageMod() {
     private fun openPreview(context: Context, data: MsgInfo) {
         val url = data.file?.url ?: ""
         val duration = data.file?.duration ?: 0L
-        val imgPath = data.getOriginalPath(ImageLoaderPayLoads.CONVERSATION_VIDEO)
+        val imgPath = data.getOriginalPath(Payloads.CONVERSATION_VIDEO)
         val info = ConversationFileInfo(SourceType.VIDEO, url, "", duration, imgPath)
         PreviewActivity.start(context, info, null)
     }

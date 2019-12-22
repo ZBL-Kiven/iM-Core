@@ -6,10 +6,10 @@ import com.zj.im.img.cache.ImageCacheUtil
 import com.zj.imcore.utils.img.loader.AvatarLoadUtil
 import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.views.ChatItemView
-import com.zj.imcore.mod.MsgInfo
+import com.zj.im_model.Payloads
+import com.zj.im_model.mod.MsgInfo
 import com.zj.imcore.enums.MsgType
-import com.zj.imcore.ui.ChatOption
-import com.zj.imcore.utils.img.ImageLoaderPayLoads
+import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.utils.img.transactions.RoundCorner
 
 /**
@@ -39,7 +39,7 @@ class ChatListModel : BaseChatModel<MsgInfo> {
 
         fun loadAvatar() {
             view.getAvatarView()?.let {
-                AvatarLoadUtil(context, dpToPx(context, ChatOption.avatarWidth), dpToPx(context, ChatOption.avatarHeight), ChatOption.avatarQuality, data, ImageCacheUtil.CENTER_CROP, ImageLoaderPayLoads.AVATAR).load { path ->
+                AvatarLoadUtil(context, dpToPx(context, ChatOption.avatarWidth), dpToPx(context, ChatOption.avatarHeight), ChatOption.avatarQuality, data, ImageCacheUtil.CENTER_CROP, Payloads.AVATAR).load { path ->
                     val avatarRadius = dpToPx(context, ChatOption.avatarRadius) * 1.0f
                     val transformer = RoundCorner(context, avatarRadius, avatarRadius, avatarRadius, avatarRadius)
                     Glide.with(context).load(path).transform(transformer).into(it)

@@ -2,6 +2,7 @@ package com.zj.base.utils;
 
 import android.content.res.Resources;
 
+@SuppressWarnings("unused")
 public class DPUtils {
     /**
      *Conversion from dp units to px (pixels) according to the resolution of the phone

@@ -8,7 +8,7 @@ import com.zj.im.chat.hub.ClientHub
 import com.zj.im.chat.hub.ServerHub
 import com.zj.im.chat.interfaces.AnalyzingData
 import com.zj.im.chat.interfaces.IMInterface
-import com.zj.im.main.UIHelper
+import com.zj.im.UIHelper
 
 object IMHelper : IMInterface() {
 

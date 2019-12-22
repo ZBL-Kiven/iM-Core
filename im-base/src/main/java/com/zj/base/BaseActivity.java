@@ -25,7 +25,6 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private View contentView;
     public View rootView, titleLine;
     private BaseLoadingView blvLoading;
     private FrameLayout flContent;
@@ -45,11 +44,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Nullable
     protected abstract String setTitle();
 
     protected abstract int getContentId();
 
     public abstract void initView();
+
+    public abstract void initData();
 
     public abstract void initListener();
 
@@ -89,7 +91,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 设置显示模式,可在主／非主线程调用
+     * set loading
      */
     public void hint(final BaseLoadingView.DisplayMode mode, final String hint, final boolean showingOnActive) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
@@ -109,8 +111,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lifecycle = Lifecycle.CREATE;
-        contentView = LayoutInflater.from(getWeakContext().get()).inflate(R.layout.activity_base, null, false);
-        setContentView(contentView);
+        View v = LayoutInflater.from(getWeakContext().get()).inflate(R.layout.activity_base, null, false);
+        setContentView(v);
         initBaseView();
     }
 
@@ -123,10 +125,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         titleLine.setVisibility(isTitleBarShow && isTitleLineShow() ? View.VISIBLE : View.GONE);
         initTitleBar(isTitleBarShow);
         blvLoading.setRefreshListener(this::callRefresh);
+        rootView = LayoutInflater.from(getWeakContext().get()).inflate(getContentId(), flContent, true);
+        initView();
+        initData();
+        initListener();
     }
 
     private void initTitleBar(boolean isShow) {
-        baseTitleView.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        String title = setTitle();
+        baseTitleView.setVisibility(isShow && title != null ? View.VISIBLE : View.GONE);
         if (isShow) {
             if (isEnableLeftToBack()) {
                 baseTitleView.setLeftClickListener(view -> finish());
@@ -181,10 +188,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         weakReference = null;
         flContent.clearDisappearingChildren();
         flContent.removeAllViews();
-        if (contentView instanceof ViewGroup) {
-            ((ViewGroup) contentView).removeAllViews();
+        if (rootView instanceof ViewGroup) {
+            ((ViewGroup) rootView).removeAllViews();
         }
-        contentView = null;
+        rootView = null;
         super.onDestroy();
     }
 

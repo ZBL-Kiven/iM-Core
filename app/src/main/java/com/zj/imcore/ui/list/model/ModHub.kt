@@ -1,7 +1,7 @@
 package com.zj.imcore.ui.list.model
 
 import com.zj.imcore.enums.MsgSubtype
-import com.zj.imcore.mod.MsgInfo
+import com.zj.im_model.mod.MsgInfo
 import com.zj.imcore.enums.MsgType
 import com.zj.imcore.ui.list.model.sub.*
 import java.lang.NullPointerException
@@ -14,8 +14,8 @@ import java.lang.NullPointerException
 @Suppress("unused")
 object ModHub {
 
-    fun getMode(msgInfo: MsgInfo): BaseItemMod {
-        msgInfo.subType?.let {
+    fun getMode(msgInfo: MsgInfo?): BaseItemMod {
+        msgInfo?.subType?.let {
             return when {
                 MsgType.INFO.eq(it) -> InfoMod()
                 MsgType.STICKER.eq(it) -> StickerMod()
@@ -33,7 +33,7 @@ object ModHub {
                 }
                 else -> throw TypeCastException("the message type $it is not supported!")
             }
-        } ?: throw NullPointerException("please check the message ${msgInfo.key} sub-type was null?")
+        } ?: throw NullPointerException("please check the message ${msgInfo?.key} sub-type was null?")
     }
 
     const val REFRESH_AVATAR = "refreshAvatar"

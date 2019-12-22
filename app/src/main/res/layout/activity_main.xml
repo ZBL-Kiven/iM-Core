@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"/>
 
-    <com.zj.imcore.ui.list.IMRecyclerView
+    <com.zj.imcore.ui.views.IMRecyclerView
             android:id="@+id/main_rv_msgBar"
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -32,7 +32,7 @@
             android:orientation="horizontal"
             android:layout_gravity="bottom"
             android:background="#acc"
-            tools:context=".ui.main.MainActivity">
+            tools:context=".main.MainActivity">
 
         <EditText
                 android:id="@+id/et"

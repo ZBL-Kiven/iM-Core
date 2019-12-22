@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:background="@color/app_base_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.zj.imcore.ui.views.pager.LoginViewPager
+            android:id="@+id/app_act_login_vp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <com.zj.imcore.ui.views.LoadingButton
+            android:id="@+id/app_act_login_btn"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:lb_btnColor="@color/colorPrimary"
+            app:lb_btnDisabledColor="@color/app_base_color_disable"
+            app:lb_resetAfterFailed="true"
+            app:lb_disabledTextColor="@color/app_base_color_text_disable"
+            app:lb_cornerRadius="8"
+            app:lb_btnRippleColor="@color/colorPrimary_grey"
+            app:lb_rippleEnable="true"
+            app:lb_btnRippleAlpha="0.5"
+            app:lb_textColor="@color/colorPrimaryTextColor"
+            app:lb_btnText="@string/app_login_text_login"
+    />
+
+</LinearLayout>

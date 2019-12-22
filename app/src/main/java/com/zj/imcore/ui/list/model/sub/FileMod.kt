@@ -2,7 +2,7 @@ package com.zj.imcore.ui.list.model.sub
 
 import android.content.Context
 import com.zj.im.list.views.ChatItemView
-import com.zj.imcore.mod.MsgInfo
+import com.zj.im_model.mod.MsgInfo
 import com.zj.imcore.ui.list.model.BaseItemMod
 
 /**

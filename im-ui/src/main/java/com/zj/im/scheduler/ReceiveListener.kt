@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.zj.im.cast
-import com.zj.im.main.UIHelper
+import com.zj.im.UIHelper
 import com.zj.im.mainHandler
 import com.zj.im.store.UIMaker
 import com.zj.im.store.interfaces.DataHandler

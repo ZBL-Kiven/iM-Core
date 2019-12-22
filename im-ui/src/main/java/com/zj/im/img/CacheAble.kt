@@ -1,5 +1,6 @@
 package com.zj.im.img
 
+@Suppress("unused")
 interface CacheAble {
 
     /**

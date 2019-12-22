@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">IMCore</string>
+    <string name="app_name" translatable="false">Fruit Chat</string>
+    <string name="app_login_hint_account">name</string>
+    <string name="app_login_hint_password">password</string>
+    <string name="app_login_hint_password_ensure">confirm password</string>
+
+    <string name="app_login_text_login">login</string>
+    <string name="app_login_text_sign">sign</string>
+    <string name="app_login_text_go_sign">sign with us?</string>
+    <string name="app_sign_text_go_login">go to login</string>
+
+    <string name="app_login_warming_null_account">invalid account!</string>
+    <string name="app_login_warming_null_pwd">invalid password!</string>
+    <string name="app_sign_warming_null_pwd_ensure">confirm password with null!</string>
+    <string name="app_sign_warming_pwd_ensure_error">Passwords verification failed!</string>
+
 </resources>

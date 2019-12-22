@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#a1a3a1</color>
+    <color name="colorPrimary">#212a20</color>
+    <color name="colorPrimary_grey">#262c27</color>
+    <color name="colorPrimaryBackground">#a1a3a1</color>
+    <color name="colorPrimaryTextColor">#e7f3e9</color>
     <color name="colorPrimaryDark">#1a1a1a</color>
     <color name="colorAccent">#1a1a10</color>
 
@@ -11,4 +14,14 @@
     <color name="chat_text_time_line">#D0707174</color>
     <color name="chat_text_info_line">#D0212A20</color>
     <color name="chat_text">#212A20</color>
+
+    <color name="app_base_background">#d9d7df</color>
+    <color name="app_base_text_color_333">#333333</color>
+    <color name="app_base_text_color_666">#666666</color>
+    <color name="app_base_text_color_999">#999999</color>
+    <color name="app_base_line_color">#1a2b21</color>
+    <color name="app_base_line_color_focused">#b6b2bc</color>
+
+    <color name="app_base_color_disable">#787879</color>
+    <color name="app_base_color_text_disable">#D0707174</color>
 </resources>

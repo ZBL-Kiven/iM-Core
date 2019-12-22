@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="app_base_line_width">1px</dimen>
+    <dimen name="app_et_text_size_16">16sp</dimen>
+    <dimen name="app_et_text_size_12">12sp</dimen>
+    <dimen name="app_et_text_size_10">10sp</dimen>
+    <dimen name="app_et_text_size_14">14sp</dimen>
+</resources>
