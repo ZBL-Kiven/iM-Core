@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zj.loading.BaseLoadingView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/photo_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:loadingRes="@drawable/loading_progressbar"
+        app:noDataRes="@mipmap/app_common_loading_no_data"
+        app:noNetworkRes="@mipmap/app_common_loading_no_network"
+        app:backgroundFill="@color/app_base_background"
+        app:backgroundUnderTheContent="@drawable/app_base_bg_btn_corners"
+        app:hintColor="@color/color_primary"
+        app:refreshTextColor="@color/color_primary_grey"
+        app:loadingText="@string/loading_progress" app:refreshText="@string/loading_refresh"
+        app:noDataText="@string/loading_no_data"/>

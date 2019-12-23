@@ -20,7 +20,7 @@ object ChatOption {
 
     var videoPlayViewWidth = 33f
     var videoPlayViewHeight = 33f
-    var videoPlayViewSource = R.mipmap.bubble_item_video_play
+    var videoPlayViewSource = R.mipmap.app_chat_icon_bubble_item_video_play
 
     var isPrintErrorAble = true
 

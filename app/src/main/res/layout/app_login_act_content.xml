@@ -16,15 +16,15 @@
             android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            app:lb_btnColor="@color/colorPrimary"
+            app:lb_btnColor="@color/color_primary"
             app:lb_btnDisabledColor="@color/app_base_color_disable"
             app:lb_resetAfterFailed="true"
             app:lb_disabledTextColor="@color/app_base_color_text_disable"
             app:lb_cornerRadius="8"
-            app:lb_btnRippleColor="@color/colorPrimary_grey"
+            app:lb_btnRippleColor="@color/color_primary_grey"
             app:lb_rippleEnable="true"
             app:lb_btnRippleAlpha="0.5"
-            app:lb_textColor="@color/colorPrimaryTextColor"
+            app:lb_textColor="@color/color_primary_text_color"
             app:lb_btnText="@string/app_login_text_login"
     />
 

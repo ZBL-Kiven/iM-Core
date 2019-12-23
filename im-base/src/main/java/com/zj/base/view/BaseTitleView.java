@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import com.zj.base.R;
 
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
@@ -137,11 +138,11 @@ public class BaseTitleView extends FrameLayout {
     }
 
     public void setLeftTextColor(int textColor) {
-        vLeft.setTextColor(textColor).draw();
+        vLeft.setTextColor(getColor(textColor)).draw();
     }
 
     public void setLeftDrawableColor(int drawableColor) {
-        vLeft.setDrawableColor(drawableColor).draw();
+        vLeft.setDrawableColor(getColor(drawableColor)).draw();
     }
 
     public void setLeftWidth(float width) {
@@ -161,11 +162,11 @@ public class BaseTitleView extends FrameLayout {
     }
 
     public void setRightTextColor(int textColor) {
-        vRight.setTextColor(textColor).draw();
+        vRight.setTextColor(getColor(textColor)).draw();
     }
 
     public void setRightDrawableColor(int drawableColor) {
-        vRight.setDrawableColor(drawableColor).draw();
+        vRight.setDrawableColor(getColor(drawableColor)).draw();
     }
 
     public void setRightWidth(float width) {
@@ -192,8 +193,12 @@ public class BaseTitleView extends FrameLayout {
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dpSize);
     }
 
+    public void setTitleTextSizeRef(int ref) {
+        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(ref));
+    }
+
     public void setTitleColor(int color) {
-        tvTitle.setTextColor(color);
+        tvTitle.setTextColor(getColor(color));
     }
 
     public void setLeftClickListener(OnClickListener l) {
@@ -218,5 +223,13 @@ public class BaseTitleView extends FrameLayout {
 
     public void setRightVisibility(boolean visibility) {
         vRight.setVisibility(visibility ? VISIBLE : GONE);
+    }
+
+    private int getColor(int c) {
+        try {
+            return ContextCompat.getColor(getContext(), c);
+        } catch (Exception e) {
+            return c;
+        }
     }
 }

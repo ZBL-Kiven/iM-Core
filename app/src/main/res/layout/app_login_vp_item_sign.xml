@@ -15,13 +15,13 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="80dp"
             app:errorEnabled="true"
-            app:startIconDrawable="@mipmap/account"
+            app:startIconDrawable="@mipmap/app_login_icon_account"
             android:hint="@string/app_login_hint_account"
             android:layout_marginBottom="5dp">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/app_act_sign_et_account"
-                style="@style/baseEtStyle"/>
+                style="@style/baseEtStyle.SingleLine"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -32,14 +32,14 @@
             android:layout_marginRight="40dp"
             app:errorEnabled="true"
             app:passwordToggleEnabled="true"
-            app:startIconDrawable="@mipmap/password"
+            app:startIconDrawable="@mipmap/app_login_icon_password"
             app:passwordToggleTint="@color/app_base_text_color_666"
             android:hint="@string/app_login_hint_password"
             android:layout_marginBottom="5dp">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/app_act_sign_et_password"
-                style="@style/baseEtStyle"
+                style="@style/baseEtStyle.SingleLine"
                 android:inputType="textPassword"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -58,7 +58,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/app_act_sign_et_password_ensure"
-                style="@style/baseEtStyle"
+                style="@style/baseEtStyle.SingleLine"
                 android:inputType="textPassword"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -67,7 +67,7 @@
             android:id="@+id/app_act_sign_tv_goto_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/color_primary"
             android:layout_marginBottom="15dp"
             android:padding="10dp"
             android:drawableStart="@mipmap/app_login_icon_back"

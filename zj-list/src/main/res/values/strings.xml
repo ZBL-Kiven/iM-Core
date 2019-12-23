@@ -23,4 +23,8 @@
     <string name="srl_component_falsify" formatted="false">%s falsify area,\n Represents the height[%.1fdp] of drag at
         run time,\n It does not show anything.
     </string>
+
+    <item name="type_header" type="integer"/>
+    <item name="type_footer" type="integer"/>
+    <item name="type_child" type="integer"/>
 </resources>

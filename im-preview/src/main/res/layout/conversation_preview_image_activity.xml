@@ -26,7 +26,7 @@
                 android:id="@+id/conversation_preview_tv_start"
                 android:layout_width="wrap_content"
                 android:text="@string/conversation_preview_video_str_default_time"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/color_primary"
                 android:layout_height="wrap_content"/>
 
         <SeekBar
@@ -40,7 +40,7 @@
                 android:id="@+id/conversation_preview_tv_end"
                 android:layout_width="wrap_content"
                 android:text="@string/conversation_preview_video_str_default_time"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/color_primary"
                 android:layout_height="wrap_content"/>
     </LinearLayout>
 </FrameLayout>

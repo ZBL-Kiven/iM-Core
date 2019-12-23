@@ -12,7 +12,7 @@ public class ViscousFluidInterpolator implements Interpolator {
     static {
         // must be set to 1.0 (used in viscousFluid())
         VISCOUS_FLUID_NORMALIZE = 1.0f / viscousFluid(1.0f);
-        // account for very small floating-point error
+        // app_login_icon_account for very small floating-point error
         VISCOUS_FLUID_OFFSET = 1.0f - VISCOUS_FLUID_NORMALIZE * viscousFluid(1.0f);
     }
 

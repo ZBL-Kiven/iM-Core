@@ -14,7 +14,7 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder, T> extends RecyclerView.Adapter<VH> {
 
-    BaseRecyclerAdapter() {
+    public BaseRecyclerAdapter() {
         data = new ArrayList<>();
     }
 

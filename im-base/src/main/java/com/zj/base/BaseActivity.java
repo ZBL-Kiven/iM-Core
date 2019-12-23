@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,9 +43,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    @Nullable
-    protected abstract String setTitle();
-
     protected abstract int getContentId();
 
     public abstract void initView();
@@ -55,23 +51,25 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract void initListener();
 
+    protected void initTitleBar(BaseTitleView baseTitleView) {
+
+    }
+
     protected void callRefresh() {
 
     }
 
-    /**
-     * Setting the visibility of the line below the title bar
-     */
-    protected boolean isTitleLineShow() {
-        return true;
-    }
-
-    protected boolean isTitleBarShow() {
-        return true;
-    }
-
-    protected void setTitleBarVisibility(boolean isShow) {
-        initTitleBar(isShow);
+    protected void showTitleBar(boolean show) {
+        if (show && baseTitleView != null) {
+            baseTitleView.setVisibility(View.VISIBLE);
+            titleLine.setVisibility(View.VISIBLE);
+            initTitleBar(baseTitleView);
+        } else {
+            if (baseTitleView != null) {
+                baseTitleView.setVisibility(View.GONE);
+                titleLine.setVisibility(View.GONE);
+            }
+        }
     }
 
     public BaseTitleView getBaseTitleView() {
@@ -80,10 +78,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setTitle(String s) {
         baseTitleView.setTitle(s + "");
-    }
-
-    public boolean isEnableLeftToBack() {
-        return true;
     }
 
     public BaseLoadingView getBlvLoading() {
@@ -121,25 +115,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         blvLoading = f(R.id.base_blvLoading);
         baseTitleView = f(R.id.baseTitle);
         titleLine = f(R.id.base_titleLine);
-        boolean isTitleBarShow = isTitleBarShow();
-        titleLine.setVisibility(isTitleBarShow && isTitleLineShow() ? View.VISIBLE : View.GONE);
-        initTitleBar(isTitleBarShow);
+        initTitleBar(baseTitleView);
         blvLoading.setRefreshListener(this::callRefresh);
         rootView = LayoutInflater.from(getWeakContext().get()).inflate(getContentId(), flContent, true);
         initView();
         initData();
         initListener();
-    }
-
-    private void initTitleBar(boolean isShow) {
-        String title = setTitle();
-        baseTitleView.setVisibility(isShow && title != null ? View.VISIBLE : View.GONE);
-        if (isShow) {
-            if (isEnableLeftToBack()) {
-                baseTitleView.setLeftClickListener(view -> finish());
-            }
-            baseTitleView.setTitle(TextUtils.isEmpty(setTitle()) ? "" : setTitle());
-        }
     }
 
     /**

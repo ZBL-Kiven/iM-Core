@@ -268,8 +268,8 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
             MotionEvent.ACTION_DOWN -> {
                 mTouchX = event.x
                 mTouchY = event.y
-                mRawX = mTouchX
-                mRawY = mTouchY
+                mRawX = event.rawX
+                mRawY = event.rawY
                 playTouchDownAnimation()
             }
             MotionEvent.ACTION_MOVE -> {

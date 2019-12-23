@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <com.zj.base.view.BaseTitleView
             android:id="@+id/baseTitle"
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
+            android:visibility="gone"
             android:layout_height="wrap_content"/>
 
     <View
             android:id="@+id/base_titleLine"
+            android:visibility="gone"
             android:layout_alignBottom="@id/baseTitle"
             style="@style/BaseLine"/>
 

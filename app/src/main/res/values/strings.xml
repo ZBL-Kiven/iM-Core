@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name" translatable="false">Fruit Chat</string>
+
+    <string name="app_system_error_no_context">System error ,please restart app to repair!</string>
+
+    <string name="app_login_failed">login failed</string>
+    <string name="app_sign_failed">sign failed</string>
+    <string name="app_get_contact_failed">fetch contact failed</string>
+
     <string name="app_login_hint_account">name</string>
     <string name="app_login_hint_password">password</string>
     <string name="app_login_hint_password_ensure">confirm password</string>
@@ -9,9 +16,19 @@
     <string name="app_login_text_go_sign">sign with us?</string>
     <string name="app_sign_text_go_login">go to login</string>
 
+    <string name="app_sign_welcome">welcome , %1$s</string>
+
     <string name="app_login_warming_null_account">invalid account!</string>
     <string name="app_login_warming_null_pwd">invalid password!</string>
     <string name="app_sign_warming_null_pwd_ensure">confirm password with null!</string>
     <string name="app_sign_warming_pwd_ensure_error">Passwords verification failed!</string>
+
+    <string name="app_main_index_chat">chat</string>
+    <string name="app_main_index_contact">contact</string>
+    <string name="app_main_index_setting">setting</string>
+
+    <string name="app_main_title_chat">Chat</string>
+    <string name="app_main_title_contact">Contact</string>
+    <string name="app_main_title_setting">Setting</string>
 
 </resources>

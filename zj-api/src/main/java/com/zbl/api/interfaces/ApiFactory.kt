@@ -16,6 +16,6 @@ abstract class ApiFactory<T> {
     open val mRetrofit: Retrofit? = null
 
     open fun createService(mRetrofit: Retrofit, cls: Class<T>): T? {
-        return null
+        return mRetrofit.create(cls)
     }
 }

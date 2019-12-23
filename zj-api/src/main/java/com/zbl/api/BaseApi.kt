@@ -11,8 +11,10 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
 import java.lang.reflect.Type
 
+@Suppress("MemberVisibilityCanBePrivate")
 class BaseApi<T : Any>(cls: Class<T>, factory: RetrofitFactory<T>?, private val errorHandler: ErrorHandler? = null) : BaseRetrofit<T>(cls, factory) {
 
     companion object {
@@ -39,7 +41,7 @@ class BaseApi<T : Any>(cls: Class<T>, factory: RetrofitFactory<T>?, private val 
         }
     }
 
-    fun <R> zip(observer: (T) -> Array<Observable<*>>, onFunc: (Any, Any, Any) -> R, subscribe: ((isSuccess: Boolean, data: R, throwable: Throwable?) -> Unit)? = null) {
+    fun <R> zip(observer: (T) -> Array<Observable<*>>, onFunc: (Any, Any, Any) -> R, subscribe: ((isSuccess: Boolean, data: R, throwable: HttpException?) -> Unit)? = null) {
 
         val observables = observer.invoke(getService())
         val obsMap = mutableMapOf<String, Observable<*>>()
@@ -51,22 +53,34 @@ class BaseApi<T : Any>(cls: Class<T>, factory: RetrofitFactory<T>?, private val 
 
     }
 
-    fun <F> request(observer: (T) -> Observable<F>, subscribeSchedulers: Scheduler = Schedulers.io(), observableSchedulers: Scheduler = AndroidSchedulers.mainThread(), subscribe: ((isSuccess: Boolean, data: F?, throwable: Throwable?) -> Unit)? = null) {
+    fun <F> request(observer: (T) -> Observable<F>, subscribe: ((isSuccess: Boolean, data: F?, throwable: HttpException?) -> Unit)? = null) {
+        val subscribeSchedulers: Scheduler = Schedulers.io()
+        val observableSchedulers: Scheduler = AndroidSchedulers.mainThread()
+        this.request(observer, subscribeSchedulers, observableSchedulers, subscribe)
+    }
+
+    fun <F> call(observer: (T) -> Observable<F>, subscribe: ((isSuccess: Boolean, data: F?, throwable: HttpException?) -> Unit)? = null): RequestCompo {
+        val subscribeSchedulers: Scheduler = Schedulers.io()
+        val observableSchedulers: Scheduler = AndroidSchedulers.mainThread()
+        return this.call(observer, subscribeSchedulers, observableSchedulers, subscribe)
+    }
+
+    fun <F> request(observer: (T) -> Observable<F>, subscribeSchedulers: Scheduler = Schedulers.io(), observableSchedulers: Scheduler = AndroidSchedulers.mainThread(), subscribe: ((isSuccess: Boolean, data: F?, throwable: HttpException?) -> Unit)? = null) {
         RequestInCompo(observer(getService()), subscribeSchedulers, observableSchedulers, { data ->
             subscribe?.invoke(true, data, null)
         }, { throwable ->
-            throwable?.let { e ->
+            (throwable as? HttpException)?.let { e ->
                 errorHandler?.onError(e);subscribe?.invoke(false, null, e)
             }
         }).init()
     }
 
-    fun <F> call(observer: (T) -> Observable<F>, subscribeSchedulers: Scheduler = Schedulers.io(), observableSchedulers: Scheduler = AndroidSchedulers.mainThread(), subscribe: ((isSuccess: Boolean, data: F?, throwable: Throwable?) -> Unit)? = null): RequestCompo {
+    fun <F> call(observer: (T) -> Observable<F>, subscribeSchedulers: Scheduler = Schedulers.io(), observableSchedulers: Scheduler = AndroidSchedulers.mainThread(), subscribe: ((isSuccess: Boolean, data: F?, throwable: HttpException?) -> Unit)? = null): RequestCompo {
         val requestInCompo: RequestInCompo<F>?
         requestInCompo = RequestInCompo(observer(getService()), subscribeSchedulers, observableSchedulers, { data ->
             subscribe?.invoke(true, data, null)
         }, { throwable ->
-            throwable?.let { e ->
+            (throwable as? HttpException)?.let { e ->
                 errorHandler?.onError(e);subscribe?.invoke(false, null, e)
             }
         })

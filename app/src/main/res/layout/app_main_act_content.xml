@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@color/app_base_background"
+        android:layout_height="match_parent">
+
+    <FrameLayout
+            android:id="@+id/app_act_main_fl_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"/>
+    <LinearLayout
+            android:id="@+id/app_act_main_ll_index_group"
+            android:layout_width="match_parent"
+            android:background="@color/color_primary"
+            android:layout_height="wrap_content">
+
+        <com.zj.base.view.SelectChangeIndexView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            <com.zj.base.view.DrawableTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:drawableHeight="20dp"
+                    app:drawablePadding="3dp"
+                    app:drawableWidth="20dp"
+                    app:orientation="top"
+                    app:padding="5dp"
+                    app:replaceDrawable="@mipmap/app_main_icon_chat_normal"
+                    app:selectedDrawable="@mipmap/app_main_icon_chat_selected"
+                    app:text="@string/app_main_index_chat"
+                    app:textColor="@color/color_primary_disable"
+                    app:textColor_select="@color/color_primary_light_grey"
+                    app:textSize="12sp"
+                    app:translationTime="500"/>
+        </com.zj.base.view.SelectChangeIndexView>
+
+        <com.zj.base.view.SelectChangeIndexView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            <com.zj.base.view.DrawableTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:drawableHeight="20dp"
+                    app:drawablePadding="3dp"
+                    app:drawableWidth="20dp"
+                    app:orientation="top"
+                    app:padding="5dp"
+                    app:replaceDrawable="@mipmap/app_main_icon_contact_normal"
+                    app:selectedDrawable="@mipmap/app_main_icon_contact_selected"
+                    app:text="@string/app_main_index_contact"
+                    app:textColor="@color/color_primary_disable"
+                    app:textColor_select="@color/color_primary_light_grey"
+                    app:textSize="12sp"
+                    app:translationTime="500"/>
+        </com.zj.base.view.SelectChangeIndexView>
+
+        <com.zj.base.view.SelectChangeIndexView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            <com.zj.base.view.DrawableTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:drawableHeight="20dp"
+                    app:drawablePadding="3dp"
+                    app:drawableWidth="20dp"
+                    app:orientation="top"
+                    app:padding="5dp"
+                    app:replaceDrawable="@mipmap/app_main_icon_setting_normal"
+                    app:selectedDrawable="@mipmap/app_main_icon_setting_selected"
+                    app:text="@string/app_main_index_setting"
+                    app:textColor="@color/color_primary_disable"
+                    app:textColor_select="@color/color_primary_light_grey"
+                    app:textSize="12sp"
+                    app:translationTime="500"/>
+        </com.zj.base.view.SelectChangeIndexView>
+
+    </LinearLayout>
+</LinearLayout>

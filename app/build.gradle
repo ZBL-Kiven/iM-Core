@@ -10,8 +10,7 @@ android {
         minSdkVersion min_sdk_version as int
         targetSdkVersion target_sdk_version as int
         applicationId "com.zj.imcore"
-        versionCode 1
-        versionName "1.0"
+        flavorDimensions("none")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -21,9 +20,60 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            File propFile = file('signing.properties')
+            if (propFile.exists()) {
+                Properties props = new Properties()
+                props.load(new FileInputStream(propFile))
+                if (props.containsKey('RELEASE_STOREFILE') && props.containsKey('RELEASE_KEY_ALIAS') && props.containsKey('RELEASE_KEY_PASSWORD') && props.containsKey('RELEASE_STOREPASSWORD')) {
+                    storeFile = file(props['RELEASE_STOREFILE'])
+                    storePassword = props['RELEASE_STOREPASSWORD']
+                    keyAlias = props['RELEASE_KEY_ALIAS']
+                    keyPassword = props['RELEASE_KEY_PASSWORD']
+                } else {
+                    android.buildTypes.release.signingConfig = null
+                }
+            } else {
+                android.buildTypes.release.signingConfig = null
+            }
+        }
+    }
+
+    def uatConfig = [
+            ENV_APP_ID  : "8b61e232-cc7c-47ac-abf1-29249b36b0f8",
+            ENV_PROTOCOL: "http",
+            ENV_HOST    : "fc-api.i-mocca.com:8000"
+    ]
+
+    def releaseConfig = [
+            ENV_APP_ID  : "8b61e232-cc7c-47ac-abf1-29249b36b0f8",
+            ENV_PROTOCOL: "http",
+            ENV_HOST    : "fc-api.i-mocca.com:8000"
+    ]
+
+    productFlavors {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('version.properties').newDataInputStream())
+
+        uat {
+            applicationIdSuffix = ".uat"
+            manifestPlaceholders = uatConfig
+            versionCode = properties.getProperty("VERSION_CODE_UAT").toInteger()
+            versionName = properties.getProperty("VERSION_NAME_UAT")
+            dimension = 'none'
+        }
+
+        prod {
+            manifestPlaceholders = releaseConfig
+            versionCode = properties.getProperty("VERSION_CODE_RELEASE").toInteger()
+            versionName = properties.getProperty("VERSION_NAME_RELEASE")
+            dimension = 'none'
+        }
+    }
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
     }
 }
 

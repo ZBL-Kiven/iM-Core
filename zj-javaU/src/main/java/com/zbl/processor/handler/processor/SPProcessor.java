@@ -42,10 +42,10 @@ public class SPProcessor extends BaseProxyInfo {
                     String modifiers = buildModifiers(e, propertyName);
                     String propertyType = e.asType().toString();
                     generateGetterAndSetter(modifiers, propertyName, propertyType, false, sb.append("\t\n"));
-                    generateTools(sb.append("\t\n"));
                 }
             }
         }
+        generateTools(sb.append("\t\n"));
         return sb.toString();
     }
 

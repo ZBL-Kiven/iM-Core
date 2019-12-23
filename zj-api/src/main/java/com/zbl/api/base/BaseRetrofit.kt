@@ -15,11 +15,11 @@ abstract class BaseRetrofit<T>(cls: Class<T>, private val retrofitFactory: Retro
     }
 
     private fun initService(cls: Class<T>) {
-        mService = retrofitFactory?.createService(retrofitFactory.mRetrofit, cls)
+        mService = retrofitFactory?.createService(cls)
     }
 
     protected fun getService(): T {
-        mService?.let { return it } ?: throw NullPointerException("the service must not be null!")
+        return mService ?: throw NullPointerException("the service must not be null!")
     }
 
     /** ------  RequestInCompo ------ **/

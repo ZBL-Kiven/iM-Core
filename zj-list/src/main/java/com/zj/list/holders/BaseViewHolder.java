@@ -38,8 +38,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    @SuppressWarnings({"WeakerAccess", "unchecked"})
-    protected <T extends View> T getView(@IdRes int id) {
+    @SuppressWarnings("unchecked")
+    public  <T extends View> T getView(@IdRes int id) {
         T v = (T) parseArray.get(id);
         if (v == null) {
             v = itemView.findViewById(id);

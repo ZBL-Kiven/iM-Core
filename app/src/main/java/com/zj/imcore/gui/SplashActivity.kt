@@ -1,33 +1,25 @@
 package com.zj.imcore.gui
 
 import android.content.Intent
-import android.widget.ImageView
-import com.zj.base.BaseActivity
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.imcore.R
-import com.zj.imcore.main.LoginActivity
-import com.zj.imcore.main.MainActivity
+import com.zj.imcore.ui.main.MainActivity
 
-class SplashActivity : BaseActivity() {
-
-    override fun setTitle(): String? {
-        return null
+class SplashActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.app_splash_activity_content)
+        initData()
     }
 
-    override fun getContentId(): Int {
-        return R.layout.app_splash_activity_content
-    }
-
-    override fun initView() {
-        find<ImageView>(R.id.app_splash_iv_content).setImageResource(R.mipmap.app_splash_main)
-    }
-
-    override fun initData() {
-        checkIsLogin()
-    }
-
-    override fun initListener() {
-
+    private fun initData() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            checkIsLogin()
+        }, 300)
     }
 
     private fun checkIsLogin() {

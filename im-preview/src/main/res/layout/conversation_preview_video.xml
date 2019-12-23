@@ -69,7 +69,7 @@
             app:preview_noDataRes="@mipmap/conversation_preview_video_loading_fail"
             app:preview_backgroundFill="@color/conversation_preview_color_loading_color_background"
             app:preview_backgroundOnAct="@color/conversation_preview_color_loading_background_float"
-            app:preview_hintColor="@color/colorPrimary"
+            app:preview_hintColor="@color/color_primary"
             app:preview_refreshTextColor="@color/conversation_preview_color_gray"
             app:preview_loadingText="@string/loading_video_progress"
             app:preview_refreshText="@string/loading_video_error_tint"

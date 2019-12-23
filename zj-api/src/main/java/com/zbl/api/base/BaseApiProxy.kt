@@ -37,7 +37,7 @@ class BaseApiProxy<T : Any, ERROR_HANDLER : ErrorHandler>(private val clazz: Cla
     }
 
     fun build(): BaseApi<T> {
-        return BaseApi(clazz, null, handler)
+        return BaseApi(clazz, RetrofitFactory(timeOut, header, baseUrl, certificate, null), handler)
     }
 
 

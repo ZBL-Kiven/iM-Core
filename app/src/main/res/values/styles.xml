@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
     </style>
 
     <style name="baseTextInputLayoutStyle">
@@ -14,10 +14,39 @@
     </style>
 
     <style name="baseEtStyle">
+        <item name="android:colorAccent">@color/color_primary</item>
+        <item name="android:colorControlNormal">@color/color_primary_grey</item>
+        <item name="android:colorControlHighlight">@color/color_primary</item>
+        <item name="android:colorControlActivated">@color/color_primary</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/app_et_text_size_16</item>
         <item name="android:textColor">@color/app_base_text_color_333</item>
     </style>
+
+    <style name="baseEtStyle.SingleLine">
+        <item name="android:lines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="baseEtStyleLight">
+        <item name="android:colorAccent">@color/color_primary_light_grey</item>
+        <item name="android:colorControlNormal">@color/color_primary_light_grey</item>
+        <item name="android:colorControlHighlight">@color/color_primary_background</item>
+        <item name="android:colorControlActivated">@color/color_primary_light_grey</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/app_et_text_size_16</item>
+        <item name="android:textColor">@color/app_base_text_color_333</item>
+    </style>
+
+    <style name="baseEtStyleLight.SingleLine">
+        <item name="android:lines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+
 
 </resources>
