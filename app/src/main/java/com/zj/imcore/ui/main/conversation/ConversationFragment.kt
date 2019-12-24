@@ -1,4 +1,4 @@
-package com.zj.imcore.ui.main.frg
+package com.zj.imcore.ui.main.conversation
 
 import android.view.LayoutInflater
 import android.view.View

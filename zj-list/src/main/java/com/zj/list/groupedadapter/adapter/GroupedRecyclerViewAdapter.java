@@ -31,7 +31,7 @@ public abstract class GroupedRecyclerViewAdapter<T> extends BaseRecyclerAdapter<
 
     private OnHeaderClickListener mOnHeaderClickListener;
     private OnFooterClickListener mOnFooterClickListener;
-    private OnChildClickListener mOnChildClickListener;
+    private OnChildClickListener<T> mOnChildClickListener;
 
     protected Context mContext;
     //保存分组列表的组结构
@@ -82,7 +82,7 @@ public abstract class GroupedRecyclerViewAdapter<T> extends BaseRecyclerAdapter<
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final BaseViewHolder holder, final int position) {
         int type = judgeType(position);
         final int groupPosition = getGroupPositionForPosition(position);
         if (type == TYPE_HEADER) {
@@ -125,10 +125,8 @@ public abstract class GroupedRecyclerViewAdapter<T> extends BaseRecyclerAdapter<
                         if (mOnChildClickListener != null) {
                             int gPosition = getGroupPositionForPosition(holder.getLayoutPosition());
                             int cPosition = getChildPositionForPosition(gPosition, holder.getLayoutPosition());
-                            if (gPosition >= 0 && gPosition < mStructures.size() && cPosition >= 0
-                                    && cPosition < mStructures.get(gPosition).getChildrenCount()) {
-                                mOnChildClickListener.onChildClick(GroupedRecyclerViewAdapter.this,
-                                        holder, gPosition, cPosition);
+                            if (gPosition >= 0 && gPosition < mStructures.size() && cPosition >= 0 && cPosition < mStructures.get(gPosition).getChildrenCount()) {
+                                mOnChildClickListener.onChildClick(GroupedRecyclerViewAdapter.this, holder, gPosition, cPosition);
                             }
                         }
                     }
@@ -651,7 +649,7 @@ public abstract class GroupedRecyclerViewAdapter<T> extends BaseRecyclerAdapter<
     }
 
     /**
-     *notify all children in a group to delete
+     * notify all children in a group to delete
      */
     public void notifyChildrenRemoved(int groupPosition) {
         if (groupPosition < mStructures.size()) {
@@ -755,7 +753,7 @@ public abstract class GroupedRecyclerViewAdapter<T> extends BaseRecyclerAdapter<
     }
 
     /**
-     *notification group tail insertion
+     * notification group tail insertion
      */
     public void notifyFooterInserted(int groupPosition) {
         if (groupPosition < mStructures.size() && 0 > getPositionForGroupFooter(groupPosition)) {
@@ -864,7 +862,7 @@ public abstract class GroupedRecyclerViewAdapter<T> extends BaseRecyclerAdapter<
     /**
      * set child click event
      */
-    public void setOnChildClickListener(OnChildClickListener listener) {
+    public void setOnChildClickListener(OnChildClickListener<T> listener) {
         mOnChildClickListener = listener;
     }
 
@@ -921,7 +919,7 @@ public abstract class GroupedRecyclerViewAdapter<T> extends BaseRecyclerAdapter<
         void onFooterClick(GroupedRecyclerViewAdapter adapter, BaseViewHolder holder, int groupPosition);
     }
 
-    public interface OnChildClickListener {
-        void onChildClick(GroupedRecyclerViewAdapter adapter, BaseViewHolder holder, int groupPosition, int childPosition);
+    public interface OnChildClickListener<T> {
+        void onChildClick(GroupedRecyclerViewAdapter<T> adapter, BaseViewHolder holder, int groupPosition, int childPosition);
     }
 }

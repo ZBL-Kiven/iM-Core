@@ -13,4 +13,7 @@
     <dimen name="app_et_text_size_12">12sp</dimen>
     <dimen name="app_et_text_size_10">10sp</dimen>
     <dimen name="app_et_text_size_14">14sp</dimen>
+
+
+    <dimen name="app_common_dp_10">10dp</dimen>
 </resources>

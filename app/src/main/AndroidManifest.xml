@@ -37,6 +37,7 @@
 
         <activity android:name="com.zj.imcore.gui.LoginActivity"/>
         <activity android:name="com.zj.imcore.ui.main.MainActivity"/>
+        <activity android:name=".ui.users.UserInfoActivity"/>
 
 
     </application>

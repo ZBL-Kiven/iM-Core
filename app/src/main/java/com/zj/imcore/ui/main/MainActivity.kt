@@ -11,7 +11,7 @@ import com.zj.imcore.base.FCActivity
 import com.zj.imcore.ui.main.contact.ContactFragment
 import com.zj.imcore.ui.main.setting.SettingFragment
 import com.zj.imcore.options.IMHelper
-import com.zj.imcore.ui.main.frg.ConversationFragment
+import com.zj.imcore.ui.main.conversation.ConversationFragment
 import java.lang.NullPointerException
 
 class MainActivity : FCActivity() {

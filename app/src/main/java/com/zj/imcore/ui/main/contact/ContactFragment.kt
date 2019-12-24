@@ -1,10 +1,11 @@
 package com.zj.imcore.ui.main.contact
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
@@ -13,7 +14,7 @@ import com.zj.imcore.apis.members.MemberApi
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.imcore.model.member.contact.ContactMemberInfo
-import com.zj.list.divider.RecyclerViewDivider
+import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.loading.BaseLoadingView
 
 class ContactFragment : BaseLinkageFragment() {
@@ -30,14 +31,14 @@ class ContactFragment : BaseLinkageFragment() {
     }
 
     private var etSearch: EditText? = null
-    private var vSearch: View? = null
+    private var vSearchClear: View? = null
     private var rvContent: RecyclerView? = null
     private var loadingView: BaseLoadingView? = null
     private var adapter: ContactListAdapter? = null
 
     private fun initView() {
         etSearch = find(R.id.app_fragment_contact_et_search)
-        vSearch = find(R.id.app_fragment_contact_v_search)
+        vSearchClear = find(R.id.app_fragment_contact_v_search_clear)
         rvContent = find(R.id.app_fragment_contact_rv)
         loadingView = find(R.id.app_fragment_contact_loading)
     }
@@ -48,6 +49,26 @@ class ContactFragment : BaseLinkageFragment() {
             loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
             getData()
         }
+        adapter?.setOnChildClickListener { adapter, _, groupPosition, childPosition ->
+            val member = adapter.getItem(groupPosition).children[childPosition]
+            UserInfoActivity.start(activity, member.uid)
+        }
+        vSearchClear?.setOnClickListener {
+            etSearch?.setText("")
+        }
+        etSearch?.addTextChangedListener(object:TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
     }
 
     private fun initData() {

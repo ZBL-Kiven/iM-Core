@@ -19,6 +19,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:paddingStart="10dp"
+                android:textColorHint="@color/color_primary_disable"
+                android:drawablePadding="@dimen/app_common_dp_10"
+                android:drawableStart="@drawable/app_contact_icon_search"
                 android:paddingEnd="10dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
@@ -26,11 +29,11 @@
                 tools:ignore="Autofill,TextFields"/>
 
         <ImageView
-                android:id="@+id/app_fragment_contact_v_search"
+                android:id="@+id/app_fragment_contact_v_search_clear"
                 android:layout_width="@dimen/app_search_bar_height"
                 android:layout_height="match_parent"
                 android:padding="13dp"
-                android:src="@mipmap/app_common_icon_search"
+                android:src="@mipmap/app_contact_icon_search_clear"
                 tools:ignore="ContentDescription"/>
     </LinearLayout>
     <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">

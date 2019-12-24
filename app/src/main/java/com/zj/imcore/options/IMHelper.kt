@@ -25,7 +25,6 @@ object IMHelper : IMInterface() {
                 override fun onError(e: ChatException) {
 
                 }
-
             })
         initChat(option)
     }
