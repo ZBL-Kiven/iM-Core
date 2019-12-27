@@ -8,12 +8,13 @@ import com.zj.base.utils.storage.sp.SPUtils_Proxy
  * login mode
  *
  * */
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class LoginInfo {
-    var device: LoginDeviceModel? = null
+    var teams: Array<String>? = null
     var user: LoginUserModel? = null
     var token: LoginTokenModel? = null
 
-    fun saveAsSP(){
+    fun saveAsSP() {
         SPUtils_Proxy.setAccessToken(token?.accessToken)
         SPUtils_Proxy.setRefreshToken(token?.refreshToken)
         SPUtils_Proxy.setUserName(user?.name)

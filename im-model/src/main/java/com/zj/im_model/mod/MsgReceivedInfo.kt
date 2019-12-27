@@ -1,3 +1,0 @@
-package com.zj.im_model.mod
-
-data class MsgReceivedInfo(var msgInfo: MsgInfo? = null, var isSelf: Boolean = false, var createTs: Long)

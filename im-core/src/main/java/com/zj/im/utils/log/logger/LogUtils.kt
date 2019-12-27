@@ -2,7 +2,6 @@
 
 package com.zj.im.utils.log.logger
 
-import com.zj.im.BuildConfig
 import com.zj.im.utils.now
 import com.zj.im.utils.today
 
@@ -23,8 +22,6 @@ internal val logUtils = object : LogCollectionUtils.Config() {
         get() = { today() }
     override val fileName: () -> String
         get() = { now() }
-    override val debugEnable: () -> Boolean
-        get() = { BuildConfig.DEBUG }
 }
 
 internal fun e(where: String, s: String) {

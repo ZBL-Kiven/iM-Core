@@ -21,6 +21,7 @@ import com.zj.im.main.ChatBase
 import com.zj.im.sender.SendObject
 import com.zj.im.utils.Constance
 import com.zj.im.utils.log.NetRecordUtils
+import com.zj.im.utils.log.logger.logUtils
 import com.zj.im.utils.log.logger.printInFile
 import com.zj.im.utils.nio
 import kotlin.math.max
@@ -29,7 +30,7 @@ import kotlin.math.max
  * Created by ZJJ
  *
  * the bridge of client, override and custom your client hub.
- *¬
+ *
  * it may reconnection if change the system clock to earlier.
  *
  */
@@ -314,11 +315,15 @@ abstract class ClientHub : BaseMessageHub() {
     }
 
     open fun canReceived(): Boolean {
-        return !isPause && !isShutdown && !isReceiving && !connection
+        val canReceive = !isPause && !isShutdown && !isReceiving && !connection
+        if (!canReceive) logUtils.d("MessageHubClient", "received enable = $canReceive  ,case : isPause = $isPause && isShutdown = $isShutdown && isReceiving = $isReceiving && connection = $connection")
+        return canReceive
     }
 
     open fun canSend(): Boolean {
-        return isAuth && !isShutdown && !isSending && !authentication && !connection
+        val canSend = isAuth && !isShutdown && !isSending && !authentication && !connection
+        if (!canSend) logUtils.d("MessageHubClient", "send enable = $canSend  ,case : isAuth = $isAuth && isShutdown = $isShutdown && isSending = $isSending && authentication = $authentication && connection = $connection")
+        return canSend
     }
 
     open fun canAuth(): Boolean {

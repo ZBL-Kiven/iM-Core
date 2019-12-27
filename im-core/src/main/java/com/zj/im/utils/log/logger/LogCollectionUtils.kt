@@ -2,7 +2,6 @@ package com.zj.im.utils.log.logger
 
 import android.app.Application
 import android.util.Log
-import com.zj.im.BuildConfig
 import com.zj.im.utils.Constance
 import com.zj.im.utils.nio
 import com.zj.im.utils.now
@@ -24,18 +23,10 @@ sealed class LogCollectionUtils {
 
     private var subPath: () -> String = { today() }
     private var fileName: () -> String = { now() }
-    private var debugEnable: () -> Boolean = { BuildConfig.DEBUG }
-    private var collectionAble: () -> Boolean = debugEnable
+    private var debugEnable: Boolean = false
+    private var collectionAble: () -> Boolean = { false }
 
-    private fun init(
-        appContext: Application?,
-        folderName: String,
-        subPath: () -> String,
-        fileName: () -> String,
-        debugEnable: () -> Boolean,
-        collectionAble: (() -> Boolean)?,
-        maxRetain: Long
-    ) {
+    private fun init(appContext: Application?, folderName: String, subPath: () -> String, fileName: () -> String, debugEnable: Boolean, collectionAble: (() -> Boolean)?, maxRetain: Long) {
         fileUtils = FileUtils.init(appContext, folderName)
         this.subPath = subPath
         this.fileName = fileName
@@ -49,19 +40,19 @@ sealed class LogCollectionUtils {
     private fun getTag(what: String?) = String.format(TAG, what)
 
     fun d(where: String, s: String?) {
-        if (debugEnable()) {
+        if (debugEnable) {
             Log.d(getTag(ErrorType.D.errorName), getLogText(where, s))
         }
     }
 
     fun w(where: String, s: String?) {
-        if (debugEnable()) {
+        if (debugEnable) {
             Log.w(getTag(ErrorType.W.errorName), getLogText(where, s))
         }
     }
 
     fun e(where: String, s: String?) {
-        if (debugEnable()) {
+        if (debugEnable) {
             Log.e(getTag(ErrorType.E.errorName), getLogText(where, s))
         }
     }
@@ -70,7 +61,7 @@ sealed class LogCollectionUtils {
     fun printInFile(where: String, s: String?, append: Boolean) {
         val type = ErrorType.D
         val txt = getLogText(where, s)
-        if (debugEnable()) {
+        if (debugEnable) {
             Log.d(getTag(type.errorName), txt)
         }
         if (collectionAble()) {
@@ -130,9 +121,9 @@ sealed class LogCollectionUtils {
     abstract class Config : LogCollectionUtils() {
         private var collectionAble: (() -> Boolean)? = null
         private var maxRetain: Long = 0
+        private var debugEnable: Boolean = false
         abstract val subPath: () -> String
         abstract val fileName: () -> String
-        abstract val debugEnable: () -> Boolean
 
         open fun overriddenFolderName(folderName: String): String {
             return folderName
@@ -143,12 +134,13 @@ sealed class LogCollectionUtils {
         /**
          * must call init() before use
          * */
-        fun init(appContext: Application?, folderName: String, collectionAble: () -> Boolean, logsMaxRetain: Long) {
+        fun init(appContext: Application?, folderName: String, debugEnable: Boolean, collectionAble: () -> Boolean, logsMaxRetain: Long) {
             if (collectionAble.invoke() && folderName.isEmpty()) {
                 throw NullPointerException(Constance.LOG_FILE_NAME_EMPTY_ERROR)
             }
             this.collectionAble = collectionAble
             this.maxRetain = logsMaxRetain
+            this.debugEnable = debugEnable
             initConfig(appContext, overriddenFolderName(folderName))
         }
 

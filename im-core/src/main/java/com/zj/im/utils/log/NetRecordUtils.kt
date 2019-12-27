@@ -1,7 +1,5 @@
 package com.zj.im.utils.log
 
-import com.zj.im.BuildConfig
-import com.zj.im.chat.interfaces.MessageInterface
 import com.zj.im.main.ChatBase
 import com.zj.im.utils.full
 import com.zj.im.utils.log.logger.DataUtils
@@ -25,10 +23,8 @@ internal object NetRecordUtils : LogCollectionUtils.Config() {
         get() = { path }
     override val fileName: () -> String
         get() = { name }
-    override val debugEnable: () -> Boolean
-        get() = { BuildConfig.DEBUG }
 
-
+    private val changedListeners = mutableMapOf<String, TCPNetRecordChangedListener>()
     private var accessAble = false
 
     private val rwl = ReentrantReadWriteLock()

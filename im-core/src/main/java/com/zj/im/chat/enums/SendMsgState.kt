@@ -7,19 +7,18 @@ package com.zj.im.chat.enums
  * */
 
 @Suppress("unused")
-enum class SendMsgState(val type: String) {
-    NONE("NONE"), SUCCESS("SUCCESS"), FAIL("FAIL"), SENDING("SENDING"), TIME_OUT("TIME_OUT"), ON_SEND_BEFORE_END("ON_SEND_BEFORE_END");
+enum class SendMsgState(val type: Int) {
+    NONE(1), SUCCESS(3), FAIL(-1), SENDING(0), TIME_OUT(-2), ON_SEND_BEFORE_END(2);
 
     companion object {
-        fun parseStateByType(type: String?): SendMsgState? {
+        fun parseStateByType(type: Int?): SendMsgState? {
             var state: SendMsgState? = null
-            if (!type.isNullOrEmpty())
-                values().forEach {
-                    if (it.type == type) {
-                        state = it
-                        return@forEach
-                    }
+            values().forEach {
+                if (it.type == type) {
+                    state = it
+                    return@forEach
                 }
+            }
             return state
         }
     }

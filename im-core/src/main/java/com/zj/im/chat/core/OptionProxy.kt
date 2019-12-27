@@ -17,6 +17,7 @@ class OptionProxy internal constructor(private val context: Application) {
 
     private var notification: Notification? = null
     private var sessionId: Int = 0
+    private var debugEnable = false
     private var logsCollectionAble: () -> Boolean = { false }
     private var logsMaxRetain: Long = Constance.MAX_RETAIN_TCP_LOG
     private var logsFileName: String = Constance.FOLDER_NAME
@@ -37,6 +38,11 @@ class OptionProxy internal constructor(private val context: Application) {
         return this
     }
 
+    fun debug(): OptionProxy {
+        debugEnable = true
+        return this
+    }
+
     fun setLogsMaxRetain(maxRetain: Long): OptionProxy {
         this.logsMaxRetain = maxRetain
         return this
@@ -52,7 +58,7 @@ class OptionProxy internal constructor(private val context: Application) {
         return this
     }
 
-    fun  build(buildOption: OnBuildOption): BaseOption {
-        return BaseOption(context, notification, sessionId, runtimeEfficiency, logsCollectionAble, logsFileName, logsMaxRetain, buildOption)
+    fun build(buildOption: OnBuildOption): BaseOption {
+        return BaseOption(context, notification, sessionId, runtimeEfficiency, logsCollectionAble, logsFileName, logsMaxRetain, debugEnable, buildOption)
     }
 }

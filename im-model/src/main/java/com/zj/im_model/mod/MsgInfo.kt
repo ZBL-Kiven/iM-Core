@@ -1,122 +1,77 @@
 package com.zj.im_model.mod
 
-import com.google.gson.annotations.SerializedName
-import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.list.interfaces.InfoImpl
 import com.zj.im_model.Payloads
 import org.msgpack.annotation.Ignore
-import java.util.*
 
 @Suppress("unused", "SpellCheckingInspection")
-class MsgInfo : InfoImpl<MsgInfo> {
+abstract class MsgInfo : InfoImpl<MsgInfo> {
 
-    @SerializedName("vchannel_id")
-    var vChannelId: String? = null
+    abstract fun vChannelId(): String?
 
-    @SerializedName("subtype")
-    var subType: String? = null
+    abstract fun subType(): String?
 
-    @SerializedName("subtype_detail")
-    var subTypeDetail: String? = null
+    abstract fun subTypeDetail(): String?
 
-    @SerializedName("text")
-    var text: String? = null
+    abstract fun text(): String?
 
-    @SerializedName("created_ts")
-    var createdTs: Long = 0
+    abstract fun createdTs(): Long
 
-    @SerializedName("uid")
-    var uid: String? = null
+    abstract fun uid(): String?
 
-    //发送消息的机器人 id
-    @SerializedName("robot_id")
-    var robotId: String? = null
+    abstract fun referKey(): String
 
-    //消息所回复的那条消息的 key
-    @SerializedName("refer_key")
-    var referKey: String? = null
+    abstract fun starId(): String?
 
-    @SerializedName("star_id")
-    var starId: String? = null
+    abstract fun deleted(): Boolean
 
-    @SerializedName("file")
-    var file: MsgFileInfo? = null
+    abstract fun textColor(): String?
 
-    //消息中的表情包
-    @SerializedName("image")
-    var image: MsgImageInfo? = null
+    abstract fun tsColor(): String?
 
-    //消息中的语音
-    @SerializedName("voice")
-    var voice: MsgVoiceInfo? = null
+    abstract fun bubbleColor(): String?
 
-    //消息是否被删除
-    @SerializedName("deleted")
-    var deleted: Boolean = false
+    abstract fun localCreatedTs(): Long
 
-    //消息颜色
-    @SerializedName("text_color")
-    var textcolor: String? = null
+    abstract fun callId(): String?
 
-    //时间颜色
-    @SerializedName("ts_color")
-    var tscolor: String? = null
+    abstract fun key(): String
 
-    //气泡颜色
-    @SerializedName("bubble_color")
-    var bubblecolor: String? = null
+    abstract fun getAvatarUrl(): String?
 
-    @SerializedName("local_created_ts")
-    var localCreatedTs: Long = 0
+    abstract fun getName(): String?
 
-    //发送时带的参数，用于 reply 回执
-    @SerializedName("call_id")
-    var callId: String? = null     //+
+    abstract fun getStickerUrl(): String?
 
-    @SerializedName("key")
-    var key: String = UUID.randomUUID().toString()
+    abstract fun getImageUrl(): String?
 
+    abstract fun getVoiceUrl():String?
+
+    abstract fun getFileUrl(): String?
+
+    abstract fun getVideoThumb(): String?
+
+    //return curUserId == this.uid
+    abstract fun isSelf(curUserId: String): Boolean
 
     /**----- packing ignore -----*/
 
-    //发送状态
-    @Ignore
-    @SerializedName("sending_state")
-    private var sendingState = "NONE"       // +
+    //send status
+    abstract fun sendingState()
 
-    //如果是发送的文件，需要保存文件的本地路径，用于重发
-    @Ignore
-    @SerializedName("local_file_path")
-    var localFilePath: String? = ""
+    //If the file is sent, the local path of the file needs to be saved for retransmission
+    abstract fun localFilePath(): String?
 
     /** -------- db ignore properties ------- */
 
     @Ignore
     var timeLineString: String? = null
-    @Ignore
-    var userAvatar: String? = null
-    @Ignore
-    var userNickname: String? = null
 
     /** -------- db ignore properties ------- */
 
-
-    fun isSelf(): Boolean {
-        //todo
-        return true
-    }
-
-    fun setSendState(state: SendMsgState) {
-        sendingState = state.name
-    }
-
-    fun getSendState(): SendMsgState? {
-        return SendMsgState.parseStateByType(sendingState)
-    }
-
     override fun compareTo(other: MsgInfo): Int {
-        other.localCreatedTs.let { ot ->
-            localCreatedTs.let {
+        other.localCreatedTs().let { ot ->
+            localCreatedTs().let {
                 if (it > ot) return 1
                 return if (it < ot) -1 else 0
             }
@@ -124,18 +79,18 @@ class MsgInfo : InfoImpl<MsgInfo> {
     }
 
     override fun equals(other: Any?): Boolean {
-        return if (other !is MsgInfo) false else key == other.key || callId == other.callId
+        return if (other !is MsgInfo) false else key() == other.key() || callId() == other.callId()
     }
 
     override fun hashCode(): Int {
-        var c = key.hashCode()
-        c = 31 * (c + callId.hashCode())
+        var c = key().hashCode()
+        c = 31 * (c + callId().hashCode())
         return c
     }
 
     override fun getCacheName(payloads: String?): String {
         return when (payloads) {
-            Payloads.AVATAR -> uid ?: "default"
+            Payloads.AVATAR -> uid() ?: "default"
             Payloads.CONVERSATION -> "conversation"
             else -> ""
         }
@@ -143,13 +98,11 @@ class MsgInfo : InfoImpl<MsgInfo> {
 
     override fun getOriginalPath(payloads: String?): String {
         return when (payloads) {
-            Payloads.AVATAR -> userAvatar ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=226862559,425820995&fm=26&gp=0.jpg"
-            Payloads.CONVERSATION_STICKER -> image?.url ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1028355655,2899485655&fm=26&gp=0.jpg"
-            Payloads.CONVERSATION_IMAGE -> file?.imageUrl ?: "http://img4.imgtn.bdimg.com/it/u=2853553659,1775735885&fm=26&gp=0.jpg"
-            Payloads.CONVERSATION_VIDEO -> file?.imageUrl ?: "http://img0.imgtn.bdimg.com/it/u=2458227883,4095122505&fm=26&gp=0.jpg"
+            Payloads.AVATAR -> getAvatarUrl() ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=226862559,425820995&fm=26&gp=0.jpg"
+            Payloads.CONVERSATION_STICKER -> getStickerUrl() ?: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1028355655,2899485655&fm=26&gp=0.jpg"
+            Payloads.CONVERSATION_IMAGE -> getImageUrl() ?: "http://img4.imgtn.bdimg.com/it/u=2853553659,1775735885&fm=26&gp=0.jpg"
+            Payloads.CONVERSATION_VIDEO -> getVideoThumb() ?: "http://img0.imgtn.bdimg.com/it/u=2458227883,4095122505&fm=26&gp=0.jpg"
             else -> ""
         }
     }
-
-
 }

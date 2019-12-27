@@ -42,7 +42,7 @@ import java.lang.IllegalArgumentException
 internal object ChatBase {
 
     var context: Application? = null
-    var imi: IMInterface? = null
+    private var imi: IMInterface? = null
     private var onErrorCallBack: ((e: ChatException) -> Unit)? = null
     private var isInit = false
     private var diskPathName: String = ""
@@ -62,17 +62,17 @@ internal object ChatBase {
         printInFile("ChatBase.IM", " the SDK init with $runningKey")
         this.context = options.context
         onErrorCallBack = { options.buildOption.onError(it) }
-        initBase(options.logsCollectionAble, options.logsFileName, options.logsMaxRetain, context)
+        initBase(options.debugEnable, options.logsCollectionAble, options.logsFileName, options.logsMaxRetain, context)
         options.init(runningKey)
         initUtils()
         isInit = true
         options.buildOption.prepare()
     }
 
-    private fun initBase(logsCollectionAble: () -> Boolean, logsFileName: String, logsMaxRetain: Long, context: Application?) {
+    private fun initBase(debugEnable: Boolean, logsCollectionAble: () -> Boolean, logsFileName: String, logsMaxRetain: Long, context: Application?) {
         diskPathName = logsFileName
-        logUtils.init(context, logsFileName, logsCollectionAble, logsMaxRetain)
-        NetRecordUtils.init(context, logsFileName, logsCollectionAble, logsMaxRetain)
+        logUtils.init(context, logsFileName, debugEnable, logsCollectionAble, logsMaxRetain)
+        NetRecordUtils.init(context, logsFileName, debugEnable, logsCollectionAble, logsMaxRetain)
         ToastUtils.init(context)
         TimeOutUtils.init()
     }

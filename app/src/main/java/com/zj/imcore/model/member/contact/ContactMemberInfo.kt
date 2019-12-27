@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 class ContactMemberInfo {
 
     class IncrementalMemberModel {
-        var nextTs: Int = 0
+        var nextTs: Long = 0
         var members: List<MemberModel>? = null
     }
 

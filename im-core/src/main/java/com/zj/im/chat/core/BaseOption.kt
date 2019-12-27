@@ -33,7 +33,7 @@ import com.zj.im.utils.log.logger.printInFile
  * @param buildOption made some rules to sdk , {@see OnBuildOption}
  */
 
-class BaseOption internal constructor(val context: Application, private val notification: Notification? = null, private val sessionId: Int?, private val runtimeEfficiency: RuntimeEfficiency, val logsCollectionAble: () -> Boolean, val logsFileName: String, val logsMaxRetain: Long, val buildOption: OnBuildOption) {
+class BaseOption internal constructor(val context: Application, private val notification: Notification? = null, private val sessionId: Int?, private val runtimeEfficiency: RuntimeEfficiency, val logsCollectionAble: () -> Boolean, val logsFileName: String, val logsMaxRetain: Long, val debugEnable: Boolean, val buildOption: OnBuildOption) {
 
     companion object {
         @Suppress("unused")
