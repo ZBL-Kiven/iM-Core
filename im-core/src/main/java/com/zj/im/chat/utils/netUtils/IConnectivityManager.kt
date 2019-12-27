@@ -9,7 +9,7 @@ import android.net.NetworkCapabilities.*
 import android.os.Build
 import com.zj.im.utils.log.logger.printInFile
 
-object IConnectivityManager {
+internal object IConnectivityManager {
 
     private var stateChangeListener: ((NetWorkInfo) -> Unit)? = null
     private var connectivityManager: ConnectivityManager? = null
@@ -26,9 +26,11 @@ object IConnectivityManager {
         }
     }
 
-    private val request = NetworkRequest.Builder()
-        .addCapability(NET_CAPABILITY_INTERNET)
-        .build()
+    fun checkNetWorkValidate() {
+        stateChangeListener?.invoke(isNetWorkActive)
+    }
+
+    private val request = NetworkRequest.Builder().addCapability(NET_CAPABILITY_INTERNET).build()
 
     private val netCallBack = object : ConnectivityManager.NetworkCallback() {
 
@@ -62,7 +64,7 @@ object IConnectivityManager {
         context?.registerReceiver(netWorkBrodCast, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
-    val isNetWorkActive: NetWorkInfo
+    private val isNetWorkActive: NetWorkInfo
         @TargetApi(Build.VERSION_CODES.M) get() {
             return try {
                 if (isNetworkConnected()) NetWorkInfo.CONNECTED else NetWorkInfo.DISCONNECTED
@@ -74,12 +76,9 @@ object IConnectivityManager {
 
     private fun isNetworkConnected(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val networkCapabilities: NetworkCapabilities? =
-                connectivityManager?.getNetworkCapabilities(connectivityManager?.activeNetwork)
+            val networkCapabilities = connectivityManager?.getNetworkCapabilities(connectivityManager?.activeNetwork)
             if (networkCapabilities != null) {
-                networkCapabilities.hasCapability(NET_CAPABILITY_INTERNET) && networkCapabilities.hasCapability(
-                    NET_CAPABILITY_VALIDATED
-                )
+                networkCapabilities.hasCapability(NET_CAPABILITY_INTERNET) && networkCapabilities.hasCapability(NET_CAPABILITY_VALIDATED)
             } else false
         } else {
             @Suppress("DEPRECATION") (connectivityManager?.activeNetworkInfo as NetworkInfo).let {

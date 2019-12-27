@@ -90,12 +90,13 @@ internal object ChatBase {
     private fun onLayerChanged(isHidden: Boolean) {
         if (isHidden != isRunningInBackground) {
             isRunningInBackground = isHidden
-            netWorkStateChanged(IConnectivityManager.isNetWorkActive)
+            checkNetWork()
             imi?.onLayerChanged(isHidden)
         }
     }
 
     private fun netWorkStateChanged(state: NetWorkInfo) {
+        printInFile("ChatBase.IM", "the SDK checked the network status changed form ${if (isNetWorkAccess) "enable" else "disable"} by net State : ${state.name}")
         isNetWorkAccess = state == NetWorkInfo.CONNECTED
         if (!isNetWorkAccess) isTcpConnected = false
         DataStore.put(BaseMsgInfo.networkStateChanged(state))
@@ -136,6 +137,10 @@ internal object ChatBase {
 
     fun correctConnectionState(state: SocketState, case: String) {
         DataStore.put(BaseMsgInfo.connectStateChange(state, case))
+    }
+
+    fun checkNetWork() {
+        IConnectivityManager.checkNetWorkValidate()
     }
 
     fun show(s: String) {
