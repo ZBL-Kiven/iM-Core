@@ -1,4 +1,4 @@
-package com.zj.imcore.ui.views.pager;
+package com.zj.imcore.gui.login.pager;
 
 import android.view.View;
 import androidx.viewpager.widget.ViewPager;

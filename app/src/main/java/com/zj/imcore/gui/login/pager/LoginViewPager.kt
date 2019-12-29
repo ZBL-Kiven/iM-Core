@@ -1,4 +1,4 @@
-package com.zj.imcore.ui.views.pager
+package com.zj.imcore.gui.login.pager
 
 import android.content.Context
 import android.util.AttributeSet
@@ -107,7 +107,7 @@ class LoginViewPager @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
-    fun initData(pageChangeListener: (View?) -> Unit, vararg data: Int) {
+    fun initData(onDataSet: (View) -> Unit, pageChangeListener: (View?) -> Unit, vararg data: Int) {
         this.pageChangeListener = pageChangeListener
         if (adapter == null) adapter = LoginPagerAdapter { p, v ->
             val h = if (v.height == 0) {
@@ -117,8 +117,8 @@ class LoginViewPager @JvmOverloads constructor(context: Context, attrs: Attribut
             heights?.put(p, h)
             if (p == curSelected) {
                 resetWithCur()
-                pageChangeListener.invoke(v)
             }
+            onDataSet.invoke(v)
         }
         (adapter as? LoginPagerAdapter)?.let {
             it.ids = data.toList()

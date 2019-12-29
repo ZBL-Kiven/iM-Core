@@ -3,6 +3,7 @@ package com.zj.imcore.ui.main
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentTransaction
+import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.SelectChangeIndexView
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.cf.managers.BaseFragmentManager

@@ -1,9 +1,12 @@
+@file:Suppress("unused")
+
 package com.zj.imcore
 
-import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import com.zj.im.scheduler.ReceiveListener
 import java.lang.IllegalArgumentException
 
 fun makeSentParams(callId: String, localFilePath: String? = null): Map<String, Any> {
@@ -16,10 +19,8 @@ fun makeSentParams(callId: String, localFilePath: String? = null): Map<String, A
     return map
 }
 
-const val userId = "aaa"
-
-fun msgIsSelf(uid: String?): Boolean {
-    return uid == userId
+inline fun <reified IN, reified OUT : Any> LifecycleOwner.registerTcpReceivedListener(name: String): ReceiveListener<IN, OUT> {
+    return ReceiveListener.create(name, this)
 }
 
 fun printViewTree(view: View) {

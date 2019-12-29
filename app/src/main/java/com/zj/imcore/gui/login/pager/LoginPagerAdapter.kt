@@ -1,4 +1,4 @@
-package com.zj.imcore.ui.views.pager
+package com.zj.imcore.gui.login.pager
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ class LoginPagerAdapter(val onViewSet: (p: Int, v: View) -> Unit) : PagerAdapter
     var ids: List<Int>? = null
 
     override fun isViewFromObject(view: View, obj: Any): Boolean {
-        return view.tag === obj
+        return view.tag == obj
     }
 
     override fun instantiateItem(parent: ViewGroup, position: Int): Any {
@@ -24,6 +24,14 @@ class LoginPagerAdapter(val onViewSet: (p: Int, v: View) -> Unit) : PagerAdapter
             return view.tag
         }
         return 0
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+        return POSITION_NONE
+    }
+
+    override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+        container.removeAllViews()
     }
 
     override fun getCount(): Int {

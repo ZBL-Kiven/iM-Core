@@ -12,25 +12,22 @@ import retrofit2.HttpException
 object UserApi {
 
     private fun get(): BaseApi<UserApiService> {
-        return BaseApi.create<UserApiService>().baseUrl(getBaseUrl()).header(getHeader()).build()
+        return BaseApi.create<UserApiService>().baseUrl(getBaseUrl()).header(getHeader()).timeOut(5000).build()
     }
 
     fun login(ac: String, pwd: String, result: (Boolean, LoginInfo?, throwAble: HttpException?) -> Unit) {
         val appId = Constance.getAppId()
         val deviceId = Constance.getDeviceId()
-        get().call({ it.login(ac, pwd, appId, deviceId) }, result)
+        get().request({ it.login(ac, pwd, appId, deviceId) }, result)
     }
 
-    fun sign(ac: String, pwd: String, email: String, genderIsLady: Boolean, result: (Boolean, SignInfo?, throwAble: HttpException?) -> Unit) {
+    fun sign(ac: String, pwd: String, tel: String, email: String, genderIsLady: Boolean, result: (Boolean, SignInfo?, throwAble: HttpException?) -> Unit) {
 
         fun getGender(isLady: Boolean): String {
             return if (isLady) "lady" else "male"
         }
 
-        val model = SignModel(ac, pwd, UserProfileModel().apply {
-            this.email = email
-            this.gender = getGender(genderIsLady)
-        })
+        val model = SignModel(ac, pwd, tel, email, getGender(genderIsLady), UserProfileModel())
         get().call({ it.sign(model) }, result)
     }
 
@@ -40,4 +37,4 @@ object UserApi {
 
 }
 
-data class SignModel(val name: String, val password: String, val profile: UserProfileModel)
+data class SignModel(val name: String, val password: String, val tel: String, val email: String, val gender: String, val profile: UserProfileModel)

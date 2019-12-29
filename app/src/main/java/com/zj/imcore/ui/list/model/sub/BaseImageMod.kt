@@ -3,13 +3,16 @@ package com.zj.imcore.ui.list.model.sub
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.widget.FrameLayout
+import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.zj.im.img.AutomationImageCalculateUtils
 import com.zj.im.img.cache.ImageCacheUtil
 import com.zj.im.list.views.ChatItemView
-import com.zj.im_model.mod.MsgInfo
+import com.zj.imcore.R
+import com.zj.model.mod.MsgInfo
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.ui.list.model.BaseItemMod
 import com.zj.imcore.utils.img.loader.ImageMsgLoadUtil
@@ -46,9 +49,18 @@ abstract class BaseImageMod : BaseItemMod() {
             val height = p.second[1]
             val quality = ChatOption.IMAGE_MSG_QUALITY
             ImageMsgLoadUtil(context, width, height, quality, data, fillType, getDataPayloads(data)).load { path ->
-                Glide.with(context).asBitmap().load(path).override(width, height).into(object : CustomTarget<Bitmap>() {
+                Glide.with(context).asBitmap().load(path).override(width, height).error(R.mipmap.app_common_image_loading_error).into(object : CustomTarget<Bitmap>() {
                     override fun onLoadCleared(placeholder: Drawable?) {
-
+                        val lp = pop.layoutParams
+                        lp.width = width
+                        lp.height = height
+                        pop.layoutParams = lp
+                        pop.bubbleColor = R.color.color_primary_disable
+                        val iv = ImageView(context)
+                        iv.setImageDrawable(placeholder)
+                        iv.scaleType = ImageView.ScaleType.CENTER_INSIDE
+                        val ivLp = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+                        pop.addView(iv, ivLp)
                     }
 
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {

@@ -7,7 +7,8 @@ import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.ChatRecyclerView
 import com.zj.im.list.utils.TimeLineInflateModel
 import com.zj.im.list.ChatItemOptions
-import com.zj.im_model.mod.MsgInfo
+import com.zj.model.mod.MsgInfo
+import com.zj.imcore.base.FCApplication.Companion.isSelf
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.ui.list.model.ChatListModel
 
@@ -32,7 +33,7 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
         if (data.isNullOrEmpty()) return null
         var lastTimeStamp = 0L
         data.forEach { m ->
-            val curStamp = m.localCreatedTs
+            val curStamp = m.impl.localCreatedTs()
             val timeLineString = TimeLineInflateModel.inflateTimeLine(context, curStamp, lastTimeStamp, ChatOption.maximumDiffDisplayTime)
             m.timeLineString = timeLineString
             lastTimeStamp = curStamp
@@ -64,7 +65,7 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
             }
 
             override fun getBubbleColor(): Int {
-                return if (data.isSelf()) ChatOption.bubbleColorSelf else ChatOption.bubbleColorOthers
+                return if (isSelf(data.impl.uid())) ChatOption.bubbleColorSelf else ChatOption.bubbleColorOthers
             }
 
             override fun getBubbleRadius(): Float {

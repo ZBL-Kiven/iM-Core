@@ -69,15 +69,17 @@ internal class UIStore<DATA, R, HANDLER : DataHandler<R>>(private val msgHandler
 
     private fun notifyDataSetChanged() {
         if (!isDataHanding) {
-            val poll = poll() ?: return
-            pollAndHandle(poll)
+            poll()?.let {
+                pollAndHandle(it)
+            }
         }
     }
 
     private fun notifyDataHandled() {
         isDataHanding = false
-        val poll = poll() ?: return
-        pollAndHandle(poll)
+        poll()?.let {
+            pollAndHandle(it)
+        }
     }
 
     private fun pushHandledData(data: R?) {

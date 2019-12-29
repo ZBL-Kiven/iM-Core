@@ -4,8 +4,8 @@ import android.animation.Animator;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
-import androidx.annotation.IdRes;
 
+import androidx.annotation.LayoutRes;
 import com.zj.list.ViewHelper;
 import com.zj.list.holders.BaseViewHolder;
 
@@ -26,11 +26,11 @@ public abstract class AnimationAdapter<T> extends BaseAdapter<T> {
 
     private boolean isFirstOnly = true;
 
-    protected AnimationAdapter(@IdRes int id) {
+    protected AnimationAdapter(@LayoutRes int id) {
         super(id);
     }
 
-    protected AnimationAdapter(@IdRes int id, List<T> data) {
+    protected AnimationAdapter(@LayoutRes int id, List<T> data) {
         super(id, data);
     }
 

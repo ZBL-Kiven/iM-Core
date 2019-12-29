@@ -69,9 +69,10 @@ class BaseApi<T : Any>(cls: Class<T>, factory: RetrofitFactory<T>?, private val 
         RequestInCompo(observer(getService()), subscribeSchedulers, observableSchedulers, { data ->
             subscribe?.invoke(true, data, null)
         }, { throwable ->
-            (throwable as? HttpException)?.let { e ->
-                errorHandler?.onError(e);subscribe?.invoke(false, null, e)
+            throwable?.let {
+                errorHandler?.onError(it)
             }
+            subscribe?.invoke(false, null, throwable as? HttpException)
         }).init()
     }
 
@@ -80,9 +81,10 @@ class BaseApi<T : Any>(cls: Class<T>, factory: RetrofitFactory<T>?, private val 
         requestInCompo = RequestInCompo(observer(getService()), subscribeSchedulers, observableSchedulers, { data ->
             subscribe?.invoke(true, data, null)
         }, { throwable ->
-            (throwable as? HttpException)?.let { e ->
-                errorHandler?.onError(e);subscribe?.invoke(false, null, e)
+            throwable?.let {
+                errorHandler?.onError(it)
             }
+            subscribe?.invoke(false, null, throwable as? HttpException)
         })
         requestInCompo.init()
         return object : RequestCompo {

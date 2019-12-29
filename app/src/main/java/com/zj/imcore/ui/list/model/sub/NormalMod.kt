@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.zj.im.list.views.ChatItemView
-import com.zj.im_model.mod.MsgInfo
+import com.zj.model.mod.MsgInfo
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.ui.list.model.BaseItemMod
 
@@ -21,7 +21,7 @@ class NormalMod : BaseItemMod() {
         view.getBubbleLayout()?.let { p ->
             val tv = TextView(context)
             tv.maxWidth = dpToPx(context, ChatOption.NORMAL_MSG_MAX_WIDTH)
-            tv.text = data.text
+            tv.text = data.impl.text()
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, ChatOption.bubbleTextSize)
             tv.setTextColor(getColor(context, ChatOption.bubbleTextColor))
 

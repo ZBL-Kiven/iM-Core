@@ -10,6 +10,9 @@
     <string name="app_login_hint_account">your account</string>
     <string name="app_login_hint_password">your password</string>
     <string name="app_login_hint_password_ensure">confirm password</string>
+    <string name="app_login_hint_tell">tel</string>
+    <string name="app_login_hint_email">email</string>
+    <string name="app_login_hint_gender">your gender:</string>
 
     <string name="app_login_text_login">login</string>
     <string name="app_login_text_sign">sign</string>
@@ -18,10 +21,12 @@
 
     <string name="app_sign_welcome">welcome , %1$s</string>
 
-    <string name="app_login_warming_null_account">account must not be null!</string>
-    <string name="app_login_warming_null_pwd">password must not be null!</string>
-    <string name="app_sign_warming_null_pwd_ensure">can\'t confirm password with null!</string>
-    <string name="app_sign_warming_pwd_ensure_error">passwords entered twice are inconsistent!</string>
+    <string name="app_login_warming_null_account">invalid account!</string>
+    <string name="app_login_warming_null_pwd">invalid password!</string>
+    <string name="app_sign_warming_null_pwd_ensure">confirm password with null!</string>
+    <string name="app_sign_warming_pwd_ensure_error">Passwords verification failed!</string>
+    <string name="app_login_warming_null_tell">invalid tel!</string>
+    <string name="app_login_warming_null_email">invalid email!</string>
 
     <string name="app_main_index_chat">chat</string>
     <string name="app_main_index_contact">contact</string>

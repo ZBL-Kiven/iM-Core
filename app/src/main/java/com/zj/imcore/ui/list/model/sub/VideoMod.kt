@@ -5,9 +5,9 @@ import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.zj.im.list.views.ChatItemView
-import com.zj.im_model.Payloads
+import com.zj.model.Payloads
 import com.zj.imcore.ui.list.ChatOption
-import com.zj.im_model.mod.MsgInfo
+import com.zj.model.mod.MsgInfo
 import com.zj.preview.PreviewActivity
 import com.zj.preview.mod.ConversationFileInfo
 import com.zj.preview.mod.SourceType
@@ -20,15 +20,15 @@ import com.zj.preview.mod.SourceType
 class VideoMod : BaseImageMod() {
 
     override fun getDataPayloads(data: MsgInfo): String {
-        return Payloads.CONVERSATION_VIDEO
+        return Payloads.BUBBLE_VIDEO
     }
 
     override fun getWidth(data: MsgInfo): Int {
-        return data.file?.width ?: 0
+        return data.impl.getVideoThumbWidth()
     }
 
     override fun getHeight(data: MsgInfo): Int {
-        return data.file?.height ?: 0
+        return data.impl.getVideoThumbHeight()
     }
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
@@ -48,9 +48,9 @@ class VideoMod : BaseImageMod() {
     }
 
     private fun openPreview(context: Context, data: MsgInfo) {
-        val url = data.file?.url ?: ""
-        val duration = data.file?.duration ?: 0L
-        val imgPath = data.getOriginalPath(Payloads.CONVERSATION_VIDEO)
+        val url = data.impl.getVideoUrl() ?: ""
+        val duration = data.impl.getVideoDuration()
+        val imgPath = data.getOriginalPath(Payloads.BUBBLE_VIDEO) ?: ""
         val info = ConversationFileInfo(SourceType.VIDEO, url, "", duration, imgPath)
         PreviewActivity.start(context, info, null)
     }

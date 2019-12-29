@@ -6,17 +6,17 @@ import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import com.zj.im.img.AutomationImageCalculateUtils
 import com.zj.im.list.views.ChatItemView
-import com.zj.im_model.Payloads
+import com.zj.model.Payloads
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.R
-import com.zj.im_model.mod.MsgInfo
+import com.zj.model.mod.MsgInfo
 import com.zj.imcore.ui.list.model.BaseItemMod
 
 class StickerMod : BaseItemMod() {
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
-        val width = data.image?.width ?: -1
-        val height = data.image?.height ?: -1
+        val width = data.impl.getStickerWidth()
+        val height = data.impl.getStickerHeight()
         if (width <= 0 || height <= 0) {
             view.printErrorMsg("Error print: sticker was no size")
             return
@@ -31,7 +31,7 @@ class StickerMod : BaseItemMod() {
         val w = calculate.second[0]
         val h = calculate.second[1]
         val lp = RelativeLayout.LayoutParams(w, h)
-        if (data.isSelf()) {
+        if (isSelf(data.impl.uid())) {
             lp.addRule(RelativeLayout.BELOW, nickNameId)
             lp.addRule(RelativeLayout.START_OF, avatarId)
         } else {
@@ -43,11 +43,11 @@ class StickerMod : BaseItemMod() {
         view.addView(imageView, lp)
         val imgW = (w * ChatOption.STICKER_MSG_QUALITY).toInt()
         val imgH = (h * ChatOption.STICKER_MSG_QUALITY).toInt()
-        Glide.with(context).load(getUrl(data)).override(imgW, imgH).into(imageView)
+        Glide.with(context).load(getUrl(data)).override(imgW, imgH).error(R.mipmap.app_common_image_loading_error).into(imageView)
     }
 
     private fun getUrl(data: MsgInfo): String {
-        return data.getOriginalPath(Payloads.CONVERSATION_STICKER)
+        return data.getOriginalPath(Payloads.BUBBLE_STICKER)?:""
     }
 
     private fun calculateImgParams(context: Context, width: Int, height: Int): Pair<Boolean, Array<Int>> {

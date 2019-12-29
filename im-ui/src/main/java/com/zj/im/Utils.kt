@@ -7,10 +7,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.zj.im.scheduler.ReceiveListener
 import java.util.*
 
-inline fun <reified IN, reified OUT : Any> LifecycleOwner.registerMsgReceivedListener(name: String): ReceiveListener<IN, OUT> {
-    return ReceiveListener.create(name, this)
-}
-
 @Suppress("UNCHECKED_CAST")
 fun <I, O> cast(a: I?): O? {
     return try {

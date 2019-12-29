@@ -61,7 +61,7 @@ abstract class ImageCacheUtil(private val context: Context, private val w: Int, 
             onGot("the cache directory name was null or empty!!")
             return
         }
-        if (cacheOriginalPath.isEmpty()) {
+        if (cacheOriginalPath.isNullOrEmpty()) {
             onGot("the original path was null or empty!!")
             return
         }

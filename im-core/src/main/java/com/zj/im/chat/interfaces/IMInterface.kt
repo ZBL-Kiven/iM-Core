@@ -81,18 +81,27 @@ abstract class IMInterface : MessageInterface() {
         option?.setFrequency(efficiency)
     }
 
-    fun pause(code: Int) {
+    fun onPause(code: Int) {
         option?.pause(code)
+        pause(code)
     }
 
-    fun resume(code: Int) {
+    fun onResume(code: Int) {
         option?.resume(code)
+        resume(code)
     }
 
     fun shutDown() {
         option?.shutDown()
         ChatBase.shutDown()
+        destroy()
     }
+
+    protected open fun pause(code: Int) {}
+
+    protected open fun resume(code: Int) {}
+
+    protected open fun destroy() {}
 
     fun postError(e: ChatException) {
         ChatBase.postError(e)

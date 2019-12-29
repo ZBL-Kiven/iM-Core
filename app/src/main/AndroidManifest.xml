@@ -35,9 +35,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.zj.imcore.gui.LoginActivity"/>
+        <activity android:name="com.zj.imcore.gui.login.LoginActivity"/>
         <activity android:name="com.zj.imcore.ui.main.MainActivity"/>
         <activity android:name=".ui.users.UserInfoActivity"/>
+        <activity android:name=".ui.chat.ChatActivity"/>
 
 
     </application>

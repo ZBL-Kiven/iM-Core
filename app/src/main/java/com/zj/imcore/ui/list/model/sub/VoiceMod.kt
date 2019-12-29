@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.zj.im.list.views.ChatItemView
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.R
-import com.zj.im_model.mod.MsgInfo
+import com.zj.model.mod.MsgInfo
 import com.zj.imcore.ui.list.model.BaseItemMod
 import com.zj.imcore.ui.views.VoiceView
 
@@ -24,17 +24,16 @@ class VoiceMod : BaseItemMod() {
         view.getBubbleLayout()?.let { p ->
             val voiceParent = RelativeLayout(context)
             val rlp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-
+            val isSelf = isSelf(data.impl.uid())
             val voiceView = VoiceView(context)
             voiceView.id = R.id.im_chat_item_bubble_voice
-            voiceView.setOrientation(if (data.isSelf()) VoiceView.ORIENTATION_LEFT else VoiceView.ORIENTATION_RIGHT)
+            voiceView.setOrientation(if (isSelf) VoiceView.ORIENTATION_LEFT else VoiceView.ORIENTATION_RIGHT)
             val vlp = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             vlp.marginStart = dpToPx(context, 5f)
 
             val tv = TextView(context)
             tv.id = R.id.im_chat_item_bubble_voice_duration
-            val time = data.voice?.duration ?: 0
+            val time = data.impl.getVoiceDuration()
             val timeStr = getVoiceTimeStr(time)
             tv.text = timeStr
             tv.maxWidth = dpToPx(context, ChatOption.NORMAL_MSG_MAX_WIDTH)
@@ -45,7 +44,7 @@ class VoiceMod : BaseItemMod() {
             tlp.marginStart = dpToPx(context, 8f)
             tlp.addRule(RelativeLayout.CENTER_VERTICAL)
 
-            if (data.isSelf()) {
+            if (isSelf) {
                 tlp.rightMargin = dpToPx(context, 10f)
                 tlp.addRule(RelativeLayout.ALIGN_PARENT_START)
                 vlp.addRule(RelativeLayout.END_OF, R.id.im_chat_item_bubble_voice_duration)

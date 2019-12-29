@@ -43,6 +43,15 @@ public class DrawableTextView extends View {
         int bottom = 3;
     }
 
+    @Target(ElementType.PARAMETER)
+    public @interface Gravity {
+        int left = 0x0002;
+        int top = 0x0004;
+        int right = 0x0008;
+        int bottom = 0x0016;
+        int center = 0x0001;
+    }
+
     public DrawableTextView(Context context) {
         this(context, null, 0);
     }
@@ -63,6 +72,7 @@ public class DrawableTextView extends View {
     private Drawable replaceDrawable;
     private Drawable selectedDrawable;
     private int orientation;
+    private int gravity;
     private float padding;
     private float paddingLeft = 0.0f, paddingTop = 0.0f, paddingRight = 0.0f, paddingBottom = 0.0f;
     private float drawablePadding = 0.0f;
@@ -70,7 +80,7 @@ public class DrawableTextView extends View {
     private float textSize = dp2px(12);
     private int textColor = Color.GRAY;
     private int textColor_select = Color.BLACK;
-    private float viewWidth, viewHeight;
+    private float viewWidth, viewHeight, layoutWidth, layoutHeight;
 
     private Paint textPaint;
 
@@ -78,6 +88,8 @@ public class DrawableTextView extends View {
         if (attrs != null) {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.DrawableTextView);
             try {
+                layoutWidth = ta.getDimension(R.styleable.DrawableTextView_viewWidth, 0f);
+                layoutHeight = ta.getDimension(R.styleable.DrawableTextView_viewHeight, 0f);
                 drawableWidth = ta.getDimension(R.styleable.DrawableTextView_drawableWidth, drawableWidth);
                 drawableHeight = ta.getDimension(R.styleable.DrawableTextView_drawableHeight, drawableHeight);
                 padding = ta.getDimension(R.styleable.DrawableTextView_padding, padding);
@@ -94,6 +106,7 @@ public class DrawableTextView extends View {
                 textColor_select = ta.getColor(R.styleable.DrawableTextView_textColor_select, textColor_select);
                 translationTime = ta.getInteger(R.styleable.DrawableTextView_translationTime, translationTime);
                 orientation = ta.getInt(R.styleable.DrawableTextView_orientation, Orientation.left);
+                gravity = ta.getInt(R.styleable.DrawableTextView_gravity, Gravity.center);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -105,6 +118,7 @@ public class DrawableTextView extends View {
         textPaint.setTextSize(textSize);
         textPaint.setTextAlign(Paint.Align.CENTER);
         calculateViewDimension();
+        calculateGravityBounds();
     }
 
     private PointF textStart;
@@ -171,6 +185,47 @@ public class DrawableTextView extends View {
         textStart = new PointF(textX, textY);
     }
 
+    private void calculateGravityBounds() {
+        float widthOffset = layoutWidth - viewWidth;
+        float heightOffset = layoutHeight - viewHeight;
+        if (widthOffset <= 0 && heightOffset <= 0) return;
+
+        if ((gravity & Gravity.left) != 0) {
+            widthOffset = 0;
+        }
+        if ((gravity & Gravity.top) != 0) {
+            heightOffset = 0;
+        }
+        boolean isCenterXSet = false;
+        boolean isCenterYSet = false;
+        if ((gravity & Gravity.center) != 0) {
+            if (widthOffset > 0) {
+                isCenterXSet = true;
+                textStart.x += widthOffset / 2f;
+                drawableRect.left += widthOffset / 2f;
+                drawableRect.right += widthOffset / 2f;
+            }
+            if (heightOffset > 0) {
+                isCenterYSet = true;
+                textStart.y += heightOffset / 2f;
+                drawableRect.top += heightOffset / 2f;
+                drawableRect.bottom += heightOffset / 2f;
+            }
+        }
+        if ((gravity & Gravity.right) != 0) {
+            float xo = isCenterXSet ? widthOffset / 2f : widthOffset;
+            textStart.x += xo;
+            drawableRect.left += xo;
+            drawableRect.right += xo;
+        }
+        if ((gravity & Gravity.bottom) != 0) {
+            float yo = isCenterYSet ? heightOffset / 2f : heightOffset;
+            textStart.y += yo;
+            drawableRect.top += yo;
+            drawableRect.bottom += yo;
+        }
+    }
+
     private float curAnimFraction;
 
     //使用initData方法可以根据某个属性状态的值使控件内的样式产生渐变动画，建议配合OnSelectedAnimParent使用；
@@ -183,6 +238,7 @@ public class DrawableTextView extends View {
     protected void onDraw(Canvas canvas) {
         canvas.save();
         calculateViewDimension();
+        calculateGravityBounds();
         drawText(canvas);
         drawDrawable(canvas);
         canvas.restore();
@@ -213,7 +269,9 @@ public class DrawableTextView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension((int) viewWidth, (int) viewHeight);
+        float w = Math.max(layoutWidth, viewWidth);
+        float h = Math.max(layoutHeight, viewHeight);
+        setMeasuredDimension((int) w, (int) h);
     }
 
     public void setOrientation(@Orientation int orientation) {

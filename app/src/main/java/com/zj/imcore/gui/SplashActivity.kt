@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.imcore.R
+import com.zj.imcore.gui.login.LoginActivity
 import com.zj.imcore.ui.main.MainActivity
 
 class SplashActivity : AppCompatActivity() {
@@ -17,6 +18,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun initData() {
+        SPUtils_Proxy.clear()
         Handler(Looper.getMainLooper()).postDelayed({
             checkIsLogin()
         }, 300)

@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.zj.imcore.ui.views.pager.LoginViewPager
+    <com.zj.imcore.gui.login.pager.LoginViewPager
             android:id="@+id/app_act_login_vp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

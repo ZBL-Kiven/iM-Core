@@ -14,7 +14,7 @@ object TimeLineInflateModel {
         } else null
     }
 
-    private fun getTimeString(ctx: Context, timestamp: Long?): String {
+    fun getTimeString(ctx: Context, timestamp: Long?): String {
         val result: String
         val weekNames = arrayOf(ctx.getString(R.string.sunday), ctx.getString(R.string.monday), ctx.getString(R.string.tuesday), ctx.getString(R.string.wednesday), ctx.getString(R.string.thursday), ctx.getString(R.string.friday), ctx.getString(R.string.saturday))
         val hourTimeFormat = ctx.getString(R.string.hour_time_format)

@@ -1,25 +1,33 @@
-package com.zj.imcore.ui.main
+package com.zj.imcore.ui.chat
 
-import com.zj.im.registerMsgReceivedListener
 import com.zj.im.store.interfaces.DataListener
-import com.zj.im_model.mod.MsgInfo
+import com.zj.model.mod.MsgInfo
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.options.IMHelper
+import com.zj.imcore.registerTcpReceivedListener
 import com.zj.imcore.renderer.TestHandler
+import com.zj.imcore.ui.main.conversation.ConversationFragment
+import com.zj.model.interfaces.MessageIn
 
 class ChatActivity :FCActivity(){
+
+    companion object{
+        fun start(conversationFragment: ConversationFragment, id: String, userId: String?, draft: String?, title: String) {
+
+        }
+    }
 
     private fun register() {
         IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
             //            main_status?.text = it.name
         }
 
-        val l = this.registerMsgReceivedListener<MsgReceivedInfo, MsgInfo>("aaa").addHandler(TestHandler()).subscribe(object : DataListener<MsgInfo>() {
+        val l = registerTcpReceivedListener<MessageIn, MsgInfo>("aaa").addHandler(TestHandler()).subscribe(object : DataListener<MsgInfo>() {
             override fun onReceived(data: MsgInfo) {
-                //                main_rv_msgBar.adapter.data().add("aa", data)
-                //                main_rv_msgBar.stopScroll()
-                //                val p = main_rv_msgBar.adapter.data().maxCurDataPosition()
-                //                main_rv_msgBar.scrollToPosition(p)
+//                                main_rv_msgBar.adapter.data().add("aa", data)
+//                                main_rv_msgBar.stopScroll()
+//                                val p = main_rv_msgBar.adapter.data().maxCurDataPosition()
+//                                main_rv_msgBar.scrollToPosition(p)
             }
         })
         l.lock(false)

@@ -9,6 +9,9 @@
     <color name="color_primary_light_grey">#dbdbdb</color>
     <color name="color_primary_background">#a1a3a1</color>
     <color name="color_primary_text_color">#e7f3e9</color>
+    <color name="color_primary_color_error">#d73323</color>
+
+    <color name="color_primary_notify_red_dot_color">#df1729</color>
 
     <color name="chat_background">#D7D7D7</color>
     <color name="chat_bubble_shadow">#FFDDDDDD</color>
@@ -18,7 +21,7 @@
     <color name="chat_text_info_line">#D0212A20</color>
     <color name="chat_text">#212A20</color>
 
-    <color name="app_base_background">#d9d7df</color>
+    <color name="app_base_background">#e3e6e9</color>
     <color name="app_base_text_color_333">#333333</color>
     <color name="app_base_text_color_666">#666666</color>
     <color name="app_base_text_color_999">#999999</color>

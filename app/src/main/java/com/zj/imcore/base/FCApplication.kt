@@ -11,7 +11,7 @@ import com.zj.base.BaseApplication
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.imcore.BuildConfig
 import com.zj.imcore.apis.user.UserApi
-import com.zj.imcore.gui.LoginActivity
+import com.zj.imcore.gui.login.LoginActivity
 
 class FCApplication : BaseApplication() {
 
@@ -27,6 +27,10 @@ class FCApplication : BaseApplication() {
             val intent = Intent(act, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
             act.startActivity(intent)
+        }
+
+        fun isSelf(uid: String?): Boolean {
+            return !uid.isNullOrEmpty() && uid == SPUtils_Proxy.getUserId("")
         }
 
         @SuppressLint("HardwareIds")

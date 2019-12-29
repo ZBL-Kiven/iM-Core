@@ -1,3 +1,4 @@
+<!--suppress AndroidDomInspection -->
 <resources>
 
     <!-- Base application theme. -->
@@ -48,5 +49,38 @@
     </style>
 
 
+    <style name="baseRedDotTvStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:background">@drawable/app_base_bg_red_dot</item>
+    </style>
+
+    <style name="baseWrapSingleLineTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="baseWrapSingleLineTextView.Light">
+        <item name="android:textColor">@color/color_primary_text_color</item>
+    </style>
+
+    <style name="baseWrapSingleLineTextView.Dark">
+        <item name="android:textColor">@color/color_primary</item>
+    </style>
+
+    <style name="conversationStatusDrawableTextViewStyle">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/app_conversation_item_status_bg</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 
 </resources>

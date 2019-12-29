@@ -64,7 +64,7 @@ internal object IConnectivityManager {
         context?.registerReceiver(netWorkBrodCast, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
-    private val isNetWorkActive: NetWorkInfo
+    val isNetWorkActive: NetWorkInfo
         @TargetApi(Build.VERSION_CODES.M) get() {
             return try {
                 if (isNetworkConnected()) NetWorkInfo.CONNECTED else NetWorkInfo.DISCONNECTED

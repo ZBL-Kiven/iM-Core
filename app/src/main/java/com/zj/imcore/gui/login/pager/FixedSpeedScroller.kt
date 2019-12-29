@@ -1,4 +1,4 @@
-package com.zj.imcore.ui.views.pager
+package com.zj.imcore.gui.login.pager
 
 import android.content.Context
 import android.view.animation.Interpolator

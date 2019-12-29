@@ -10,11 +10,12 @@ import com.zj.base.utils.storage.sp.SPUtils_Proxy
  * */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class LoginInfo {
-    var teams: Array<String>? = null
+
     var user: LoginUserModel? = null
     var token: LoginTokenModel? = null
 
     fun saveAsSP() {
+        SPUtils_Proxy.setUserId(user?.id?.toString())
         SPUtils_Proxy.setAccessToken(token?.accessToken)
         SPUtils_Proxy.setRefreshToken(token?.refreshToken)
         SPUtils_Proxy.setUserName(user?.name)

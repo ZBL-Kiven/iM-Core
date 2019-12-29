@@ -1,19 +1,23 @@
-package com.zj.imcore.gui
+package com.zj.imcore.gui.login
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
+import android.widget.RadioGroup
+import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.zj.imcore.R
 import com.zj.imcore.apis.user.UserApi
 import com.zj.imcore.base.FCApplication
+import com.zj.imcore.gui.login.pager.LoginViewPager
 import com.zj.imcore.ui.main.MainActivity
 import com.zj.imcore.ui.views.LoadingButton
-import com.zj.imcore.ui.views.pager.LoginViewPager
+import kotlin.math.max
 
-class LoginActivity : AppCompatActivity(), (View?) -> Unit {
+class LoginActivity : AppCompatActivity() {
 
     private var vp: LoginViewPager? = null
     private var tvGotoSign: View? = null
@@ -23,11 +27,19 @@ class LoginActivity : AppCompatActivity(), (View?) -> Unit {
     private var etSignName: TextInputEditText? = null
     private var etSignPwd: TextInputEditText? = null
     private var etSignPwdCof: TextInputEditText? = null
+    private var etSignTell: TextInputEditText? = null
+    private var etSignEmail: TextInputEditText? = null
+    private var etSignDone: EditText? = null
+    private var rgSignGender: RadioGroup? = null
+    private var signScroller: ScrollView? = null
     private var etLoginNameLayout: TextInputLayout? = null
     private var etLoginPasswordLayout: TextInputLayout? = null
     private var etSignNameLayout: TextInputLayout? = null
     private var etSignPwdLayout: TextInputLayout? = null
     private var etSignPwdCofLayout: TextInputLayout? = null
+    private var etSignTellLayout: TextInputLayout? = null
+    private var etSignEmailLayout: TextInputLayout? = null
+    private var tvSignGenderHint: View? = null
     private var btnLoginOrSign: LoadingButton? = null
 
     private val tagLogin = "tagLogin"
@@ -48,7 +60,7 @@ class LoginActivity : AppCompatActivity(), (View?) -> Unit {
         btnLoginOrSign = findViewById(R.id.app_act_login_btn)
         vp?.let {
             it.controlViewPagerSpeed(500)
-            it.initData(this, viewIdLogin, viewIdSign)
+            it.initData(onDataSet, onPageChanged, viewIdLogin, viewIdSign)
         }
     }
 
@@ -57,14 +69,11 @@ class LoginActivity : AppCompatActivity(), (View?) -> Unit {
             if (vp?.isScrolling == true) return@setOnClickListener
             when (it.tag) {
                 tagLogin -> {
-                    etLoginName?.clearFocus()
-                    etLoginPassword?.clearFocus()
+                    clearFoucs()
                     performLogin()
                 }
                 tagSign -> {
-                    etSignName?.clearFocus()
-                    etSignPwd?.clearFocus()
-                    etSignPwdCof?.clearFocus()
+                    clearFoucs()
                     performSign()
                 }
             }
@@ -92,28 +101,61 @@ class LoginActivity : AppCompatActivity(), (View?) -> Unit {
         val ac = etSignName?.text?.toString()
         if (ac.isNullOrEmpty()) {
             etSignNameLayout?.error = getString(R.string.app_login_warming_null_account)
+            scrollTo(etSignName)
             return
         }
         val pwd = etSignPwd?.text?.toString()
         if (pwd.isNullOrEmpty()) {
             etSignPwdLayout?.error = getString(R.string.app_login_warming_null_pwd)
+            scrollTo(etSignPwd)
             return
         }
         val cof = etSignPwdCof?.text?.toString()
         if (cof.isNullOrEmpty()) {
             etSignPwdCofLayout?.error = getString(R.string.app_sign_warming_null_pwd_ensure)
+            scrollTo(etSignPwdCof)
             return
         }
         if (pwd != cof) {
             etSignPwdLayout?.error = getString(R.string.app_sign_warming_pwd_ensure_error)
             etSignPwdCofLayout?.error = getString(R.string.app_sign_warming_pwd_ensure_error)
+            scrollTo(etSignPwd)
+            return
+        }
+        val tel = etSignTell?.text?.toString()
+        if (tel.isNullOrEmpty()) {
+            etSignTellLayout?.error = getString(R.string.app_login_warming_null_tell)
+            scrollTo(etSignTell)
+            return
+        }
+        val email = etSignEmail?.text?.toString()
+        if (email.isNullOrEmpty()) {
+            etSignEmailLayout?.error = getString(R.string.app_login_warming_null_email)
+            scrollTo(etSignEmail)
+            return
+        }
+        val genderIsLady = getCheckedGender()
+        if (genderIsLady == null) {
+            scrollTo(tvSignGenderHint)
             return
         }
         etSignNameLayout?.error = null
         etSignPwdLayout?.error = null
         etSignPwdCofLayout?.error = null
         btnLoginOrSign?.startLoading()
-        sign(ac, pwd)
+        sign(ac, pwd, tel, email, genderIsLady)
+    }
+
+    private fun scrollTo(v: View?) {
+        signScroller?.let {
+            val a = IntArray(2)
+            v?.getLocationInWindow(a)
+            val p = a[1]
+            val scr = it.scrollY
+            val offset = p + (scr - it.height)
+            println("----- $p   $scr   $offset")
+            it.smoothScrollTo(0, max(0, offset))
+        }
     }
 
     private fun login(ac: String, pwd: String) {
@@ -140,9 +182,9 @@ class LoginActivity : AppCompatActivity(), (View?) -> Unit {
         finish()
     }
 
-    private fun sign(ac: String, pwd: String) {
+    private fun sign(ac: String, pwd: String, tel: String, email: String, genderIsLady: Boolean) {
         enableViews(false)
-        UserApi.sign(ac, pwd, "zjj0888@gmail.com", false) { isSuccess, data, throwable ->
+        UserApi.sign(ac, pwd, tel, email, genderIsLady) { isSuccess, data, throwable ->
             if (isSuccess) {
                 btnLoginOrSign?.loadingSuccessful()
                 FCApplication.showToast(getString(R.string.app_sign_welcome, data?.name))
@@ -170,7 +212,29 @@ class LoginActivity : AppCompatActivity(), (View?) -> Unit {
         etSignPwdCof?.isEnabled = enable
     }
 
-    override fun invoke(v: View?) {
+    private fun clearFoucs() {
+        etLoginName?.clearFocus()
+        etLoginPassword?.clearFocus()
+        etSignName?.clearFocus()
+        etSignPwd?.clearFocus()
+        etSignPwdCof?.clearFocus()
+        etSignTell?.clearFocus()
+        etSignEmail?.clearFocus()
+    }
+
+    private val onPageChanged: (v: View?) -> Unit = { v ->
+        when (v?.id) {
+            R.id.app_act_login_ll_content -> {
+                btnLoginOrSign?.text = getString(R.string.app_login_text_login)
+                btnLoginOrSign?.tag = tagLogin
+            }
+            R.id.app_act_sign_ll_content -> {
+                btnLoginOrSign?.text = getString(R.string.app_login_text_sign)
+                btnLoginOrSign?.tag = tagSign
+            }
+        }
+    }
+    private val onDataSet: (v: View?) -> Unit = { v ->
         when (v?.id) {
             R.id.app_act_login_ll_content -> {
                 if (etLoginName == null) {
@@ -197,8 +261,6 @@ class LoginActivity : AppCompatActivity(), (View?) -> Unit {
                         vp?.setCurrentItem(1, true)
                     }
                 }
-                btnLoginOrSign?.text = getString(R.string.app_login_text_login)
-                btnLoginOrSign?.tag = tagLogin
             }
             R.id.app_act_sign_ll_content -> {
                 if (etSignName == null) {
@@ -219,19 +281,65 @@ class LoginActivity : AppCompatActivity(), (View?) -> Unit {
                         if (i) etSignPwdCofLayout?.error = null
                     }
                 }
+                if (etSignTell == null) {
+                    etSignTell = v.findViewById(R.id.app_act_sign_et_tell)
+                    etSignTell?.setOnFocusChangeListener { _, i ->
+                        if (i) etSignTellLayout?.error = null
+                    }
+                }
+                if (etSignEmail == null) {
+                    etSignEmail = v.findViewById(R.id.app_act_sign_et_email)
+                    etSignEmail?.setOnFocusChangeListener { _, i ->
+                        if (i) etSignEmailLayout?.error = null
+                    }
+                }
+                if (rgSignGender == null) {
+                    rgSignGender = v.findViewById(R.id.app_act_sign_rg_gender)
+                    rgSignGender?.setOnCheckedChangeListener { _, _ ->
+                        if (tvSignGenderHint?.isSelected == true) tvSignGenderHint?.isSelected = false
+                        clearFoucs()
+                    }
+                }
+                if (etSignDone == null) {
+                    etSignDone = v.findViewById(R.id.app_act_sign_et_done)
+                    etSignDone?.setOnEditorActionListener { tv, _, _ ->
+                        if (tv.imeActionId == resources.getInteger(R.integer.app_action_sign)) {
+                            btnLoginOrSign?.callOnClick()
+                        }
+                        return@setOnEditorActionListener false
+                    }
+                }
+                if (signScroller == null) {
+                    signScroller = v.findViewById(R.id.app_act_sign_scr_content)
+                }
                 if (etSignNameLayout == null) etSignNameLayout = v.findViewById(R.id.app_act_sign_et_account_layout)
                 if (etSignPwdLayout == null) etSignPwdLayout = v.findViewById(R.id.app_act_sign_et_password_layout)
                 if (etSignPwdCofLayout == null) etSignPwdCofLayout = v.findViewById(R.id.app_act_sign_et_password_ensure_layout)
+                if (etSignTellLayout == null) etSignTellLayout = v.findViewById(R.id.app_act_sign_et_tell_layout)
+                if (etSignEmailLayout == null) etSignEmailLayout = v.findViewById(R.id.app_act_sign_et_email_layout)
+                if (tvSignGenderHint == null) tvSignGenderHint = v.findViewById(R.id.app_act_sign_tv_gender_hint)
                 if (tvGotoLogin == null) {
                     tvGotoLogin = v.findViewById(R.id.app_act_sign_tv_goto_login)
                     tvGotoLogin?.setOnClickListener { _ ->
                         vp?.setCurrentItem(0, true)
                     }
                 }
-                btnLoginOrSign?.text = getString(R.string.app_login_text_sign)
-                btnLoginOrSign?.tag = tagSign
             }
         }
+    }
+
+    private fun getCheckedGender(): Boolean? {
+        val gender = rgSignGender?.checkedRadioButtonId?.let {
+            when (it) {
+                R.id.app_act_sign_rb1 -> false
+                R.id.app_act_sign_rb2 -> true
+                else -> null
+            }
+        }
+        if (gender == null) {
+            tvSignGenderHint?.isSelected = true
+        }
+        return gender
     }
 
     override fun onDestroy() {

@@ -11,6 +11,6 @@ interface CacheAble {
     /**
      * the data original path or url
      * */
-    fun getOriginalPath(payloads: String?): String
+    fun getOriginalPath(payloads: String?): String?
 
 }

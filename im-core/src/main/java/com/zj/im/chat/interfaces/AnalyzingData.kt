@@ -10,6 +10,11 @@ class AnalyzingData {
 
     val state: SendMsgState?
     val callId: String?
+
+    private val type: Type
+    private val param: MutableMap<String, Any>?
+    private val response: MutableMap<String, Any>?
+
     fun getData(): MutableMap<String, Any>? {
         return if (isSelf()) param else response
     }
@@ -21,19 +26,15 @@ class AnalyzingData {
     fun isRecent(): Boolean {
         return type == Type.SOURCE_RESEND
     }
-
     /**
      * inner params
      * */
 
     internal enum class Type {
+
         SOURCE_SEND, SOURCE_RECEIVE, SOURCE_RESEND
 
     }
-
-    private val type: Type
-    private val param: MutableMap<String, Any>?
-    private val response: MutableMap<String, Any>?
 
     /**
      * the message by send

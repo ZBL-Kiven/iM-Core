@@ -6,8 +6,9 @@ import com.zj.im.img.cache.ImageCacheUtil
 import com.zj.imcore.utils.img.loader.AvatarLoadUtil
 import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.views.ChatItemView
-import com.zj.im_model.Payloads
-import com.zj.im_model.mod.MsgInfo
+import com.zj.model.Payloads
+import com.zj.model.mod.MsgInfo
+import com.zj.imcore.base.FCApplication
 import com.zj.imcore.enums.MsgType
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.utils.img.transactions.RoundCorner
@@ -24,22 +25,22 @@ class ChatListModel : BaseChatModel<MsgInfo> {
     }
 
     override fun isInitInfoView(data: MsgInfo): Boolean {
-        return MsgType.INFO.eq(data.subType)
+        return MsgType.INFO.eq(data.impl.subType())
     }
 
     override fun isInitBaseBubbleView(data: MsgInfo): Boolean {
-        return MsgType.isMsg(data.subType)
+        return MsgType.isMsg(data.impl.subType())
     }
 
     override fun getOrientation(data: MsgInfo): ChatItemView.Orientation {
-        return if (data.isSelf()) ChatItemView.Orientation.SELF else ChatItemView.Orientation.OTHERS
+        return if (FCApplication.isSelf(data.impl.uid())) ChatItemView.Orientation.SELF else ChatItemView.Orientation.OTHERS
     }
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
 
         fun loadAvatar() {
             view.getAvatarView()?.let {
-                AvatarLoadUtil(context, dpToPx(context, ChatOption.avatarWidth), dpToPx(context, ChatOption.avatarHeight), ChatOption.avatarQuality, data, ImageCacheUtil.CENTER_CROP, Payloads.AVATAR).load { path ->
+                AvatarLoadUtil(context, dpToPx(context, ChatOption.avatarWidth), dpToPx(context, ChatOption.avatarHeight), ChatOption.avatarQuality, data, ImageCacheUtil.CENTER_CROP, Payloads.MEMBERS_AVATAR).load { path ->
                     val avatarRadius = dpToPx(context, ChatOption.avatarRadius) * 1.0f
                     val transformer = RoundCorner(context, avatarRadius, avatarRadius, avatarRadius, avatarRadius)
                     Glide.with(context).load(path).transform(transformer).into(it)
@@ -52,7 +53,7 @@ class ChatListModel : BaseChatModel<MsgInfo> {
         }
 
         fun loadNickName() {
-            view.getNicknameView()?.text = "${data.uid}"
+            view.getNicknameView()?.text = "${data.impl.uid()}"
         }
 
         fun loadBubble() {

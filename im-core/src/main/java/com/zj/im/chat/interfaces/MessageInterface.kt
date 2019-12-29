@@ -12,8 +12,6 @@ import com.zj.im.utils.log.TCPNetRecordChangedListener
 
 abstract class MessageInterface {
 
-    /**----------*/
-
     private var socketStateObserver: MutableMap<String, ((SocketState) -> Unit)?>? = null
         get() {
             if (field == null) field = mutableMapOf()
@@ -36,20 +34,16 @@ abstract class MessageInterface {
         }
     }
 
-    /**----------*/
-
     private var netWorkStateObserver: MutableMap<String, ((NetWorkInfo) -> Unit)?>? = null
         get() {
             if (field == null) field = mutableMapOf()
             return field
         }
 
-
     fun registerNetWorkStateChangeListener(name: String, observer: (NetWorkInfo) -> Unit) {
         observer(IConnectivityManager.isNetWorkActive)
         this.netWorkStateObserver?.put(name, observer)
     }
-
 
     fun removeNetWorkStateChangeListener(name: String) {
         this.netWorkStateObserver?.remove(name)
@@ -60,8 +54,6 @@ abstract class MessageInterface {
             p?.invoke(state)
         }
     }
-
-    /**----------*/
 
     private var lifecycleListeners: HashMap<String, LifecycleListener>? = null
         get() {
@@ -89,8 +81,6 @@ abstract class MessageInterface {
         }
     }
 
-    /**----------*/
-
     private var changedListeners: HashMap<String, TCPNetRecordChangedListener>? = null
         get() {
             if (field == null) field = hashMapOf()
@@ -115,8 +105,6 @@ abstract class MessageInterface {
         }
     }
 
-    /**-------------*/
-
     /**
      *override after connected and intercept the nex step with :isContinue
      * */
@@ -135,12 +123,8 @@ abstract class MessageInterface {
         this.onAuthSuccess = obj
     }
 
-    /**-------------*/
-
     abstract fun onMsgPatch(data: AnalyzingData, onFinish: () -> Unit)
 
     abstract fun progressUpdate(progress: Int, callId: String)
-
-    /**-------------*/
 
 }
