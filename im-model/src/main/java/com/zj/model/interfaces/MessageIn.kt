@@ -3,7 +3,7 @@ package com.zj.model.interfaces
 @Suppress("unused")
 interface MessageIn {
 
-    fun vChannelId(): String?
+    fun channelId(): String?
 
     fun subType(): String?
 
@@ -37,33 +37,32 @@ interface MessageIn {
 
     fun getName(): String?
 
-    /**------- */
+    /**---- sticker ---- */
 
     fun getStickerUrl(): String?
 
     fun getStickerWidth(): Int
     fun getStickerHeight(): Int
 
-    /**------- */
+    /**---- image ---- */
 
     fun getImageUrl(): String?
-
     fun getImageWidth(): Int
     fun getImageHeight(): Int
 
-    /**------- */
+    /**---- voice ---- */
 
     fun getVoiceUrl(): String?
 
     fun getVoiceDuration(): Long
 
-    /**------- */
+    /**--- file ---- */
 
     fun getFileUrl(): String?
 
     fun getFileSize(): Long
 
-    /**------- */
+    /**---- video --- */
 
     fun getVideoUrl(): String?
 
@@ -78,11 +77,9 @@ interface MessageIn {
     /**----- packing ignore -----*/
 
     //send status
-    fun sendingState()
+    fun sendingState():Int
 
     //If the file is sent, the local path of the file needs to be saved for retransmission
     fun localFilePath(): String?
-
-    /** -------- db ignore properties ------- */
 
 }

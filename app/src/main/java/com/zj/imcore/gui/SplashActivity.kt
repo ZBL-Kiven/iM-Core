@@ -18,7 +18,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        SPUtils_Proxy.clear()
         Handler(Looper.getMainLooper()).postDelayed({
             checkIsLogin()
         }, 300)

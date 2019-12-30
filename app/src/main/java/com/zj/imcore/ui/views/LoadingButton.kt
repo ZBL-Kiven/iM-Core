@@ -339,12 +339,12 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
                 canvas.drawPath(mPath, mStrokePaint)
             }
             STATE_ANIMATION_SUCCESS -> {
-                canvas.drawPath(mSuccessPath!!, mPathEffectPaint)
+                mSuccessPath?.let { canvas.drawPath(it, mPathEffectPaint) }
                 canvas.drawCircle((width / 2).toFloat(), (viewHeight / 2).toFloat(), mRadius - mDensity, mStrokePaint)
             }
             STATE_ANIMATION_FAILED -> {
-                canvas.drawPath(mFailedPath!!, mPathEffectPaint)
-                canvas.drawPath(mFailedPath2!!, mPathEffectPaint2)
+                mFailedPath?.let { canvas.drawPath(it, mPathEffectPaint) }
+                mFailedPath2?.let { canvas.drawPath(it, mPathEffectPaint2) }
                 canvas.drawCircle((width / 2).toFloat(), (viewHeight / 2).toFloat(), mRadius - mDensity, mStrokePaint)
             }
         }
@@ -358,7 +358,6 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
             scaleFailedPath()
             return
         }
-
         if (mCurrentState == STATE_BUTTON) {
             mCurrentState = STATE_ANIMATION_STEP1
             mPaint.clearShadowLayer()
@@ -370,8 +369,8 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
      * loading data successful
      */
     fun loadingSuccessful() {
-        if (mLoadingAnimatorSet != null && mLoadingAnimatorSet!!.isStarted) {
-            mLoadingAnimatorSet!!.end()
+        if (mLoadingAnimatorSet != null && mLoadingAnimatorSet?.isStarted == true) {
+            mLoadingAnimatorSet?.end()
             mCurrentState = STATE_STOP_LOADING
             playSuccessAnimation()
         }
@@ -381,8 +380,8 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
      * loading data failed
      */
     fun loadingFailed() {
-        if (mLoadingAnimatorSet != null && mLoadingAnimatorSet!!.isStarted) {
-            mLoadingAnimatorSet!!.end()
+        if (mLoadingAnimatorSet != null && mLoadingAnimatorSet?.isStarted == true) {
+            mLoadingAnimatorSet?.end()
             mCurrentState = STATE_STOP_LOADING
             playFailedAnimation()
         }
@@ -415,7 +414,7 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
     private fun createSuccessPath() {
 
         if (mSuccessPath != null) {
-            mSuccessPath!!.reset()
+            mSuccessPath?.reset()
         } else {
             mSuccessPath = Path()
         }
@@ -441,8 +440,8 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
     private fun createFailedPath() {
 
         if (mFailedPath != null) {
-            mFailedPath!!.reset()
-            mFailedPath2!!.reset()
+            mFailedPath?.reset()
+            mFailedPath2?.reset()
         } else {
             mFailedPath = Path()
             mFailedPath2 = Path()
@@ -451,11 +450,11 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
         val left = (width / 2 - mRadius + mRadius / 2).toFloat()
         val top = mRadius / 2 + mPadding
 
-        mFailedPath!!.moveTo(left, top)
-        mFailedPath!!.lineTo(left + mRadius, top + mRadius)
+        mFailedPath?.moveTo(left, top)
+        mFailedPath?.lineTo(left + mRadius, top + mRadius)
 
-        mFailedPath2!!.moveTo((width / 2 + mRadius / 2).toFloat(), top)
-        mFailedPath2!!.lineTo((width / 2 - mRadius + mRadius / 2).toFloat(), top + mRadius)
+        mFailedPath2?.moveTo((width / 2 + mRadius / 2).toFloat(), top)
+        mFailedPath2?.lineTo((width / 2 - mRadius + mRadius / 2).toFloat(), top + mRadius)
 
         mFailedPathLength = PathMeasure(mFailedPath, false).length
         mFailedPathIntervals = floatArrayOf(mFailedPathLength, mFailedPathLength)
@@ -544,17 +543,17 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
 
         mLoadingAnimatorSet?.cancel()
         mLoadingAnimatorSet = AnimatorSet()
-        mLoadingAnimatorSet!!.doOnEnd {
+        mLoadingAnimatorSet?.doOnEnd {
             isEnabled = true
             updateButtonColor()
         }
         if (isReverse) {
-            mLoadingAnimatorSet!!.playSequentially(animator2, animator)
-            mLoadingAnimatorSet!!.start()
+            mLoadingAnimatorSet?.playSequentially(animator2, animator)
+            mLoadingAnimatorSet?.start()
             return
         }
-        mLoadingAnimatorSet!!.playSequentially(animator, animator2, loadingAnimator)
-        mLoadingAnimatorSet!!.start()
+        mLoadingAnimatorSet?.playSequentially(animator, animator2, loadingAnimator)
+        mLoadingAnimatorSet?.start()
     }
 
     private fun playSuccessAnimation() {
@@ -657,7 +656,7 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
             addUpdateListener { valueAnimator ->
                 val value = valueAnimator.animatedValue as Float
                 scaleMatrix.setScale(value, value, (width / 2).toFloat(), (viewHeight / 2).toFloat())
-                mSuccessPath!!.transform(scaleMatrix)
+                mSuccessPath?.transform(scaleMatrix)
                 invalidate()
             }
             doOnEnd {
@@ -676,8 +675,8 @@ class LoadingButton @JvmOverloads constructor(context: Context, attrs: Attribute
             addUpdateListener { valueAnimator ->
                 val value = valueAnimator.animatedValue as Float
                 scaleMatrix.setScale(value, value, (width / 2).toFloat(), (viewHeight / 2).toFloat())
-                mFailedPath!!.transform(scaleMatrix)
-                mFailedPath2!!.transform(scaleMatrix)
+                mFailedPath?.transform(scaleMatrix)
+                mFailedPath2?.transform(scaleMatrix)
                 invalidate()
             }
             doOnEnd {

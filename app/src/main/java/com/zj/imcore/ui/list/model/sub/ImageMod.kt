@@ -10,10 +10,10 @@ class ImageMod : BaseImageMod() {
     }
 
     override fun getWidth(data: MsgInfo): Int {
-        return data.impl.getImageWidth()
+        return data.imageWidth
     }
 
     override fun getHeight(data: MsgInfo): Int {
-        return data.impl.getImageHeight()
+        return data.imageHeight
     }
 }

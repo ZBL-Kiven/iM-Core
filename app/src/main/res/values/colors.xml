@@ -7,6 +7,8 @@
     <color name="color_primary_grey">#262c27</color>
     <color name="color_primary_disable">#717c71</color>
     <color name="color_primary_light_grey">#dbdbdb</color>
+    <color name="color_primary_light_grey_dark">#d3d3d3</color>
+    <color name="color_primary_light_dark">#c1c7c3</color>
     <color name="color_primary_background">#a1a3a1</color>
     <color name="color_primary_text_color">#e7f3e9</color>
     <color name="color_primary_color_error">#d73323</color>

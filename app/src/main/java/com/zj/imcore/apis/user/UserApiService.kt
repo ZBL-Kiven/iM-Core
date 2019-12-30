@@ -15,6 +15,9 @@ interface UserApiService {
     @POST("/v1/users")
     fun sign(@Body model: SignModel): Observable<SignInfo>
 
+    @POST("/oauth/v1/logout")
+    fun logout(): Observable<String>
+
     @GET("/oauth/hello")
-    fun ping():Observable<String>
+    fun ping(): Observable<String>
 }

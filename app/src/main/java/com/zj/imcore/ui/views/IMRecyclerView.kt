@@ -33,7 +33,7 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
         if (data.isNullOrEmpty()) return null
         var lastTimeStamp = 0L
         data.forEach { m ->
-            val curStamp = m.impl.localCreatedTs()
+            val curStamp = m.localCreatedTs
             val timeLineString = TimeLineInflateModel.inflateTimeLine(context, curStamp, lastTimeStamp, ChatOption.maximumDiffDisplayTime)
             m.timeLineString = timeLineString
             lastTimeStamp = curStamp
@@ -65,7 +65,7 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
             }
 
             override fun getBubbleColor(): Int {
-                return if (isSelf(data.impl.uid())) ChatOption.bubbleColorSelf else ChatOption.bubbleColorOthers
+                return if (isSelf(data.uid)) ChatOption.bubbleColorSelf else ChatOption.bubbleColorOthers
             }
 
             override fun getBubbleRadius(): Float {

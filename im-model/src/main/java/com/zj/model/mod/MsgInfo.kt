@@ -3,14 +3,95 @@ package com.zj.model.mod
 import com.zj.im.list.interfaces.InfoImpl
 import com.zj.model.Payloads
 import com.zj.model.interfaces.MessageIn
-import org.msgpack.annotation.Ignore
 
 @Suppress("unused", "SpellCheckingInspection")
-class MsgInfo(val impl: MessageIn) : InfoImpl<MsgInfo> {
+class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
+
+    val channelId: String?; get() = impl.channelId()
+
+    val subType: String?; get() = impl.channelId()
+
+    val subTypeDetail: String?; get() = impl.channelId()
+
+    val text: String?; get() = impl.channelId()
+
+    val createdTs: Long; get() = impl.createdTs()
+
+    val uid: String?; get() = impl.uid()
+
+    val referKey: String; get() = impl.referKey()
+
+    val starId: String?; get() = impl.starId()
+
+    val deleted: Boolean; get() = impl.deleted()
+
+    val textColor: String?; get() = impl.textColor()
+
+    val tsColor: String?; get() = impl.tsColor()
+
+    val bubbleColor: String?; get() = impl.bubbleColor()
+
+    val localCreatedTs: Long; get() = impl.localCreatedTs()
+
+    val callId: String?; get() = impl.callId()
+
+    val key: String; get() = impl.key()
+
+    val avatarUrl: String?; get() = impl.getAvatarUrl()
+
+    val name: String?; get() = impl.getName()
+
+    /**------- */
+
+    val stickerUrl: String?; get() = impl.getStickerUrl()
+
+    val stickerWidth: Int; get() = impl.getStickerWidth()
+
+    val stickerHeight: Int; get() = impl.getStickerHeight()
+
+    /**------- */
+
+    val imageUrl: String?; get() = impl.channelId()
+
+    val imageWidth: Int; get() = impl.getImageWidth()
+    val imageHeight: Int; get() = impl.getImageHeight()
+
+    /**------- */
+
+    val voiceUrl: String?; get() = impl.getVoiceUrl()
+
+    val voiceDuration: Long; get() = impl.getVoiceDuration()
+
+    /**------- */
+
+    val fileUrl: String?; get() = impl.getFileUrl()
+
+    val fileSize: Long; get() = impl.getFileSize()
+
+    /**------- */
+
+    val videoUrl: String?; get() = impl.getVideoUrl()
+
+    val videoThumb: String?; get() = impl.getVideoThumb()
+
+    val videoThumbWidth: Int; get() = impl.getVideoThumbWidth()
+
+    val videoThumbHeight: Int; get() = impl.getVideoThumbHeight()
+
+    val videoDuration: Long; get() = impl.getVideoDuration()
+
+    /**----- packing ignore -----*/
+
+    //send status
+    val sendingState: Int; get() = impl.sendingState()
+
+    //If the file is sent, the local path of the file needs to be saved for retransmission
+    val localFilePath: String?; get() = impl.channelId()
 
     /** -------- db ignore properties ------- */
 
-    @Ignore
+    /** -------- db ignore properties ------- */
+
     var timeLineString: String? = null
 
     /** -------- db ignore properties ------- */

@@ -15,8 +15,8 @@ import com.zj.imcore.ui.list.model.BaseItemMod
 class StickerMod : BaseItemMod() {
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
-        val width = data.impl.getStickerWidth()
-        val height = data.impl.getStickerHeight()
+        val width = data.stickerWidth
+        val height = data.stickerHeight
         if (width <= 0 || height <= 0) {
             view.printErrorMsg("Error print: sticker was no size")
             return
@@ -31,7 +31,7 @@ class StickerMod : BaseItemMod() {
         val w = calculate.second[0]
         val h = calculate.second[1]
         val lp = RelativeLayout.LayoutParams(w, h)
-        if (isSelf(data.impl.uid())) {
+        if (isSelf(data.uid)) {
             lp.addRule(RelativeLayout.BELOW, nickNameId)
             lp.addRule(RelativeLayout.START_OF, avatarId)
         } else {

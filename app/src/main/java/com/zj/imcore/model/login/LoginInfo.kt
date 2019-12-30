@@ -19,8 +19,11 @@ class LoginInfo {
         SPUtils_Proxy.setAccessToken(token?.accessToken)
         SPUtils_Proxy.setRefreshToken(token?.refreshToken)
         SPUtils_Proxy.setUserName(user?.name)
-        SPUtils_Proxy.setUserEmail(user?.profile?.email)
-        SPUtils_Proxy.setUserNote(user?.profile?.note)
-        SPUtils_Proxy.setUserAvatar(user?.profile?.avatar)
+        SPUtils_Proxy.setUserGender(user?.gender)
+        SPUtils_Proxy.setUserEmail(user?.email)
+        SPUtils_Proxy.setUserTel(user?.created)
+        SPUtils_Proxy.setUserNote(user?.note)
+        SPUtils_Proxy.setUserAvatar(user?.avatar)
+        SPUtils_Proxy.setUserAddress(user?.profile?.address)
     }
 }

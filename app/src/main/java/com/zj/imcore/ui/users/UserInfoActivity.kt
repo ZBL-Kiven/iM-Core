@@ -8,11 +8,11 @@ class UserInfoActivity : FCActivity() {
 
     companion object {
 
-        const val UID = "uid"
+        private const val UID = "uid"
 
-        fun start(context: Context?, id: Int) {
-            context?.startActivity(Intent(context,UserInfoActivity::class.java).apply {
-                this.putExtra(UID,id)
+        fun start(context: Context?, id: String) {
+            context?.startActivity(Intent(context, UserInfoActivity::class.java).apply {
+                this.putExtra(UID, id)
             })
         }
     }

@@ -30,13 +30,11 @@ interface DialogIn {
     fun getDraft(): String?
 
     //对话是否显示
-    fun shown(): Boolean
+    fun isShown(): Boolean
 
     fun sortTs(): Long
 
-    fun notification(): String
-
-    fun hide(): String
+    fun notification(): Boolean
 
     fun hideTs(): Long
 

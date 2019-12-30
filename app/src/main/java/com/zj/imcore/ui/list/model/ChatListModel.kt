@@ -25,15 +25,15 @@ class ChatListModel : BaseChatModel<MsgInfo> {
     }
 
     override fun isInitInfoView(data: MsgInfo): Boolean {
-        return MsgType.INFO.eq(data.impl.subType())
+        return MsgType.INFO.eq(data.subType)
     }
 
     override fun isInitBaseBubbleView(data: MsgInfo): Boolean {
-        return MsgType.isMsg(data.impl.subType())
+        return MsgType.isMsg(data.subType)
     }
 
     override fun getOrientation(data: MsgInfo): ChatItemView.Orientation {
-        return if (FCApplication.isSelf(data.impl.uid())) ChatItemView.Orientation.SELF else ChatItemView.Orientation.OTHERS
+        return if (FCApplication.isSelf(data.uid)) ChatItemView.Orientation.SELF else ChatItemView.Orientation.OTHERS
     }
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
@@ -53,7 +53,7 @@ class ChatListModel : BaseChatModel<MsgInfo> {
         }
 
         fun loadNickName() {
-            view.getNicknameView()?.text = "${data.impl.uid()}"
+            view.getNicknameView()?.text = "${data.uid}"
         }
 
         fun loadBubble() {

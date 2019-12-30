@@ -21,7 +21,7 @@ class NormalMod : BaseItemMod() {
         view.getBubbleLayout()?.let { p ->
             val tv = TextView(context)
             tv.maxWidth = dpToPx(context, ChatOption.NORMAL_MSG_MAX_WIDTH)
-            tv.text = data.impl.text()
+            tv.text = data.text
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, ChatOption.bubbleTextSize)
             tv.setTextColor(getColor(context, ChatOption.bubbleTextColor))
 

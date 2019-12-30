@@ -24,11 +24,11 @@ class VideoMod : BaseImageMod() {
     }
 
     override fun getWidth(data: MsgInfo): Int {
-        return data.impl.getVideoThumbWidth()
+        return data.videoThumbWidth
     }
 
     override fun getHeight(data: MsgInfo): Int {
-        return data.impl.getVideoThumbHeight()
+        return data.videoThumbHeight
     }
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
@@ -48,8 +48,8 @@ class VideoMod : BaseImageMod() {
     }
 
     private fun openPreview(context: Context, data: MsgInfo) {
-        val url = data.impl.getVideoUrl() ?: ""
-        val duration = data.impl.getVideoDuration()
+        val url = data.videoUrl ?: ""
+        val duration = data.videoDuration
         val imgPath = data.getOriginalPath(Payloads.BUBBLE_VIDEO) ?: ""
         val info = ConversationFileInfo(SourceType.VIDEO, url, "", duration, imgPath)
         PreviewActivity.start(context, info, null)

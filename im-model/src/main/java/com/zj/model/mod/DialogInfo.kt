@@ -3,8 +3,50 @@ package com.zj.model.mod
 import com.zj.list.multiable.MultiAbleData
 import com.zj.model.interfaces.DialogIn
 
-abstract class DialogInfo(val impl: DialogIn) : MultiAbleData<DialogInfo> {
+class DialogInfo(val impl: DialogIn) : MultiAbleData<DialogInfo> {
 
+    //unique id for conversation
+    val channelId: String; get() = impl.getId()
+
+    val title: String; get() = impl.getTitle()
+
+    val subDetail: String; get() = impl.getSubDetail()
+
+    //the conversation last updated Ts
+    val latestTs: Long; get() = impl.getLatestTs()
+
+    val selfReadTs: Long; get() = impl.getSelfReadTs()
+
+    val unReadCount: Int; get() = impl.getUnReadCount()
+
+    //last time someone read the conversation
+    val otherReadTs: Long; get() = impl.getOtherReadTs()
+
+    //user id of the peer during p2p conversation
+    val userId: String?; get() = impl.getUserId()
+
+    //are there favorite messages in the conversation
+    val hasStar: Boolean; get() = impl.hasStar()
+
+    //对话的草稿
+    val draft: String?; get() = impl.getDraft()
+
+    //对话是否显示
+    val isShown: Boolean; get() = impl.isShown()
+
+    val sortTs: Long; get() = impl.sortTs()
+
+    val notification: Boolean; get() = impl.notification()
+
+    val hideTs: Long; get() = impl.hideTs()
+
+    val thumbUrl: String; get() = impl.getThumbUrl()
+
+    val isPin: Boolean; get() = impl.isPin()
+
+    val isMute: Boolean; get() = impl.isMute()
+
+    val isDelete: Boolean; get() = impl.isDelete()
 
     override fun compareTo(other: DialogInfo): Int {
         val isPin = impl.isPin()
@@ -23,7 +65,7 @@ abstract class DialogInfo(val impl: DialogIn) : MultiAbleData<DialogInfo> {
     }
 
     override fun equals(other: Any?): Boolean {
-        return if (other !is MsgInfo) false else impl.getId() == other.impl.key()
+        return if (other !is MsgInfo) false else channelId == other.channelId
     }
 
     override fun hashCode(): Int {

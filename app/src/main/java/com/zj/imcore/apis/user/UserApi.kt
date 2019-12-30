@@ -4,6 +4,7 @@ import com.zbl.api.BaseApi
 import com.zj.imcore.Constance
 import com.zj.imcore.Constance.getBaseUrl
 import com.zj.imcore.Constance.getHeader
+import com.zj.imcore.getGender
 import com.zj.imcore.model.login.LoginInfo
 import com.zj.imcore.model.login.UserProfileModel
 import com.zj.imcore.model.sign.SignInfo
@@ -23,12 +24,12 @@ object UserApi {
 
     fun sign(ac: String, pwd: String, tel: String, email: String, genderIsLady: Boolean, result: (Boolean, SignInfo?, throwAble: HttpException?) -> Unit) {
 
-        fun getGender(isLady: Boolean): String {
-            return if (isLady) "lady" else "male"
-        }
-
         val model = SignModel(ac, pwd, tel, email, getGender(genderIsLady), UserProfileModel())
         get().call({ it.sign(model) }, result)
+    }
+
+    fun logout(result: (Boolean, String?, throwAble: HttpException?) -> Unit) {
+        get().call({ it.logout() }, result)
     }
 
     fun ping(isOk: (Boolean, String?, Throwable?) -> Unit) {

@@ -19,6 +19,17 @@ fun makeSentParams(callId: String, localFilePath: String? = null): Map<String, A
     return map
 }
 
+fun getGender(isLady: Boolean): String {
+    return if (isLady) "lady" else "male"
+}
+
+fun genderIsLady(gender: String): Boolean {
+    return when (gender) {
+        "lady" -> true
+        else -> false
+    }
+}
+
 inline fun <reified IN, reified OUT : Any> LifecycleOwner.registerTcpReceivedListener(name: String): ReceiveListener<IN, OUT> {
     return ReceiveListener.create(name, this)
 }

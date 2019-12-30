@@ -58,6 +58,7 @@ class LoginActivity : AppCompatActivity() {
     private fun initView() {
         vp = findViewById(R.id.app_act_login_vp)
         btnLoginOrSign = findViewById(R.id.app_act_login_btn)
+        btnLoginOrSign?.tag = tagLogin
         vp?.let {
             it.controlViewPagerSpeed(500)
             it.initData(onDataSet, onPageChanged, viewIdLogin, viewIdSign)
@@ -153,7 +154,6 @@ class LoginActivity : AppCompatActivity() {
             val p = a[1]
             val scr = it.scrollY
             val offset = p + (scr - it.height)
-            println("----- $p   $scr   $offset")
             it.smoothScrollTo(0, max(0, offset))
         }
     }

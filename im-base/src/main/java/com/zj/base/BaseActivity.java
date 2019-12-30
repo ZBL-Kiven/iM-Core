@@ -62,13 +62,20 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void showTitleBar(boolean show) {
         if (show && baseTitleView != null) {
             baseTitleView.setVisibility(View.VISIBLE);
-            titleLine.setVisibility(View.VISIBLE);
             initTitleBar(baseTitleView);
         } else {
             if (baseTitleView != null) {
                 baseTitleView.setVisibility(View.GONE);
-                titleLine.setVisibility(View.GONE);
+
             }
+        }
+    }
+
+    protected void showTitleLine(boolean show) {
+        if (show && baseTitleView != null) {
+            titleLine.setVisibility(View.VISIBLE);
+        } else {
+            titleLine.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -113,7 +120,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void initBaseView() {
         flContent = f(R.id.base_flContent);
         blvLoading = f(R.id.base_blvLoading);
-        baseTitleView = f(R.id.baseTitle);
+        baseTitleView = f(R.id.base_title);
         titleLine = f(R.id.base_titleLine);
         initTitleBar(baseTitleView);
         blvLoading.setRefreshListener(this::callRefresh);

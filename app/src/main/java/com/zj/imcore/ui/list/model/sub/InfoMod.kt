@@ -14,7 +14,7 @@ class InfoMod : BaseItemMod() {
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
         if (payloads.isNullOrEmpty()) {
-            view.getInfoLineView()?.text = data.impl.text()
+            view.getInfoLineView()?.text = data.text
         }
     }
 

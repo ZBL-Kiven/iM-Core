@@ -5,7 +5,7 @@
         android:layout_height="match_parent">
 
     <com.zj.base.view.BaseTitleView
-            android:id="@+id/baseTitle"
+            android:id="@+id/base_title"
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:visibility="gone"
@@ -13,8 +13,8 @@
 
     <View
             android:id="@+id/base_titleLine"
-            android:visibility="gone"
-            android:layout_alignBottom="@id/baseTitle"
+            android:visibility="invisible"
+            android:layout_alignBottom="@id/base_title"
             style="@style/BaseLine"/>
 
     <FrameLayout

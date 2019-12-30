@@ -24,7 +24,7 @@ class VoiceMod : BaseItemMod() {
         view.getBubbleLayout()?.let { p ->
             val voiceParent = RelativeLayout(context)
             val rlp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            val isSelf = isSelf(data.impl.uid())
+            val isSelf = isSelf(data.uid)
             val voiceView = VoiceView(context)
             voiceView.id = R.id.im_chat_item_bubble_voice
             voiceView.setOrientation(if (isSelf) VoiceView.ORIENTATION_LEFT else VoiceView.ORIENTATION_RIGHT)
@@ -33,7 +33,7 @@ class VoiceMod : BaseItemMod() {
 
             val tv = TextView(context)
             tv.id = R.id.im_chat_item_bubble_voice_duration
-            val time = data.impl.getVoiceDuration()
+            val time = data.voiceDuration
             val timeStr = getVoiceTimeStr(time)
             tv.text = timeStr
             tv.maxWidth = dpToPx(context, ChatOption.NORMAL_MSG_MAX_WIDTH)

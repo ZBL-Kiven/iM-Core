@@ -39,13 +39,13 @@ class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int) 
 
         fun initAvatar() {
             avatar?.let {
-                val url = data.impl.getThumbUrl()
+                val url = data.thumbUrl
                 Glide.with(it).load(url).override(it.width, it.height).error(R.mipmap.app_contact_avatar_default).into(it)
             }
         }
 
         fun initUnReadCount() {
-            val unReadCount = data.impl.getUnReadCount().toString()
+            val unReadCount = data.unReadCount.toString()
             count?.let {
                 if (unReadCount.isEmpty()) it.visibility = View.GONE
                 else {
@@ -56,33 +56,33 @@ class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int) 
         }
 
         fun initName() {
-            name?.text = data.impl.getTitle()
+            name?.text = data.title
         }
 
         fun initSubDetail() {
-            subDetail?.text = data.impl.getDraft() ?: data.impl.getSubDetail()
+            subDetail?.text = data.draft ?: data.subDetail
         }
 
         fun initTime() {
-            var ts = data.impl.sortTs()
-            if (ts <= 0) ts = data.impl.getLatestTs()
+            var ts = data.sortTs
+            if (ts <= 0) ts = data.latestTs
             time?.let { it.text = TimeLineInflateModel.getTimeString(it.context ?: return, ts) }
         }
 
         fun initPin() {
-            val isPin = data.impl.isPin()
+            val isPin = data.isPin
             itemView.isSelected = isPin
             pin?.isSelected = isPin
         }
 
         fun initMute() {
-            val isMute = data.impl.isMute()
+            val isMute = data.isMute
             mute?.isSelected = isMute
             muteDisplay?.visibility = if (isMute) View.VISIBLE else View.GONE
         }
 
         fun initDeleted() {
-            if (data.impl.isDelete()) throw IllegalArgumentException("the module for dialog was deleted? why inflate with there? ")
+            if (data.isDelete) throw IllegalArgumentException("the module for dialog was deleted? why inflate with there? ")
         }
 
         when (payloads?.firstOrNull()) {

@@ -6,12 +6,13 @@
 
     <dimen name="app_sign_gender_size">35dp</dimen>
 
-    <dimen name="app_search_bar_height">53dp</dimen>
+    <dimen name="app_search_bar_height">30dp</dimen>
 
-    <dimen name="app_contact_avatar_height">50dp</dimen>
-    <dimen name="app_contact_avatar_width">50dp</dimen>
+    <dimen name="app_contact_avatar_height">40dp</dimen>
+    <dimen name="app_contact_avatar_width">40dp</dimen>
 
     <dimen name="app_et_text_size_16">16sp</dimen>
+    <dimen name="app_et_text_size_18">18sp</dimen>
     <dimen name="app_et_text_size_12">12sp</dimen>
     <dimen name="app_et_text_size_10">10sp</dimen>
     <dimen name="app_et_text_size_8">8sp</dimen>
@@ -20,6 +21,9 @@
     <dimen name="app_conversation_avatar_height">50dp</dimen>
     <dimen name="app_conversation_avatar_width">50dp</dimen>
     <dimen name="app_conversation_menu_width">60dp</dimen>
+
+    <dimen name="app_setting_avatar_height">75dp</dimen>
+    <dimen name="app_setting_avatar_width">75dp</dimen>
 
     <dimen name="app_common_dp_10">10dp</dimen>
 </resources>

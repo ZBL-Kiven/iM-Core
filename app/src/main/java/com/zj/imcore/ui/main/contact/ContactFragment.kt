@@ -57,7 +57,7 @@ class ContactFragment : BaseLinkageFragment() {
         }
         adapter?.setOnChildClickListener { adapter, _, groupPosition, childPosition ->
             val member = adapter.getItem(groupPosition).children[childPosition]
-            UserInfoActivity.start(activity, member.uid)
+            UserInfoActivity.start(activity, member.uid.toString())
         }
         vSearchClear?.setOnClickListener {
             etSearch?.setText("")
