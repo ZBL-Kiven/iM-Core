@@ -22,7 +22,7 @@ import com.zj.im.utils.runSync
  * thread-safety list will pop their top  by their priority
  *
  * */
-internal object DataStore : RunningObserver() {
+internal class DataStore<T> : RunningObserver() {
 
     fun init() {
         clear()
@@ -38,29 +38,29 @@ internal object DataStore : RunningObserver() {
     }
 
     //PRI = 2
-    private val netWorkStateChanged = cusListOf<BaseMsgInfo>()
+    private val netWorkStateChanged = cusListOf<BaseMsgInfo<T>>()
     //PRI = 5
-    private val sendAuth = cusListOf<BaseMsgInfo>()
+    private val sendAuth = cusListOf<BaseMsgInfo<T>>()
     //PRI = 8
-    private val sendMsg = cusListOf<BaseMsgInfo>()
+    private val sendMsg = cusListOf<BaseMsgInfo<T>>()
     //PRI = 4
-    private val connectStateChanged = cusListOf<BaseMsgInfo>()
+    private val connectStateChanged = cusListOf<BaseMsgInfo<T>>()
     //PRI = 6
-    private val heartBeats = cusListOf<BaseMsgInfo>()
+    private val heartBeats = cusListOf<BaseMsgInfo<T>>()
     //PRI = 3
-    private val connectToServers = cusListOf<BaseMsgInfo>()
+    private val connectToServers = cusListOf<BaseMsgInfo<T>>()
     //PRI = 1
-    private val closeSocket = cusListOf<BaseMsgInfo>()
+    private val closeSocket = cusListOf<BaseMsgInfo<T>>()
     //PRI = 7
-    private val sendStateChanged = cusListOf<BaseMsgInfo>()
+    private val sendStateChanged = cusListOf<BaseMsgInfo<T>>()
     //PRI = 9
-    private val receivedMsg = cusListOf<BaseMsgInfo>()
+    private val receivedMsg = cusListOf<BaseMsgInfo<T>>()
     //PRI = 0
-    private val simpleStatusFound = cusListOf<BaseMsgInfo>()
+    private val simpleStatusFound = cusListOf<BaseMsgInfo<T>>()
     //PRI = 10
-    private val sendingProgress = cusListOf<BaseMsgInfo>()
+    private val sendingProgress = cusListOf<BaseMsgInfo<T>>()
 
-    fun put(info: BaseMsgInfo) {
+    fun put(info: BaseMsgInfo<T>) {
         EfficiencyUtils.checkEfficiency()
         MsgHandler.checkRunning()
         when (info.type) {
@@ -82,8 +82,7 @@ internal object DataStore : RunningObserver() {
                 sendMsg.sort { it.sendObject?.createdTs ?: 0.0 }
             }
             BaseMsgInfo.MessageHandleType.RECEIVED_MSG -> {
-                if (filterHeartBeatsOrAuthResponseFormReceived(info))
-                    receivedMsg.add(info)
+                if (filterHeartBeatsOrAuthResponseFormReceived(info)) receivedMsg.add(info)
             }
             BaseMsgInfo.MessageHandleType.SEND_STATE_CHANGE -> {
                 sendStateChanged.add(info)
@@ -106,7 +105,7 @@ internal object DataStore : RunningObserver() {
         }
     }
 
-    private fun pop(): BaseMsgInfo? {
+    private fun pop(): BaseMsgInfo<T>? {
 
         when {
             /**
@@ -201,7 +200,7 @@ internal object DataStore : RunningObserver() {
         return null
     }
 
-    private fun filterHeartBeatsOrAuthResponseFormReceived(info: BaseMsgInfo): Boolean {
+    private fun filterHeartBeatsOrAuthResponseFormReceived(info: BaseMsgInfo<T>): Boolean {
         val data = info.data
         val interrupt = isHeartBeatsOrAuthResponse(data)
         val authResponse = interrupt.third
@@ -224,7 +223,7 @@ internal object DataStore : RunningObserver() {
 
     private var isSending: () -> Boolean = { true }
     private var isReceiving: () -> Boolean = { true }
-    private var isHeartBeatsOrAuthResponse: (data: Map<String, Any>?) -> Triple<Boolean, Boolean, AuthBuilder.AuthStatus?> = { Triple(first = true, second = false, third = null) }
+    private var isHeartBeatsOrAuthResponse: (data: T?) -> Triple<Boolean, Boolean, AuthBuilder.AuthStatus?> = { Triple(first = true, second = false, third = null) }
     private var canAuth: () -> Boolean = { true }
 
     fun canSend(isSending: () -> Boolean) {
@@ -235,7 +234,7 @@ internal object DataStore : RunningObserver() {
         DataStore.isReceiving = isReceiving
     }
 
-    fun isHeartBeatsOrAuthResponse(isHeartBeatsOrAuthResponse: (data: Map<String, Any>?) -> Triple<Boolean, Boolean, AuthBuilder.AuthStatus?>) {
+    fun isHeartBeatsOrAuthResponse(isHeartBeatsOrAuthResponse: (data: T?) -> Triple<Boolean, Boolean, AuthBuilder.AuthStatus?>) {
         this.isHeartBeatsOrAuthResponse = isHeartBeatsOrAuthResponse
     }
 
@@ -243,7 +242,7 @@ internal object DataStore : RunningObserver() {
         canAuth = auth
     }
 
-    fun queryInMsgQueue(predicate: (BaseMsgInfo) -> Boolean): Boolean {
+    fun queryInMsgQueue(predicate: (BaseMsgInfo<T>) -> Boolean): Boolean {
         return sendMsg.contains(predicate)
     }
 

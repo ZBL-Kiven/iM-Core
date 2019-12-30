@@ -2,23 +2,29 @@ package com.zj.imcore.options
 
 import android.app.Service
 import com.zj.im.chat.hub.ServerHub
+import com.zj.im.chat.interfaces.ConnectCallBack
+import com.zj.im.chat.interfaces.HeartBeatsCallBack
 
-class IMServer : ServerHub() {
+class IMServer : ServerHub<String>() {
 
-    override fun packParams(param: Map<String, Any>?): ByteArray {
-        return TcpMessageUtility.packMap(param)
+    override fun init() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun unPackParams(data: ByteArray): Map<String, Any>? {
-        return TcpMessageUtility.unpackMsg(data)
+    override fun connect(address: String?, port: Int?, socketTimeOut: Int?, callBack: ConnectCallBack?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onServiceConnected(service: Service?) {
-        println(" ----- onServiceConnected")
+    override fun send(params: Map<String, Any>, callBack: HeartBeatsCallBack?): Long {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onServiceDisConnected(service: Service?) {
-        println(" ----- onServiceDisConnected")
+    override fun shutdown() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun closeSocket() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

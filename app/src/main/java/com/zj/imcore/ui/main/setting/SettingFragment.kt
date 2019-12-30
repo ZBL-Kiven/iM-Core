@@ -17,7 +17,6 @@ import com.zj.imcore.R
 import com.zj.imcore.apis.user.UserApi
 import com.zj.imcore.genderIsLady
 import com.zj.imcore.gui.SplashActivity
-import com.zj.imcore.gui.login.LoginActivity
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.imcore.ui.views.LoadingButton
 import com.zj.imcore.utils.img.loader.AvatarLoadUtil
@@ -89,7 +88,7 @@ class SettingFragment : BaseLinkageFragment() {
             "id: $userId"
         }
         tvInfoBar?.setBackgroundResource(infoBarBackground)
-        tvInfoBar?.text = StringBuilder().append(gender).append(" ").append(userAddress).append("·").append(userCountry).toString()
+        tvInfoBar?.text = StringBuilder().append(gender).append("  ").append(userAddress).append("·").append(userCountry).toString()
         tvEmail?.text = userEmail
         tvPhone?.text = userTel
         if (userNote.isNullOrEmpty()) {

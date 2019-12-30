@@ -11,7 +11,7 @@ import com.zj.im.sender.SendingUp
 /**
  * Created by ZJJ
  */
-internal class BaseMsgInfo private constructor() {
+internal class BaseMsgInfo<T> private constructor() {
 
     enum class MessageHandleType {
         NETWORK_STATE, RECEIVED_MSG, SOCKET_STATE, SEND_MSG, CONNECT_TO_SERVER, HEARTBEATS_SEND, AUTH_SEND, SEND_STATE_CHANGE, CLOSE_SOCKET, SEND_PROGRESS_CHANGED, AUTH_RESPONSE, HEARTBEATS_RESPONSE
@@ -19,7 +19,7 @@ internal class BaseMsgInfo private constructor() {
 
     var type: MessageHandleType? = null
 
-    var data: Map<String, Any>? = null
+    var data: T? = null
 
     var params: Map<String, Any>? = null
 
@@ -60,31 +60,31 @@ internal class BaseMsgInfo private constructor() {
 
 
     companion object {
-        fun heartBeats(params: Map<String, Any>?): BaseMsgInfo {
-            val baseInfo = BaseMsgInfo()
+        fun <T>heartBeats(params: Map<String, Any>?): BaseMsgInfo<T> {
+            val baseInfo = BaseMsgInfo<T>()
             baseInfo.params = params
             baseInfo.type = MessageHandleType.HEARTBEATS_SEND
             return baseInfo
         }
 
-        fun auth(callId: String, params: Map<String, Any>?): BaseMsgInfo {
-            val baseInfo = BaseMsgInfo()
+        fun <T>auth(callId: String, params: Map<String, Any>?): BaseMsgInfo<T> {
+            val baseInfo = BaseMsgInfo<T>()
             baseInfo.params = params
             baseInfo.callId = callId
             baseInfo.type = MessageHandleType.AUTH_SEND
             return baseInfo
         }
 
-        fun onProgressChange(progress: Int, callId: String): BaseMsgInfo {
-            return BaseMsgInfo().apply {
+        fun <T>onProgressChange(progress: Int, callId: String): BaseMsgInfo<T> {
+            return BaseMsgInfo<T>().apply {
                 this.callId = callId
                 this.progress = progress
                 this.type = MessageHandleType.SEND_PROGRESS_CHANGED
             }
         }
 
-        fun sendingStateChange(state: SendMsgState?, callId: String, params: Map<String, Any>?, isResend: Boolean): BaseMsgInfo {
-            val baseInfo = BaseMsgInfo()
+        fun <T>sendingStateChange(state: SendMsgState?, callId: String, params: Map<String, Any>?, isResend: Boolean): BaseMsgInfo<T> {
+            val baseInfo = BaseMsgInfo<T>()
             baseInfo.sendingState = state
             baseInfo.callId = callId
             baseInfo.params = params
@@ -93,15 +93,15 @@ internal class BaseMsgInfo private constructor() {
             return baseInfo
         }
 
-        fun networkStateChanged(state: NetWorkInfo): BaseMsgInfo {
-            val baseInfo = BaseMsgInfo()
+        fun <T>networkStateChanged(state: NetWorkInfo): BaseMsgInfo<T> {
+            val baseInfo = BaseMsgInfo<T>()
             baseInfo.netWorkState = state
             baseInfo.type = MessageHandleType.NETWORK_STATE
             return baseInfo
         }
 
-        fun connectStateChange(connStateChange: SocketState, case: String = ""): BaseMsgInfo {
-            val baseInfo = BaseMsgInfo()
+        fun <T>connectStateChange(connStateChange: SocketState, case: String = ""): BaseMsgInfo<T> {
+            val baseInfo = BaseMsgInfo<T>()
             baseInfo.type = MessageHandleType.SOCKET_STATE
             baseInfo.connStateChange = connStateChange.apply {
                 this.case = case
@@ -109,21 +109,21 @@ internal class BaseMsgInfo private constructor() {
             return baseInfo
         }
 
-        fun closeSocket(): BaseMsgInfo {
-            return BaseMsgInfo().apply {
+        fun <T>closeSocket(): BaseMsgInfo<T> {
+            return BaseMsgInfo<T>().apply {
                 this.type = MessageHandleType.CLOSE_SOCKET
             }
         }
 
-        fun connectToServer(connInfo: SocketConnInfo): BaseMsgInfo {
-            val baseInfo = BaseMsgInfo()
+        fun <T>connectToServer(connInfo: SocketConnInfo): BaseMsgInfo<T> {
+            val baseInfo = BaseMsgInfo<T>()
             baseInfo.connInfo = connInfo
             baseInfo.type = MessageHandleType.CONNECT_TO_SERVER
             return baseInfo
         }
 
-        fun sendMsg(sendObject: SendObject, joinInTop: Boolean = false): BaseMsgInfo {
-            return BaseMsgInfo().apply {
+        fun <T>sendMsg(sendObject: SendObject, joinInTop: Boolean = false): BaseMsgInfo<T> {
+            return BaseMsgInfo<T>().apply {
                 this.joinInTop = joinInTop
                 this.sendObject = sendObject
                 this.callId = sendObject.getCallId()
@@ -132,22 +132,22 @@ internal class BaseMsgInfo private constructor() {
             }
         }
 
-        fun receiveMsg(data: Map<String, Any>?): BaseMsgInfo {
-            val baseInfo = BaseMsgInfo()
+        fun <T> receiveMsg(data: T?): BaseMsgInfo<T> {
+            val baseInfo = BaseMsgInfo<T>()
             baseInfo.data = data
             baseInfo.type = MessageHandleType.RECEIVED_MSG
             return baseInfo
         }
 
-        fun authResponse(authStatus: AuthBuilder.AuthStatus): BaseMsgInfo {
-            return BaseMsgInfo().apply {
+        fun <T>authResponse(authStatus: AuthBuilder.AuthStatus): BaseMsgInfo<T> {
+            return BaseMsgInfo<T>().apply {
                 this.authStatus = authStatus
                 this.type = MessageHandleType.AUTH_RESPONSE
             }
         }
 
-        fun heartBeatsResponse(): BaseMsgInfo {
-            return BaseMsgInfo().apply {
+        fun <T>heartBeatsResponse(): BaseMsgInfo<T> {
+            return BaseMsgInfo<T>().apply {
                 this.type = MessageHandleType.HEARTBEATS_RESPONSE
             }
         }

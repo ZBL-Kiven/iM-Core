@@ -6,16 +6,16 @@ import com.zj.im.chat.enums.SendMsgState
  * Created by ZJJ
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-class AnalyzingData {
+class AnalyzingData<T> {
 
     val state: SendMsgState?
     val callId: String?
 
     private val type: Type
-    private val param: MutableMap<String, Any>?
-    private val response: MutableMap<String, Any>?
+    private val param: T?
+    private val response: T?
 
-    fun getData(): MutableMap<String, Any>? {
+    fun getData(): T? {
         return if (isSelf()) param else response
     }
 
@@ -26,6 +26,7 @@ class AnalyzingData {
     fun isRecent(): Boolean {
         return type == Type.SOURCE_RESEND
     }
+
     /**
      * inner params
      * */
@@ -39,10 +40,10 @@ class AnalyzingData {
     /**
      * the message by send
      * */
-    internal constructor(state: SendMsgState?, callId: String?, param: Map<String, Any>?, isResend: Boolean) {
+    internal constructor(state: SendMsgState?, callId: String?, param: T?, isResend: Boolean) {
         this.state = state
         this.callId = callId
-        this.param = param?.toMutableMap()
+        this.param = param
         this.response = null
         this.type = if (isResend) Type.SOURCE_RESEND else Type.SOURCE_SEND
     }
@@ -50,11 +51,11 @@ class AnalyzingData {
     /**
      * the message form server
      * */
-    internal constructor(response: Map<String, Any>?) {
+    internal constructor(response: T?) {
         this.state = SendMsgState.SUCCESS
         this.callId = ""
         this.param = null
-        this.response = response?.toMutableMap()
+        this.response = response
         this.type = Type.SOURCE_RECEIVE
     }
 }

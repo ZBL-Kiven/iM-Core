@@ -7,7 +7,6 @@ import android.os.Binder
 import android.os.IBinder
 import com.zj.im.chat.exceptions.ExceptionHandler
 import com.zj.im.chat.exceptions.NecessaryAttributeEmptyException
-import com.zj.im.chat.hub.ServerHub
 import com.zj.im.chat.interfaces.ConnectCallBack
 import com.zj.im.main.ChatBase
 import com.zj.im.net.tasks.ConnectionTask
@@ -36,10 +35,6 @@ open class BaseSocketService : Service() {
     private val executorService = Executors.newSingleThreadExecutor()
 
     protected open var isShutdown = false
-
-    open fun initServer(getClient: () -> ServerHub) {
-
-    }
 
     private val setSocketToReadThread: () -> Socket? = {
         socket ?: { ChatBase.postError(NecessaryAttributeEmptyException("form read thread , the socket was null"));null }.invoke()
@@ -76,16 +71,15 @@ open class BaseSocketService : Service() {
         }
     }
 
-
     private fun send(params: ByteArray): Throwable? {
         var throwable: Throwable? = null
         try {
             if (socket == null) throwable = NullPointerException("Socket is null or closed")
             socket?.let {
-                if (!it.isClosed) {
+                throwable = if (!it.isClosed) {
                     val result: Future<Throwable>? = executorService.submit(SendMessageTask(WeakReference(socket), params))
-                    throwable = result?.get()
-                } else throwable = NetworkErrorException("Socket is already closed")
+                    result?.get()
+                } else NetworkErrorException("Socket is already closed")
             }
         } catch (e: Exception) {
             throwable = e

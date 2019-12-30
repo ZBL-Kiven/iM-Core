@@ -20,8 +20,8 @@ internal object SendExecutors {
 
     fun send(sendObject: SendObject, done: () -> Unit) {
         try {
-            when {
-                sendObject.getSendingUpState() == SendingUp.CANCEL -> {
+            when (SendingUp.CANCEL) {
+                sendObject.getSendingUpState() -> {
                     try {
                         sendingFail(sendObject, NetworkErrorException(""))
                     } finally {

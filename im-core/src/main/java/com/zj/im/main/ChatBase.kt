@@ -3,17 +3,21 @@
 package com.zj.im.main
 
 import android.app.Application
+import android.app.Service
+import android.content.Intent
+import android.os.Binder
+import android.os.IBinder
 import com.zj.im.chat.enums.SocketState
 import com.zj.im.chat.exceptions.*
 import com.zj.im.chat.core.DataStore
 import com.zj.im.chat.enums.RuntimeEfficiency
-import com.zj.im.chat.interfaces.BaseMsgInfo
 import com.zj.im.chat.hub.ClientHub
 import com.zj.im.chat.hub.ServerHub
+import com.zj.im.chat.interfaces.BaseMsgInfo
 import com.zj.im.chat.hub.StatusHub.isNetWorkAccess
 import com.zj.im.chat.hub.StatusHub.isRunningInBackground
 import com.zj.im.chat.hub.StatusHub.isTcpConnected
-import com.zj.im.chat.interfaces.IMInterface
+import com.zj.im.chat.interfaces.AnalyzingData
 import com.zj.im.chat.modle.IMLifecycle
 import com.zj.im.chat.utils.TimeOutUtils
 import com.zj.im.chat.utils.netUtils.IConnectivityManager
@@ -39,17 +43,33 @@ import java.lang.IllegalArgumentException
  * the internal base hub for SDK
  */
 
-internal object ChatBase {
+internal class ChatBase<T> : Service() {
 
-    var context: Application? = null
-    private var imi: IMInterface? = null
+    private var context: Application? = null
+    private var dropRecoverListener: DropRecoverListener? = null
+    private var dataStore: DataStore<T>? = null
+    private var msgHandler: MsgHandler? = null
+
+
+    fun sendMsg(sendObject: SendObject) {
+
+    }
+
+    internal fun onMsgReceived(data: AnalyzingData<T>) {
+
+    }
+
+
+
+
+    private var imi: IMInterface<T>? = null
     private var onErrorCallBack: ((e: ChatException) -> Unit)? = null
     private var isInit = false
     private var diskPathName: String = ""
     private var curRunningKey: String = ""
     private var runningKey: String = ""
 
-    fun init(imi: IMInterface) {
+    fun init(imi: IMInterface<T>) {
         this.imi = imi
         val options = imi.option ?: return
         if (isInit) {
@@ -81,7 +101,8 @@ internal object ChatBase {
         IConnectivityManager.init(context) {
             netWorkStateChanged(it)
         }
-        DropRecoverListener.init {
+        dropRecoverListener = DropRecoverListener(context)
+        dropRecoverListener?.init {
             onLayerChanged(false);isInit && (imi?.isInterrupt() ?: true)
         }
         AppHiddenListener.init(context) { onLayerChanged(true) }
@@ -100,18 +121,6 @@ internal object ChatBase {
         isNetWorkAccess = state == NetWorkInfo.CONNECTED
         if (!isNetWorkAccess) isTcpConnected = false
         DataStore.put(BaseMsgInfo.networkStateChanged(state))
-    }
-
-    fun getClient(case: String = ""): ClientHub? {
-        return imi?.getClient(case)
-    }
-
-    fun getServer(case: String = ""): ServerHub? {
-        return imi?.getServer(case)
-    }
-
-    fun getIMInterface(): IMInterface? {
-        return imi
     }
 
     fun checkInit(name: String) {
@@ -171,7 +180,7 @@ internal object ChatBase {
         printInFile("ChatBase.IM", " the SDK has begin shutdown with $runningKey")
         runningKey = ""
         IConnectivityManager.shutDown(context)
-        DropRecoverListener.destroy()
+        dropRecoverListener?.destroy()
         AppHiddenListener.shutDown(context)
         isInit = false
         printInFile("ChatBase.IM", " the SDK was shutdown")
@@ -216,4 +225,21 @@ internal object ChatBase {
         }
         return ""
     }
+
+    data class SocketBinder<T>(val service: ChatBase<T>) : Binder()
+
+    override fun onBind(intent: Intent?): IBinder? {
+        return SocketBinder(this@ChatBase)
+    }
+
+    fun getClient(case: String = ""): ClientHub<T>? {
+        logUtils.e("IMI.getClient", case)
+        return option.buildOption.getClient()
+    }
+
+    fun getServer(case: String = ""): ServerHub<T>? {
+        logUtils.e("IMI.getServer", case)
+        return option.buildOption.getServer()
+    }
+
 }

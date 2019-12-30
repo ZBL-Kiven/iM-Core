@@ -41,7 +41,7 @@ internal object EventHub {
     }
 
     private fun closeSocket() {
-        getServer("closeSocket")?.getService("closeSocket", true)?.closeSocket()
+        getServer("closeSocket")?.closeSocket()
     }
 
     private fun sendMsg(sendObject: SendObject?) {
@@ -82,7 +82,7 @@ internal object EventHub {
 
     private fun heartbeats(params: Map<String, Any>?) {
         if (params != null) {
-            getServer("heartbeats")?.onHeartBeatsRequest(params, object : HeartBeatsCallBack {
+            getServer("heartbeats")?.send(params, object : HeartBeatsCallBack {
                 override fun heartBeats(isOK: Boolean, throwable: Throwable?) {
                     if (isOK) getClient("heartbeats")?.nextHeartBeats()
                     else {

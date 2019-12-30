@@ -4,6 +4,7 @@ class LoginUserModel {
     var id: Int = 0
     var name: String? = ""
     var inactive: Boolean = false
+    var phone: String? = ""
     var email: String? = ""
     var avatar: String? = ""
     var gender: String? = ""

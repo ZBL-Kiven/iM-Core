@@ -21,7 +21,7 @@ class LoginInfo {
         SPUtils_Proxy.setUserName(user?.name)
         SPUtils_Proxy.setUserGender(user?.gender)
         SPUtils_Proxy.setUserEmail(user?.email)
-        SPUtils_Proxy.setUserTel(user?.created)
+        SPUtils_Proxy.setUserTel(user?.phone)
         SPUtils_Proxy.setUserNote(user?.note)
         SPUtils_Proxy.setUserAvatar(user?.avatar)
         SPUtils_Proxy.setUserAddress(user?.profile?.address)

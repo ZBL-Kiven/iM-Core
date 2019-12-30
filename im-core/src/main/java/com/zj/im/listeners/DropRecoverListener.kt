@@ -3,12 +3,11 @@ package com.zj.im.listeners
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import com.zj.im.main.ChatBase.context
 
 /**
  * Created by ZJJ
  */
-object DropRecoverListener : Application.ActivityLifecycleCallbacks {
+class DropRecoverListener(private val context: Application?) : Application.ActivityLifecycleCallbacks {
 
     private var interrupting: (() -> Boolean)? = null
 

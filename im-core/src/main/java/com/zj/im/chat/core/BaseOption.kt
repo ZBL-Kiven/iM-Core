@@ -10,7 +10,7 @@ import com.zj.im.chat.hub.ServerHub
 import com.zj.im.chat.hub.StatusHub
 import com.zj.im.chat.hub.StatusHub.isRunningInBackground
 import com.zj.im.main.ChatBase
-import com.zj.im.main.ChatBase.checkInit
+import com.zj.im.main.MsgHandler
 import com.zj.im.sender.SendObject
 import com.zj.im.sender.SendingPool
 import com.zj.im.utils.log.logger.printInFile
@@ -33,7 +33,7 @@ import com.zj.im.utils.log.logger.printInFile
  * @param buildOption made some rules to sdk , {@see OnBuildOption}
  */
 
-class BaseOption internal constructor(val context: Application, private val notification: Notification? = null, private val sessionId: Int?, private val runtimeEfficiency: RuntimeEfficiency, val logsCollectionAble: () -> Boolean, val logsFileName: String, val logsMaxRetain: Long, val debugEnable: Boolean, val buildOption: OnBuildOption) {
+class BaseOption<T> internal constructor(val context: Application, private val notification: Notification? = null, private val sessionId: Int?, private val runtimeEfficiency: RuntimeEfficiency, val logsCollectionAble: () -> Boolean, val logsFileName: String, val logsMaxRetain: Long, val debugEnable: Boolean, val buildOption: OnBuildOption<T>) {
 
     companion object {
         @Suppress("unused")
@@ -42,18 +42,18 @@ class BaseOption internal constructor(val context: Application, private val noti
         }
     }
 
-    private var mClient: ClientHub? = null
+    private var mClient: ClientHub<T>? = null
 
-    internal fun getClient(where: String): ClientHub? {
+    internal fun getClient(where: String): ClientHub<T>? {
         if (!ChatBase.isFinishing(runningKey) && mClient == null) {
             ChatBase.postError(NecessaryAttributeEmptyException("at $where.getClient() \n clientHub == null ,you must call register a client hub before eventHub working"))
         }
         return mClient
     }
 
-    private var mServer: ServerHub? = null
+    private var mServer: ServerHub<T>? = null
 
-    internal fun getServer(where: String): ServerHub? {
+    internal fun getServer(where: String): ServerHub<T>? {
         if (!ChatBase.isFinishing(runningKey) && mServer == null) {
             ChatBase.postError(NecessaryAttributeEmptyException("at  $where.getServer() \n serverHub == null ,you must call register a server hub before eventHub working"))
         }
@@ -97,7 +97,6 @@ class BaseOption internal constructor(val context: Application, private val noti
     }
 
     internal fun sendToSocket(sendObject: SendObject) {
-        checkInit("sendToSocket")
         getClient("sendToSocket")?.sendToSocket(sendObject)
     }
 

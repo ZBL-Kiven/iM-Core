@@ -1,8 +1,8 @@
-package com.zj.im.chat.core;
+package com.zj.im.main;
 
+import com.zj.im.chat.core.DataStore;
 import com.zj.im.chat.exceptions.ExceptionHandler;
 import com.zj.im.chat.exceptions.LooperInterruptedException;
-import com.zj.im.main.ChatBase;
 import com.zj.im.net.socket.ReadSocketThread;
 import com.zj.im.sender.SendingPool;
 

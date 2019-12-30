@@ -53,6 +53,6 @@ internal object ReadSocketThread : RunningObserver() {
     }
 
     private fun putReceivedDataFormServer(data: ByteArray) {
-        ChatBase.getServer("message received")?.receivedMessage(data)
+        ChatBase.getServer("message received")?.postReceivedMessage(data)
     }
 }

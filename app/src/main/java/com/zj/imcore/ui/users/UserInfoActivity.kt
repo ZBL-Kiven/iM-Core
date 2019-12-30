@@ -2,6 +2,7 @@ package com.zj.imcore.ui.users
 
 import android.content.Context
 import android.content.Intent
+import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 
 class UserInfoActivity : FCActivity() {
@@ -18,19 +19,19 @@ class UserInfoActivity : FCActivity() {
     }
 
     override fun getContentId(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return R.layout.app_act_user_info_content
     }
 
     override fun initListener() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun initData() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun initView() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        setTitle("UserInfomation")
     }
 
 }
