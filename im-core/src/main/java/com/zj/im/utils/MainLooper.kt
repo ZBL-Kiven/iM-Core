@@ -1,4 +1,4 @@
-package com.zj.im.chat.utils
+package com.zj.im.utils
 
 import android.os.Handler
 import android.os.Looper

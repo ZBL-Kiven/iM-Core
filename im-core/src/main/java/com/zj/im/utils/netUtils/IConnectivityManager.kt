@@ -1,4 +1,4 @@
-package com.zj.im.chat.utils.netUtils
+package com.zj.im.utils.netUtils
 
 import android.annotation.TargetApi
 import android.app.Application
@@ -9,25 +9,31 @@ import android.net.NetworkCapabilities.*
 import android.os.Build
 import com.zj.im.utils.log.logger.printInFile
 
-internal object IConnectivityManager {
+internal class IConnectivityManager private constructor() {
 
     private var stateChangeListener: ((NetWorkInfo) -> Unit)? = null
     private var connectivityManager: ConnectivityManager? = null
     private var netWorkBrodCast: NetWorkBrodCast? = null
 
-    fun init(context: Application?, l: ((NetWorkInfo) -> Unit)?) {
-        this.stateChangeListener = l
-        clearRegister(context)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            isLowerNChange(context)
-        } else {
-            this.connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
-            connectivityManager?.registerNetworkCallback(request, netCallBack)
+    companion object {
+        fun init(context: Application?, l: ((NetWorkInfo) -> Unit)?): IConnectivityManager {
+            return IConnectivityManager().apply {
+                this.stateChangeListener = l
+                clearRegister(context)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    isLowerNChange(context)
+                } else {
+                    this.connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
+                    connectivityManager?.registerNetworkCallback(request, netCallBack)
+                }
+            }
         }
     }
 
-    fun checkNetWorkValidate() {
-        stateChangeListener?.invoke(isNetWorkActive)
+    fun checkNetWorkValidate(): NetWorkInfo {
+        val isActive = isNetWorkActive
+        stateChangeListener?.invoke(isActive)
+        return isActive
     }
 
     private val request = NetworkRequest.Builder().addCapability(NET_CAPABILITY_INTERNET).build()
@@ -64,7 +70,7 @@ internal object IConnectivityManager {
         context?.registerReceiver(netWorkBrodCast, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
-    val isNetWorkActive: NetWorkInfo
+    private val isNetWorkActive: NetWorkInfo
         @TargetApi(Build.VERSION_CODES.M) get() {
             return try {
                 if (isNetworkConnected()) NetWorkInfo.CONNECTED else NetWorkInfo.DISCONNECTED

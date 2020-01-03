@@ -7,13 +7,14 @@ import android.os.Bundle
 /**
  * Created by ZJJ
  */
-class DropRecoverListener(private val context: Application?) : Application.ActivityLifecycleCallbacks {
+class DropRecoverListener private constructor(private val context: Application?, private var interrupting: (() -> Unit)) : Application.ActivityLifecycleCallbacks {
 
-    private var interrupting: (() -> Boolean)? = null
-
-    fun init(interrupting: () -> Boolean) {
-        this.interrupting = interrupting
-        context?.registerActivityLifecycleCallbacks(this)
+    companion object {
+        fun init(context: Application?, interrupting: () -> Unit): DropRecoverListener {
+            val dl = DropRecoverListener(context, interrupting)
+            context?.registerActivityLifecycleCallbacks(dl)
+            return dl
+        }
     }
 
     override fun onActivityPaused(activity: Activity?) {
@@ -21,11 +22,7 @@ class DropRecoverListener(private val context: Application?) : Application.Activ
     }
 
     override fun onActivityResumed(activity: Activity?) {
-        interrupting?.let {
-            if (!it.invoke()) {
-                destroy()
-            }
-        }
+        interrupting.invoke()
     }
 
     override fun onActivityStarted(activity: Activity?) {
@@ -48,5 +45,4 @@ class DropRecoverListener(private val context: Application?) : Application.Activ
     fun destroy() {
         context?.unregisterActivityLifecycleCallbacks(this)
     }
-
 }

@@ -5,5 +5,10 @@ package com.zj.im.sender
  */
 
 interface OnSendBefore {
-    fun onSendBefore(onProgressCover: (progress: Int, callId: String) -> Unit, todo: (isContinue: Boolean, callId: String) -> Unit)
+    fun call(onStatus: OnStatus)
+
+}
+
+interface OnStatus {
+    fun call(callId: String, progress: Int, isOK: Boolean, isCancel: Boolean)
 }

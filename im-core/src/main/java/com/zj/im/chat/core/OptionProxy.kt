@@ -58,7 +58,7 @@ class OptionProxy internal constructor(private val context: Application) {
         return this
     }
 
-    fun build(buildOption: OnBuildOption): BaseOption {
-        return BaseOption(context, notification, sessionId, runtimeEfficiency, logsCollectionAble, logsFileName, logsMaxRetain, debugEnable, buildOption)
+    fun build(): BaseOption {
+        return BaseOption(context, notification, sessionId, runtimeEfficiency, logsCollectionAble, logsFileName, logsMaxRetain, debugEnable)
     }
 }

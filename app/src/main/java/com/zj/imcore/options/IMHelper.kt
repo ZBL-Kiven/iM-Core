@@ -1,27 +1,12 @@
 package com.zj.imcore.options
 
 import android.app.Application
-import com.zj.im.chat.core.BaseOption
-import com.zj.im.chat.core.OnBuildOption
-import com.zj.im.chat.exceptions.ChatException
-import com.zj.im.chat.hub.ClientHub
-import com.zj.im.chat.interfaces.AnalyzingData
-import com.zj.im.main.IMInterface
 import com.zj.im.UIHelper
+import com.zj.im.chat.core.BaseOption
+import com.zj.im.chat.hub.ClientHub
+import com.zj.im.main.impl.IMInterface
+import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.chat.hub.ServerHub
-/**
- * @property getClient return your custom client for sdk {@see ClientHub}
- *
- * @property getServer return your custom server for sdk {@see ServerHub}
- *
- * @property onError handler the sdk errors with runtime
- *
- * @property prepare on SDK init prepare
- *
- * @property shutdown it called when SDK was shutdown
- *
- * @property onLayerChanged it called when SDK was changed form foreground / background
- * */
 
 object IMHelper : IMInterface<String>() {
 
@@ -30,16 +15,7 @@ object IMHelper : IMInterface<String>() {
         initChat(option)
     }
 
-    override fun onMsgPatch(data: AnalyzingData<String>, onFinish: () -> Unit) {
-        UIHelper.postReceiveData(data)
-        onFinish()
-    }
-
-    override fun progressUpdate(progress: Int, callId: String) {
-        println(" ----- $callId   $progress")
-    }
-
-    override fun getClient(): ClientHub {
+    override fun getClient(): ClientHub<String> {
         return IMClient()
     }
 
@@ -47,8 +23,7 @@ object IMHelper : IMInterface<String>() {
         return IMServer()
     }
 
-    override fun onError(e: ChatException) {
+    override fun onError(e: Throwable) {
 
     }
-
 }

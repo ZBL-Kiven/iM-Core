@@ -1,63 +1,53 @@
 package com.zj.im.sender
 
-import android.accounts.NetworkErrorException
-import com.zj.im.chat.enums.SendMsgState
-import com.zj.im.chat.exceptions.ExceptionHandler
-import com.zj.im.chat.core.DataStore
-import com.zj.im.chat.hub.StatusHub.isNetWorkAccess
-import com.zj.im.chat.hub.StatusHub.isTcpConnected
-import com.zj.im.chat.interfaces.BaseMsgInfo
-import com.zj.im.chat.interfaces.SendReplyCallBack
-import com.zj.im.chat.utils.TimeOutUtils
-import com.zj.im.main.ChatBase
-import com.zj.im.utils.log.NetRecordUtils
+import com.zj.im.chat.hub.ServerHub
+import com.zj.im.main.StatusHub
+import com.zj.im.chat.modle.BaseMsgInfo
+import com.zj.im.chat.interfaces.SendingCallBack
+import com.zj.im.chat.modle.SendingUp
+import com.zj.im.utils.TimeOutUtils
+import com.zj.im.main.dispatcher.DataReceivedDispatcher
 
 /**
  * Created by ZJJ
  */
 
-internal object SendExecutors {
+internal class SendExecutors<T>(info: BaseMsgInfo<T>, server: ServerHub<T>?, done: (isOK: Boolean, info: BaseMsgInfo<T>, e: Throwable?) -> Unit) {
 
-    fun send(sendObject: SendObject, done: () -> Unit) {
+    init {
+        var exc: Throwable? = null
+        fun sendingFail() {
+            TimeOutUtils.remove(info.callId)
+        }
         try {
             when (SendingUp.CANCEL) {
-                sendObject.getSendingUpState() -> {
-                    try {
-                        sendingFail(sendObject, NetworkErrorException(""))
-                    } finally {
-                        done()
-                    }
-                }
+                info.sendingUp -> sendingFail()
                 else -> {
-                    NetRecordUtils.recordSendCount()
-                    TimeOutUtils.putASentMessage(sendObject.getCallId(), sendObject.getParams(), sendObject.getTimeOut(), sendObject.isResend())
-                    ChatBase.getServer("SendExecutors.send")?.sendToSocket(sendObject, object : SendReplyCallBack {
-                        override fun onReply(isSuccess: Boolean, sendObject: SendObject, e: Throwable?) {
+                    TimeOutUtils.putASentMessage(info.callId, info.data, info.timeOut, info.isResend, info.ignoreConnecting)
+                    server?.sendToSocket(info.data, info.callId, object : SendingCallBack {
+
+                        override fun result(isOK: Boolean, throwable: Throwable?) {
                             try {
-                                if (!isSuccess) {
-                                    if (!(isNetWorkAccess && isTcpConnected)) {
-                                        TimeOutUtils.remove(sendObject.getCallId())
-                                        DataStore.put(BaseMsgInfo.sendMsg(sendObject))
+                                exc = throwable
+                                if (!isOK) {
+                                    if (!StatusHub.isDataEnable()) {
+                                        TimeOutUtils.remove(info.callId)
+                                        DataReceivedDispatcher.pushData(info)
                                         return
                                     }
-                                    sendingFail(sendObject, e)
+                                    sendingFail()
                                 }
-                            } finally {
-                                done()
+                            } catch (e: Exception) {
+                                exc = e
                             }
                         }
                     })
                 }
             }
         } catch (e: Exception) {
-            done()
-            ExceptionHandler.postError(e)
+            exc = e
+        } finally {
+            done(exc == null, info, exc)
         }
-    }
-
-    private fun sendingFail(sendObject: SendObject, e: Throwable?) {
-        ExceptionHandler.postError(e)
-        TimeOutUtils.remove(sendObject.getCallId())
-        DataStore.put(BaseMsgInfo.sendingStateChange(SendMsgState.FAIL, sendObject.getCallId(), sendObject.getParams(), sendObject.isResend()))
     }
 }

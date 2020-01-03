@@ -1,4 +1,4 @@
-package com.zj.im.chat.utils.netUtils
+package com.zj.im.utils.netUtils
 
 enum class NetWorkInfo {
 

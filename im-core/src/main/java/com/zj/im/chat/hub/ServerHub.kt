@@ -1,37 +1,37 @@
 package com.zj.im.chat.hub
 
-import com.zj.im.chat.core.DataStore
-import com.zj.im.chat.interfaces.BaseMsgInfo
+import com.zj.im.chat.modle.BaseMsgInfo
 import com.zj.im.chat.interfaces.ConnectCallBack
-import com.zj.im.chat.interfaces.HeartBeatsCallBack
-import com.zj.im.chat.interfaces.SendReplyCallBack
-import com.zj.im.sender.SendObject
+import com.zj.im.chat.interfaces.SendingCallBack
+import com.zj.im.chat.modle.SocketConnInfo
+import com.zj.im.main.dispatcher.DataReceivedDispatcher
 import com.zj.im.utils.log.NetRecordUtils
 
-abstract class ServerHub<T> : BaseMessageHub() {
+@Suppress("unused")
+abstract class ServerHub<T> {
 
     abstract fun init()
 
-    abstract fun connect(address: String?, port: Int?, socketTimeOut: Int?, callBack: ConnectCallBack?)
+    abstract fun connect(connInfo: SocketConnInfo?, callBack: ConnectCallBack?)
 
-    abstract fun send(params: Map<String, Any>, callBack: HeartBeatsCallBack?): Long
-
-    abstract fun shutdown()
+    protected abstract fun send(params: T?, callId: String, callBack: SendingCallBack?): Long
 
     abstract fun closeSocket()
 
-    internal fun sendToSocket(sendObject: SendObject, callBack: SendReplyCallBack?) {
-        val rawMsg = sendObject.getParams()
-        val size = send(rawMsg, object : HeartBeatsCallBack {
-            override fun heartBeats(isOK: Boolean, throwable: Throwable?) {
-                callBack?.onReply(isOK, sendObject, throwable)
-            }
-        })
+    internal fun sendToSocket(params: T?, callId: String, callBack: SendingCallBack?) {
+        val size = send(params, callId, callBack)
         if (size > 0) NetRecordUtils.recordLastModifySendData(size)
     }
 
-    fun postReceivedMessage(data: T, size: Long) {
+    /**
+     * @param isSpecialData This message is prioritized when calculating priority and is not affected by pauses
+     * */
+    protected fun postReceivedMessage(data: T, isSpecialData: Boolean, size: Long) {
         NetRecordUtils.recordLastModifySendData(size)
-        DataStore.put(BaseMsgInfo.receiveMsg(data))
+        DataReceivedDispatcher.pushData(BaseMsgInfo.receiveMsg(data, isSpecialData))
+    }
+
+    open fun shutdown(){
+        closeSocket()
     }
 }

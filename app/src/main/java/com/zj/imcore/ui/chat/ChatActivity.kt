@@ -18,9 +18,9 @@ class ChatActivity :FCActivity(){
     }
 
     private fun register() {
-        IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
-            //            main_status?.text = it.name
-        }
+//        IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
+//            //            main_status?.text = it.name
+//        }
 
         val l = registerTcpReceivedListener<MessageIn, MsgInfo>("aaa").addHandler(TestHandler()).subscribe(object : DataListener<MsgInfo>() {
             override fun onReceived(data: MsgInfo) {

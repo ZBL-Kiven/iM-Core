@@ -1,4 +1,4 @@
-package com.zj.im.chat.utils.netUtils
+package com.zj.im.utils.netUtils
 
 import android.content.BroadcastReceiver
 import android.content.Context

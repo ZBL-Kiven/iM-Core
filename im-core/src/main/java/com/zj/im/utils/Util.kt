@@ -1,8 +1,7 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
 package com.zj.im.utils
 
-import com.zj.im.chat.exceptions.ExceptionHandler
 import com.zj.im.chat.exceptions.ParamPathNotFoundException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -99,18 +98,16 @@ internal class CustomList<OUT> {
     }
 
     fun add(index: Int, element: OUT?) {
-        if (element != null && index in 0 until lst.lastIndex)
-            lst.runSync {
-                it.add(index, element)
-            }
+        if (element != null && index in 0 until lst.lastIndex) lst.runSync {
+            it.add(index, element)
+        }
     }
 
     fun addOnly(element: OUT?) {
-        if (element != null)
-            lst.runSync {
-                it.clear()
-                it.add(element)
-            }
+        if (element != null) lst.runSync {
+            it.clear()
+            it.add(element)
+        }
     }
 
     fun addIf(element: OUT?, index: Int = -1, predicate: (`in`: OUT, other: OUT) -> Boolean) {
@@ -268,15 +265,12 @@ class MutableParamsMap {
                 getNamesMap(p, index + 1)
             }
         }
-        try {
-            val sub = getNamesMap(this)
-            if (sub != null) {
-                sub.curTransactionKey = sub.transactionKey
-                block(sub)
-                sub.transactionKey = getIncrementKey()
-            }
-        } catch (e: Exception) {
-            ExceptionHandler.postError(e)
+
+        val sub = getNamesMap(this)
+        if (sub != null) {
+            sub.curTransactionKey = sub.transactionKey
+            block(sub)
+            sub.transactionKey = getIncrementKey()
         }
     }
 

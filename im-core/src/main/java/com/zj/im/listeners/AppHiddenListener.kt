@@ -9,13 +9,14 @@ import android.content.res.Configuration
  * Created by ZJJ
  */
 
-object AppHiddenListener : ComponentCallbacks2 {
+class AppHiddenListener private constructor(private val appHiddenListener: (() -> Unit)) : ComponentCallbacks2 {
 
-    private var appHiddenListener: (() -> Unit)? = null
-
-    fun init(context: Application?, appHiddenListener: () -> Unit) {
-        this.appHiddenListener = appHiddenListener
-        context?.registerComponentCallbacks(this)
+    companion object {
+        fun init(context: Application?, appHiddenListener: () -> Unit): AppHiddenListener {
+            val al = AppHiddenListener(appHiddenListener)
+            context?.registerComponentCallbacks(al)
+            return al
+        }
     }
 
     override fun onLowMemory() {
@@ -27,7 +28,7 @@ object AppHiddenListener : ComponentCallbacks2 {
     }
 
     override fun onTrimMemory(level: Int) {
-        if (level == TRIM_MEMORY_UI_HIDDEN) appHiddenListener?.invoke()
+        if (level == TRIM_MEMORY_UI_HIDDEN) appHiddenListener.invoke()
     }
 
     fun shutDown(context: Application?) {

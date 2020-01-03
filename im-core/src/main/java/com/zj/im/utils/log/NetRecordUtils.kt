@@ -1,6 +1,5 @@
 package com.zj.im.utils.log
 
-import com.zj.im.main.ChatBase
 import com.zj.im.utils.full
 import com.zj.im.utils.log.logger.DataUtils
 import com.zj.im.utils.log.logger.LogCollectionUtils
@@ -26,7 +25,7 @@ internal object NetRecordUtils : LogCollectionUtils.Config() {
 
     private val changedListeners = mutableMapOf<String, TCPNetRecordChangedListener>()
     private var accessAble = false
-
+    private var onRecord: ((NetWorkRecordInfo) -> Unit)? = null
     private val rwl = ReentrantReadWriteLock()
     private val r = rwl.readLock()
     private val w = rwl.writeLock()
@@ -41,6 +40,10 @@ internal object NetRecordUtils : LogCollectionUtils.Config() {
 
     override fun prepare() {
         accessAble = true
+    }
+
+    fun addRecordListener(onRecord: ((NetWorkRecordInfo) -> Unit)) {
+        this.onRecord = onRecord
     }
 
     @JvmStatic
@@ -105,7 +108,7 @@ internal object NetRecordUtils : LogCollectionUtils.Config() {
         info.lastModifyTime = full()
         val recordString = DataUtils.toString(info)
         write(recordString, false)
-        ChatBase.onRecordChange(info)
+        onRecord?.invoke(info)
     }
 
     private fun getNetRecordInfo(): NetWorkRecordInfo? {
@@ -116,5 +119,9 @@ internal object NetRecordUtils : LogCollectionUtils.Config() {
         } finally {
             r.unlock()
         }
+    }
+
+    fun removeRecordListener() {
+        this.onRecord = null
     }
 }
