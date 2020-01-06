@@ -1,0 +1,17 @@
+// recived msg
+{
+    "type": "create_message",
+    "call_id": "c674eaea-d2c7-4b6b-9487-7afcca0d396d",
+    "data": {
+        "deleted": false,
+        "content": null,
+        "updated": "2020-01-03T09:38:11Z",
+        "uid": 4,
+        "created": "2020-01-03T09:38:11Z",
+        "id": 991077318262784,
+        "team_id": 1,
+        "dialog_id": 8589934596,
+        "subtype": "normal",
+        "text": "1"
+    }
+}

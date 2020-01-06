@@ -3,11 +3,12 @@ package com.zj.imcore.ui.views
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.ImageView
+import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.ChatRecyclerView
 import com.zj.im.list.utils.TimeLineInflateModel
 import com.zj.im.list.ChatItemOptions
-import com.zj.model.mod.MsgInfo
+import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication.Companion.isSelf
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.ui.list.model.ChatListModel
@@ -65,7 +66,8 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
             }
 
             override fun getBubbleColor(): Int {
-                return if (isSelf(data.uid)) ChatOption.bubbleColorSelf else ChatOption.bubbleColorOthers
+                val selfColor = if (data.sendingState == SendMsgState.SENDING.type) ChatOption.bubbleColorSelfSending else ChatOption.bubbleColorSelf
+                return if (isSelf(data.uid)) selfColor else ChatOption.bubbleColorOthers
             }
 
             override fun getBubbleRadius(): Float {

@@ -12,7 +12,7 @@ import com.zj.im.img.AutomationImageCalculateUtils
 import com.zj.im.img.cache.ImageCacheUtil
 import com.zj.im.list.views.ChatItemView
 import com.zj.imcore.R
-import com.zj.model.mod.MsgInfo
+import com.zj.model.chat.MsgInfo
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.ui.list.model.BaseItemMod
 import com.zj.imcore.utils.img.loader.ImageMsgLoadUtil

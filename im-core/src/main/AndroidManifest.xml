@@ -13,7 +13,7 @@
         tools:ignore="UnusedAttribute">
 
         <service
-            android:name="com.zj.im.net.socket.BaseSocketService"
+            android:name="com.zj.im.main.ChatBase"
             android:exported="false" />
     </application>
 </manifest>

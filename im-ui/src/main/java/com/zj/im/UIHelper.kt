@@ -37,10 +37,13 @@ object UIHelper {
      *
      * */
     fun postReceiveData(data: Any?) {
-        listeners?.let {
-            synchronized(it) {
-                it.forEach { (_, v) ->
-                    v.postData(data)
+        //todo 暂时容错
+        mainHandler.post {
+            listeners?.let {
+                synchronized(it) {
+                    it.forEach { (_, v) ->
+                        v.postData(data)
+                    }
                 }
             }
         }

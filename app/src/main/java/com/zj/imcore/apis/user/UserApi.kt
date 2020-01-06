@@ -23,13 +23,16 @@ object UserApi {
     }
 
     fun sign(ac: String, pwd: String, tel: String, email: String, genderIsLady: Boolean, result: (Boolean, SignInfo?, throwAble: HttpException?) -> Unit) {
-
         val model = SignModel(ac, pwd, tel, email, getGender(genderIsLady), UserProfileModel())
         get().call({ it.sign(model) }, result)
     }
 
     fun logout(result: (Boolean, String?, throwAble: HttpException?) -> Unit) {
         get().call({ it.logout() }, result)
+    }
+
+    fun refreshToken(token: String, refresh: String, isOk: (Boolean, String?, Throwable?) -> Unit) {
+        get().call({ it.ping() }, isOk)
     }
 
     fun ping(isOk: (Boolean, String?, Throwable?) -> Unit) {

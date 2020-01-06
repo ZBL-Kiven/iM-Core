@@ -4,13 +4,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import com.zj.im.cast
 import com.zj.im.UIHelper
 import com.zj.im.mainHandler
 import com.zj.im.store.UIMaker
 import com.zj.im.store.interfaces.DataHandler
 import com.zj.im.store.interfaces.DataListener
 import com.zj.im.store.interfaces.EventCallBack
+import java.lang.Exception
+import java.lang.NullPointerException
 import java.util.ArrayList
 
 /**
@@ -78,7 +79,14 @@ class ReceiveListener<IN, OUT : Any> constructor(private val name: String, priva
             val lst = ArrayList(tempCache)
             tempCache.clear()
             lst.forEach {
-                mainHandler.post { listener?.onReceived(it) }
+                //todo listener 有问题
+                mainHandler.post {
+                    try {
+                        listener?.onReceived(it)
+                    } catch (e: Throwable) {
+                        e.printStackTrace()
+                    }
+                }
             }
         }
     }
@@ -89,16 +97,30 @@ class ReceiveListener<IN, OUT : Any> constructor(private val name: String, priva
     internal fun postData(data: Any?) {
         if (data == null) com.zj.im.log("the received data was null ,so it never process by ui-maker")
         else {
-            if (data.javaClass != cI && (data is Collection<*> && data.toMutableList()[0]?.javaClass != cI)) {
+            if (data.javaClass != cI && (data is Collection<*> && data.toMutableList().firstOrNull()?.javaClass != cI)) {
                 return
             }
             uiMaker?.let { maker ->
-                synchronized(maker) {
-                    cast<Any, List<IN>>(data)?.let {
-                        maker.pushAll(it)
-                    } ?: cast<Any, IN>(data)?.let {
-                        maker.push(it)
+                fun <IN> cast(a: Any): IN? {
+                    var e: IN? = null
+                    try {
+                        e = @Suppress("UNCHECKED_CAST") (a as IN)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
+                    return e
+                }
+                synchronized(maker) {
+                    if (data is List<*>) {
+                        cast<List<IN>>(data)?.let {
+                            maker.pushAll(it)
+                        }
+                        return
+                    }
+                    cast<IN>(data)?.let {
+                        maker.push(it)
+                        return
+                    } ?: throw NullPointerException("the data parsed was null")
                 }
             } ?: com.zj.im.log("the data may abandoned by a null ui-maker")
         }

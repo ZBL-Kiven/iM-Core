@@ -12,6 +12,7 @@ import com.zj.im.chat.hub.ClientHub
 import com.zj.im.chat.hub.ServerHub
 import com.zj.im.chat.interfaces.MessageInterface
 import com.zj.im.main.ChatBase
+import com.zj.im.sender.OnSendBefore
 import com.zj.im.utils.cast
 import com.zj.im.utils.log.logger.logUtils
 
@@ -38,6 +39,7 @@ import com.zj.im.utils.log.logger.logUtils
  * @property onAppLayerChanged it called when SDK was changed form foreground / background
  *
  */
+@Suppress("unused")
 abstract class IMInterface<T> : MessageInterface<T>() {
 
     private var baseSocketService: ChatBase<T>? = null
@@ -82,12 +84,10 @@ abstract class IMInterface<T> : MessageInterface<T>() {
         if (!ignoreNull && baseSocketService == null) {
             onError(NecessaryAttributeEmptyException("at $tag \n socketService == null ,you must restart the sdk and recreate the service"))
         }
-        logUtils.d("IMInterface.getService", tag)
         return baseSocketService
     }
 
     internal fun getClient(case: String = ""): ClientHub<T>? {
-        logUtils.d("IMI.getClient", case)
         if (client == null) {
             client = getClient()
             logUtils.d("IMI.getClient", "create client with $case")
@@ -99,7 +99,6 @@ abstract class IMInterface<T> : MessageInterface<T>() {
     }
 
     internal fun getServer(case: String = ""): ServerHub<T>? {
-        logUtils.d("IMI.getServer", case)
         if (server == null) {
             server = getServer()
             logUtils.d("IMI.getServer", "create server with $case")
@@ -136,6 +135,25 @@ abstract class IMInterface<T> : MessageInterface<T>() {
 
     fun postError(e: Throwable) {
         onError(e)
+    }
+
+    /**
+     * send a msg
+     * */
+    fun send(data: T, callId: String, timeOut: Long, isSpecialData: Boolean, ignoreConnecting: Boolean, sendBefore: OnSendBefore?) {
+        getService("IMInterface.send", false)?.send(data, callId, timeOut, false, isSpecialData, ignoreConnecting, sendBefore)
+    }
+
+    fun resend(data: T, callId: String, timeOut: Long, isSpecialData: Boolean, ignoreConnecting: Boolean, sendBefore: OnSendBefore?) {
+        getService("IMInterface.resend", false)?.send(data, callId, timeOut, true, isSpecialData, ignoreConnecting, sendBefore)
+    }
+
+    fun pause(code: Int) {
+        getClient("IMInterface.pause")?.pause(code)
+    }
+
+    fun resume(code: Int) {
+        getClient("IMInterface.resume")?.resume(code)
     }
 
     fun shutDown(case: String) {

@@ -3,6 +3,9 @@
 
     <string name="app_system_error_no_context">System error ,please restart app to repair!</string>
     <string name="app_common_search">search</string>
+    <string name="app_common_unset">not set</string>
+    <string name="app_common_secret">secret</string>
+    <string name="app_common_send">send</string>
 
     <string name="app_login_failed">login failed</string>
     <string name="app_sign_failed">sign failed</string>

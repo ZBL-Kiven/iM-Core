@@ -1,4 +1,4 @@
-package com.zj.model.mod
+package com.zj.model.chat
 
 import com.zj.im.list.interfaces.InfoImpl
 import com.zj.model.Payloads
@@ -9,11 +9,11 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     val channelId: String?; get() = impl.channelId()
 
-    val subType: String?; get() = impl.channelId()
+    val subType: String?; get() = impl.subType()
 
-    val subTypeDetail: String?; get() = impl.channelId()
+    val subTypeDetail: String?; get() = impl.subTypeDetail()
 
-    val text: String?; get() = impl.channelId()
+    val text: String?; get() = impl.text()
 
     val createdTs: Long; get() = impl.createdTs()
 
@@ -24,12 +24,6 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
     val starId: String?; get() = impl.starId()
 
     val deleted: Boolean; get() = impl.deleted()
-
-    val textColor: String?; get() = impl.textColor()
-
-    val tsColor: String?; get() = impl.tsColor()
-
-    val bubbleColor: String?; get() = impl.bubbleColor()
 
     val localCreatedTs: Long; get() = impl.localCreatedTs()
 
@@ -115,9 +109,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
     }
 
     override fun hashCode(): Int {
-        var c = impl.key().hashCode()
-        c = 31 * (c + impl.callId().hashCode())
-        return c
+        return impl.callId().hashCode()
     }
 
     override fun getCacheName(payloads: String?): String {

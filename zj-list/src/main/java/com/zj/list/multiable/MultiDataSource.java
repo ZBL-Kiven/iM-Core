@@ -119,6 +119,7 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
         boolean isFirstPush = checkIsDefault();
         DataSource<R> ds = getOrCreateDs(name);
         if (ds != null) {
+            if(ds.contains(r)) ds.remove(r);
             boolean add = ds.put(r);
             if (isFirstPush) {
                 changeSource(name);

@@ -15,6 +15,8 @@ import com.zj.imcore.base.FCApplication
 import com.zj.imcore.gui.login.pager.LoginViewPager
 import com.zj.imcore.ui.main.MainActivity
 import com.zj.imcore.ui.views.LoadingButton
+import retrofit2.HttpException
+import java.lang.Exception
 import kotlin.math.max
 
 class LoginActivity : AppCompatActivity() {
@@ -159,23 +161,31 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login(ac: String, pwd: String) {
+        fun loginFailed(throwable: HttpException?) {
+            enableViews(true)
+            btnLoginOrSign?.loadingFailed()
+            FCApplication.showToast(throwable?.response()?.errorBody()?.string() ?: getString(R.string.app_login_failed))
+        }
         enableViews(false)
         UserApi.login(ac, pwd) { isSuccess, data, throwable ->
             if (isSuccess) {
+                try {
+                    data?.saveAsSP()
+                } catch (e: Exception) {
+                    loginFailed(null)
+                }
                 btnLoginOrSign?.loadingSuccessful()
-                data?.saveAsSP()
                 vp?.postDelayed({
                     enableViews(true)
                     btnLoginOrSign?.reset()
                     startMainAct()
                 }, 1000)
             } else {
-                enableViews(true)
-                btnLoginOrSign?.loadingFailed()
-                FCApplication.showToast(throwable?.response()?.errorBody()?.string() ?: getString(R.string.app_login_failed))
+                loginFailed(throwable)
             }
         }
     }
+
 
     private fun startMainAct() {
         startActivity(Intent(this, MainActivity::class.java))

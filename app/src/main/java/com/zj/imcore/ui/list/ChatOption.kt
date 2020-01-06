@@ -30,6 +30,7 @@ object ChatOption {
     var shadowColor: Int = R.color.chat_bubble_shadow
     var bubbleColorOthers: Int = R.color.chat_bubble_other
     var bubbleColorSelf: Int = R.color.chat_bubble_self
+    var bubbleColorSelfSending: Int = R.color.chat_bubble_self_sending
     var bubbleRadius: Float = 8f
     var bubblePadding: Float = 8f
 
@@ -64,7 +65,7 @@ object ChatOption {
     var infoLineTopMargin: Float = 10f
     var infoLineBottomMargin: Float = 10f
 
-    var maximumDiffDisplayTime: Long = 1 * 1000
+    var maximumDiffDisplayTime: Long = 2 * 60 * 1000
 
     /**
      * max normal text width

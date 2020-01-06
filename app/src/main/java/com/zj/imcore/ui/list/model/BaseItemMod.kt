@@ -3,8 +3,9 @@ package com.zj.imcore.ui.list.model
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.zj.im.list.views.ChatItemView
-import com.zj.model.mod.MsgInfo
+import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication
+import java.lang.Exception
 
 /**
  * Created by ZJJ on 19/12/12
@@ -23,7 +24,7 @@ abstract class BaseItemMod {
     protected fun getColor(context: Context, c: Int): Int {
         return try {
             ContextCompat.getColor(context, c)
-        } catch (e: Exception) {
+        } catch (e:Exception) {
             c
         }
     }

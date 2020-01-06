@@ -8,7 +8,7 @@ class LoginTokenModel {
     @SerializedName("refresh_token")
     var refreshToken: String? = ""
     @SerializedName("expires_in")
-    var expiresIn: Int = 0
+    var expiresIn: Long = 0
     @SerializedName("token_type")
     var tokenType: String? = ""
     var scope: Array<String>? = null

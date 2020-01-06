@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.zj.imcore.ui.views.IMRecyclerView
+            android:id="@+id/app_act_chat_content_rv"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:paddingTop="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/app_act_chat_bg_v_input_bar"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/app_act_chat_content_btn_voice"
+                android:layout_width="30dp"
+                android:src="@mipmap/app_chat_icon_voice"
+                android:padding="3dp"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_height="30dp"
+                tools:ignore="ContentDescription"/>
+
+        <EditText
+                android:id="@+id/app_act_chat_content_et_input"
+                style="@style/baseEtStyle.SingleLine"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_toStartOf="@id/app_act_chat_content_btn_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:imeActionId="@integer/app_action_send"
+                android:imeOptions="actionSend"
+                android:layout_toEndOf="@id/app_act_chat_content_btn_voice"
+                android:background="@drawable/app_act_chat_bg_et_input"
+                tools:ignore="Autofill,LabelFor,TextFields"/>
+
+        <ImageView
+                android:id="@+id/app_act_chat_content_btn_emoji"
+                android:layout_width="30dp"
+                android:padding="3dp"
+                android:src="@mipmap/app_chat_icon_emoji"
+                android:layout_marginStart="10dp"
+                android:layout_toStartOf="@id/app_act_chat_content_btn_more"
+                android:layout_height="30dp" tools:ignore="ContentDescription"/>
+
+        <ImageView
+                android:id="@+id/app_act_chat_content_btn_more"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="3dp"
+                android:src="@mipmap/app_chat_icon_more"
+                android:layout_marginStart="10dp"
+                android:layout_alignParentEnd="true"
+                tools:ignore="ContentDescription"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

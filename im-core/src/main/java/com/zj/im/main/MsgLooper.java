@@ -1,6 +1,5 @@
 package com.zj.im.main;
 
-import com.zj.im.chat.exceptions.ExceptionHandler;
 import com.zj.im.main.impl.RunningObserver;
 
 /**

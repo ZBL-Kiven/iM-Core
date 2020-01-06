@@ -15,6 +15,7 @@ import com.zj.im.log
 import com.zj.im.mainHandler
 import com.zj.imcore.R
 import com.zj.imcore.apis.user.UserApi
+import com.zj.imcore.base.FCApplication
 import com.zj.imcore.genderIsLady
 import com.zj.imcore.gui.SplashActivity
 import com.zj.imcore.ui.users.UserInfoActivity
@@ -106,6 +107,9 @@ class SettingFragment : BaseLinkageFragment() {
         lbLogout?.setOnClickListener {
             lbLogout?.startLoading()
             lbLogout?.isEnabled = false
+            FCApplication.logout("log out form user"){
+
+            }
             UserApi.logout { _, _, throwAble ->
                 val isSuccess = when (throwAble?.response()?.code() ?: 0) {
                     401, 200 -> true

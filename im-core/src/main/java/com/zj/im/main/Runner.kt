@@ -15,9 +15,11 @@ import com.zj.im.utils.netUtils.IConnectivityManager
 import com.zj.im.utils.netUtils.NetWorkInfo
 import com.zj.im.listeners.AppHiddenListener
 import com.zj.im.listeners.DropRecoverListener
+import com.zj.im.main.dispatcher.DataReceivedDispatcher
 import com.zj.im.main.dispatcher.EventHub
 import com.zj.im.main.impl.IMInterface
 import com.zj.im.main.impl.RunningObserver
+import com.zj.im.sender.OnSendBefore
 import com.zj.im.sender.OnStatus
 import com.zj.im.sender.SendExecutors
 import com.zj.im.sender.SendingPool
@@ -46,7 +48,6 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
     private var isInit = false
     private var diskPathName: String = ""
     private var dropRecoverListener: DropRecoverListener? = null
-    private var connectivityManager: IConnectivityManager? = null
     private var appHiddenListener: AppHiddenListener? = null
 
     protected var imi: IMInterface<T>? = null
@@ -65,18 +66,19 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
         initUtils()
         initBase()
         initQueue()
-        initHandler()
-        isInit = true
-        imi.prepare()
+        getServer("init and start")?.init()
         getClient("init.setRunnigKey and start")?.let {
             dataStore?.canSend { it.canSend() }
             dataStore?.canReceive { it.canReceived() }
             it.init()
         }
+        initHandler()
+        isInit = true
+        imi.prepare()
     }
 
     private fun initUtils() {
-        connectivityManager = IConnectivityManager.init(context) { netWorkStateChanged(it) }
+        IConnectivityManager.init(context) { netWorkStateChanged(it) }
         dropRecoverListener = DropRecoverListener.init(context) { onLayerChanged(false) }
         appHiddenListener = AppHiddenListener.init(context) { onLayerChanged(true) }
         imi?.let {
@@ -123,6 +125,14 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
             msgLooper?.checkRunning(true)
             setLooperEfficiency(dataStore?.put(it) ?: 0)
         }
+    }
+
+    /**
+     * send a msg
+     * */
+    fun send(data: T, callId: String, timeOut: Long, isResend: Boolean, isSpecialData: Boolean, ignoreConnecting: Boolean, sendBefore: OnSendBefore?) {
+        DataReceivedDispatcher.pushData(BaseMsgInfo.sendingStateChange(SendMsgState.SENDING, callId, data, isResend))
+        DataReceivedDispatcher.pushData(BaseMsgInfo.sendMsg(data, callId, timeOut, isResend, isSpecialData, ignoreConnecting, sendBefore, false))
     }
 
     private fun setLooperEfficiency(total: Int) {
@@ -200,7 +210,6 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
         enqueue(BaseMsgInfo.networkStateChanged<T>(state))
     }
 
-
     fun postError(e: Throwable) {
         errorCollector.printInFile("postError", e.message, true)
         when (e) {
@@ -245,8 +254,8 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
         TimeOutUtils.remove(callId)
     }
 
-    protected fun checkNetWork(): Boolean {
-        return connectivityManager?.checkNetWorkValidate() == NetWorkInfo.CONNECTED
+    fun checkNetWork(): Boolean {
+        return IConnectivityManager.checkNetWorkValidate() == NetWorkInfo.CONNECTED
     }
 
     fun isFinishing(runningKey: String?): Boolean {
@@ -265,12 +274,11 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
         getClient("shutdown call")?.shutdown()
         getServer("shutdown call")?.shutdown()
         runningKey = ""
-        connectivityManager?.shutDown(context)
-        dropRecoverListener?.destroy()
+        IConnectivityManager.shutDown(context)
         appHiddenListener?.shutDown(context)
+        dropRecoverListener?.destroy()
         dataStore?.shutDown()
         sendingPool?.clear()
-        connectivityManager = null
         dropRecoverListener = null
         appHiddenListener = null
         dataStore = null

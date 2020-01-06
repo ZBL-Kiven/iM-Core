@@ -5,6 +5,7 @@ import com.zj.im.chat.enums.SocketState
 import com.zj.im.chat.interfaces.ConnectCallBack
 import com.zj.im.chat.modle.SocketConnInfo
 import com.zj.im.chat.modle.BaseMsgInfo
+import com.zj.im.chat.modle.IMLifecycle
 import com.zj.im.utils.netUtils.NetWorkInfo
 import com.zj.im.main.ChatBase
 import com.zj.im.main.StatusHub
@@ -34,9 +35,12 @@ internal object DataReceivedDispatcher {
         chatBase?.onAppLayerChanged(isHidden)
     }
 
+    fun onLifeStateChanged(lifecycle: IMLifecycle) {
+        chatBase?.notify()?.onLifecycle(lifecycle)
+    }
+
     fun onNetworkStateChanged(netWorkState: NetWorkInfo) {
-        StatusHub.isNetWorkAccess = netWorkState == NetWorkInfo.CONNECTED
-        printInFile("ChatBase.IM", "the SDK checked the network status changed form ${if (StatusHub.isNetWorkAccess) "enable" else "disable"} by net State : ${netWorkState.name}")
+        printInFile("onNetworkStateChanged", "the SDK checked the network status changed form ${if (StatusHub.isNetWorkAccess) "enable" else "disable"} by net State : ${netWorkState.name}")
         chatBase?.notify()?.onNetWorkStatusChanged(netWorkState)
         if ((netWorkState == NetWorkInfo.CONNECTED && StatusHub.curSocketState.canConnect()) || netWorkState == NetWorkInfo.DISCONNECTED) {
             onSocketStateChange(SocketState.NETWORK_STATE_CHANGE)
@@ -52,6 +56,7 @@ internal object DataReceivedDispatcher {
     }
 
     fun onSocketStateChange(connState: SocketState) {
+        printInFile("on socket stateChanged", "$connState  ${if (connState.case.isNotEmpty()) "and ${connState.case}" else ""}")
         StatusHub.curSocketState = connState
         getClient("on socket state changed")?.let {
             if (connState.canConnect()) {
@@ -70,7 +75,8 @@ internal object DataReceivedDispatcher {
         getServer("on connection call")?.connect(connInfo, object : ConnectCallBack {
             override fun onConnection(isSuccess: Boolean, throwable: Throwable?) {
                 val state = if (isSuccess) SocketState.CONNECTED else SocketState.CONNECTED_ERROR
-                pushData(BaseMsgInfo.connectStateChange<T>(state, Constance.CONNECT_ERROR))
+                val case = if (!isSuccess) Constance.CONNECT_ERROR else ""
+                pushData(BaseMsgInfo.connectStateChange<T>(state, case))
             }
         })
     }

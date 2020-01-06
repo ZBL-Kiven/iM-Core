@@ -1,7 +1,7 @@
 package com.zj.imcore.ui.list.model.sub
 
 import com.zj.model.Payloads
-import com.zj.model.mod.MsgInfo
+import com.zj.model.chat.MsgInfo
 
 class ImageMod : BaseImageMod() {
 

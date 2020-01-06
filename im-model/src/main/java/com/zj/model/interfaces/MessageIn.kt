@@ -21,12 +21,6 @@ interface MessageIn {
 
     fun deleted(): Boolean
 
-    fun textColor(): String?
-
-    fun tsColor(): String?
-
-    fun bubbleColor(): String?
-
     fun localCreatedTs(): Long
 
     fun callId(): String?

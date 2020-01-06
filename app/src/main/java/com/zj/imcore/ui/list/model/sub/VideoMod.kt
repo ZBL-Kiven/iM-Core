@@ -7,7 +7,7 @@ import android.widget.ImageView
 import com.zj.im.list.views.ChatItemView
 import com.zj.model.Payloads
 import com.zj.imcore.ui.list.ChatOption
-import com.zj.model.mod.MsgInfo
+import com.zj.model.chat.MsgInfo
 import com.zj.preview.PreviewActivity
 import com.zj.preview.mod.ConversationFileInfo
 import com.zj.preview.mod.SourceType

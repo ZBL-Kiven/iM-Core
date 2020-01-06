@@ -3,22 +3,8 @@ package com.zj.im
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.lifecycle.LifecycleOwner
-import com.zj.im.scheduler.ReceiveListener
+import java.lang.Exception
 import java.util.*
-
-@Suppress("UNCHECKED_CAST")
-fun <I, O> cast(a: I?): O? {
-    return try {
-        a as? O
-    } catch (e: java.lang.ClassCastException) {
-        e.printStackTrace()
-        null
-    } catch (e: ClassCastException) {
-        e.printStackTrace()
-        null
-    }
-}
 
 @Suppress("UNCHECKED_CAST")
 @Throws(java.lang.ClassCastException::class, ClassCastException::class)

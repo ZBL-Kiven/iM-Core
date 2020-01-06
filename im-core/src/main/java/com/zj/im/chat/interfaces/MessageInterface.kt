@@ -58,25 +58,25 @@ abstract class MessageInterface<T> {
         }
     }
 
-    private var lifecycleListeners: HashMap<String, LifecycleListener>? = null
+    private var lifecycleListeners: HashMap<String, (IMLifecycle) -> Unit>? = null
         get() {
             if (field == null) field = hashMapOf()
             return field
         }
 
-    fun registerLifecycleListener(name: String, lifecycleListener: LifecycleListener) {
-        lifecycleListeners?.put(name, lifecycleListener)
+    fun registerLifecycleListener(name: String, l: (IMLifecycle) -> Unit) {
+        lifecycleListeners?.put(name, l)
     }
 
     fun unRegisterLifecycleListener(name: String) {
         lifecycleListeners?.remove(name)
     }
 
-    protected fun onLifecycle(state: IMLifecycle) {
-        lifecycleListeners?.forEach { (k, v) ->
+    internal fun onLifecycle(state: IMLifecycle) {
+        lifecycleListeners?.forEach { (_, v) ->
             MainLooper.post {
                 try {
-                    v.status(k, state)
+                    v(state)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

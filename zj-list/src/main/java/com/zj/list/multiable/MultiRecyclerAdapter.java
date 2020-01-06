@@ -53,10 +53,12 @@ public abstract class MultiRecyclerAdapter<T extends MultiAbleData<T>> extends R
 
     @Override
     public void onDataInserted(int position) {
-        notifyItemInserted(position);
-        if (position < getItemCount()) {
-            notifyItemRangeChanged(position, getItemCount());
-        }
+        //todo 需要优化
+//        notifyItemInserted(position);
+//        if (position < getItemCount()) {
+//            notifyItemRangeChanged(position, getItemCount());
+//        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -66,10 +68,12 @@ public abstract class MultiRecyclerAdapter<T extends MultiAbleData<T>> extends R
 
     @Override
     public void onDataRemoved(int position) {
-        notifyItemRemoved(position);
-        if (position < getItemCount()) {
-            notifyItemRangeChanged(position, getItemCount());
-        }
+        //todo 需要优化
+//        notifyItemRemoved(position);
+//        if (position < getItemCount()) {
+//            notifyItemRangeChanged(position, getItemCount());
+//        }
+        notifyDataSetChanged();
     }
 
     @Override

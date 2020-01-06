@@ -7,7 +7,7 @@ import com.zj.imcore.utils.img.loader.AvatarLoadUtil
 import com.zj.im.list.interfaces.BaseChatModel
 import com.zj.im.list.views.ChatItemView
 import com.zj.model.Payloads
-import com.zj.model.mod.MsgInfo
+import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.enums.MsgType
 import com.zj.imcore.ui.list.ChatOption
@@ -53,7 +53,7 @@ class ChatListModel : BaseChatModel<MsgInfo> {
         }
 
         fun loadNickName() {
-            view.getNicknameView()?.text = "${data.uid}"
+            view.getNicknameView()?.text = "${data.name}"
         }
 
         fun loadBubble() {

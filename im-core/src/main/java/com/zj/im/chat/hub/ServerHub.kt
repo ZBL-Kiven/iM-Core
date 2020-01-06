@@ -1,11 +1,13 @@
 package com.zj.im.chat.hub
 
+import com.zj.im.chat.enums.SocketState
 import com.zj.im.chat.modle.BaseMsgInfo
 import com.zj.im.chat.interfaces.ConnectCallBack
 import com.zj.im.chat.interfaces.SendingCallBack
 import com.zj.im.chat.modle.SocketConnInfo
 import com.zj.im.main.dispatcher.DataReceivedDispatcher
 import com.zj.im.utils.log.NetRecordUtils
+import com.zj.im.utils.log.logger.printInFile
 
 @Suppress("unused")
 abstract class ServerHub<T> {
@@ -23,6 +25,10 @@ abstract class ServerHub<T> {
         if (size > 0) NetRecordUtils.recordLastModifySendData(size)
     }
 
+    protected fun postToClose(case: String) {
+        DataReceivedDispatcher.pushData<T>(BaseMsgInfo.connectStateChange(SocketState.CONNECTED_ERROR, case))
+    }
+
     /**
      * @param isSpecialData This message is prioritized when calculating priority and is not affected by pauses
      * */
@@ -31,7 +37,11 @@ abstract class ServerHub<T> {
         DataReceivedDispatcher.pushData(BaseMsgInfo.receiveMsg(data, isSpecialData))
     }
 
-    open fun shutdown(){
+    protected fun print(where: String, case: String) {
+        printInFile(where, case)
+    }
+
+    open fun shutdown() {
         closeSocket()
     }
 }

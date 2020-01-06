@@ -11,7 +11,6 @@ android {
         targetSdkVersion target_sdk_version as int
         applicationId "com.zj.imcore"
         flavorDimensions("none")
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -80,5 +79,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':im-base')
-    implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
+    implementation 'org.java-websocket:Java-WebSocket:1.4.0'
+    implementation 'junit:junit:4.12'
 }

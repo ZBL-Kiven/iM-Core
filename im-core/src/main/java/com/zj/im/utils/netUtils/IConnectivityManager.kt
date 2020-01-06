@@ -1,6 +1,5 @@
 package com.zj.im.utils.netUtils
 
-import android.annotation.TargetApi
 import android.app.Application
 import android.content.Context
 import android.content.IntentFilter
@@ -9,24 +8,20 @@ import android.net.NetworkCapabilities.*
 import android.os.Build
 import com.zj.im.utils.log.logger.printInFile
 
-internal class IConnectivityManager private constructor() {
+internal object IConnectivityManager {
 
     private var stateChangeListener: ((NetWorkInfo) -> Unit)? = null
     private var connectivityManager: ConnectivityManager? = null
     private var netWorkBrodCast: NetWorkBrodCast? = null
 
-    companion object {
-        fun init(context: Application?, l: ((NetWorkInfo) -> Unit)?): IConnectivityManager {
-            return IConnectivityManager().apply {
-                this.stateChangeListener = l
-                clearRegister(context)
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    isLowerNChange(context)
-                } else {
-                    this.connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
-                    connectivityManager?.registerNetworkCallback(request, netCallBack)
-                }
-            }
+    fun init(context: Application?, l: ((NetWorkInfo) -> Unit)?) {
+        this.stateChangeListener = l
+        clearRegister(context)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            isLowerNChange(context)
+        } else {
+            this.connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
+            connectivityManager?.registerNetworkCallback(request, netCallBack)
         }
     }
 
@@ -46,8 +41,10 @@ internal class IConnectivityManager private constructor() {
         }
 
         override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-            val level = networkCapabilities.signalStrength
-            printInFile("ConnectivityManager", "the signal changed to $level")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val level = networkCapabilities.signalStrength
+                printInFile("ConnectivityManager", "the signal changed to $level")
+            }
             super.onCapabilitiesChanged(network, networkCapabilities)
         }
 
@@ -70,8 +67,8 @@ internal class IConnectivityManager private constructor() {
         context?.registerReceiver(netWorkBrodCast, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
-    private val isNetWorkActive: NetWorkInfo
-        @TargetApi(Build.VERSION_CODES.M) get() {
+    val isNetWorkActive: NetWorkInfo
+        get() {
             return try {
                 if (isNetworkConnected()) NetWorkInfo.CONNECTED else NetWorkInfo.DISCONNECTED
             } catch (e: Exception) {

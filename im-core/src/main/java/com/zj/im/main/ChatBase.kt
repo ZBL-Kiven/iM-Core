@@ -17,17 +17,17 @@ import com.zj.im.utils.log.logger.printInFile
 
 internal class ChatBase<T> : Runner<T>() {
 
-    override fun initBase() {
-        NetRecordUtils.addRecordListener {
-            getClient("net data record")?.onRecordChange(it)
-        }
-        DataReceivedDispatcher.init(this)
-    }
-
     data class SocketBinder<T>(val service: ChatBase<T>) : Binder()
 
     override fun onBind(intent: Intent?): IBinder? {
         return SocketBinder(this@ChatBase)
+    }
+
+    override fun initBase() {
+        NetRecordUtils.addRecordListener {
+            imi?.onRecordChange(it)
+        }
+        DataReceivedDispatcher.init(this)
     }
 
     fun onAppLayerChanged(isHidden: Boolean) {

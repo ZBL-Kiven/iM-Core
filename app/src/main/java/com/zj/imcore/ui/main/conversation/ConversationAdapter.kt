@@ -7,13 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.zj.im.list.utils.TimeLineInflateModel
-import com.zj.model.mod.DialogInfo
+import com.zj.model.chat.DialogInfo
 import com.zj.imcore.R
 import com.zj.list.multiable.MultiRecyclerAdapter
 import com.zj.model.Payloads
 import java.lang.IllegalArgumentException
 
-class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int) -> Unit) : MultiRecyclerAdapter<DialogInfo>() {
+class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int, v: View) -> Unit) : MultiRecyclerAdapter<DialogInfo>() {
 
     companion object {
         const val CONVERSATION_EVENT_ITEM = 0
@@ -107,20 +107,20 @@ class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int) 
         }
 
         content.setOnClickListener {
-            listener(CONVERSATION_EVENT_ITEM, data, position)
+            listener(CONVERSATION_EVENT_ITEM, data, position, it)
         }
 
         unread.setOnClickListener {
-            listener(CONVERSATION_EVENT_UNREAD, data, position)
+            listener(CONVERSATION_EVENT_UNREAD, data, position, it)
         }
         pin.setOnClickListener {
-            listener(CONVERSATION_EVENT_PIN, data, position)
+            listener(CONVERSATION_EVENT_PIN, data, position, it)
         }
         mute.setOnClickListener {
-            listener(CONVERSATION_EVENT_MUTE, data, position)
+            listener(CONVERSATION_EVENT_MUTE, data, position, it)
         }
         archive.setOnClickListener {
-            listener(CONVERSATION_EVENT_ARCHIVE, data, position)
+            listener(CONVERSATION_EVENT_ARCHIVE, data, position, it)
         }
     }
 

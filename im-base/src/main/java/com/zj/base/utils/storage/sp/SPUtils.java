@@ -18,6 +18,7 @@ class SPUtils {
     public static String userCountry;
     public static String userCreateTs;
     public static String userUpdateTs;
+    public static Long expiresIn;
 
     public static Long memberSyncSince;
 }

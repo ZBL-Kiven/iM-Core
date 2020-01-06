@@ -3,7 +3,6 @@ package com.zj.imcore.ui.main
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentTransaction
-import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.SelectChangeIndexView
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.cf.managers.BaseFragmentManager
@@ -11,7 +10,7 @@ import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.ui.main.contact.ContactFragment
 import com.zj.imcore.ui.main.setting.SettingFragment
-import com.zj.imcore.options.IMHelper
+import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.ui.main.conversation.ConversationFragment
 import java.lang.NullPointerException
 
@@ -33,6 +32,7 @@ class MainActivity : FCActivity() {
     }
 
     override fun initData() {
+//        SPUtils_Proxy.getRefreshToken()
         conversationFragment = ConversationFragment()
         contactFragment = ContactFragment()
         settingFragment = SettingFragment()

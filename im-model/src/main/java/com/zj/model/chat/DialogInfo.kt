@@ -1,4 +1,4 @@
-package com.zj.model.mod
+package com.zj.model.chat
 
 import com.zj.list.multiable.MultiAbleData
 import com.zj.model.interfaces.DialogIn

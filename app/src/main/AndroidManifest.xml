@@ -40,6 +40,15 @@
         <activity android:name=".ui.users.UserInfoActivity"/>
         <activity android:name=".ui.chat.ChatActivity"/>
 
+        <receiver
+                android:name=".gui.auth.TokenRefreshUtils"
+                android:enabled="true"
+                android:exported="true"
+                android:permission="android.permission.INTERNET">
+            <intent-filter>
+                <action android:name="com.fc.auth.refreshToken"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

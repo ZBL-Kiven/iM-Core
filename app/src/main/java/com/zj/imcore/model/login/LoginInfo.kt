@@ -1,6 +1,7 @@
 package com.zj.imcore.model.login
 
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
+import com.zj.imcore.base.FCApplication
 
 /**
  * Created by ZJJ on 19/12/23
@@ -15,6 +16,7 @@ class LoginInfo {
     var token: LoginTokenModel? = null
 
     fun saveAsSP() {
+        val expires = token?.expiresIn ?: 24 * 60 * 60 * 1000L
         SPUtils_Proxy.setUserId(user?.id?.toString())
         SPUtils_Proxy.setAccessToken(token?.accessToken)
         SPUtils_Proxy.setRefreshToken(token?.refreshToken)
@@ -25,5 +27,7 @@ class LoginInfo {
         SPUtils_Proxy.setUserNote(user?.note)
         SPUtils_Proxy.setUserAvatar(user?.avatar)
         SPUtils_Proxy.setUserAddress(user?.profile?.address)
+        SPUtils_Proxy.setExpiresIn(expires)
+        FCApplication.recordNewToken(expires)
     }
 }

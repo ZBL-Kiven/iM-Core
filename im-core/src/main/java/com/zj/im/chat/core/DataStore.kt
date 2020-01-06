@@ -1,6 +1,5 @@
 package com.zj.im.chat.core
 
-import com.zj.im.chat.exceptions.ExceptionHandler
 import com.zj.im.main.StatusHub
 import com.zj.im.chat.modle.BaseMsgInfo
 import com.zj.im.chat.modle.MessageHandleType
@@ -17,21 +16,21 @@ import com.zj.im.utils.cusListOf
  * */
 internal class DataStore<T> {
 
-    //PRI = 2
-    private val netWorkStateChanged = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 8
-    private val sendMsg = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 4
-    private val connectStateChanged = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 3
-    private val connectToServers = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 7
-    private val sendStateChanged = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 9
-    private val receivedMsg = cusListOf<BaseMsgInfo<T>>()
     //PRI = 0
+    private val netWorkStateChanged = cusListOf<BaseMsgInfo<T>>()
+    //PRI = 5
+    private val sendMsg = cusListOf<BaseMsgInfo<T>>()
+    //PRI = 3
+    private val connectStateChanged = cusListOf<BaseMsgInfo<T>>()
+    //PRI = 1
+    private val connectToServers = cusListOf<BaseMsgInfo<T>>()
+    //PRI = 4
+    private val sendStateChanged = cusListOf<BaseMsgInfo<T>>()
+    //PRI = 6
+    private val receivedMsg = cusListOf<BaseMsgInfo<T>>()
+    //PRI = 2
     private val simpleStatusFound = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 10
+    //PRI = 7
     private val sendingProgress = cusListOf<BaseMsgInfo<T>>()
 
     fun put(info: BaseMsgInfo<T>): Int {
@@ -40,7 +39,7 @@ internal class DataStore<T> {
                 connectToServers.addOnly(info)
             }
             MessageHandleType.SOCKET_STATE -> {
-                connectStateChanged.add(info)
+                connectStateChanged.addOnly(info)
             }
             MessageHandleType.SEND_MSG -> {
                 if (info.isSpecialData) simpleStatusFound.add(info) else {
@@ -75,14 +74,6 @@ internal class DataStore<T> {
 
         when {
             /**
-             * when heartbeats / auth received
-             * */
-            simpleStatusFound.isNotEmpty() -> {
-                return getFirst(simpleStatusFound) { it, lst ->
-                    lst.remove(it)
-                }
-            }
-            /**
              * when network status changed
              */
             netWorkStateChanged.isNotEmpty() -> {
@@ -99,6 +90,14 @@ internal class DataStore<T> {
                 }
             }
             /**
+             * when heartbeats / auth received
+             * */
+            simpleStatusFound.isNotEmpty() -> {
+                return getFirst(simpleStatusFound) { it, lst ->
+                    lst.remove(it)
+                }
+            }
+            /**
              * when connection status changed
              */
             connectStateChanged.isNotEmpty() -> {
@@ -106,7 +105,6 @@ internal class DataStore<T> {
                     lst.remove(it)
                 }
             }
-
             /**
              * when sending progress changed
              * */

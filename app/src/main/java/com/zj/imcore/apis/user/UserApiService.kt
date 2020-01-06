@@ -20,4 +20,7 @@ interface UserApiService {
 
     @GET("/oauth/hello")
     fun ping(): Observable<String>
+
+    @GET("/oauth/v1/refresh")
+    fun refresh(): Observable<String>
 }
