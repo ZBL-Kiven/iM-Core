@@ -61,6 +61,7 @@ class MsgLooper extends Thread {
                 observer.runningInBlock(runningKey);
                 Thread.sleep(sleepTime);
             } catch (Exception e) {
+                System.out.println("-----" + e.getMessage());
                 e.printStackTrace();
             }
         }

@@ -3,13 +3,10 @@ package com.zj.im.chat.hub
 import com.zj.im.chat.enums.LifeType
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.chat.enums.SocketState
-import com.zj.im.chat.modle.SocketConnInfo
-import com.zj.im.utils.MainLooper
 import com.zj.im.main.StatusHub
 import com.zj.im.main.dispatcher.DataReceivedDispatcher
 import com.zj.im.chat.modle.BaseMsgInfo
 import com.zj.im.chat.modle.IMLifecycle
-import com.zj.im.utils.Constance
 import com.zj.im.utils.log.logger.printInFile
 
 /**
@@ -22,33 +19,6 @@ import com.zj.im.utils.log.logger.printInFile
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 abstract class ClientHub<T>{
-
-    protected abstract fun getConnectionInfo(get: (SocketConnInfo?) -> Unit)
-
-    /**
-     * init and start
-     */
-    internal fun init() {
-        startConnect(0)
-    }
-
-    internal fun startConnect(delay: Long = Constance.DEFAULT_RECONNECT_TIME) {
-        MainLooper.run {
-            removeCallbacks(conn)
-            postDelayed(conn, delay)
-        }
-    }
-
-    private val conn = {
-        getConnectionInfo {
-            if (it == null) {
-                printInFile("Client.getConnectionInfo", "the connection info sould not be null")
-                startConnect()
-                return@getConnectionInfo
-            }
-            DataReceivedDispatcher.pushData(BaseMsgInfo.connectToServer<T>(it))
-        }
-    }
 
     protected abstract fun onMsgPatch(data: T?, callId: String?, isSpecialData: Boolean, sendingState: SendMsgState?, isResent: Boolean, onFinish: () -> Unit)
 
@@ -65,11 +35,11 @@ abstract class ClientHub<T>{
     }
 
     open fun canReceived(): Boolean {
-        return StatusHub.isRunning() && !StatusHub.isReceiving && StatusHub.isDataEnable()
+        return StatusHub.isRunning() && !StatusHub.isReceiving && DataReceivedDispatcher.isDataEnable()
     }
 
     open fun canSend(): Boolean {
-        return StatusHub.isAlive() && StatusHub.isDataEnable()
+        return StatusHub.isAlive() &&  DataReceivedDispatcher.isDataEnable()
     }
 
     internal fun pause(code: Int) {

@@ -5,7 +5,7 @@ package com.zj.im.chat.exceptions
  *
  * base of chat exception
  * */
-abstract class ChatException(case: String?, private val body: Any? = null) : Throwable(case) {
+open class ChatException(case: String?, private val body: Any? = null) : Throwable(case) {
 
     @Suppress("unused")
     fun getBodyData(): Any? {

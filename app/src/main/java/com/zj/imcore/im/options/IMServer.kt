@@ -1,68 +1,55 @@
 package com.zj.imcore.im.options
 
+import android.app.Application
 import android.os.Handler
-import android.os.Looper
 import com.google.gson.Gson
+import com.zj.base.utils.storage.sp.SPUtils_Proxy
+import com.zj.im.chat.enums.SocketState
 import com.zj.im.chat.hub.ServerHub
-import com.zj.im.chat.interfaces.ConnectCallBack
 import com.zj.im.chat.interfaces.SendingCallBack
-import com.zj.im.chat.modle.SocketConnInfo
+import com.zj.im.utils.nio
 import com.zj.imcore.im.options.mod.BaseMod
 import org.java_websocket.handshake.ServerHandshake
 import java.lang.Exception
+import java.lang.NullPointerException
 import java.net.URI
 import java.nio.charset.Charset
 
 class IMServer : ServerHub<String>(), WebSocketImpl {
 
-    private var headers: Map<String, String>? = null
-    private var connectListener: ConnectCallBack? = null
-    private var uri: URI? = null
+    private val headers: Map<String, String>? = null
     private var handler: Handler? = null
+    private var mSocket: WebSocketClient? = null
 
-    private var socket: WebSocketClient? = null
-        get() {
-            if(field != null && field?.isOpen ==false){
-                field?.reconnect()
-            }else if(field == null){
-                uri?.let { field = WebSocketClient(this, it, headers) } ?: postToClose("the connect uri is empty or invalid")
-            }
-            return field
-        }
-
-    override fun init() {
-        handler = Handler(Looper.getMainLooper()) {
-            if (it.what == HEART_BEATS_EVENT) {
-                sendHeartbeats()
-                recordShakeState(HEART_BEATS_PING)
+    override fun init(context: Application?) {
+        handler = Handler {
+            when (it.what) {
+                HEART_BEATS_EVENT -> {
+                    sendHeartbeats()
+                }
+                CONNECTION_EVENT -> {
+                    connect()
+                }
             }
             return@Handler false
         }
+        connectDelay(0)
     }
 
-    override fun onConnected(s: ServerHandshake?) {
-        val code = s?.httpStatus ?: 404
-        val str = s?.httpStatusMessage ?: ""
-        val sortSuccess: Short = 101
-        val b = sortSuccess == code
-        if (b) {
-            nextHeartbeats()
-            connectListener?.onConnection(b, null)
-        }
-        print("IMServer", "socket connect ${if (b) "success" else "fail"}  case $str")
+    private fun connectDelay(connTime: Long = RECONNECTION_TIME) {
+        handler?.removeMessages(CONNECTION_EVENT)
+        handler?.sendEmptyMessageDelayed(CONNECTION_EVENT, connTime)
+    }
+
+    override fun onOpen(s: ServerHandshake?) {
+        curSocketState = SocketState.CONNECTED
+        nextHeartbeats()
     }
 
     override fun onClose(errorCode: Int, case: String?, isFromRemote: Boolean) {
         when (errorCode) {
-            -111 -> {
-                print("IMServer", case ?: "socket closed by shutdown")
-            }
-            1006 -> {
-
-            }
-            else -> {
-                postToClose(case ?: "socket closed by unkown error")
-            }
+            -111 -> print("IMServer", case ?: "socket closed by shutdown")
+            else -> curSocketState = SocketState.CONNECTED_ERROR.case("the socket have to reconnection with error: $case")
         }
     }
 
@@ -74,43 +61,46 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
     }
 
     override fun onError(e: Exception?) {
-        postToClose(e?.message ?: "the socket closed by an unkown exception")
+        curSocketState = SocketState.CONNECTED_ERROR.case("the socket have to reconnection with error: ${e?.message}")
     }
 
-    override fun connect(connInfo: SocketConnInfo?, callBack: ConnectCallBack?) {
-        var exc: Throwable? = null
+    private fun connect() {
+        curSocketState = SocketState.CONNECTION
+        val connInfo = getConnectionInfo()
         try {
-            uri = URI.create(connInfo?.address)
-            socket!!.run {
-                connectionLostTimeout = connInfo?.socketTimeOut ?: 10000
-                connect()
+            var isReconn = false
+            if (mSocket != null && mSocket?.isOpen == false) {
+                mSocket?.reconnect()
+                isReconn = true
+            }
+            if (mSocket == null) {
+                val uri = URI.create(connInfo)
+                mSocket = WebSocketClient(this, uri, this.headers)
+            }
+            if (!isReconn) {
+                mSocket?.connectionLostTimeout = CONNECTION_TIME_OUT
+                mSocket?.connect()
             }
         } catch (e: Exception) {
-            exc = e
-            socket?.close(-111)
-            socket = null
-        } finally {
-            if (exc != null) {
-                callBack?.onConnection(false, exc)
-            } else this.connectListener = callBack
+            e.printStackTrace()
         }
     }
 
-    override fun send(params: String?, callId: String, callBack: SendingCallBack?): Long {
+    override fun send(params: String, callId: String, callBack: SendingCallBack): Long {
         var exc: Throwable? = null
         try {
-            socket!!.send(params)
+            mSocket!!.send(params)
         } catch (e: Exception) {
             exc = e
         } finally {
-            callBack?.result(exc == null, exc)
-            val b = params?.toByteArray(Charset.forName("UTF-8"))
-            return (b?.size ?: 0) * 1L
+            callBack.result(exc == null, exc)
+            val b = params.toByteArray(Charset.forName("UTF-8"))
+            return b.size.toLong()
         }
     }
 
-    override fun closeSocket() {
-        socket?.close(-111, "the socket will close by shutdown")
+    override fun closeSocket(case: String) {
+        mSocket?.close(-111, "the socket will close by shutdown")
     }
 
     private fun onMessageReceived(msg: String?) {
@@ -120,41 +110,21 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
         }
     }
 
-    private var pingHasNotResponseCount = 0
-    private var pongTime = 0L
-    private var pingTime = 0L
-    private var heartBeatsTime = 0L
+    private fun getConnectionInfo(): String {
+        val token = SPUtils_Proxy.getAccessToken("")
+        if (token.isNullOrEmpty()) {
+            postError(NullPointerException("when get connection info, the token is null!"))
+        }
+        return "ws://106.75.100.103:8000/wand/$token"
+    }
 
     private fun recordShakeState(type: String): Boolean {
-
-        return try {
-            when {
-                type.equals(HEART_BEATS_PONG, true) -> { //pong
-                    pingHasNotResponseCount = 0
-                    pongTime = System.currentTimeMillis()
-                    nextHeartbeats()
-                    false
-                }
-                type.equals(HEART_BEATS_PING, true) -> { //ping
-                    val curTime = System.currentTimeMillis()
-                    val outOfTime = heartBeatsTime * 3f
-                    val lastPingTime = curTime - pingTime - heartBeatsTime
-                    if (pingTime > 0 && pongTime <= 0) {
-                        pingHasNotResponseCount++
-                    }
-                    if (pingHasNotResponseCount > 3 || (pongTime > 0L && curTime - (pongTime + lastPingTime) > outOfTime)) {
-                        pongTime = 0L
-                        pingTime = 0L
-                        pingHasNotResponseCount = 0
-                        postToClose(PING_TIMEOUT)
-                    }
-                    pingTime = System.currentTimeMillis()
-                    false
-                }
-                else -> true
+        return when {
+            type.equals(HEART_BEATS_PONG, true) -> { //pong
+                curSocketState = SocketState.PONG
+                false
             }
-        } finally {
-            print("record socket state", type)
+            else -> true
         }
     }
 
@@ -164,17 +134,89 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
     }
 
     private fun sendHeartbeats() {
-        val heartbeats = BaseMod().apply {
-            this.callId = CALL_ID_HEART_BEATS
-            this.type = HEART_BEATS_PING
+        if (curSocketState.isConnected()) {
+            val heartbeats = BaseMod().apply {
+                this.callId = CALL_ID_HEART_BEATS
+                this.type = HEART_BEATS_PING
+            }
+            send(Gson().toJson(heartbeats), CALL_ID_HEART_BEATS, object : SendingCallBack {
+                override fun result(isOK: Boolean, throwable: Throwable?) {
+                    heartBeatsTime = if (isOK) HEART_BEATS_TIME else HEART_BEATS_TIME_SPECIAL
+                    nextHeartbeats()
+                }
+            })
+            curSocketState = SocketState.PING
         }
-        send(Gson().toJson(heartbeats), CALL_ID_HEART_BEATS, null)
+    }
+
+    private var pingHasNotResponseCount = 0
+    private var pongTime = 0L
+    private var pingTime = 0L
+    private var heartBeatsTime = HEART_BEATS_TIME
+
+    private var curSocketState: SocketState = SocketState.INIT
+        set(value) {
+            when (value) {
+                SocketState.PONG -> {
+                    pingHasNotResponseCount = 0
+                    pongTime = System.currentTimeMillis()
+                }
+                SocketState.PING -> {
+                    if (field == SocketState.PING && !hasNetworkAccess()) {
+                        checkNetWork()
+                    }
+                    val curTime = System.currentTimeMillis()
+                    val outOfTime = heartBeatsTime * 3f
+                    val lastPingTime = curTime - pingTime - heartBeatsTime
+                    if (pingTime > 0 && pongTime <= 0) {
+                        pingHasNotResponseCount++
+                    }
+                    if (pingHasNotResponseCount > 3 || (pongTime > 0L && curTime - (pongTime + lastPingTime) > outOfTime)) {
+                        closeSocket(PING_TIMEOUT)
+                    }
+                    pingTime = System.currentTimeMillis()
+                }
+                SocketState.CONNECTED -> {
+                    clearPingRecord()
+                }
+                SocketState.NETWORK_STATE_CHANGE, SocketState.CONNECTED_ERROR -> {
+                    clearPingRecord()
+                    connectDelay(RECONNECTION_TIME)
+                }
+                else -> {
+                }
+            }
+            if (value != field) {
+                field = value
+                if (value.isValidState()) postConnectState(curSocketState)
+                when (value) {
+                    SocketState.PING -> print("on socket status change ----- ", "--- $value -- ${nio(pingTime)}")
+                    SocketState.PONG -> print("on socket status change ----- ", "--- $value -- ${nio(pongTime)}")
+                    SocketState.CONNECTED_ERROR -> print("on socket status change ----- ", "$value  ==> reconnection with error : ${value.case}")
+                    else -> print("on socket status change ----- ", "--- $value --")
+                }
+            }
+        }
+        get() {
+            synchronized(field) {
+                return field
+            }
+        }
+
+    private fun clearPingRecord() {
+        pongTime = 0L
+        pingTime = 0L
+        pingHasNotResponseCount = 0
     }
 
     companion object {
         const val PING_TIMEOUT = "the socket would reconnection because the ping was no response too many times!"
         const val HEART_BEATS_EVENT = 0xf1365
+        const val CONNECTION_EVENT = 0xf1378
         const val HEART_BEATS_TIME = 5000L
+        const val RECONNECTION_TIME = 5000L
+        const val CONNECTION_TIME_OUT = 3000
+        const val HEART_BEATS_TIME_SPECIAL = 1000L
         const val CALL_ID_HEART_BEATS = "CUS-M61C-Q3TN-OX6Y"
         const val HEART_BEATS_PING = "ping"
         const val HEART_BEATS_PONG = "pong"

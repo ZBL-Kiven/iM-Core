@@ -79,13 +79,11 @@ class ReceiveListener<IN, OUT : Any> constructor(private val name: String, priva
             val lst = ArrayList(tempCache)
             tempCache.clear()
             lst.forEach {
-                //todo listener 有问题
-                mainHandler.post {
-                    try {
-                        listener?.onReceived(it)
-                    } catch (e: Throwable) {
-                        e.printStackTrace()
-                    }
+                try {
+                    println("----- 44444 $it")
+                    listener?.onReceived(it)
+                } catch (e: Throwable) {
+                    e.printStackTrace()
                 }
             }
         }
@@ -106,6 +104,7 @@ class ReceiveListener<IN, OUT : Any> constructor(private val name: String, priva
                     try {
                         e = @Suppress("UNCHECKED_CAST") (a as IN)
                     } catch (e: Exception) {
+                        println("----- eeee & ${e.message}")
                         e.printStackTrace()
                     }
                     return e
@@ -113,11 +112,13 @@ class ReceiveListener<IN, OUT : Any> constructor(private val name: String, priva
                 synchronized(maker) {
                     if (data is List<*>) {
                         cast<List<IN>>(data)?.let {
+                            println("----- 0000 & $it")
                             maker.pushAll(it)
                         }
                         return
                     }
                     cast<IN>(data)?.let {
+                        println("----- 1111 & $it")
                         maker.push(it)
                         return
                     } ?: throw NullPointerException("the data parsed was null")

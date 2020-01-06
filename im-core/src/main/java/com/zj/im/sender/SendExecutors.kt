@@ -7,6 +7,7 @@ import com.zj.im.chat.interfaces.SendingCallBack
 import com.zj.im.chat.modle.SendingUp
 import com.zj.im.utils.TimeOutUtils
 import com.zj.im.main.dispatcher.DataReceivedDispatcher
+import java.lang.NullPointerException
 
 /**
  * Created by ZJJ
@@ -23,14 +24,14 @@ internal class SendExecutors<T>(info: BaseMsgInfo<T>, server: ServerHub<T>?, don
             when (SendingUp.CANCEL) {
                 info.sendingUp -> sendingFail()
                 else -> {
+                    val data = info.data ?: throw NullPointerException("what's the point you sending an empty message?")
                     TimeOutUtils.putASentMessage(info.callId, info.data, info.timeOut, info.isResend, info.ignoreConnecting)
-                    server?.sendToSocket(info.data, info.callId, object : SendingCallBack {
-
+                    server?.sendToSocket(data, info.callId, object : SendingCallBack {
                         override fun result(isOK: Boolean, throwable: Throwable?) {
                             try {
                                 exc = throwable
                                 if (!isOK) {
-                                    if (!StatusHub.isDataEnable()) {
+                                    if (! DataReceivedDispatcher.isDataEnable()) {
                                         TimeOutUtils.remove(info.callId)
                                         DataReceivedDispatcher.pushData(info)
                                         return

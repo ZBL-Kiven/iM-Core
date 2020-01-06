@@ -18,26 +18,21 @@ internal class DataStore<T> {
 
     //PRI = 0
     private val netWorkStateChanged = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 5
-    private val sendMsg = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 3
-    private val connectStateChanged = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 1
-    private val connectToServers = cusListOf<BaseMsgInfo<T>>()
     //PRI = 4
-    private val sendStateChanged = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 6
-    private val receivedMsg = cusListOf<BaseMsgInfo<T>>()
+    private val sendMsg = cusListOf<BaseMsgInfo<T>>()
     //PRI = 2
+    private val connectStateChanged = cusListOf<BaseMsgInfo<T>>()
+    //PRI = 3
+    private val sendStateChanged = cusListOf<BaseMsgInfo<T>>()
+    //PRI = 5
+    private val receivedMsg = cusListOf<BaseMsgInfo<T>>()
+    //PRI = 1
     private val simpleStatusFound = cusListOf<BaseMsgInfo<T>>()
-    //PRI = 7
+    //PRI = 6
     private val sendingProgress = cusListOf<BaseMsgInfo<T>>()
 
     fun put(info: BaseMsgInfo<T>): Int {
         when (info.type) {
-            MessageHandleType.CONNECT_TO_SERVER -> {
-                connectToServers.addOnly(info)
-            }
             MessageHandleType.SOCKET_STATE -> {
                 connectStateChanged.addOnly(info)
             }
@@ -79,14 +74,6 @@ internal class DataStore<T> {
             netWorkStateChanged.isNotEmpty() -> {
                 return getFirst(netWorkStateChanged) { it, lst ->
                     lst.remove(it)
-                }
-            }
-            /**
-             * when con / recon to server
-             */
-            connectToServers.isNotEmpty() -> {
-                return getFirst(connectToServers) { _, lst ->
-                    lst.clear()
                 }
             }
             /**
@@ -173,7 +160,7 @@ internal class DataStore<T> {
 
     private fun getTotal(): Int {
         return try {
-            netWorkStateChanged.count + sendMsg.count + connectStateChanged.count + connectToServers.count + sendStateChanged.count + receivedMsg.count + simpleStatusFound.count + sendingProgress.count
+            netWorkStateChanged.count + sendMsg.count + connectStateChanged.count + sendStateChanged.count + receivedMsg.count + simpleStatusFound.count + sendingProgress.count
         } catch (e: Exception) {
             0
         }
@@ -182,7 +169,6 @@ internal class DataStore<T> {
     fun shutDown() {
         sendMsg.clear()
         connectStateChanged.clear()
-        connectToServers.clear()
         sendStateChanged.clear()
         receivedMsg.clear()
     }

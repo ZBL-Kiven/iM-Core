@@ -21,6 +21,7 @@ internal class Options<DATA, R, HANDLER : DataHandler<R>> private constructor(ha
 
     fun push(d: DATA) {
         @Suppress("UNCHECKED_CAST") val data: DATA = d as? DATA ?: throw ClassCastException("the data can not cast to register classes !")
+        println("----- 3333 & $data")
         store?.put(data)
     }
 

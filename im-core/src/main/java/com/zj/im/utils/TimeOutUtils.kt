@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import com.zj.im.chat.enums.SendMsgState
-import com.zj.im.main.StatusHub.isDataEnable
 import com.zj.im.main.StatusHub.isRunning
 import com.zj.im.chat.modle.BaseMsgInfo
 import com.zj.im.main.dispatcher.DataReceivedDispatcher
@@ -13,7 +12,6 @@ import com.zj.im.main.dispatcher.DataReceivedDispatcher
  * created by ZJJ
  *
  * the Timeout utils ,Nonnull param callId
- *
  * */
 
 internal object TimeOutUtils {
@@ -80,7 +78,7 @@ internal object TimeOutUtils {
                             sentMessages.runSync {
                                 val rev = arrayListOf<SentMsgInfo<*>>()
                                 it.forEach { v ->
-                                    if (v.isIgnoreConnecting || (isRunning() && isDataEnable())) {
+                                    if (v.isIgnoreConnecting || (isRunning() && DataReceivedDispatcher.isDataEnable())) {
                                         if (System.currentTimeMillis() - v.putTime >= v.timeOut) {
                                             rev.add(v)
                                         }

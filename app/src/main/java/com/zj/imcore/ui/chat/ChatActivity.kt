@@ -94,9 +94,12 @@ class ChatActivity : FCActivity() {
     }
 
     private fun register() {
+        IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
+            setTitle(it.name)
+        }
         val l = registerTcpReceivedListener<MessageBean, MsgInfo>("aaa").addHandler(MsgHandler()).subscribe(object : DataListener<MsgInfo>() {
             override fun onReceived(data: MsgInfo) {
-                println("----- ${data.sendingState}")
+                println("----- 5555 ${data.sendingState}")
                 rvContent?.let {
                     it.stopScroll()
                     it.adapter.data().add(NORMAL, data)
@@ -125,34 +128,8 @@ class ChatActivity : FCActivity() {
         IMHelper.send(data, callId, 10000, false, false, null)
     }
 
-    //
-    //    override fun initView() {
-    //        main_rv_msgBar?.itemAnimator = null
-    //        sendMsg?.setOnClickListener {
-    //            it.postInvalidate()
-    //            val callId = IMClient.getRandomCallId()
-    //            val vid = "=bvwBLyAvD"
-    //            val timeOut = IMClient.TCP_TIME_OUT
-    //            val text = et?.text.toString()
-    //            @Suppress("SpellCheckingInspection") SendObject.create(callId).put("type", "message").put("vchannel_id", vid).put("text", text).put("subtype", "normal").putAll(makeSentParams(callId)).timeOut(timeOut).build().send()
-    //        }
-    //        receiveMock?.setOnClickListener {
-    //            receiveMock?.isEnabled = false
-    //            mutableListOf<MsgReceivedInfo>().let {
-    //                val r = java.util.Random()
-    //                for (i in 0 until 10) {
-    //                    val msg = MessageBean()
-    //                    msg.text = "this is data $i "
-    //                    it.add(MsgReceivedInfo(msg, r.nextBoolean(), (System.currentTimeMillis()) + i))
-    //                }
-    //                UIHelper.postReceiveData(it)
-    //            }
-    //            receiveMock?.isEnabled = true
-    //        }
-    //    }
-    //
-    //    override fun finish() {
-    //        IMHelper.removeSocketStateChangeListener(javaClass.simpleName)
-    //        super.finish()
-    //    }
+    override fun finish() {
+        IMHelper.removeSocketStateChangeListener(javaClass.simpleName)
+        super.finish()
+    }
 }

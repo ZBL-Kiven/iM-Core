@@ -1,6 +1,5 @@
 package com.zj.im.sender
 
-import com.zj.im.main.StatusHub.isDataEnable
 import com.zj.im.chat.modle.BaseMsgInfo
 import com.zj.im.chat.modle.SendingUp
 import com.zj.im.main.dispatcher.DataReceivedDispatcher
@@ -41,7 +40,7 @@ internal class SendingPool<T>(private val onStateChange: OnStatus) {
         sendMsgQueue.getFirst { it.ignoreConnecting }?.let {
             return it
         }
-        if (!isDataEnable()) {
+        if (! DataReceivedDispatcher.isDataEnable()) {
             sendMsgQueue.forEach {
                 it.joinInTop = true
                 DataReceivedDispatcher.pushData(it)

@@ -8,7 +8,7 @@ import java.net.URI
 class WebSocketClient @JvmOverloads constructor(private val impl: WebSocketImpl, uri: URI, header: Map<String, String>? = null) : WebSocketClient(uri, header) {
 
     override fun onOpen(handshakedata: ServerHandshake?) {
-        impl.onConnected(handshakedata)
+        impl.onOpen(handshakedata)
     }
 
     override fun onClose(p0: Int, p1: String?, p2: Boolean) {

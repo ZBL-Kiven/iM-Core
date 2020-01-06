@@ -11,7 +11,6 @@ internal class EventHub<T> {
         when (data.type) {
             MessageHandleType.SEND_MSG -> DataReceivedDispatcher.sendMsg(data)
             MessageHandleType.RECEIVED_MSG -> DataReceivedDispatcher.received(data.data, data.sendingState, data.callId, data.isSpecialData)
-            MessageHandleType.CONNECT_TO_SERVER -> DataReceivedDispatcher.conn<T>(data.connInfo)
             MessageHandleType.SOCKET_STATE -> DataReceivedDispatcher.onSocketStateChange(data.connStateChange ?: SocketState.CONNECTED_ERROR)
             MessageHandleType.SEND_STATE_CHANGE -> DataReceivedDispatcher.sendingStateChanged(data.sendingState ?: SendMsgState.NONE, data.callId, data.data, data.isSpecialData, data.isResend)
             MessageHandleType.NETWORK_STATE -> DataReceivedDispatcher.onNetworkStateChanged(data.netWorkState)

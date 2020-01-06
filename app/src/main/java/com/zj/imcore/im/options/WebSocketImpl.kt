@@ -5,7 +5,7 @@ import java.lang.Exception
 
 interface WebSocketImpl {
 
-    fun onConnected(s: ServerHandshake?)
+    fun onOpen(s: ServerHandshake?)
 
     fun onClose(errorCode: Int, case: String?, isFromRemote: Boolean)
 

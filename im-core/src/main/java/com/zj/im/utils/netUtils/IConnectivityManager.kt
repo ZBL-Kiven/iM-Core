@@ -8,15 +8,17 @@ import android.net.NetworkCapabilities.*
 import android.os.Build
 import com.zj.im.utils.log.logger.printInFile
 
-internal object IConnectivityManager {
+internal class IConnectivityManager {
 
     private var stateChangeListener: ((NetWorkInfo) -> Unit)? = null
     private var connectivityManager: ConnectivityManager? = null
     private var netWorkBrodCast: NetWorkBrodCast? = null
+    private var context: Application? = null
 
     fun init(context: Application?, l: ((NetWorkInfo) -> Unit)?) {
+        this.context = context
         this.stateChangeListener = l
-        clearRegister(context)
+        clearRegister()
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             isLowerNChange(context)
         } else {
@@ -90,7 +92,7 @@ internal object IConnectivityManager {
         }
     }
 
-    private fun clearRegister(context: Application?) {
+    private fun clearRegister() {
         try {
             connectivityManager?.unregisterNetworkCallback(netCallBack)
             context?.unregisterReceiver(netWorkBrodCast)
@@ -99,8 +101,8 @@ internal object IConnectivityManager {
         }
     }
 
-    fun shutDown(context: Application?) {
-        clearRegister(context)
+    fun shutDown() {
+        clearRegister()
         stateChangeListener = null
         connectivityManager = null
     }

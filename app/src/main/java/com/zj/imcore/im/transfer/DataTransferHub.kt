@@ -16,19 +16,21 @@ object DataTransferHub {
 
     //todo 临时拆分
     fun onSocketDataReceived(data: String?, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
-        val d = Gson().fromJson(data, JsonObject::class.java)
-        val msg = Gson().fromJson(d.get("data").toString(), MessageBean::class.java)
-        mCacheMsgs.firstOrNull { it == msg }?.let {
-            msg.callId = it.callId
-            msg.localCreateTs = System.currentTimeMillis()
-        } ?: {
-            msg.callId = if (callId.isNullOrEmpty()) d.get("call_id").asString else callId
-            msg.sendMsgState = sendingState?.type ?: 0
-//            val createDate: Date? = DateUtils.getDate("yyyy-MM-dd'T'HH:mm:ss'Z'", msg.created)
-            msg.localCreateTs = System.currentTimeMillis()
-        }.invoke()
-        mCacheMsgs.add(msg)
-        UIHelper.postReceiveData(msg)
+//        val d = Gson().fromJson(data, JsonObject::class.java)
+//        val msg = Gson().fromJson(d.get("data").toString(), MessageBean::class.java)
+//        mCacheMsgs.firstOrNull { it == msg }?.let {
+//            msg.callId = it.callId
+//            msg.localCreateTs = System.currentTimeMillis()
+//        } ?: {
+//            msg.callId = if (callId.isNullOrEmpty()) d.get("call_id").asString else callId
+//            msg.sendMsgState = sendingState?.type ?: 0
+//            //            val createDate: Date? = DateUtils.getDate("yyyy-MM-dd'T'HH:mm:ss'Z'", msg.created)
+//            msg.localCreateTs = System.currentTimeMillis()
+//        }.invoke()
+//        mCacheMsgs.add(msg)
+//        val s = mCacheMsgs.joinToString { "${it.text} \n" }
+        println("----- $data")
+        //        UIHelper.postReceiveData(msg)
         onFinish()
     }
 

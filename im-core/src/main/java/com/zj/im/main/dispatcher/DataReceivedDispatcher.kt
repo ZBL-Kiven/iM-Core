@@ -2,14 +2,11 @@ package com.zj.im.main.dispatcher
 
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.chat.enums.SocketState
-import com.zj.im.chat.interfaces.ConnectCallBack
-import com.zj.im.chat.modle.SocketConnInfo
 import com.zj.im.chat.modle.BaseMsgInfo
 import com.zj.im.chat.modle.IMLifecycle
 import com.zj.im.utils.netUtils.NetWorkInfo
 import com.zj.im.main.ChatBase
 import com.zj.im.main.StatusHub
-import com.zj.im.utils.Constance
 import com.zj.im.utils.cast
 import com.zj.im.utils.log.logger.printInFile
 
@@ -31,8 +28,24 @@ internal object DataReceivedDispatcher {
         chatBase?.sendTo(data)
     }
 
+    fun postError(throwable: Throwable) {
+        chatBase?.postError(throwable)
+    }
+
     fun onLayerChanged(isHidden: Boolean) {
         chatBase?.onAppLayerChanged(isHidden)
+    }
+
+    fun checkNetWork() {
+        getServer("on app layer changed")?.checkNetWork()
+    }
+
+    fun isDataEnable(): Boolean {
+        return StatusHub.curSocketState.isConnected() && isNetWorkAccess()
+    }
+
+    private fun isNetWorkAccess(): Boolean {
+        return getServer("check data enable")?.isNetWorkAccess == true
     }
 
     fun onLifeStateChanged(lifecycle: IMLifecycle) {
@@ -40,7 +53,7 @@ internal object DataReceivedDispatcher {
     }
 
     fun onNetworkStateChanged(netWorkState: NetWorkInfo) {
-        printInFile("onNetworkStateChanged", "the SDK checked the network status changed form ${if (StatusHub.isNetWorkAccess) "enable" else "disable"} by net State : ${netWorkState.name}")
+        printInFile("onNetworkStateChanged", "the SDK checked the network status changed to ${if (netWorkState == NetWorkInfo.CONNECTED) "enable" else "disable"} by net State : ${netWorkState.name}")
         chatBase?.notify()?.onNetWorkStatusChanged(netWorkState)
         if ((netWorkState == NetWorkInfo.CONNECTED && StatusHub.curSocketState.canConnect()) || netWorkState == NetWorkInfo.DISCONNECTED) {
             onSocketStateChange(SocketState.NETWORK_STATE_CHANGE)
@@ -56,28 +69,13 @@ internal object DataReceivedDispatcher {
     }
 
     fun onSocketStateChange(connState: SocketState) {
-        printInFile("on socket stateChanged", "$connState  ${if (connState.case.isNotEmpty()) "and ${connState.case}" else ""}")
         StatusHub.curSocketState = connState
         getClient("on socket state changed")?.let {
-            if (connState.canConnect()) {
-                it.startConnect()
-            }
+            chatBase?.notify()?.onSocketStatusChanged(connState)
         }
-        chatBase?.notify()?.onSocketStatusChanged(connState)
     }
 
     fun onSendingProgress(callId: String, progress: Int) {
         getClient("on sending progress update")?.progressUpdate(progress, callId)
-    }
-
-    fun <T> conn(connInfo: SocketConnInfo?) {
-        onSocketStateChange(SocketState.CONNECTION)
-        getServer("on connection call")?.connect(connInfo, object : ConnectCallBack {
-            override fun onConnection(isSuccess: Boolean, throwable: Throwable?) {
-                val state = if (isSuccess) SocketState.CONNECTED else SocketState.CONNECTED_ERROR
-                val case = if (!isSuccess) Constance.CONNECT_ERROR else ""
-                pushData(BaseMsgInfo.connectStateChange<T>(state, case))
-            }
-        })
     }
 }

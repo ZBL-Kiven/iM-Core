@@ -33,7 +33,7 @@ internal class ChatBase<T> : Runner<T>() {
     fun onAppLayerChanged(isHidden: Boolean) {
         if (isHidden != StatusHub.isRunningInBackground) {
             StatusHub.isRunningInBackground = isHidden
-            checkNetWork()
+            DataReceivedDispatcher.checkNetWork()
         }
         try {
             imi?.onAppLayerChanged(isHidden)

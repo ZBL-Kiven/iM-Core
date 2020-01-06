@@ -5,14 +5,11 @@ import com.zj.im.chat.core.DataStore
 import com.zj.im.chat.enums.RuntimeEfficiency
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.chat.enums.SocketState
-import com.zj.im.chat.exceptions.AuthFailException
 import com.zj.im.chat.exceptions.LooperInterruptedException
 import com.zj.im.chat.hub.ClientHub
 import com.zj.im.chat.hub.ServerHub
 import com.zj.im.chat.modle.BaseMsgInfo
 import com.zj.im.chat.modle.SendingUp
-import com.zj.im.utils.netUtils.IConnectivityManager
-import com.zj.im.utils.netUtils.NetWorkInfo
 import com.zj.im.listeners.AppHiddenListener
 import com.zj.im.listeners.DropRecoverListener
 import com.zj.im.main.dispatcher.DataReceivedDispatcher
@@ -66,11 +63,10 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
         initUtils()
         initBase()
         initQueue()
-        getServer("init and start")?.init()
+        getServer("init and start")?.init(context)
         getClient("init.setRunnigKey and start")?.let {
             dataStore?.canSend { it.canSend() }
             dataStore?.canReceive { it.canReceived() }
-            it.init()
         }
         initHandler()
         isInit = true
@@ -78,7 +74,6 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
     }
 
     private fun initUtils() {
-        IConnectivityManager.init(context) { netWorkStateChanged(it) }
         dropRecoverListener = DropRecoverListener.init(context) { onLayerChanged(false) }
         appHiddenListener = AppHiddenListener.init(context) { onLayerChanged(true) }
         imi?.let {
@@ -137,7 +132,7 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
 
     private fun setLooperEfficiency(total: Int) {
         if (!StatusHub.isAlive()) return
-        val e = if (StatusHub.isDataEnable()) {
+        val e = if (DataReceivedDispatcher.isDataEnable()) {
             EfficiencyUtils.getEfficiency(total)
         } else {
             RuntimeEfficiency.MEDIUM
@@ -160,6 +155,7 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
             return try {
                 return block()
             } catch (e: Exception) {
+                println("----- eeee run -- & ${e.message}")
                 postError(e)
                 null
             }
@@ -191,7 +187,7 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
 
     override fun call(callId: String, progress: Int, isOK: Boolean, isCancel: Boolean) {
         if (isOK) {
-            val sendState = if (!StatusHub.isDataEnable()) SendingUp.WAIT else SendingUp.CANCEL
+            val sendState = if (!DataReceivedDispatcher.isDataEnable()) SendingUp.WAIT else SendingUp.CANCEL
             sendingPool?.setSendState(sendState, isCancel, callId)
         } else {
             enqueue(BaseMsgInfo.onProgressChange<T>(progress, callId))
@@ -206,19 +202,13 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
         enqueue(BaseMsgInfo.connectStateChange<T>(state, case))
     }
 
-    private fun netWorkStateChanged(state: NetWorkInfo) {
-        enqueue(BaseMsgInfo.networkStateChanged<T>(state))
-    }
-
     fun postError(e: Throwable) {
         errorCollector.printInFile("postError", e.message, true)
         when (e) {
             is LooperInterruptedException -> {
+                println("----- LooperInterruptedException!!!")
                 if (!isFinishing(curRunningKey)) initHandler()
                 else printInFile("ChatBase.IM.LooperInterrupted", " the MsgLooper was stopped by SDK shutDown")
-            }
-            is AuthFailException -> {
-                correctConnectionState(SocketState.CONNECTED_ERROR, e.case)
             }
         }
         imi?.postError(e)
@@ -254,10 +244,6 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
         TimeOutUtils.remove(callId)
     }
 
-    fun checkNetWork(): Boolean {
-        return IConnectivityManager.checkNetWorkValidate() == NetWorkInfo.CONNECTED
-    }
-
     fun isFinishing(runningKey: String?): Boolean {
         return runningKey != this.runningKey
     }
@@ -274,7 +260,6 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
         getClient("shutdown call")?.shutdown()
         getServer("shutdown call")?.shutdown()
         runningKey = ""
-        IConnectivityManager.shutDown(context)
         appHiddenListener?.shutDown(context)
         dropRecoverListener?.destroy()
         dataStore?.shutDown()

@@ -11,7 +11,7 @@ import com.zj.im.utils.getIncrementNumber
  * Created by ZJJ
  */
 enum class MessageHandleType {
-    NETWORK_STATE, RECEIVED_MSG, SOCKET_STATE, SEND_MSG, CONNECT_TO_SERVER, SEND_STATE_CHANGE, SEND_PROGRESS_CHANGED, LAYER_CHANGED
+    NETWORK_STATE, RECEIVED_MSG, SOCKET_STATE, SEND_MSG, SEND_STATE_CHANGE, SEND_PROGRESS_CHANGED, LAYER_CHANGED
 }
 
 enum class SendingUp {
@@ -29,8 +29,6 @@ internal class BaseMsgInfo<T> private constructor() {
     var data: T? = null
 
     var isSpecialData: Boolean = false
-
-    var connInfo: SocketConnInfo? = null
 
     var connStateChange: SocketState? = null
 
@@ -102,13 +100,6 @@ internal class BaseMsgInfo<T> private constructor() {
             baseInfo.connStateChange = connStateChange.apply {
                 this.case = case
             }
-            return baseInfo
-        }
-
-        fun <T> connectToServer(connInfo: SocketConnInfo): BaseMsgInfo<T> {
-            val baseInfo = BaseMsgInfo<T>()
-            baseInfo.connInfo = connInfo
-            baseInfo.type = MessageHandleType.CONNECT_TO_SERVER
             return baseInfo
         }
 
