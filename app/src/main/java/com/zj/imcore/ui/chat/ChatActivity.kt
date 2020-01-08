@@ -2,6 +2,9 @@ package com.zj.imcore.ui.chat
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -19,6 +22,7 @@ import com.zj.imcore.im.transfer.DataTransferHub
 import com.zj.imcore.registerTcpReceivedListener
 import com.zj.imcore.ui.views.IMRecyclerView
 import com.zj.model.mod.MessageBean
+import java.lang.Exception
 import java.util.*
 
 class ChatActivity : FCActivity() {
@@ -75,6 +79,15 @@ class ChatActivity : FCActivity() {
     }
 
     override fun initData() {
+        try{
+
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+//        SESSION_ID = "session_id"
+//        private const val USER_ID = "user_id"
+//        private const val DRAFT = "draft"
+//        private const val TITLE = "title"
         setTitle("aa")
         register()
         DataTransferHub.queryMsgInDb("", "")
@@ -97,18 +110,28 @@ class ChatActivity : FCActivity() {
         IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
             setTitle(it.name)
         }
-        val l = registerTcpReceivedListener<MessageBean, MsgInfo>("aaa").addHandler(MsgHandler()).subscribe(object : DataListener<MsgInfo>() {
+        val l = registerTcpReceivedListener<MsgInfo, MsgInfo>("aaa").addHandler(MsgHandler()).subscribe(object : DataListener<MsgInfo>() {
             override fun onReceived(data: MsgInfo) {
-                println("----- 5555 ${data.sendingState}")
                 rvContent?.let {
                     it.stopScroll()
                     it.adapter.data().add(NORMAL, data)
                     val p = it.adapter.data().maxCurDataPosition()
-                    it.scrollToPosition(p)
+                    handler.removeMessages(1999)
+                    val msg = Message.obtain()
+                    msg.what = 1999
+                    msg.arg1 = p
+                    handler.sendMessageDelayed(msg, 30)
                 }
             }
         })
         l.lock(false)
+    }
+
+    private val handler = Handler(Looper.getMainLooper()) {
+        if (it.what == 1999) {
+            rvContent?.scrollToPosition(it.arg1)
+        }
+        return@Handler false
     }
 
     private fun sendText(text: String) {
@@ -118,8 +141,9 @@ class ChatActivity : FCActivity() {
             this.subtype = "normal"
             this.uid = SPUtils_Proxy.getUserId("0").toInt()
             this.team_id = 1
-            this.dialog_id = 8589934596
+            this.dialog_id = 8589934605
             this.text = text
+            this.callId = callId
         }
         baseSendInfo.data = m
         baseSendInfo.callId = callId

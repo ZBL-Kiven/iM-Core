@@ -8,6 +8,7 @@ import com.zj.im.chat.enums.SocketState
 import com.zj.im.chat.hub.ServerHub
 import com.zj.im.chat.interfaces.SendingCallBack
 import com.zj.im.utils.nio
+import com.zj.imcore.base.FCApplication
 import com.zj.imcore.im.options.mod.BaseMod
 import org.java_websocket.handshake.ServerHandshake
 import java.lang.Exception
@@ -22,6 +23,7 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
     private var mSocket: WebSocketClient? = null
 
     override fun init(context: Application?) {
+        super.init(context)
         handler = Handler {
             when (it.what) {
                 HEART_BEATS_EVENT -> {
@@ -50,13 +52,6 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
         when (errorCode) {
             -111 -> print("IMServer", case ?: "socket closed by shutdown")
             else -> curSocketState = SocketState.CONNECTED_ERROR.case("the socket have to reconnection with error: $case")
-        }
-    }
-
-    override fun onMessage(msg: String?) {
-        val mod = Gson().fromJson(msg, BaseMod::class.java)
-        if (recordShakeState(mod.type)) {
-            onMessageReceived(msg)
         }
     }
 
@@ -99,6 +94,14 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
         }
     }
 
+    override fun onMessage(msg: String?) {
+        val mod = Gson().fromJson(msg, BaseMod::class.java)
+        if (recordShakeState(mod.type)) {
+            println("----- received ==> ${mod.callId}")
+            onMessageReceived(msg)
+        }
+    }
+
     override fun closeSocket(case: String) {
         mSocket?.close(-111, "the socket will close by shutdown")
     }
@@ -112,9 +115,7 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
 
     private fun getConnectionInfo(): String {
         val token = SPUtils_Proxy.getAccessToken("")
-        if (token.isNullOrEmpty()) {
-            postError(NullPointerException("when get connection info, the token is null!"))
-        }
+//        FCApplication.logout("the socket connect error with null token")
         return "ws://106.75.100.103:8000/wand/$token"
     }
 

@@ -19,7 +19,6 @@ internal class UIMaker<DATA, R, HANDLER : DataHandler<R>>(private val handler: H
 
     fun push(data: DATA) {
         if (options == null) {
-            println("----- 2222 & $data")
             handler.onDataGot(castNotSafety<DATA, R>(data))
             return
         }

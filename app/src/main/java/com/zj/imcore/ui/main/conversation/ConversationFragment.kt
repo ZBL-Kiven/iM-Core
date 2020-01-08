@@ -26,6 +26,7 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
         super.onCreate()
         rvContent = find(R.id.app_fragment_conversation_rv_content)
         initData()
+        getData()
     }
 
     private fun initData() {
@@ -36,11 +37,6 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
                 adapter?.data()?.add("aa", data)
             }
         }).lock(false)
-        getData()
-    }
-
-    override fun onResumed() {
-        super.onResumed()
         getData()
     }
 

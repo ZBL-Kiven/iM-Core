@@ -4,6 +4,7 @@ import com.zj.im.log
 import com.zj.im.store.interfaces.DataHandler
 import com.zj.im.store.interfaces.EventCallBack
 import com.zj.im.with
+import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.concurrent.Executors
@@ -26,7 +27,13 @@ internal class UIStore<DATA, R, HANDLER : DataHandler<R>>(private val msgHandler
 
     fun put(data: DATA): Boolean {
         return uiQueue?.with {
-            if (it.offer(data) && !isDataHanding) {
+            val isOffer = try {
+                it.offer(data)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+            if (isOffer && !isDataHanding) {
                 notifyDataSetChanged()
                 true
             } else false

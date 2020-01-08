@@ -28,6 +28,10 @@ class FCApplication : BaseApplication() {
     companion object {
 
         fun logout(case: String?, done: ((isOK: Boolean) -> Unit)? = null) {
+            if (SPUtils_Proxy.getAccessToken("") == null) {
+                SPUtils_Proxy.clear()
+                return
+            }
             UserApi.logout { _, _, throwAble ->
                 val isSuccess = when (throwAble?.response()?.code() ?: 0) {
                     401, 200 -> true

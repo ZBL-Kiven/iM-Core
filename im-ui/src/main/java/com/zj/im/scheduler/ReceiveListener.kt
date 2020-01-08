@@ -79,11 +79,12 @@ class ReceiveListener<IN, OUT : Any> constructor(private val name: String, priva
             val lst = ArrayList(tempCache)
             tempCache.clear()
             lst.forEach {
-                try {
-                    println("----- 44444 $it")
-                    listener?.onReceived(it)
-                } catch (e: Throwable) {
-                    e.printStackTrace()
+                mainHandler.post {
+                    try {
+                        listener?.onReceived(it)
+                    } catch (e: Throwable) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }
@@ -95,36 +96,46 @@ class ReceiveListener<IN, OUT : Any> constructor(private val name: String, priva
     internal fun postData(data: Any?) {
         if (data == null) com.zj.im.log("the received data was null ,so it never process by ui-maker")
         else {
-            if (data.javaClass != cI && (data is Collection<*> && data.toMutableList().firstOrNull()?.javaClass != cI)) {
+            val isSameIClass = cI == data.javaClass
+            val isCollectionIN: Boolean = if (data is Collection<*>) {
+                cast<Collection<*>>(data)?.let {
+                    if (it.isNullOrEmpty()) {
+                        false
+                    } else {
+                        cast<Array<IN>>(it.toTypedArray())?.let {
+                            true
+                        } ?: false
+                    }
+                } ?: false
+            } else false
+            if (!isSameIClass && !isCollectionIN) {
                 return
             }
             uiMaker?.let { maker ->
-                fun <IN> cast(a: Any): IN? {
-                    var e: IN? = null
-                    try {
-                        e = @Suppress("UNCHECKED_CAST") (a as IN)
-                    } catch (e: Exception) {
-                        println("----- eeee & ${e.message}")
-                        e.printStackTrace()
-                    }
-                    return e
-                }
                 synchronized(maker) {
                     if (data is List<*>) {
                         cast<List<IN>>(data)?.let {
-                            println("----- 0000 & $it")
                             maker.pushAll(it)
                         }
                         return
                     }
                     cast<IN>(data)?.let {
-                        println("----- 1111 & $it")
                         maker.push(it)
                         return
                     } ?: throw NullPointerException("the data parsed was null")
                 }
             } ?: com.zj.im.log("the data may abandoned by a null ui-maker")
         }
+    }
+
+    private fun <IN> cast(a: Any): IN? {
+        var e: IN? = null
+        try {
+            e = @Suppress("UNCHECKED_CAST") (a as IN)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return e
     }
 
     /**

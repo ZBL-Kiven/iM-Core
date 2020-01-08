@@ -107,25 +107,11 @@ class SettingFragment : BaseLinkageFragment() {
         lbLogout?.setOnClickListener {
             lbLogout?.startLoading()
             lbLogout?.isEnabled = false
-            FCApplication.logout("log out form user"){
-
-            }
-            UserApi.logout { _, _, throwAble ->
-                val isSuccess = when (throwAble?.response()?.code() ?: 0) {
-                    401, 200 -> true
-                    else -> false
-                }
-                if (isSuccess) {
-                    SPUtils_Proxy.clear()
-                    lbLogout?.loadingSuccessful()
-                    mainHandler.postDelayed({
-                        startActivity(Intent(context, SplashActivity::class.java))
-                        activity?.finish()
-                    }, 300)
-                } else {
+            FCApplication.logout("log out form user") {
+                if (it) lbLogout?.loadingSuccessful()
+                else {
                     lbLogout?.loadingFailed()
                     lbLogout?.isEnabled = false
-                    log("${throwAble?.response()?.errorBody()?.string()}")
                 }
             }
         }
