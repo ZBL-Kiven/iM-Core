@@ -57,6 +57,7 @@ class UIHelperCreator<T, R>(private val owner: LifecycleOwner, private val uniqu
         cacheDatas.forEach {
             onDataReceived?.invoke(it)
         }
+        cacheDatas.clear()
     }
 
     fun pause() {

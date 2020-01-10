@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.im.dispatcher.addReceiveObserver
-import com.zj.im.log
+import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.im.transfer.DataTransferHub
 import com.zj.imcore.ui.chat.ChatActivity
@@ -17,6 +17,7 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
 
     private var rvContent: RecyclerView? = null
     private var adapter: ConversationAdapter? = null
+    private val normal = "normal"
 
     override fun getView(inflater: LayoutInflater, container: ViewGroup?): View {
         return inflater.inflate(R.layout.app_fragment_conversation_content, container, false)
@@ -32,8 +33,9 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
     private fun initData() {
         adapter = ConversationAdapter(this::invoke)
         rvContent?.adapter = adapter
-        this.addReceiveObserver<DialogInfo>(11121).listen {
-            adapter?.data()?.add("aa", it)
+        this.addReceiveObserver<DialogInfo>(Constance.REG_CODE_COVERSATION_FRAGMENT_DIALOG).listen {
+            if (activity?.isFinishing == true) return@listen
+            adapter?.data()?.add(normal, it)
         }
     }
 

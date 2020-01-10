@@ -20,7 +20,6 @@ open class BaseApplication : Application() {
 
         fun clearAct() {
             val acts = (application as? BaseApplication)?.activities
-            log("${acts?.joinToString { " $it , " }}")
             acts?.forEach {
                 it.finish()
                 acts.remove(it)

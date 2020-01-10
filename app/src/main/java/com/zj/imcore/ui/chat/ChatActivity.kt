@@ -12,9 +12,12 @@ import com.google.gson.Gson
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.BaseTitleView
 import com.zj.im.dispatcher.addReceiveObserver
+import com.zj.im.log
+import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCActivity
+import com.zj.imcore.base.FCApplication
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.im.options.mod.BaseMod
 import com.zj.imcore.im.transfer.DataTransferHub
@@ -33,8 +36,7 @@ class ChatActivity : FCActivity() {
         private const val TITLE = "title"
 
         private const val NORMAL = "normal"
-        private const val ARCHIVE = "archive"
-        private const val HISTORY = "history"
+        private const val FAILED = "failed"
 
         fun start(activity: Activity?, id: String, userId: String?, draft: String?, title: String) {
             val i = Intent(activity, ChatActivity::class.java)
@@ -78,15 +80,19 @@ class ChatActivity : FCActivity() {
 
     override fun initData() {
         try {
-
+            intent?.let {
+                if (it.hasExtra(SESSION_ID)) sessionId = it.getStringExtra(SESSION_ID) ?: ""
+                if (it.hasExtra(USER_ID)) uid = it.getStringExtra(USER_ID) ?: ""
+                if (it.hasExtra(DRAFT)) draft = it.getStringExtra(DRAFT) ?: ""
+                if (it.hasExtra(TITLE)) conversasionTitle = it.getStringExtra(TITLE) ?: ""
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        //        SESSION_ID = "session_id"
-        //        private const val USER_ID = "user_id"
-        //        private const val DRAFT = "draft"
-        //        private const val TITLE = "title"
-        setTitle("aa")
+        if (sessionId.isEmpty() && uid.isEmpty()) {
+            FCApplication.showToast(getString(R.string.app_chat_error_empty_target))
+            return
+        }
         register()
         DataTransferHub.queryMsgInDb("", "")
     }
@@ -108,8 +114,9 @@ class ChatActivity : FCActivity() {
         IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
             setTitle(it.name)
         }
-        this@ChatActivity.addReceiveObserver<MsgInfo>(11101).listen { data ->
-            rvContent?.let {
+        this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).listen { data ->
+            log("11111 ${data.text}  ${data.sendingState}")
+            if (!isFinishing) rvContent?.let {
                 it.stopScroll()
                 it.adapter.data().add(NORMAL, data)
                 val p = it.adapter.data().maxCurDataPosition()
@@ -136,7 +143,7 @@ class ChatActivity : FCActivity() {
             this.subtype = "normal"
             this.uid = SPUtils_Proxy.getUserId("0").toInt()
             this.team_id = 1
-            this.dialog_id = 8589934605
+            this.dialog_id = sessionId.toLong()
             this.text = text
             this.callId = callId
         }

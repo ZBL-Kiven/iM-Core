@@ -1,5 +1,6 @@
 package com.zj.im.dispatcher
 
+import com.zj.im.debugLog
 import com.zj.im.log
 
 object UIStore {
@@ -30,9 +31,9 @@ object UIStore {
         }
         msgObservers?.forEach {
             if (it.post(data)) {
-                log("the observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class successful and received the data")
+                debugLog("the observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class successful and received the data")
             } else {
-                log("invalid observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class has abandon the data ${data.javaClass.simpleName}.class")
+                debugLog("invalid observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class has abandon the data ${data.javaClass.simpleName}.class")
             }
         }
     }
