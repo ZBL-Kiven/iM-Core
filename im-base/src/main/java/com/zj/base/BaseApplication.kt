@@ -2,6 +2,7 @@ package com.zj.base
 
 import android.app.Activity
 import android.app.Application
+import com.zj.im.log
 
 @Suppress("unused")
 open class BaseApplication : Application() {
@@ -19,6 +20,7 @@ open class BaseApplication : Application() {
 
         fun clearAct() {
             val acts = (application as? BaseApplication)?.activities
+            log("${acts?.joinToString { " $it , " }}")
             acts?.forEach {
                 it.finish()
                 acts.remove(it)
@@ -26,7 +28,7 @@ open class BaseApplication : Application() {
         }
     }
 
-    private var activities: LinkedHashSet<Activity>? = null
+    private var activities: LinkedHashSet<Activity> = linkedSetOf()
 
     private var curAct: Activity? = null
 

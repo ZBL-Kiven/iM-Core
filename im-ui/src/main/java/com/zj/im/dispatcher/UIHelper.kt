@@ -69,9 +69,9 @@ class UIHelperCreator<T, R>(private val owner: LifecycleOwner, private val uniqu
     }
 
     fun shutdown() {
+        cacheDatas.clear()
         onDataReceived = null
         isPaused = false
-        cacheDatas.clear()
         filterIn = null
         filterOut = null
     }
@@ -84,7 +84,6 @@ internal class UIOptions<T, R>(owner: LifecycleOwner, private val uniqueCode: An
     private val handler = Handler(Looper.getMainLooper()) {
         if (it.what == handleWhat) {
             castNotSafety<Any?, R?>(it.obj)?.let { r ->
-                log("")
                 result(r)
             } ?: log("the data ${it.obj} was handled but null result in cast transform")
         }
@@ -119,9 +118,9 @@ internal class UIOptions<T, R>(owner: LifecycleOwner, private val uniqueCode: An
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroyed() {
-        UIStore.removeAnObserver(this)
         try {
             creator.shutdown()
+            UIStore.removeAnObserver(this)
             handler.removeCallbacksAndMessages(null)
             if (!executors.isShutdown) executors.shutdownNow()
         } catch (e: Exception) {

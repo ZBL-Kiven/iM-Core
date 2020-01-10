@@ -45,14 +45,15 @@ class FCApplication : BaseApplication() {
                 done?.invoke(isSuccess)
                 if (isSuccess) {
                     mainHandler.postDelayed({
-                        val act = getAct()
-                        val intent = Intent(act, SplashActivity::class.java)
-                        act?.startActivity(intent)
+                        val ctx = application
                         clearAct()
+                        val intent = Intent(ctx, SplashActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        ctx.startActivity(intent)
                         case?.let {
                             Toast.makeText(application, it, Toast.LENGTH_SHORT).show()
                         }
-                    }, 300)
+                    }, 700)
                 }
             }
         }

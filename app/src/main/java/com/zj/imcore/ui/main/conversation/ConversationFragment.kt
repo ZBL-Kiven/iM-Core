@@ -33,7 +33,6 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
         adapter = ConversationAdapter(this::invoke)
         rvContent?.adapter = adapter
         this.addReceiveObserver<DialogInfo>(11121).listen {
-            log("111111")
             adapter?.data()?.add("aa", it)
         }
     }
