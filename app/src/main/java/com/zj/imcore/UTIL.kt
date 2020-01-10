@@ -5,8 +5,6 @@ package com.zj.imcore
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
-import com.zj.im.scheduler.ReceiveListener
 import java.lang.IllegalArgumentException
 
 fun makeSentParams(callId: String, localFilePath: String? = null): Map<String, Any> {
@@ -28,10 +26,6 @@ fun genderIsLady(gender: String): Boolean {
         "lady" -> true
         else -> false
     }
-}
-
-inline fun <reified IN, reified OUT : Any> LifecycleOwner.registerTcpReceivedListener(name: String): ReceiveListener<IN, OUT> {
-    return ReceiveListener.create(name, this)
 }
 
 fun printViewTree(view: View) {

@@ -15,7 +15,7 @@ fun <I, O> castNotSafety(a: I): O {
 val mainHandler = Handler(Looper.getMainLooper())
 
 fun log(str: String) {
-    Log.e(" im-uiKit ----- ", str)
+    println("im-ui ----- $str")
 }
 
 fun <T, R> PriorityQueue<T>.with(block: (PriorityQueue<T>) -> R): R {

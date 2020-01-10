@@ -34,7 +34,7 @@ class FCApplication : BaseApplication() {
             }
             UserApi.logout { _, _, throwAble ->
                 val isSuccess = when (throwAble?.response()?.code() ?: 0) {
-                    401, 200 -> true
+                    in 200..299, 401 -> true
                     else -> false
                 }
                 if (isSuccess) {

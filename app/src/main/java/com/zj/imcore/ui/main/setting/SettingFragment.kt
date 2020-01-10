@@ -1,6 +1,5 @@
 package com.zj.imcore.ui.main.setting
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,9 @@ import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.im.img.CacheAble
 import com.zj.im.img.cache.ImageCacheUtil.Companion.CENTER_CROP
-import com.zj.im.log
-import com.zj.im.mainHandler
 import com.zj.imcore.R
-import com.zj.imcore.apis.user.UserApi
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.genderIsLady
-import com.zj.imcore.gui.SplashActivity
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.imcore.ui.views.LoadingButton
 import com.zj.imcore.utils.img.loader.AvatarLoadUtil

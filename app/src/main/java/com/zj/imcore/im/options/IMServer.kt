@@ -8,11 +8,9 @@ import com.zj.im.chat.enums.SocketState
 import com.zj.im.chat.hub.ServerHub
 import com.zj.im.chat.interfaces.SendingCallBack
 import com.zj.im.utils.nio
-import com.zj.imcore.base.FCApplication
 import com.zj.imcore.im.options.mod.BaseMod
 import org.java_websocket.handshake.ServerHandshake
 import java.lang.Exception
-import java.lang.NullPointerException
 import java.net.URI
 import java.nio.charset.Charset
 
@@ -50,6 +48,7 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
 
     override fun onClose(errorCode: Int, case: String?, isFromRemote: Boolean) {
         when (errorCode) {
+            1002 -> print("IMServer", "$case")
             -111 -> print("IMServer", case ?: "socket closed by shutdown")
             else -> curSocketState = SocketState.CONNECTED_ERROR.case("the socket have to reconnection with error: $case")
         }
@@ -115,7 +114,7 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
 
     private fun getConnectionInfo(): String {
         val token = SPUtils_Proxy.getAccessToken("")
-//        FCApplication.logout("the socket connect error with null token")
+        //        FCApplication.logout("the socket connect error with null token")
         return "ws://106.75.100.103:8000/wand/$token"
     }
 

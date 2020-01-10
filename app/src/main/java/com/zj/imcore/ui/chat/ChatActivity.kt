@@ -11,15 +11,13 @@ import android.widget.EditText
 import com.google.gson.Gson
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.BaseTitleView
-import com.zj.im.store.interfaces.DataListener
+import com.zj.im.dispatcher.addReceiveObserver
 import com.zj.imcore.R
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.im.options.mod.BaseMod
-import com.zj.imcore.im.renderer.MsgHandler
 import com.zj.imcore.im.transfer.DataTransferHub
-import com.zj.imcore.registerTcpReceivedListener
 import com.zj.imcore.ui.views.IMRecyclerView
 import com.zj.model.mod.MessageBean
 import java.lang.Exception
@@ -79,15 +77,15 @@ class ChatActivity : FCActivity() {
     }
 
     override fun initData() {
-        try{
+        try {
 
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-//        SESSION_ID = "session_id"
-//        private const val USER_ID = "user_id"
-//        private const val DRAFT = "draft"
-//        private const val TITLE = "title"
+        //        SESSION_ID = "session_id"
+        //        private const val USER_ID = "user_id"
+        //        private const val DRAFT = "draft"
+        //        private const val TITLE = "title"
         setTitle("aa")
         register()
         DataTransferHub.queryMsgInDb("", "")
@@ -110,21 +108,18 @@ class ChatActivity : FCActivity() {
         IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
             setTitle(it.name)
         }
-        val l = registerTcpReceivedListener<MsgInfo, MsgInfo>("aaa").addHandler(MsgHandler()).subscribe(object : DataListener<MsgInfo>() {
-            override fun onReceived(data: MsgInfo) {
-                rvContent?.let {
-                    it.stopScroll()
-                    it.adapter.data().add(NORMAL, data)
-                    val p = it.adapter.data().maxCurDataPosition()
-                    handler.removeMessages(1999)
-                    val msg = Message.obtain()
-                    msg.what = 1999
-                    msg.arg1 = p
-                    handler.sendMessageDelayed(msg, 30)
-                }
+        this@ChatActivity.addReceiveObserver<MsgInfo>(11101).listen { data ->
+            rvContent?.let {
+                it.stopScroll()
+                it.adapter.data().add(NORMAL, data)
+                val p = it.adapter.data().maxCurDataPosition()
+                handler.removeMessages(1999)
+                val msg = Message.obtain()
+                msg.what = 1999
+                msg.arg1 = p
+                handler.sendMessageDelayed(msg, 30)
             }
-        })
-        l.lock(false)
+        }
     }
 
     private val handler = Handler(Looper.getMainLooper()) {

@@ -97,7 +97,6 @@ internal class IConnectivityManager {
             connectivityManager?.unregisterNetworkCallback(netCallBack)
             context?.unregisterReceiver(netWorkBrodCast)
         } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

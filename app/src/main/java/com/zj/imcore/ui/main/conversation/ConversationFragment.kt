@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.zj.cf.fragments.BaseLinkageFragment
-import com.zj.im.store.interfaces.DataListener
+import com.zj.im.dispatcher.addReceiveObserver
+import com.zj.im.log
 import com.zj.imcore.R
 import com.zj.imcore.im.transfer.DataTransferHub
-import com.zj.imcore.registerTcpReceivedListener
 import com.zj.imcore.ui.chat.ChatActivity
 import com.zj.imcore.ui.main.conversation.ConversationAdapter.Companion.CONVERSATION_EVENT_ITEM
 import com.zj.model.chat.DialogInfo
@@ -32,12 +32,10 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
     private fun initData() {
         adapter = ConversationAdapter(this::invoke)
         rvContent?.adapter = adapter
-        this.registerTcpReceivedListener<DialogInfo, DialogInfo>(this.javaClass.simpleName).subscribe(object : DataListener<DialogInfo>() {
-            override fun onReceived(data: DialogInfo) {
-                adapter?.data()?.add("aa", data)
-            }
-        }).lock(false)
-        getData()
+        this.addReceiveObserver<DialogInfo>(11121).listen {
+            log("111111")
+            adapter?.data()?.add("aa", it)
+        }
     }
 
     private fun getData() {
