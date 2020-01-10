@@ -34,4 +34,7 @@ object Constance {
     fun getDeviceId(): String {
         return FCApplication.getDeviceId()
     }
+
+    const val REG_CODE_COVERSATION_FRAGMENT_DIALOG = 11121
+    const val REG_CODE_CHAT_ACTIVITY_MESSAGE = 11101
 }

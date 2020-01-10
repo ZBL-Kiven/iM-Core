@@ -2,8 +2,6 @@ package com.zj.im
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import java.lang.Exception
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
@@ -16,6 +14,10 @@ val mainHandler = Handler(Looper.getMainLooper())
 
 fun log(str: String) {
     println("im-ui ----- $str")
+}
+
+fun debugLog(str: String) {
+//    println("im-ui-debug ----- $str")
 }
 
 fun <T, R> PriorityQueue<T>.with(block: (PriorityQueue<T>) -> R): R {

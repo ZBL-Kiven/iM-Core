@@ -44,4 +44,6 @@
     <string name="app_fragment_setting_clear_caches">clear app caches</string>
     <string name="app_fragment_setting_logout">logout</string>
 
+    <string name="app_chat_error_empty_target">target was undifineded</string>
+
 </resources>

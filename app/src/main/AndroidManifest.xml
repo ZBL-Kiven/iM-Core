@@ -35,10 +35,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.zj.imcore.gui.login.LoginActivity"/>
-        <activity android:name="com.zj.imcore.ui.main.MainActivity"/>
-        <activity android:name=".ui.users.UserInfoActivity"/>
-        <activity android:name=".ui.chat.ChatActivity"/>
+        <activity android:name="com.zj.imcore.gui.login.LoginActivity" android:launchMode="singleTask"/>
+        <activity android:name="com.zj.imcore.ui.main.MainActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ui.users.UserInfoActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ui.chat.ChatActivity" android:launchMode="singleTask"/>
 
         <receiver
                 android:name=".gui.auth.TokenRefreshUtils"
