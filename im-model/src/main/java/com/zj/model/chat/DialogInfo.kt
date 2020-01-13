@@ -3,7 +3,7 @@ package com.zj.model.chat
 import com.zj.list.multiable.MultiAbleData
 import com.zj.model.interfaces.DialogIn
 
-class DialogInfo(val impl: DialogIn) : MultiAbleData<DialogInfo> {
+class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
 
     //unique id for conversation
     val channelId: String; get() = impl.getId()
@@ -65,10 +65,10 @@ class DialogInfo(val impl: DialogIn) : MultiAbleData<DialogInfo> {
     }
 
     override fun equals(other: Any?): Boolean {
-        return if (other !is MsgInfo) false else channelId == other.channelId
+        return if (other !is DialogInfo) false else channelId == other.channelId
     }
 
     override fun hashCode(): Int {
-        return impl.getId().hashCode()
+        return channelId.hashCode()
     }
 }

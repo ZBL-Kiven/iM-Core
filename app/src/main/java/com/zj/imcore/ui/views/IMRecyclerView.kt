@@ -42,6 +42,22 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
         return data
     }
 
+    override fun isNeedToRefresh(d1: MsgInfo, d2: MsgInfo): Boolean {
+        val notSames = d1.key != d2.key || d1.callId != d2.callId
+        val quickFind = d1.sendingState != d2.sendingState || d1.deleted != d2.deleted
+        if (notSames || quickFind) {
+            return true
+        }
+        val ps = MsgInfo::class.java.declaredFields
+        ps.forEach {
+            it.isAccessible = true
+            if (it.get(d1) != it.get(d2)) {
+                return true
+            }
+        }
+        return false
+    }
+
     private fun initOptions(data: MsgInfo): ChatItemOptions {
         return object : ChatItemOptions() {
 

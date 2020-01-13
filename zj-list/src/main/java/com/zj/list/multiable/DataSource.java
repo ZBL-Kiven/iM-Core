@@ -7,15 +7,13 @@ import com.zj.list.utlis.QuickSort;
 import java.util.*;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-class DataSource<T extends MultiAbleData<T>> implements Comparable<DataSource> {
+class DataSource<T extends MultiAbleData<T>>{
 
-    private int weights;
     private boolean isDefault;
     private final HashSet<T> data;
     private final String name;
 
-    DataSource(int weights, boolean isDefault, String name) {
-        this.weights = weights;
+    DataSource(boolean isDefault, String name) {
         this.isDefault = isDefault;
         this.name = name;
         this.data = new HashSet<>();
@@ -23,10 +21,6 @@ class DataSource<T extends MultiAbleData<T>> implements Comparable<DataSource> {
 
     int getCount() {
         return data.size();
-    }
-
-    int getWeights() {
-        return weights;
     }
 
     boolean isDefault() {
@@ -87,14 +81,6 @@ class DataSource<T extends MultiAbleData<T>> implements Comparable<DataSource> {
 
     void clear() {
         data.clear();
-    }
-
-    @Override
-    public int compareTo(@NonNull DataSource dataSource) {
-        int result = 0;
-        if (dataSource.weights > weights) result = -1;
-        if (dataSource.weights < weights) result = 1;
-        return result;
     }
 
     @Override
