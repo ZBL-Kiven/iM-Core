@@ -94,5 +94,9 @@ class FCApplication : BaseApplication() {
 
             }
         }
+
+        fun getCacheDir(): String {
+            return "${application.externalCacheDir?.absolutePath}/temp"
+        }
     }
 }

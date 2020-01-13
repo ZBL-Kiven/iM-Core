@@ -8,23 +8,17 @@ import android.os.Message
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import com.google.gson.Gson
-import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.BaseTitleView
 import com.zj.im.dispatcher.addReceiveObserver
-import com.zj.im.log
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.im.options.IMHelper
-import com.zj.imcore.im.options.mod.BaseMod
 import com.zj.imcore.im.transfer.DataTransferHub
 import com.zj.imcore.ui.views.IMRecyclerView
-import com.zj.model.mod.MessageBean
 import java.lang.Exception
-import java.util.*
 
 class ChatActivity : FCActivity() {
 
@@ -103,7 +97,7 @@ class ChatActivity : FCActivity() {
                 val text = v.text.toString()
                 if (text.isEmpty()) return@setOnEditorActionListener false
                 v.text = ""
-                sendText(text)
+                IMHelper.sendTxt(sessionId, text)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -115,7 +109,6 @@ class ChatActivity : FCActivity() {
             setTitle(it.name)
         }
         this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).listen { data ->
-            log("11111 ${data.text}  ${data.sendingState}")
             if (!isFinishing) rvContent?.let {
                 it.stopScroll()
                 it.adapter.data().add(NORMAL, data)
@@ -134,24 +127,6 @@ class ChatActivity : FCActivity() {
             rvContent?.scrollToPosition(it.arg1)
         }
         return@Handler false
-    }
-
-    private fun sendText(text: String) {
-        val callId = UUID.randomUUID().toString()
-        val baseSendInfo = BaseMod()
-        val m = MessageBean().apply {
-            this.subtype = "normal"
-            this.uid = SPUtils_Proxy.getUserId("0").toInt()
-            this.team_id = 1
-            this.dialog_id = sessionId.toLong()
-            this.text = text
-            this.callId = callId
-        }
-        baseSendInfo.data = m
-        baseSendInfo.callId = callId
-        baseSendInfo.type = "create_message"
-        val data = Gson().toJson(baseSendInfo)
-        IMHelper.send(data, callId, 10000, false, false, null)
     }
 
     override fun finish() {

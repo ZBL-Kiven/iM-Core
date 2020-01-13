@@ -17,7 +17,11 @@ abstract class ChatRecyclerView<T : MultiAbleData<T>> @JvmOverloads constructor(
     abstract fun getViewModel(data: T): BaseChatModel<T>
 
     open fun getItemId(data: T): Long? {
-        return null
+        return NO_ID
+    }
+
+    open fun isNeedToRefresh(d1: T, d2: T): Boolean {
+        return d1 != d2
     }
 
     open fun getItemViewType(data: T): Int? {
@@ -46,11 +50,11 @@ abstract class ChatRecyclerView<T : MultiAbleData<T>> @JvmOverloads constructor(
             }
 
             override fun getItemId(position: Int): Long {
-                return this@ChatRecyclerView.getItemId(data().getDataWithPosition(position)) ?: super.getItemId(position)
+                return this@ChatRecyclerView.getItemId(data[position]) ?: super.getItemId(position)
             }
 
             override fun getItemViewType(position: Int): Int {
-                return this@ChatRecyclerView.getItemViewType(data().getDataWithPosition(position)) ?: super.getItemViewType(position)
+                return this@ChatRecyclerView.getItemViewType(data[position]) ?: super.getItemViewType(position)
             }
 
             override fun onCreateView(parent: ViewGroup, viewType: Int): View {
@@ -63,6 +67,10 @@ abstract class ChatRecyclerView<T : MultiAbleData<T>> @JvmOverloads constructor(
                     it.removeBaseBubbleView()
                     it.removeAllViews()
                 }
+            }
+
+            override fun isEqual(d1: T, d2: T): Boolean {
+                return !isNeedToRefresh(d1, d2)
             }
 
             override fun initData(itemView: View, data: T, position: Int, payloads: MutableList<Any>?) {

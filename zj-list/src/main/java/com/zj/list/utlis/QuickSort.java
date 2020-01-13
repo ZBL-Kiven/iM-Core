@@ -8,7 +8,7 @@ import java.util.*;
  * Created by ZJJ on 19/12/11
  * A java quick-sort utils
  * Supports data that implements the comparable interface for efficient and fast sorting.
- * the tool algorithm complexity is O(n*log.n)
+ * the tool algorithm logic complexity is O(n*log.n)
  */
 
 public class QuickSort {

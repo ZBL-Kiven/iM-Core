@@ -9,17 +9,11 @@ interface AdapterDataSet<T> {
     @Nullable
     List<T> onBuildData(List<T> data);
 
-    void onSourceSet(String name);
+    void onSourceSet(List<T> data, String name);
 
-    void onDataInserted(int position);
+    void onDataSet(T data, Object payloads);
 
-    void onDataSet(int position, Object payloads);
-
-    void onDataRemoved(int position);
-
-    void onDataRangeRemoved();
+    void onDataChanged(List<T> data);
 
     void onDataCleared();
-
-    void onDataRangeInserted(int start, int end, int count);
 }
