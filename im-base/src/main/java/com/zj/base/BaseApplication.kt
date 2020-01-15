@@ -37,12 +37,12 @@ open class BaseApplication : Application() {
         this.registerActivityLifecycleCallbacks(object : ActLifecycleImpl() {
             override fun onActivityResumed(activity: Activity) {
                 curAct = activity
-                activities?.add(activity)
+                activities.add(activity)
             }
 
             override fun onActivityStopped(activity: Activity) {
                 if (curAct == activity) curAct = null
-                activities?.remove(activity)
+                activities.remove(activity)
             }
         })
     }

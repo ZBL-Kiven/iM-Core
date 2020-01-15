@@ -31,4 +31,10 @@
     <attr name="shadowColor" format="color"/>
     </declare-styleable>
 
+
+    <declare-styleable name="EmoticonsIndicatorView">
+        <attr name="bmpNomal" format="reference" />
+        <attr name="bmpSelect" format="reference" />
+    </declare-styleable>
+
 </resources>

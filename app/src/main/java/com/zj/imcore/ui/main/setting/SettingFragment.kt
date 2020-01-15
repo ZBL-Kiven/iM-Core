@@ -53,11 +53,11 @@ class SettingFragment : BaseLinkageFragment() {
         val ctx = this.context ?: return
         val userAvatar = SPUtils_Proxy.getUserAvatar("")
         val userId = SPUtils_Proxy.getUserId("")
-        val gender = SPUtils_Proxy.getUserGender(getString(R.string.app_common_secret))
+        val gender = SPUtils_Proxy.getUserGender(getString(R.string.app_user_info_secret))
         val userName = SPUtils_Proxy.getUserName("none")
         val userCountry = SPUtils_Proxy.getUserCountry("China")
-        val userTel = SPUtils_Proxy.getUserTel(getString(R.string.app_common_unset))
-        val userEmail = SPUtils_Proxy.getUserEmail(getString(R.string.app_common_unset))
+        val userTel = SPUtils_Proxy.getUserTel(getString(R.string.app_user_info_unset))
+        val userEmail = SPUtils_Proxy.getUserEmail(getString(R.string.app_user_info_unset))
         val userAddress = SPUtils_Proxy.getUserAddress("Beijing")
         val userNote = SPUtils_Proxy.getUserNote("")
 

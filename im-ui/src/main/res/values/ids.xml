@@ -5,4 +5,9 @@
     <item type="id" name="im_chat_time_line"/>
     <item type="id" name="im_chat_info_line"/>
     <item type="id" name="im_chat_bubble"/>
+
+    <item type="id" name="im_emotion_autolayout" />
+    <item type="id" name="im_emotion_tag_pageset" />
+    <item type="id" name="im_emotion_toolbar_left" />
+    <item type="id" name="im_emotion_toolbar_right" />
 </resources>

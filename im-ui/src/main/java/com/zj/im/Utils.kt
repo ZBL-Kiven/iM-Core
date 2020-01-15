@@ -17,7 +17,7 @@ fun log(str: String) {
 }
 
 fun debugLog(str: String) {
-//    println("im-ui-debug ----- $str")
+    println("im-ui-debug ----- $str")
 }
 
 fun <T, R> PriorityQueue<T>.with(block: (PriorityQueue<T>) -> R): R {

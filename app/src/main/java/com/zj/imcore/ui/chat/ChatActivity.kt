@@ -2,25 +2,29 @@ package com.zj.imcore.ui.chat
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
+import android.view.KeyEvent
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.zj.base.view.BaseTitleView
 import com.zj.im.dispatcher.addReceiveObserver
+import com.zj.im.emotionboard.CusEmoticonsLayout
+import com.zj.im.emotionboard.adpater.EmoticonPacksAdapter
+import com.zj.im.emotionboard.utils.EmoticonsKeyboardUtils
+import com.zj.im.emotionboard.widget.FuncLayout
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.model.chat.MsgInfo
-import com.zj.imcore.base.FCActivity
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.im.transfer.DataTransferHub
 import com.zj.imcore.ui.views.IMRecyclerView
 import java.lang.Exception
 
-class ChatActivity : FCActivity() {
+class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
     companion object {
 
@@ -48,31 +52,26 @@ class ChatActivity : FCActivity() {
     private var conversasionTitle = ""
 
     private var rvContent: IMRecyclerView? = null
-    private var vVoice: View? = null
-    private var vEmoji: View? = null
-    private var vMore: View? = null
-    private var etInput: EditText? = null
+    private var titleView: BaseTitleView? = null
+    private var celBar: CusEmoticonsLayout? = null
+    private var adapter: EmoticonPacksAdapter? = null
 
-    override fun getContentId(): Int {
-        return R.layout.app_act_chat_content
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.app_act_chat_content)
+        initView()
+        initData()
+        initListener()
     }
 
-    override fun initView() {
+    private fun initView() {
         rvContent = findViewById(R.id.app_act_chat_content_rv)
-        vVoice = findViewById(R.id.app_act_chat_content_btn_voice)
-        vEmoji = findViewById(R.id.app_act_chat_content_btn_emoji)
-        vMore = findViewById(R.id.app_act_chat_content_btn_more)
-        etInput = findViewById(R.id.app_act_chat_content_et_input)
-        showTitleBar(true)
+        titleView = findViewById(R.id.app_act_chat_title)
+        celBar = findViewById(R.id.ap_act_chat_cel)
+        titleView?.setLeftClickListener { finish() }
     }
 
-    override fun initTitleBar(baseTitleView: BaseTitleView?) {
-        super.initTitleBar(baseTitleView)
-        baseTitleView?.setLeftIcon(R.mipmap.app_back)
-        baseTitleView?.setLeftClickListener { finish() }
-    }
-
-    override fun initData() {
+    private fun initData() {
         try {
             intent?.let {
                 if (it.hasExtra(SESSION_ID)) sessionId = it.getStringExtra(SESSION_ID) ?: ""
@@ -85,28 +84,37 @@ class ChatActivity : FCActivity() {
         }
         if (sessionId.isEmpty() && uid.isEmpty()) {
             FCApplication.showToast(getString(R.string.app_chat_error_empty_target))
+            finish()
             return
         }
         register()
         DataTransferHub.queryMsgInDb("", "")
     }
 
-    override fun initListener() {
-        etInput?.setOnEditorActionListener { v, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                val text = v.text.toString()
-                if (text.isEmpty()) return@setOnEditorActionListener false
-                v.text = ""
-                IMHelper.sendTxt(sessionId, text)
-                return@setOnEditorActionListener true
+    private fun initListener() {
+        //        etInput?.setOnEditorActionListener { v, actionId, _ ->
+        //            if (actionId == EditorInfo.IME_ACTION_SEND) {
+        //                val text = v.text.toString()
+        //                if (text.isEmpty()) return@setOnEditorActionListener false
+        //                v.text = ""
+        //                IMHelper.sendTxt(sessionId, text)
+        //                return@setOnEditorActionListener true
+        //            }
+        //            return@setOnEditorActionListener false
+        //        }
+
+        rvContent?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    celBar?.reset()
+                }
             }
-            return@setOnEditorActionListener false
-        }
+        })
     }
 
     private fun register() {
         IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
-            setTitle(it.name)
+            titleView?.setTitle(it.name)
         }
         this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).listen { data ->
             if (!isFinishing) rvContent?.let {
@@ -129,8 +137,37 @@ class ChatActivity : FCActivity() {
         return@Handler false
     }
 
+    protected fun scrollToBottom() {
+        rvContent?.requestLayout()
+        rvContent?.post { rvContent?.scrollToPosition(rvContent?.adapter?.itemCount ?: 1 - 1) }
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        return if (EmoticonsKeyboardUtils.isFullScreen(this)) {
+            if (celBar?.dispatchKeyEventInFullScreen(event) == true) {
+                true
+            } else {
+                super.dispatchKeyEvent(event)
+            }
+        } else super.dispatchKeyEvent(event)
+
+    }
+
+    override fun onFuncPop(height: Int) {
+        scrollToBottom()
+    }
+
+    override fun onFuncClose() {
+
+    }
+
     override fun finish() {
         IMHelper.removeSocketStateChangeListener(javaClass.simpleName)
         super.finish()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        celBar?.reset()
     }
 }
