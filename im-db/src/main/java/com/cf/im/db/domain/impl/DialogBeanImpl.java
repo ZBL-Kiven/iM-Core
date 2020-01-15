@@ -1,7 +1,8 @@
-package com.cf.im.db.domain;
+package com.cf.im.db.domain.impl;
 
 import androidx.annotation.NonNull;
 
+import com.cf.im.db.domain.DialogBean;
 import com.zj.model.interfaces.DialogIn;
 
 public class DialogBeanImpl extends DialogBean implements DialogIn {

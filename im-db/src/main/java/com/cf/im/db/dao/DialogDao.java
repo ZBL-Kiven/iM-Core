@@ -4,7 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Query;
 
 import com.cf.im.db.domain.DialogBean;
-import com.cf.im.db.domain.DialogBeanImpl;
+import com.cf.im.db.domain.impl.DialogBeanImpl;
 
 import java.util.List;
 

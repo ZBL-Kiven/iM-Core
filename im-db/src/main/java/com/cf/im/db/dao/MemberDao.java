@@ -5,6 +5,7 @@ import androidx.room.Query;
 
 import com.cf.im.db.domain.MemberBean;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Dao
@@ -17,6 +18,6 @@ public interface MemberDao extends IDao<MemberBean> {
     void clearAll();
 
     @Query("select * from memberbean where uid in (:uids)")
-    List<MemberBean> queryByIds(Long[] uids);
+    List<MemberBean> queryByIds(long[] uids);
 
 }

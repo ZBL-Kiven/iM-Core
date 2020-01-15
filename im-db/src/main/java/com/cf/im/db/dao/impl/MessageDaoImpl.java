@@ -3,6 +3,7 @@ package com.cf.im.db.dao.impl;
 import androidx.room.Dao;
 import androidx.room.Query;
 import androidx.room.RawQuery;
+import androidx.room.Transaction;
 import androidx.sqlite.db.SimpleSQLiteQuery;
 import androidx.sqlite.db.SupportSQLiteQuery;
 
@@ -48,6 +49,7 @@ public abstract class MessageDaoImpl implements MessageDao {
      * @param serviceId 服务器消息Id
      * @return 消息主键Id（自增Id）
      */
+    @Transaction
     @Query("select * from messagebean where callId = :callId or id = :serviceId limit 1")
     public abstract MessageBeanImpl queryIdOrCallIdImpl(String callId, long serviceId);
 
