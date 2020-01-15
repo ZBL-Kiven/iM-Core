@@ -88,7 +88,7 @@ class ChatActivity : FCActivity() {
             return
         }
         register()
-        DataTransferHub.queryMsgInDb("", "")
+        DataTransferHub.queryMsgInDb("13", 8589934605)
     }
 
     override fun initListener() {
@@ -108,18 +108,19 @@ class ChatActivity : FCActivity() {
         IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
             setTitle(it.name)
         }
-        this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).listen { data ->
-            if (!isFinishing) rvContent?.let {
-                it.stopScroll()
-                it.adapter.data().add(NORMAL, data)
-                val p = it.adapter.data().maxCurDataPosition()
-                handler.removeMessages(1999)
-                val msg = Message.obtain()
-                msg.what = 1999
-                msg.arg1 = p
-                handler.sendMessageDelayed(msg, 30)
+        this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE)
+            .listen { data ->
+                if (!isFinishing) rvContent?.let {
+                    it.stopScroll()
+                    it.adapter.data().add(NORMAL, data)
+                    val p = it.adapter.data().maxCurDataPosition()
+                    handler.removeMessages(1999)
+                    val msg = Message.obtain()
+                    msg.what = 1999
+                    msg.arg1 = p
+                    handler.sendMessageDelayed(msg, 30)
+                }
             }
-        }
     }
 
     private val handler = Handler(Looper.getMainLooper()) {

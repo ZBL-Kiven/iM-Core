@@ -9,6 +9,8 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.widget.Toast
+import com.cf.im.db.databases.AppDatabase
+import com.cf.im.db.databases.DB
 import com.zj.base.BaseApplication
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.im.log
@@ -23,6 +25,8 @@ class FCApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         SPUtils_Proxy.init(BuildConfig.APPLICATION_ID, this)
+        DB.singleton.get().init(this)
+        AppDatabase.singleton.get();
     }
 
     companion object {
@@ -64,7 +68,10 @@ class FCApplication : BaseApplication() {
 
         @SuppressLint("HardwareIds")
         fun getDeviceId(): String {
-            return Settings.Secure.getString(application.contentResolver, Settings.Secure.ANDROID_ID)
+            return Settings.Secure.getString(
+                application.contentResolver,
+                Settings.Secure.ANDROID_ID
+            )
         }
 
         fun showToast(s: String) {
@@ -79,8 +86,14 @@ class FCApplication : BaseApplication() {
 
         fun recordNewToken(expiresIn: Long) {
             try {
-                val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                val pendingIntentSet = PendingIntent.getBroadcast(application, 0, Intent("repeatAlarm"), PendingIntent.FLAG_UPDATE_CURRENT)
+                val alarmManager =
+                    application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val pendingIntentSet = PendingIntent.getBroadcast(
+                    application,
+                    0,
+                    Intent("repeatAlarm"),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
                 alarmManager.set(AlarmManager.RTC_WAKEUP, expiresIn, pendingIntentSet)
             } catch (e: Exception) {
                 e.printStackTrace()
