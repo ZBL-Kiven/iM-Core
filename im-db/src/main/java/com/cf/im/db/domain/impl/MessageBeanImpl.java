@@ -13,7 +13,7 @@ public class MessageBeanImpl implements MessageIn {
     @Embedded
     public MessageBean message;
 
-    @Relation(parentColumn = "uid", entityColumn = "uid")
+    @Relation(parentColumn = "uid", entityColumn = "uid", entity = MemberBean.class)
     public MemberBeanImpl member;
 
     //~~~~~~~~~ 实现 UI 接口 ~~~~~~~~~ 
