@@ -14,7 +14,7 @@ public class MessageBeanImpl implements MessageIn {
     public MessageBean message;
 
     @Relation(parentColumn = "uid", entityColumn = "uid", entity = MemberBean.class)
-    public MemberBeanImpl member;
+    public _MemberBeanImpl member;
 
     //~~~~~~~~~ 实现 UI 接口 ~~~~~~~~~ 
     @Override

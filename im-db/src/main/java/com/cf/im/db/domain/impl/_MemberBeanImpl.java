@@ -1,6 +1,10 @@
 package com.cf.im.db.domain.impl;
 
-public class MemberBeanImpl {
+/**
+ * 临时优化项
+ * Message——Member
+ */
+public class _MemberBeanImpl {
 
     /**
      * 用户头像
