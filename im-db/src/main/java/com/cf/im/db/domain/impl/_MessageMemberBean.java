@@ -4,8 +4,7 @@ package com.cf.im.db.domain.impl;
  * 临时优化项
  * Message——Member
  */
-public class _MemberBeanImpl {
-
+public class _MessageMemberBean {
     /**
      * 用户头像
      */

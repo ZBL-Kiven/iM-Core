@@ -3,7 +3,7 @@ package com.cf.im.db.repositorys;
 
 import com.cf.im.db.dao.DialogDao;
 import com.cf.im.db.domain.DialogBean;
-import com.cf.im.db.domain.impl.DialogBeanImpl;
+import com.cf.im.db.domain.impl._DialogBeanImpl;
 import com.cf.im.db.listener.DBListener;
 
 import java.util.List;
@@ -28,23 +28,23 @@ public class DialogRepository extends BaseRepository {
         });
     }
 
-    public static void queryDialog(DBListener<List<DialogBeanImpl>> listener) {
+    public static void queryDialog(DBListener<List<_DialogBeanImpl>> listener) {
         getReadExecutor().execute(() -> {
-            List<DialogBeanImpl> beans = getDialogDao().queryAll();
+            List<_DialogBeanImpl> beans = getDialogDao().queryAll();
             listener.onSuccess(beans);
         });
     }
 
-    public static void queryDialogById(String dialogId, DBListener<DialogBeanImpl> listener) {
+    public static void queryDialogById(String dialogId, DBListener<_DialogBeanImpl> listener) {
         getReadExecutor().execute(() -> {
-            DialogBeanImpl bean = getDialogDao().queryById(dialogId);
+            _DialogBeanImpl bean = getDialogDao().queryById(dialogId);
             listener.onSuccess(bean);
         });
     }
 
-    public static void queryByUserId(String userId, DBListener<DialogBeanImpl> listener) {
+    public static void queryByUserId(String userId, DBListener<_DialogBeanImpl> listener) {
         getReadExecutor().execute(() -> {
-            DialogBeanImpl bean = getDialogDao().queryByUserId(userId);
+            _DialogBeanImpl bean = getDialogDao().queryByUserId(userId);
             listener.onSuccess(bean);
         });
     }

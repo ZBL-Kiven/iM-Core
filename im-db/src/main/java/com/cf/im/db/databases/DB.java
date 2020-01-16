@@ -6,7 +6,7 @@ public class DB {
 
     public static BaseSingleton<DB> singleton = new BaseSingleton<DB>() {
         @Override
-        protected DB create() {
+        protected DB create(String... arg) {
             return new DB();
         }
     };
