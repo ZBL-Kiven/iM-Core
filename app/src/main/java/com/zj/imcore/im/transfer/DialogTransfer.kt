@@ -12,13 +12,13 @@ object DialogTransfer {
     }
 
     fun transform(bean: DialogIn): DialogInfo {
-        return DialogInfo(bean);
+        return DialogInfo(bean)
     }
 
-    fun transform(i: Int): DialogInfo {
+    fun transformTest(i: Int): DialogInfo {
         return DialogInfo(object : DialogIn {
-            override fun getId(): String {
-                return "8589934605"
+            override fun getId(): Long {
+                return 8589934605
             }
 
             override fun getTitle(): String {
@@ -45,8 +45,8 @@ object DialogTransfer {
                 return 1
             }
 
-            override fun getUserId(): String? {
-                return "2"
+            override fun getUserId(): Long {
+                return 2
             }
 
             override fun hasStar(): Boolean {
@@ -91,10 +91,11 @@ object DialogTransfer {
         })
     }
 
+    @Suppress("unused")
     fun getTestData(): ArrayList<DialogInfo> {
         return arrayListOf<DialogInfo>().apply {
             (0 until 1).forEach { i ->
-                add(transform(i))
+                add(transformTest(i))
             }
         }
     }

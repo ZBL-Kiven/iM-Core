@@ -13,7 +13,7 @@ interface MessageIn {
 
     fun createdTs(): Long
 
-    fun uid(): String?
+    fun uid(): Long
 
     fun referKey(): String
 

@@ -26,7 +26,7 @@ class FCApplication : BaseApplication() {
         super.onCreate()
         SPUtils_Proxy.init(BuildConfig.APPLICATION_ID, this)
         DB.singleton.get().init(this)
-        AppDatabase.singleton.get();
+        AppDatabase.singleton.get()
         AppDatabase.singleton.get("userId")
     }
 
@@ -63,8 +63,8 @@ class FCApplication : BaseApplication() {
             }
         }
 
-        fun isSelf(uid: String?): Boolean {
-            return !uid.isNullOrEmpty() && uid == SPUtils_Proxy.getUserId("")
+        fun isSelf(uid: Long): Boolean {
+            return uid == SPUtils_Proxy.getUserId(0)
         }
 
         @SuppressLint("HardwareIds")

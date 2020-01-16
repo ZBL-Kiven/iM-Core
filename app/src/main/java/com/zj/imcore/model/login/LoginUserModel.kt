@@ -1,7 +1,7 @@
 package com.zj.imcore.model.login
 
 class LoginUserModel {
-    var id: Int = 0
+    var id: Long = 0L
     var name: String? = ""
     var inactive: Boolean = false
     var phone: String? = ""

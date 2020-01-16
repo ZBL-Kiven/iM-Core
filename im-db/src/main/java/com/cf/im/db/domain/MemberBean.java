@@ -16,7 +16,7 @@ public class MemberBean {
      * sample：false
      */
     @PrimaryKey()
-    public int uid;
+    public long uid;
 
     /**
      * 用户是否活跃

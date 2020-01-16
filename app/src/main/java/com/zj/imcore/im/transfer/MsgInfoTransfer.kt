@@ -1,6 +1,12 @@
 package com.zj.imcore.im.transfer
 
+import com.alibaba.fastjson.JSON
 import com.cf.im.db.domain.impl._MessageBeanImpl
+import com.cf.im.db.repositorys.MessageRepository
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.zj.im.chat.enums.SendMsgState
+import com.zj.im.dispatcher.UIStore
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.enums.MsgSubtype
 import com.zj.imcore.enums.MsgType
@@ -12,10 +18,21 @@ import kotlin.random.Random
 
 object MsgInfoTransfer {
 
-    private var isMock = false
+    fun transforMsg(d: JsonObject, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
+        val msg = Gson().fromJson(d.get("data").toString(), MessageBean::class.java)
+        msg.callId = if (callId.isNullOrEmpty()) d.get("call_id").asString else callId
+        msg.sendMsgState = sendingState?.type ?: 0
+        msg.localCreateTs = System.currentTimeMillis()
+
+        MessageRepository.insertOrUpdate(JSON.toJSONString(msg)) {
+            val info = transform(it)
+            UIStore.postData(info)
+            onFinish()
+        }
+    }
 
     fun transform(beans: List<_MessageBeanImpl>): MutableList<MsgInfo> {
-       return beans.mapTo(arrayListOf()) {
+        return beans.mapTo(arrayListOf()) {
             transform(it)
         }
     }
@@ -25,11 +42,8 @@ object MsgInfoTransfer {
     }
 
     fun transform(data: MessageBean): MsgInfo {
-
-        if (isMock) {
-            data.subtype = null
-            data.subtypeDetail = null
-        }
+        data.subtype = null
+        data.subtypeDetail = null
         return MsgInfo(object : MessageIn {
             override fun channelId(): String? {
                 return "" + data.dialog_id
@@ -73,8 +87,8 @@ object MsgInfoTransfer {
                 return DateUtils.getDate("yyyy-MM-dd'T'HH-mm-ss", data.created)?.time ?: 0
             }
 
-            override fun uid(): String? {
-                return "${data.uid}"
+            override fun uid(): Long {
+                return data.uid
             }
 
             override fun referKey(): String {
@@ -106,7 +120,7 @@ object MsgInfoTransfer {
             }
 
             override fun getName(): String? {
-                return if (FCApplication.isSelf(data.uid.toString())) "self" else "other"
+                return if (FCApplication.isSelf(data.uid)) "self" else "other"
             }
 
             override fun getStickerUrl(): String? {

@@ -40,7 +40,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
         private const val NORMAL = "normal"
 
-        fun start(activity: Activity?, id: String, userId: String?, draft: String?, title: String) {
+        fun start(activity: Activity?, id: Long, userId: Long, draft: String?, title: String) {
             val i = Intent(activity, ChatActivity::class.java)
             i.putExtra(SESSION_ID, id)
             i.putExtra(USER_ID, userId)
@@ -50,8 +50,8 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         }
     }
 
-    private var uid = ""
-    private var sessionId = ""
+    private var uid = 0L
+    private var sessionId = 0L
     private var draft = ""
     private var conversasionTitle = ""
 
@@ -83,7 +83,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
                 return celBar?.etChat
             }
 
-            override fun getSessionId(): String {
+            override fun getSessionId(): Long {
                 return this@ChatActivity.sessionId
             }
         }))
@@ -92,21 +92,21 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
     private fun initData() {
         try {
             intent?.let {
-                if (it.hasExtra(SESSION_ID)) sessionId = it.getStringExtra(SESSION_ID) ?: ""
-                if (it.hasExtra(USER_ID)) uid = it.getStringExtra(USER_ID) ?: ""
+                if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
+                if (it.hasExtra(USER_ID)) uid = it.getLongExtra(USER_ID, 0L)
                 if (it.hasExtra(DRAFT)) draft = it.getStringExtra(DRAFT) ?: ""
                 if (it.hasExtra(TITLE)) conversasionTitle = it.getStringExtra(TITLE) ?: ""
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        if (sessionId.isEmpty() && uid.isEmpty()) {
+        if (sessionId <= 0 && uid <= 0) {
             FCApplication.showToast(getString(R.string.app_chat_error_empty_target))
             finish()
             return
         }
         register()
-        DataTransferHub.queryMsgInDb("13", 8589934605)
+        DataTransferHub.queryMsgInDb(sessionId)
     }
 
     private fun initListener() {
@@ -181,7 +181,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         celBar?.reset()
     }
 
-    fun getSessionId(): String {
+    fun getSessionId(): Long {
         return sessionId
     }
 

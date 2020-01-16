@@ -12,14 +12,14 @@ import java.util.*
 
 object MsgSender {
 
-    fun sendText(sessionId: String, text: String) {
+    fun sendText(sessionId: Long, text: String) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = MessageBean().apply {
             this.subtype = "normal"
-            this.uid = SPUtils_Proxy.getUserId("0").toInt()
+            this.uid = SPUtils_Proxy.getUserId(0)
             this.team_id = 1
-            this.dialog_id = sessionId.toLong()
+            this.dialog_id = sessionId
             this.text = text
             this.callId = callId
         }
@@ -30,15 +30,15 @@ object MsgSender {
         IMHelper.send(data, callId, 10000, false, false, null)
     }
 
-    fun sendSticker(sessionId: String, uri: String) {
+    fun sendSticker(sessionId: Long, path: String) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = MessageBean().apply {
             this.subtype = MsgType.STICKER.name
-            this.uid = SPUtils_Proxy.getUserId("0").toInt()
+            this.uid = SPUtils_Proxy.getUserId(0)
             this.team_id = 1
-            this.dialog_id = sessionId.toLong()
-            this.text = "[sticker]"
+            this.dialog_id = sessionId
+            this.text = "[sticker]$path"
             this.callId = callId
         }
         baseSendInfo.data = m
@@ -48,15 +48,15 @@ object MsgSender {
         IMHelper.send(data, callId, 10000, false, false, null)
     }
 
-    fun sendImage(sessionId: String, info: FileInfo) {
+    fun sendImage(sessionId: Long, info: FileInfo) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = MessageBean().apply {
             this.subtype = MsgType.FILE.name
             this.subtypeDetail = MsgSubtype.IMAGE.name
-            this.uid = SPUtils_Proxy.getUserId("0").toInt()
+            this.uid = SPUtils_Proxy.getUserId(0)
             this.team_id = 1
-            this.dialog_id = sessionId.toLong()
+            this.dialog_id = sessionId
             this.text = "[image]${info.path}"
             this.callId = callId
         }
@@ -67,15 +67,15 @@ object MsgSender {
         IMHelper.send(data, callId, 10000, false, false, null)
     }
 
-    fun sendVideo(sessionId: String, info: FileInfo) {
+    fun sendVideo(sessionId: Long, info: FileInfo) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = MessageBean().apply {
             this.subtype = MsgType.FILE.name
             this.subtypeDetail = MsgSubtype.VIDEO.name
-            this.uid = SPUtils_Proxy.getUserId("0").toInt()
+            this.uid = SPUtils_Proxy.getUserId(0)
             this.team_id = 1
-            this.dialog_id = sessionId.toLong()
+            this.dialog_id = sessionId
             this.text = "[video]${info.path}"
             this.callId = callId
         }
@@ -86,15 +86,15 @@ object MsgSender {
         IMHelper.send(data, callId, 10000, false, false, null)
     }
 
-    fun sendFile(sessionId: String, info: FileInfo) {
+    fun sendFile(sessionId: Long, info: FileInfo) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = MessageBean().apply {
             this.subtype = MsgType.FILE.name
             this.subtypeDetail = MsgSubtype.FILE.name
-            this.uid = SPUtils_Proxy.getUserId("0").toInt()
+            this.uid = SPUtils_Proxy.getUserId(0)
             this.team_id = 1
-            this.dialog_id = sessionId.toLong()
+            this.dialog_id = sessionId
             this.text = "[file]${info.path}"
             this.callId = callId
         }

@@ -18,22 +18,8 @@ object DataTransferHub {
         val d = Gson().fromJson(data, JsonObject::class.java)
         when (d.get("type").toString()) {
             "create_message" -> {
-                transforMsg(d, callId, sendingState, onFinish)
+                MsgInfoTransfer.transforMsg(d, callId, sendingState, onFinish)
             }
-        }
-    }
-
-
-    private fun transforMsg(d: JsonObject, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
-        val msg = Gson().fromJson(d.get("data").toString(), MessageBean::class.java)
-        msg.callId = if (callId.isNullOrEmpty()) d.get("call_id").asString else callId
-        msg.sendMsgState = sendingState?.type ?: 0
-        msg.localCreateTs = System.currentTimeMillis()
-
-        MessageRepository.insertOrUpdate(JSON.toJSONString(msg)) {
-            val info = MsgInfoTransfer.transform(it)
-            UIStore.postData(info)
-            onFinish()
         }
     }
 
@@ -44,14 +30,13 @@ object DataTransferHub {
     fun queryDialogInDb() {
         DialogRepository.queryDialog {
             UIStore.postData(DialogTransfer.transform(it))
-            UIStore.postData(DialogTransfer.getTestData())
         }
     }
 
-    fun queryMsgInDb(uid: String, dialogId: Long) {
+    fun queryMsgInDb(dialogId: Long) {
         MessageRepository.queryMessageBy(dialogId, -1, 20, true) {
             UIStore.postData(MsgInfoTransfer.transform(it))
-        };
+        }
     }
 
     private fun getMockMsgs(data: MessageBean): MsgInfo {

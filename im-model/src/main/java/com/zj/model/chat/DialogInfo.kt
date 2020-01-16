@@ -6,7 +6,7 @@ import com.zj.model.interfaces.DialogIn
 class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
 
     //unique id for conversation
-    val channelId: String; get() = impl.getId()
+    val channelId: Long; get() = impl.getId()
 
     val title: String; get() = impl.getTitle()
 
@@ -23,15 +23,13 @@ class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
     val otherReadTs: Long; get() = impl.getOtherReadTs()
 
     //user id of the peer during p2p conversation
-    val userId: String?; get() = impl.getUserId()
+    val userId: Long; get() = impl.getUserId()
 
     //are there favorite messages in the conversation
     val hasStar: Boolean; get() = impl.hasStar()
 
-    //对话的草稿
     val draft: String?; get() = impl.getDraft()
 
-    //对话是否显示
     val isShown: Boolean; get() = impl.isShown()
 
     val sortTs: Long; get() = impl.sortTs()

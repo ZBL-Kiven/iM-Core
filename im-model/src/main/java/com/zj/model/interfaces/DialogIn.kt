@@ -4,7 +4,7 @@ package com.zj.model.interfaces
 interface DialogIn {
 
     //unique id for conversation
-    fun getId(): String
+    fun getId(): Long
 
     fun getTitle(): String
 
@@ -21,7 +21,7 @@ interface DialogIn {
     fun getOtherReadTs(): Long
 
     //user id of the peer during p2p conversation
-    fun getUserId(): String?
+    fun getUserId(): Long
 
     //are there favorite messages in the conversation
     fun hasStar(): Boolean

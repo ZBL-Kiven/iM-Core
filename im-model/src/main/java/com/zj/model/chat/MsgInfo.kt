@@ -17,7 +17,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     val createdTs: Long; get() = impl.createdTs()
 
-    val uid: String?; get() = impl.uid()
+    val uid: Long; get() = impl.uid()
 
     val referKey: String; get() = impl.referKey()
 
@@ -91,7 +91,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
     /** -------- db ignore properties ------- */
 
     //return curUserId == this.uid
-    fun isSelf(curUserId: String): Boolean {
+    fun isSelf(curUserId: Long): Boolean {
         return impl.uid() == curUserId
     }
 
@@ -113,7 +113,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
     }
 
     override fun getCacheName(payloads: String?): String {
-        return impl.uid() ?: "default"
+        return "${impl.uid()}"
     }
 
     override fun getOriginalPath(payloads: String?): String? {

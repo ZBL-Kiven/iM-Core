@@ -11,7 +11,7 @@ class UserInfoActivity : FCActivity() {
 
         private const val UID = "uid"
 
-        fun start(context: Context?, id: String) {
+        fun start(context: Context?, id: Long) {
             context?.startActivity(Intent(context, UserInfoActivity::class.java).apply {
                 this.putExtra(UID, id)
             })
