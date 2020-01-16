@@ -91,6 +91,11 @@ public class MemberBean {
     public String avatar;
 
     /**
+     * 用户首字母
+     */
+    public String indexSymbol;
+
+    /**
      * 填充 profile 内容
      *
      * @param profile 服务器返回Member 里面的 profile 对象
@@ -100,6 +105,7 @@ public class MemberBean {
         this.email = profile.get("email");
         this.title = profile.get("title");
         this.avatar = profile.get("avatar");
+        this.indexSymbol = profile.get("indexSymbol");
     }
     //####### profile MAP END #########
 

@@ -32,8 +32,9 @@ object IMHelper : IMInterface<String>() {
         SyncManager.init()
     }
 
-    override fun shutdown() {
+    override fun shutdown(case: String) {
         SyncManager.shutdown()
+        super.shutdown(case)
     }
 
     fun sendTxt(sessionId: String, text: String?) {

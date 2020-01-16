@@ -14,24 +14,21 @@ import com.zj.model.mod.MessageBean
 object DataTransferHub {
 
     //todo 临时拆分
-    fun onSocketDataReceived(
-        data: String?,
-        callId: String?,
-        sendingState: SendMsgState?,
-        onFinish: () -> Unit
-    ) {
+    fun onSocketDataReceived(data: String?, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
         val d = Gson().fromJson(data, JsonObject::class.java)
-        val msg = Gson().fromJson(d.get("data").toString(), MessageBean::class.java)
-        mCacheMsgs.firstOrNull { it == msg }?.let {
-            msg.callId = it.callId
-            msg.localCreateTs = System.currentTimeMillis()
-        } ?: {
-            msg.callId = if (callId.isNullOrEmpty()) d.get("call_id").asString else callId
-            msg.sendMsgState = sendingState?.type ?: 0
-            msg.localCreateTs = System.currentTimeMillis()
-        }.invoke()
+        when (d.get("type").toString()) {
+            "create_message" -> {
+                transforMsg(d, callId, sendingState, onFinish)
+            }
+        }
+    }
 
-        mCacheMsgs.add(msg)
+
+    private fun transforMsg(d: JsonObject, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
+        val msg = Gson().fromJson(d.get("data").toString(), MessageBean::class.java)
+        msg.callId = if (callId.isNullOrEmpty()) d.get("call_id").asString else callId
+        msg.sendMsgState = sendingState?.type ?: 0
+        msg.localCreateTs = System.currentTimeMillis()
 
         MessageRepository.insertOrUpdate(JSON.toJSONString(msg)) {
             val info = MsgInfoTransfer.transform(it)
@@ -60,7 +57,4 @@ object DataTransferHub {
     private fun getMockMsgs(data: MessageBean): MsgInfo {
         return MsgInfoTransfer.transform(data)
     }
-
-    val mCacheMsgs = mutableListOf<MessageBean>()
-
 }

@@ -10,15 +10,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
-import com.alibaba.fastjson.JSON
+import com.cf.im.db.domain.MemberBean
 import com.cf.im.db.repositorys.MemberRepository
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
+import com.zj.im.dispatcher.addReceiveObserver
+import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.apis.members.MemberApi
 import com.zj.imcore.base.FCApplication
+import com.zj.imcore.model.member.MembersEventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
-import com.zj.imcore.model.member.contact.ContactMemberInfo
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.loading.BaseLoadingView
 import java.util.ArrayList
@@ -43,7 +47,7 @@ class ContactFragment : BaseLinkageFragment() {
     private var loadingView: BaseLoadingView? = null
     private var adapter: ContactListAdapter? = null
     private var searchHandler: Handler? = null
-    private var cachedData: ArrayList<ContactMemberInfo.MemberModel>? = null
+    private var cachedData: ArrayList<MemberBean>? = null
 
     private fun initView() {
         etSearch = find(R.id.app_fragment_contact_et_search)
@@ -84,6 +88,7 @@ class ContactFragment : BaseLinkageFragment() {
     }
 
     private fun initData() {
+        loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
         searchHandler = Handler(Looper.getMainLooper()) {
             if (it.what == searchKey) doOnSearch(it.obj.toString())
             return@Handler false
@@ -91,35 +96,15 @@ class ContactFragment : BaseLinkageFragment() {
         this.context?.let {
             adapter = ContactListAdapter(it)
             rvContent?.adapter = adapter
-            getData()
-        } ?: loadingView?.setMode(
-            BaseLoadingView.DisplayMode.NO_DATA,
-            getString(R.string.app_system_error_no_context)
-        )
-    }
-
-    private fun getData() {
-        val since = SPUtils_Proxy.getMemberSyncSince(0)
-        loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
-        MemberApi.fetchMembers(since) { isSuccess, data, throwable ->
-            if (isSuccess) {
-                if (data == null || data.members.isNullOrEmpty()) {
+        } ?: loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_system_error_no_context))
+        addReceiveObserver<MembersEventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).listen {
+            MemberRepository.queryAll {
+                if (it.isNullOrEmpty()) {
                     loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
                 } else {
-                    SPUtils_Proxy.setMemberSyncSince(data.nextTs)
-                    data.members?.let { cachedData = ArrayList(it) }
-                    setData(cachedData)
-                    MemberRepository.insertOrUpdateAll(JSON.toJSONString(cachedData)) {
-                        //数据集操作完成
-                    }
+
                     loadingView?.setMode(BaseLoadingView.DisplayMode.NORMAL.delay(500))
                 }
-            } else {
-                FCApplication.showToast(
-                    throwable?.response()?.errorBody()?.string()
-                        ?: getString(R.string.app_get_contact_failed)
-                )
-                loadingView?.setMode(BaseLoadingView.DisplayMode.NO_NETWORK)
             }
         }
     }
@@ -131,17 +116,14 @@ class ContactFragment : BaseLinkageFragment() {
         }
         cachedData?.let {
             val filterList = it.filterTo(arrayListOf()) { m ->
-                m.name?.contains(ets, true) ?: false || m.profile?.title?.contains(
-                    ets,
-                    true
-                ) ?: false || m.profile?.email?.contains(ets, true) ?: false
+                m.name?.contains(ets, true) ?: false || m.title?.contains(ets, true) ?: false || m.email?.contains(ets, true) ?: false
             }
             setData(filterList)
         }
     }
 
-    private fun setData(data: List<ContactMemberInfo.MemberModel>?) {
-        val map = mutableMapOf<String, MutableList<ContactMemberInfo.MemberModel>>()
+    private fun setData(data: List<MemberBean>?) {
+        val map = mutableMapOf<String, MutableList<MemberBean>>()
         data?.groupByTo(map) {
             it.indexSymbol
         }
@@ -150,6 +132,33 @@ class ContactFragment : BaseLinkageFragment() {
             ContactGroupInfo(it.key, it.value)
         }
         adapter?.change(groupData)
+    }
+
+    private fun getData() {
+        val since = SPUtils_Proxy.getMemberSyncSince(0)
+        loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
+        MemberApi.fetchMembers(since) { isSuccess, data, throwable ->
+            if (isSuccess) {
+                val obj = Gson().fromJson(data, JsonObject::class.java)
+                if (isSuccess && obj != null) {
+                    @Suppress("CAST_NEVER_SUCCEEDS") val nextTs = obj["next_ts"] as Long
+                    val d = obj["members"].toString()
+                    MemberRepository.insertOrUpdateAll(d) {
+                        if (data == null || it.isNullOrEmpty()) {
+                            loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
+                        } else {
+                            SPUtils_Proxy.setMemberSyncSince(nextTs)
+                            cachedData = ArrayList(it)
+                            setData(cachedData)
+                            loadingView?.setMode(BaseLoadingView.DisplayMode.NORMAL.delay(500))
+                        }
+                    }
+                } else {
+                    FCApplication.showToast(throwable?.response()?.errorBody()?.string() ?: getString(R.string.app_get_contact_failed))
+                    loadingView?.setMode(BaseLoadingView.DisplayMode.NO_NETWORK)
+                }
+            }
+        }
     }
 
     override fun onDestroyed() {

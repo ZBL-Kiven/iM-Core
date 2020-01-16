@@ -125,8 +125,6 @@ abstract class IMInterface<T> : MessageInterface<T>() {
 
     open fun prepare() {}
 
-    open fun shutdown() {}
-
     open fun onAppLayerChanged(isHidden: Boolean) {}
 
     open fun onServiceConnected() {}
@@ -156,7 +154,7 @@ abstract class IMInterface<T> : MessageInterface<T>() {
         getClient("IMInterface.resume")?.resume(code)
     }
 
-    fun shutDown(case: String) {
+    open fun shutdown(case: String) {
         getService("shutDown by $case", true)?.shutDown()
         serviceConn?.let {
             option?.context?.unbindService(it)

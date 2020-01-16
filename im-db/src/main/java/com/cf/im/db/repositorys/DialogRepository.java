@@ -5,6 +5,7 @@ import com.cf.im.db.dao.DialogDao;
 import com.cf.im.db.domain.DialogBean;
 import com.cf.im.db.domain.impl._DialogBeanImpl;
 import com.cf.im.db.listener.DBListener;
+import com.zj.model.interfaces.DialogIn;
 
 import java.util.List;
 
@@ -21,11 +22,11 @@ public class DialogRepository extends BaseRepository {
         });
     }
 
-    public static void insertOrUpdate(List<DialogBean> beans, DBListener<List<DialogBean>> listener) {
-        getWriteExecutor().execute(() -> {
-            getDialogDao().insertOrUpdate(beans);
-            listener.onSuccess(beans);
-        });
+    public static void insertOrUpdate(String beans, DBListener<List<DialogIn>> listener) {
+//        getWriteExecutor().execute(() -> {
+//            getDialogDao().insertOrUpdate(beans);
+//            listener.onSuccess(beans);
+//        });
     }
 
     public static void queryDialog(DBListener<List<_DialogBeanImpl>> listener) {
