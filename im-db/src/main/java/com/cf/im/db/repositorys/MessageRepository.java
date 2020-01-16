@@ -82,5 +82,4 @@ public class MessageRepository extends BaseRepository {
             listener.onSuccess(beans);
         });
     }
-
 }

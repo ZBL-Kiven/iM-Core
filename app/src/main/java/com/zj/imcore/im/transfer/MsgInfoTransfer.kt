@@ -15,9 +15,9 @@ object MsgInfoTransfer {
     private var isMock = false
 
     fun transform(beans: List<_MessageBeanImpl>): MutableList<MsgInfo> {
-        val list = mutableListOf<MsgInfo>()
-        beans.forEach { list.add(transform(it)) }
-        return list
+       return beans.mapTo(arrayListOf()) {
+            transform(it)
+        }
     }
 
     fun transform(bean: _MessageBeanImpl): MsgInfo {
