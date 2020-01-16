@@ -19,7 +19,7 @@ object FetcherApi {
     fun syncDialogs(completed: (Boolean, HttpException?) -> Unit): BaseRetrofit.RequestCompo {
         return get().call({ it.fetchDialogs() }) { isSuccess: Boolean, data: String?, throwable: HttpException? ->
             if (isSuccess) {
-                DialogRepository.insertOrUpdate(data) {
+                DialogRepository.insertOrUpdates(data) {
                     UIStore.postData(it)
                     completed.invoke(true, null)
                 }

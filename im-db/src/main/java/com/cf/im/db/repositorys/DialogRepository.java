@@ -1,11 +1,10 @@
 package com.cf.im.db.repositorys;
 
-
+import com.alibaba.fastjson.JSON;
 import com.cf.im.db.dao.DialogDao;
 import com.cf.im.db.domain.DialogBean;
 import com.cf.im.db.domain.impl._DialogBeanImpl;
 import com.cf.im.db.listener.DBListener;
-import com.zj.model.interfaces.DialogIn;
 
 import java.util.List;
 
@@ -15,18 +14,20 @@ public class DialogRepository extends BaseRepository {
         return getDatabase().getDialogDao();
     }
 
-    public static void insertOrUpdate(DialogBean bean, DBListener<DialogBean> listener) {
+    public static void insertOrUpdate(String json, DBListener<DialogBean> listener) {
         getWriteExecutor().execute(() -> {
+            DialogBean bean = JSON.parseObject(json, DialogBean.class);
             getDialogDao().insertOrUpdate(bean);
             listener.onSuccess(bean);
         });
     }
 
-    public static void insertOrUpdate(String beans, DBListener<List<DialogIn>> listener) {
-//        getWriteExecutor().execute(() -> {
-//            getDialogDao().insertOrUpdate(beans);
-//            listener.onSuccess(beans);
-//        });
+    public static void insertOrUpdates(String json, DBListener<List<DialogBean>> listener) {
+        getWriteExecutor().execute(() -> {
+            List<DialogBean> beans = JSON.parseArray(json, DialogBean.class);
+            getDialogDao().insertOrUpdate(beans);
+            listener.onSuccess(beans);
+        });
     }
 
     public static void queryDialog(DBListener<List<_DialogBeanImpl>> listener) {
