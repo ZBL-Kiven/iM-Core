@@ -1,102 +1,113 @@
 package com.cf.im.db.domain.impl;
 
 import androidx.annotation.NonNull;
+import androidx.room.Embedded;
+import androidx.room.Relation;
 
 import com.cf.im.db.domain.DialogBean;
+import com.cf.im.db.domain.MessageBean;
 import com.zj.model.interfaces.DialogIn;
 
-public class DialogBeanImpl extends DialogBean implements DialogIn {
+public class _DialogBeanImpl implements DialogIn {
+
+    @Embedded
+    public DialogBean bean;
+
+    @Relation(parentColumn = "dialogId", entityColumn = "dialogId", entity = MessageBean.class)
+    public _DialogMessageBean msg;
+
     @Override
     @NonNull
     public String getId() {
-        return channelID;
+        return String.valueOf(bean.dialogId);
     }
 
     @Override
     @NonNull
     public String getTitle() {
-        return title;
+        return bean.name;
     }
 
     @Override
     @NonNull
     public String getSubDetail() {
-        return subDetail;
+        return msg == null ? "" : msg.text;
     }
 
+    // TODO: 2020/1/16 yj
     @Override
     public long getLatestTs() {
-        return latestTs;
+        return msg != null ? System.currentTimeMillis() : System.currentTimeMillis();
     }
 
     @Override
     public long getSelfReadTs() {
-        return selfReadTs;
+        return 0;
     }
 
     @Override
     public int getUnReadCount() {
-        return unReadCount;
+        return 0;
     }
 
     @Override
     public long getOtherReadTs() {
-        return otherReadTs;
+        return 0;
     }
 
     @Override
     public String getUserId() {
-        return userId;
+        return bean.userId;
     }
 
     @Override
     public boolean hasStar() {
-        return hasStar;
+        return false;
     }
 
     @Override
     public String getDraft() {
-        return draft;
+        return bean.draft;
     }
 
     @Override
     public boolean isShown() {
-        return isShown;
+        return true;
     }
 
     @Override
     public long sortTs() {
-        return sortTs;
+        return bean.latestTs;
     }
 
     @Override
     public boolean notification() {
-        return notification;
+        return false;
     }
 
     @Override
     public long hideTs() {
-        return hideTs;
+        return 0;
     }
 
     @Override
     @NonNull
     public String getThumbUrl() {
-        return thumbUrl;
+        return bean.avatar;
     }
 
     @Override
     public boolean isPin() {
-        return isPin;
+        return false;
     }
 
     @Override
     public boolean isMute() {
-        return isMute;
+        return false;
     }
 
     @Override
     public boolean isDelete() {
-        return isDelete;
+        return false;
     }
 }

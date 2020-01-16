@@ -8,7 +8,7 @@ import androidx.sqlite.db.SimpleSQLiteQuery;
 import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.cf.im.db.dao.MessageDao;
-import com.cf.im.db.domain.impl.MessageBeanImpl;
+import com.cf.im.db.domain.impl._MessageBeanImpl;
 
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +25,7 @@ public abstract class MessageDaoImpl implements MessageDao {
      * @param desc     排序方式
      * @return 消息列表
      */
-    public List<MessageBeanImpl> queryMessageBy(long dialogId, int kId, int limit, boolean desc) {
+    public List<_MessageBeanImpl> queryMessageBy(long dialogId, int kId, int limit, boolean desc) {
         String descStr = desc ? "desc" : "asc";
         String sql;
         if (kId <= 0) {
@@ -40,7 +40,7 @@ public abstract class MessageDaoImpl implements MessageDao {
     }
 
     @RawQuery
-    public abstract List<MessageBeanImpl> queryBySqlImpl(SupportSQLiteQuery sql);
+    public abstract List<_MessageBeanImpl> queryBySqlImpl(SupportSQLiteQuery sql);
 
     /**
      * 通过callId 或者 serviceId 查询消息主键Id
@@ -51,6 +51,6 @@ public abstract class MessageDaoImpl implements MessageDao {
      */
     @Transaction
     @Query("select * from messagebean where callId = :callId or id = :serviceId limit 1")
-    public abstract MessageBeanImpl queryIdOrCallIdImpl(String callId, long serviceId);
+    public abstract _MessageBeanImpl queryIdOrCallIdImpl(String callId, long serviceId);
 
 }

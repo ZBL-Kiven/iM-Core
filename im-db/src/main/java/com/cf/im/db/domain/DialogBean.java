@@ -5,50 +5,35 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.zj.model.mod.MessageBean;
+
+import java.util.Map;
+
 @Entity(indices = {@Index("userId"), @Index("latestTs")})
 public class DialogBean {
 
-    @NonNull
-    @PrimaryKey(autoGenerate = false)
-    public String channelID;//: ; get() = impl.getId()
+    @PrimaryKey
+    public long dialogId; // 17179869197,
 
-    public String title;//: ; get() = impl.getTitle()
+    public String groupId; // null,
 
-    public String subDetail;//: ; get() = impl.getSubDetail()
+    public int teamId; // 1,
 
-    //the conversation last updated Ts
-    public long latestTs;// get() = impl.getLatestTs()
+    public String userId; // 4,
 
-    public long selfReadTs;// get() = impl.getSelfReadTs()
+    public String type; // "p2p",
 
-    public int unReadCount;//: ; get() = impl.getUnReadCount()
+    public String name;
 
-    //last time someone read the conversation
-    public long otherReadTs;// get() = impl.getOtherReadTs()
+    public String avatar;
 
-    //user id of the peer during p2p conversation
-    public String userId;//: ?; get() = impl.getUserId()
+    //草稿
+    public String draft;
 
-    //are there favorite messages in the conversation
-    public boolean hasStar;// get() = impl.hasStar()
+    public long latestTs; // 1578991414658
 
-    //对话的草稿
-    public String draft;//: ?; get() = impl.getDraft()
-
-    //对话是否显示
-    public boolean isShown;// get() = impl.isShown()
-
-    public long sortTs;// get() = impl.sortTs()
-
-    public boolean notification;// get() = impl.notification()
-
-    public long hideTs;// get() = impl.hideTs()
-
-    public String thumbUrl;//: ; get() = impl.getThumbUrl()
-
-    public boolean isPin;// get() = impl.isPin()
-
-    public boolean isMute;// get() = impl.isMute()
-
-    public boolean isDelete;// get() = impl.isDelete()
+    public void setInfo(Map<String, String> info) {
+        this.name = info.get("name");
+        this.avatar = info.get("avatar");
+    }
 }

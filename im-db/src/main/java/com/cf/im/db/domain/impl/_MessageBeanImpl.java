@@ -8,15 +8,16 @@ import com.cf.im.db.domain.MemberBean;
 import com.cf.im.db.domain.MessageBean;
 import com.zj.model.interfaces.MessageIn;
 
-public class MessageBeanImpl implements MessageIn {
+public class _MessageBeanImpl implements MessageIn {
 
     @Embedded
     public MessageBean message;
 
     @Relation(parentColumn = "uid", entityColumn = "uid", entity = MemberBean.class)
-    public _MemberBeanImpl member;
+    public _MessageMemberBean member;
 
-    //~~~~~~~~~ 实现 UI 接口 ~~~~~~~~~ 
+    //~~~~~~~~~ 实现 UI 接口 ~~~~~~~~~
+
     @Override
     public String channelId() {
         return message != null ? String.valueOf(message.dialogId) : "";

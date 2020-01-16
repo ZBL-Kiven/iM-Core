@@ -35,25 +35,9 @@ object DataTransferHub {
 
         MessageRepository.insertOrUpdate(JSON.toJSONString(msg)) {
             val info = MsgInfoTransfer.transform(it)
-            DialogRepository.queryByUserId("") {
-                if (it != null) {
-                    it.latestTs = System.currentTimeMillis()
-                    // 更新最后一条数据
-                    DialogRepository.insertOrUpdate(it) {
-                        //更新成功
-                        UIStore.postData(info)
-                        onFinish()
-                    }
-                } else {
-                    //拉数据
-                    UIStore.postData(info)
-                    onFinish()
-                    onFinish()
-                }
-            }
-
+            UIStore.postData(info)
+            onFinish()
         }
-
     }
 
     fun onSendingProgressChanged(process: Int, callId: String) {

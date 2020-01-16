@@ -18,4 +18,5 @@ public interface IDatabase {
 
     DialogDao getDialogDao();
 
+    void exit();
 }

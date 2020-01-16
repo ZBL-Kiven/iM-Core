@@ -8,18 +8,14 @@ package com.cf.im.db.databases;
 public abstract class BaseSingleton<T> {
     private volatile T mInstance;
 
-    protected abstract T create();
+    protected abstract T create(String... arg);
 
-    public final T get() {
+    public final T get(String... arg) {
         synchronized (this) {
             if (mInstance == null) {
-                mInstance = create();
+                mInstance = create(arg);
             }
             return mInstance;
         }
-    }
-
-    public void exit() {
-        mInstance = null;
     }
 }

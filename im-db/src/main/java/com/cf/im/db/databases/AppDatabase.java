@@ -13,7 +13,6 @@ import com.tencent.wcdb.room.db.WCDBOpenHelperFactory;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
 @Database(version = 1, entities = {
         MessageBean.class,
         MemberBean.class,
@@ -23,13 +22,16 @@ public abstract class AppDatabase extends RoomDatabase implements IDatabase {
 
     public static BaseSingleton<IDatabase> singleton = new BaseSingleton<IDatabase>() {
         @Override
-        protected IDatabase create() {
-            return AppDatabase.create();
+        protected IDatabase create(String... arg) {
+            if (arg == null || arg.length != 1) {
+                throw new NullPointerException("参数错误");
+            }
+            return AppDatabase.create(arg[0]);
         }
     };
 
     //数据库配置
-    private static final String DB_NAME = "cf_im2.db";
+    private static final String DB_NAME = "cf_im_%s.db";
 
 //    private static Migration MIGRATION_1_2 = new Migration(1, 2) {
 //        @Override
@@ -59,7 +61,7 @@ public abstract class AppDatabase extends RoomDatabase implements IDatabase {
         return databaseReadExecutor;
     }
 
-    private static AppDatabase create() {
+    public static IDatabase create(String user) {
         SQLiteCipherSpec cipherSpec = new SQLiteCipherSpec()  // 指定加密方式，使用默认加密可以省略
                 .setPageSize(4096)
                 .setKDFIteration(64000);
@@ -73,11 +75,15 @@ public abstract class AppDatabase extends RoomDatabase implements IDatabase {
         return Room.databaseBuilder(
                 DB.singleton.get().getContext(),
                 AppDatabase.class,
-                DB_NAME)
+                String.format(DB_NAME, user))
 //                .addMigrations(MIGRATION_1_2)
                 //.allowMainThreadQueries() // 允许主线程执行DB操作，一般不推荐
                 .openHelperFactory(factory) // 重要：使用WCDB打开Room
                 .build();
+    }
+
+    public synchronized void exit() {
+        singleton = null;
     }
 
 }

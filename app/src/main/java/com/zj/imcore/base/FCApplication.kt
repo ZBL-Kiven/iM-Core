@@ -27,6 +27,7 @@ class FCApplication : BaseApplication() {
         SPUtils_Proxy.init(BuildConfig.APPLICATION_ID, this)
         DB.singleton.get().init(this)
         AppDatabase.singleton.get();
+        AppDatabase.singleton.get("userId")
     }
 
     companion object {
