@@ -2,7 +2,7 @@ package com.yj;
 
 import com.cf.im.db.domain.MemberBean;
 import com.cf.im.db.listener.DBListener;
-import com.cf.im.db.repository.MemberRepository;
+import com.cf.im.db.repositorys.MemberRepository;
 
 import java.lang.ref.ReferenceQueue;
 import java.util.Map;

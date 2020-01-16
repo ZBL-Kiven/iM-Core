@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSON
-import com.cf.im.db.repository.MemberRepository
+import com.cf.im.db.repositorys.MemberRepository
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.imcore.R

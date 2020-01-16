@@ -1,8 +1,8 @@
 package com.zj.imcore.im.transfer
 
 import com.alibaba.fastjson.JSON
-import com.cf.im.db.repository.DialogRepository
-import com.cf.im.db.repository.MessageRepository
+import com.cf.im.db.repositorys.DialogRepository
+import com.cf.im.db.repositorys.MessageRepository
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.zj.im.chat.enums.SendMsgState
