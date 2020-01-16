@@ -1,6 +1,9 @@
 package com.cf.im.db.repositorys;
 
 
+import android.app.Dialog;
+
+import com.alibaba.fastjson.JSON;
 import com.cf.im.db.dao.DialogDao;
 import com.cf.im.db.domain.DialogBean;
 import com.cf.im.db.domain.impl._DialogBeanImpl;
@@ -14,15 +17,17 @@ public class DialogRepository extends BaseRepository {
         return getDatabase().getDialogDao();
     }
 
-    public static void insertOrUpdate(DialogBean bean, DBListener<DialogBean> listener) {
+    public static void insertOrUpdate(String json, DBListener<DialogBean> listener) {
         getWriteExecutor().execute(() -> {
+            DialogBean bean = JSON.parseObject(json, DialogBean.class);
             getDialogDao().insertOrUpdate(bean);
             listener.onSuccess(bean);
         });
     }
 
-    public static void insertOrUpdate(List<DialogBean> beans, DBListener<List<DialogBean>> listener) {
+    public static void insertOrUpdates(String json, DBListener<List<DialogBean>> listener) {
         getWriteExecutor().execute(() -> {
+            List<DialogBean> beans = JSON.parseArray(json, DialogBean.class);
             getDialogDao().insertOrUpdate(beans);
             listener.onSuccess(beans);
         });

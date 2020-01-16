@@ -8,6 +8,7 @@ import androidx.sqlite.db.SimpleSQLiteQuery;
 import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.cf.im.db.dao.MessageDao;
+import com.cf.im.db.domain.MessageBean;
 import com.cf.im.db.domain.impl._MessageBeanImpl;
 
 import java.util.List;
@@ -52,5 +53,12 @@ public abstract class MessageDaoImpl implements MessageDao {
     @Transaction
     @Query("select * from messagebean where callId = :callId or id = :serviceId limit 1")
     public abstract _MessageBeanImpl queryIdOrCallIdImpl(String callId, long serviceId);
+
+
+    @Query("select kId,id from messagebean where id in (:id)")
+    public abstract List<MessageBean> queryByIds(long... id);
+
+    @Query("select * from messagebean where id in (:id)")
+    public abstract List<_MessageBeanImpl> queryMessageByServiceIds(long... id);
 
 }
