@@ -7,12 +7,12 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.view.KeyEvent
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.zj.base.view.BaseTitleView
 import com.zj.im.dispatcher.addReceiveObserver
 import com.zj.im.emotionboard.CusEmoticonsLayout
-import com.zj.im.emotionboard.adpater.EmoticonPacksAdapter
 import com.zj.im.emotionboard.utils.EmoticonsKeyboardUtils
 import com.zj.im.emotionboard.widget.FuncLayout
 import com.zj.imcore.Constance
@@ -21,6 +21,11 @@ import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.im.transfer.DataTransferHub
+import com.zj.imcore.ui.chat.emoticon.AdapterUtils
+import com.zj.imcore.ui.chat.emoticon.OnEmojiClickListener
+import com.zj.imcore.ui.chat.func.FuncEventListener
+import com.zj.imcore.ui.chat.func.FuncGridView
+import com.zj.imcore.ui.chat.func.FuncsAdapter
 import com.zj.imcore.ui.views.IMRecyclerView
 import java.lang.Exception
 
@@ -34,7 +39,6 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         private const val TITLE = "title"
 
         private const val NORMAL = "normal"
-        private const val FAILED = "failed"
 
         fun start(activity: Activity?, id: String, userId: String?, draft: String?, title: String) {
             val i = Intent(activity, ChatActivity::class.java)
@@ -54,7 +58,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
     private var rvContent: IMRecyclerView? = null
     private var titleView: BaseTitleView? = null
     private var celBar: CusEmoticonsLayout? = null
-    private var adapter: EmoticonPacksAdapter? = null
+    private var onFuncListener: FuncsAdapter.OnItemClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +72,21 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         rvContent = findViewById(R.id.app_act_chat_content_rv)
         titleView = findViewById(R.id.app_act_chat_title)
         celBar = findViewById(R.id.ap_act_chat_cel)
-        titleView?.setLeftClickListener { finish() }
+        onFuncListener = FuncEventListener(this)
+        celBar?.addOnFuncKeyBoardListener(this)
+        celBar?.addFuncView(FuncGridView(this, onFuncListener))
+        celBar?.etChat?.setOnSizeChangedListener { _, _, _, _ ->
+            scrollToBottom()
+        }
+        celBar?.setAdapter(AdapterUtils.getAdapter(this, object : OnEmojiClickListener() {
+            override fun getEt(): EditText? {
+                return celBar?.etChat
+            }
+
+            override fun getSessionId(): String {
+                return this@ChatActivity.sessionId
+            }
+        }))
     }
 
     private fun initData() {
@@ -92,17 +110,13 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
     }
 
     private fun initListener() {
-        //        etInput?.setOnEditorActionListener { v, actionId, _ ->
-        //            if (actionId == EditorInfo.IME_ACTION_SEND) {
-        //                val text = v.text.toString()
-        //                if (text.isEmpty()) return@setOnEditorActionListener false
-        //                v.text = ""
-        //                IMHelper.sendTxt(sessionId, text)
-        //                return@setOnEditorActionListener true
-        //            }
-        //            return@setOnEditorActionListener false
-        //        }
-
+        celBar?.btnSend?.setOnClickListener {
+            val text = celBar?.etChat?.text?.toString()
+            if (!text.isNullOrEmpty()) {
+                celBar?.etChat?.text = null
+                IMHelper.sendTxt(sessionId, text)
+            }
+        }
         rvContent?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
@@ -110,6 +124,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
                 }
             }
         })
+        titleView?.setLeftClickListener { finish() }
     }
 
     private fun register() {
@@ -118,10 +133,10 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         }
         this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).listen { data ->
             if (!isFinishing) rvContent?.let {
+                handler.removeMessages(1999)
                 it.stopScroll()
                 it.adapter.data().add(NORMAL, data)
                 val p = it.adapter.data().maxCurDataPosition()
-                handler.removeMessages(1999)
                 val msg = Message.obtain()
                 msg.what = 1999
                 msg.arg1 = p
@@ -137,7 +152,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         return@Handler false
     }
 
-    protected fun scrollToBottom() {
+    private fun scrollToBottom() {
         rvContent?.requestLayout()
         rvContent?.post { rvContent?.scrollToPosition(rvContent?.adapter?.itemCount ?: 1 - 1) }
     }
@@ -159,6 +174,14 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
     override fun onFuncClose() {
 
+    }
+
+    fun resetEmotationBar() {
+        celBar?.reset()
+    }
+
+    fun getSessionId(): String {
+        return sessionId
     }
 
     override fun finish() {

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -34,7 +33,7 @@ public class FuncLayout extends LinearLayout {
             return;
         }
         mFuncViewArrayMap.put(key, view);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         addView(view, params);
         view.setVisibility(GONE);
     }

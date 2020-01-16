@@ -65,7 +65,6 @@ public class DrawableTextView extends View {
         init(context, attrs);
     }
 
-
     private float drawableWidth = dp2px(20);
     private float drawableHeight = dp2px(20);
     private int translationTime = 300;
@@ -124,7 +123,6 @@ public class DrawableTextView extends View {
     private PointF textStart;
     private Rect drawableRect;
 
-    //计算控件高度
     private void calculateViewDimension() {
         float textWidth;
         float textHeight;
@@ -228,7 +226,7 @@ public class DrawableTextView extends View {
 
     private float curAnimFraction;
 
-    //使用initData方法可以根据某个属性状态的值使控件内的样式产生渐变动画，建议配合OnSelectedAnimParent使用；
+    //Use the initData method to generate a gradient animation based on the value of a property state. It is recommended to use it with OnSelectedAnimParent;
     public void initData(float curAnimationFraction) {
         this.curAnimFraction = curAnimationFraction;
         postInvalidate();

@@ -5,12 +5,12 @@
               android:layout_height="wrap_content"
               android:focusable="true"
               android:clickable="true"
-              android:background="@drawable/ui_chat_bg_v_input_bar"
+              android:background="@color/color_primary_light_grey_dark"
               android:orientation="vertical">
 
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingBottom="8dp"
             android:paddingTop="8dp">
@@ -40,9 +40,10 @@
         <RelativeLayout
                 android:id="@+id/rl_input"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="8dp"
+                android:padding="3dp"
                 android:background="@drawable/ui_chat_bg_et_input"
                 android:layout_toStartOf="@+id/rl_multi_and_send"
                 android:layout_toEndOf="@+id/btn_voice_or_text"
@@ -57,8 +58,7 @@
                     android:background="@null"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:lineSpacingExtra="4dp"
-                    android:maxLines="4"
+                    android:maxLines="3"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="5dp"
@@ -72,7 +72,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
-                    android:src="@mipmap/ui_emo_icon_face"
+                    android:layout_marginStart="5dp"
+                    android:src="@mipmap/ui_emo_icon_face_pop"
                     tools:ignore="ContentDescription"/>
         </RelativeLayout>
 
@@ -95,8 +96,8 @@
 
             <Button
                     android:id="@+id/btn_send"
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
+                    android:layout_width="45dp"
+                    android:layout_height="35dp"
                     android:layout_centerInParent="true"
                     android:background="@drawable/ui_bf_send_bg_disable"
                     android:paddingLeft="10dp"
@@ -109,7 +110,7 @@
     </RelativeLayout>
 
     <com.zj.im.emotionboard.widget.FuncLayout
-            android:id="@+id/ly_kvml"
+            android:id="@+id/key_board_func"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"

@@ -25,14 +25,12 @@ import java.util.List;
 import com.zj.im.emotionboard.adpater.EmoticonPacksAdapter;
 import com.zj.im.emotionboard.data.Emoticon;
 import com.zj.im.emotionboard.data.EmoticonPack;
-import com.zj.im.emotionboard.interfaces.EmoticonsIndicator;
 import com.zj.im.emotionboard.interfaces.EmoticonsToolBar;
 import com.zj.im.emotionboard.interfaces.OnToolBarItemClickListener;
 import com.zj.im.emotionboard.utils.EmoticonsKeyboardUtils;
 import com.zj.im.emotionboard.widget.AutoHeightLayout;
 import com.zj.im.emotionboard.widget.EmoticonsEditText;
 import com.zj.im.emotionboard.widget.EmoticonsFuncView;
-import com.zj.im.emotionboard.widget.EmoticonsIndicatorView;
 import com.zj.im.emotionboard.widget.FuncLayout;
 
 @SuppressWarnings("unused")
@@ -52,7 +50,6 @@ public class CusEmoticonsLayout extends AutoHeightLayout implements View.OnClick
     protected FuncLayout funcLayout;
 
     protected EmoticonsFuncView emoticonsFuncView;
-    protected EmoticonsIndicator emoticonsIndicator;
     protected EmoticonsToolBar emoticonsToolBar;
 
     protected boolean dispatchKeyEventPreImeLock = false;
@@ -82,7 +79,7 @@ public class CusEmoticonsLayout extends AutoHeightLayout implements View.OnClick
         inputLayout = findViewById(R.id.rl_input);
         btnMultimedia = findViewById(R.id.btn_multimedia);
         btnSend = findViewById(R.id.btn_send);
-        funcLayout = findViewById(R.id.ly_kvml);
+        funcLayout = findViewById(R.id.key_board_func);
         btnVoiceOrText.setOnClickListener(this);
         btnFace.setOnClickListener(this);
         btnMultimedia.setOnClickListener(this);
@@ -98,7 +95,6 @@ public class CusEmoticonsLayout extends AutoHeightLayout implements View.OnClick
         View keyboardView = inflateFunc();
         funcLayout.addFuncView(FUNC_TYPE_EMOTION, keyboardView);
         emoticonsFuncView = findViewById(R.id.view_epv);
-        emoticonsIndicator = ((EmoticonsIndicatorView) findViewById(R.id.view_eiv));
         emoticonsToolBar = findViewById(R.id.view_etv);
         emoticonsFuncView.setListener(this);
         emoticonsToolBar.setToolBarItemClickListener(this);
@@ -132,7 +128,6 @@ public class CusEmoticonsLayout extends AutoHeightLayout implements View.OnClick
                 if (!TextUtils.isEmpty(s)) {
                     btnSend.setVisibility(VISIBLE);
                     btnMultimedia.setVisibility(GONE);
-                    btnSend.setBackgroundResource(R.drawable.ui_bg_send_bg);
                 } else {
                     btnMultimedia.setVisibility(VISIBLE);
                     btnSend.setVisibility(GONE);
@@ -149,7 +144,6 @@ public class CusEmoticonsLayout extends AutoHeightLayout implements View.OnClick
             @Override
             public void onDataSetChanged() {
                 emoticonsToolBar.notifyDataChanged();
-                emoticonsIndicator.notifyDataChanged();
             }
         });
     }
@@ -234,11 +228,6 @@ public class CusEmoticonsLayout extends AutoHeightLayout implements View.OnClick
     @Override
     public void onCurrentEmoticonPackChanged(EmoticonPack<? extends Emoticon> currentPack) {
         emoticonsToolBar.selectEmotionPack(currentPack);
-    }
-
-    @Override
-    public void playTo(int position, EmoticonPack<? extends Emoticon> pack) {
-        emoticonsIndicator.playTo(position, pack);
     }
 
     @Override
@@ -344,10 +333,6 @@ public class CusEmoticonsLayout extends AutoHeightLayout implements View.OnClick
 
     public EmoticonsFuncView getEmoticonsFuncView() {
         return emoticonsFuncView;
-    }
-
-    public EmoticonsIndicator getEmoticonsIndicatorView() {
-        return emoticonsIndicator;
     }
 
     public EmoticonsToolBar getEmoticonsToolBarView() {
