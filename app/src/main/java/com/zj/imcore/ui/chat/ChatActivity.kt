@@ -106,7 +106,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
             return
         }
         register()
-        DataTransferHub.queryMsgInDb("", "")
+        DataTransferHub.queryMsgInDb("13", 8589934605)
     }
 
     private fun initListener() {
@@ -131,6 +131,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         IMHelper.registerSocketStateChangeListener(javaClass.simpleName) {
             titleView?.setTitle(it.name)
         }
+
         this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).listen { data ->
             if (!isFinishing) rvContent?.let {
                 handler.removeMessages(1999)

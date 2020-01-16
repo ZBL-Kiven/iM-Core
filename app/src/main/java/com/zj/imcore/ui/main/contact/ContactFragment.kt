@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.fastjson.JSON
+import com.cf.im.db.repositorys.MemberRepository
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.imcore.R
@@ -90,7 +92,10 @@ class ContactFragment : BaseLinkageFragment() {
             adapter = ContactListAdapter(it)
             rvContent?.adapter = adapter
             getData()
-        } ?: loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_system_error_no_context))
+        } ?: loadingView?.setMode(
+            BaseLoadingView.DisplayMode.NO_DATA,
+            getString(R.string.app_system_error_no_context)
+        )
     }
 
     private fun getData() {
@@ -104,10 +109,16 @@ class ContactFragment : BaseLinkageFragment() {
                     SPUtils_Proxy.setMemberSyncSince(data.nextTs)
                     data.members?.let { cachedData = ArrayList(it) }
                     setData(cachedData)
+                    MemberRepository.insertOrUpdateAll(JSON.toJSONString(cachedData)) {
+                        //数据集操作完成
+                    }
                     loadingView?.setMode(BaseLoadingView.DisplayMode.NORMAL.delay(500))
                 }
             } else {
-                FCApplication.showToast(throwable?.response()?.errorBody()?.string() ?: getString(R.string.app_get_contact_failed))
+                FCApplication.showToast(
+                    throwable?.response()?.errorBody()?.string()
+                        ?: getString(R.string.app_get_contact_failed)
+                )
                 loadingView?.setMode(BaseLoadingView.DisplayMode.NO_NETWORK)
             }
         }
@@ -120,7 +131,10 @@ class ContactFragment : BaseLinkageFragment() {
         }
         cachedData?.let {
             val filterList = it.filterTo(arrayListOf()) { m ->
-                m.name?.contains(ets, true) ?: false || m.profile?.title?.contains(ets, true) ?: false || m.profile?.email?.contains(ets, true) ?: false
+                m.name?.contains(ets, true) ?: false || m.profile?.title?.contains(
+                    ets,
+                    true
+                ) ?: false || m.profile?.email?.contains(ets, true) ?: false
             }
             setData(filterList)
         }
