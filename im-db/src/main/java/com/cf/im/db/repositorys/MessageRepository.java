@@ -26,6 +26,12 @@ public class MessageRepository extends BaseRepository {
         });
     }
 
+    public static void insertOrUpdates(String json, DBListener<List<_MessageBeanImpl>> listener) {
+        getWriteExecutor().execute(() -> {
+           
+        });
+    }
+
     /**
      * 通过会话窗口id 查询信息（非离线消息）列表
      *
