@@ -12,10 +12,8 @@ object SyncManager {
         IMHelper.registerSocketStateChangeListener(SOCKET_STATE_LISTEN) {
             if (it == SocketState.CONNECTED) {
                 IMHelper.pause(FETCH_MSG_PAUSE_CODE)
-                onFetchStart { isContinue ->
-                    if (isContinue) {
-                        IMHelper.resume(FETCH_MSG_PAUSE_CODE)
-                    }
+                onFetchStart {
+                    IMHelper.resume(FETCH_MSG_PAUSE_CODE)
                 }
             }
         }
@@ -25,7 +23,11 @@ object SyncManager {
         IMHelper.removeSocketStateChangeListener(SOCKET_STATE_LISTEN)
     }
 
-    private fun onFetchStart(`continue`: (isOK: Boolean) -> Unit) {
-        `continue`(true)
+    private fun onFetchStart(isContinue: () -> Unit) {
+
+
+
+
+        isContinue()
     }
 }
