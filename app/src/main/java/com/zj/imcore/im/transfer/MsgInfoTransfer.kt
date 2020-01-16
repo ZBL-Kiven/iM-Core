@@ -1,6 +1,5 @@
 package com.zj.imcore.im.transfer
 
-import com.alibaba.fastjson.JSON
 import com.cf.im.db.domain.impl.MessageBeanImpl
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.enums.MsgSubtype
@@ -16,9 +15,9 @@ object MsgInfoTransfer {
     private var isMock = false
 
     fun transform(beans: List<MessageBeanImpl>): MutableList<MsgInfo> {
-        val list = mutableListOf<MsgInfo>()
-        beans.forEach { list.add(transform(it)) }
-        return list
+       return beans.mapTo(arrayListOf()) {
+            transform(it)
+        }
     }
 
     fun transform(bean: MessageBeanImpl): MsgInfo {

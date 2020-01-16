@@ -19,9 +19,10 @@ class BaseApi<T : Any>(cls: Class<T>, factory: RetrofitFactory<T>?, private val 
 
     companion object {
 
+        @Suppress("unused")
         @JvmStatic
-        inline fun <reified T : Any> create(): BaseApiProxy<T, *> {
-            return BaseApiProxy<T, Nothing>(T::class.java)
+        inline fun <reified T : Any> create(): BaseApiProxy<T, Nothing> {
+            return BaseApiProxy(T::class.java)
         }
 
         @Suppress("unused")
@@ -30,14 +31,15 @@ class BaseApi<T : Any>(cls: Class<T>, factory: RetrofitFactory<T>?, private val 
             return BaseApiProxy(T::class.java, ERROR_HANDLER::class.java.newInstance())
         }
 
+        @Suppress("unused")
         @JvmStatic
-        fun <T : Any> create(cls: Class<T>): BaseApiProxy<T, *> {
-            return BaseApiProxy<T, Nothing>(cls)
+        inline fun <reified T : Any> create(handler: ErrorHandler): BaseApiProxy<T, ErrorHandler> {
+            return BaseApiProxy(T::class.java, handler)
         }
 
         @JvmStatic
-        fun <T : Any, ERROR_HANDLER : ErrorHandler> create(cls: Class<T>, errorHandler: Class<ERROR_HANDLER>): BaseApiProxy<T, ERROR_HANDLER> {
-            return BaseApiProxy(cls)
+        fun <T : Any> create(cls: Class<T>): BaseApiProxy<T, *> {
+            return BaseApiProxy<T, Nothing>(cls)
         }
     }
 

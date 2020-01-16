@@ -4,6 +4,7 @@ import com.zbl.api.BaseApi
 import com.zj.imcore.Constance
 import com.zj.imcore.Constance.getBaseUrl
 import com.zj.imcore.Constance.getHeader
+import com.zj.imcore.apis.ApiErrorHandler
 import com.zj.imcore.getGender
 import com.zj.imcore.model.login.LoginInfo
 import com.zj.imcore.model.login.UserProfileModel
@@ -13,7 +14,7 @@ import retrofit2.HttpException
 object UserApi {
 
     private fun get(): BaseApi<UserApiService> {
-        return BaseApi.create<UserApiService>().baseUrl(getBaseUrl()).header(getHeader()).timeOut(5000).build()
+        return BaseApi.create<UserApiService>(ApiErrorHandler).baseUrl(getBaseUrl()).header(getHeader()).timeOut(5000).build()
     }
 
     fun login(ac: String, pwd: String, result: (Boolean, LoginInfo?, throwAble: HttpException?) -> Unit) {
