@@ -139,7 +139,7 @@ class ContactFragment : BaseLinkageFragment() {
         loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
         MemberApi.fetchMembers(since) { isSuccess, data, throwable ->
             if (isSuccess) {
-                val obj = Gson().fromJson(data, JsonObject::class.java)
+                val obj = Gson().fromJson(data?.string(), JsonObject::class.java)
                 if (isSuccess && obj != null) {
                     @Suppress("CAST_NEVER_SUCCEEDS") val nextTs = obj["next_ts"] as Long
                     val d = obj["members"].toString()

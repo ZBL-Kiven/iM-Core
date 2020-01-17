@@ -18,7 +18,6 @@ object ApiErrorHandler : ErrorHandler {
                     403 -> {
                         FCApplication.logout("Token was expired")
                     }
-
                 }
             } catch (e: Exception) {
                 log("onHttpError ----- case: ${e.message}")

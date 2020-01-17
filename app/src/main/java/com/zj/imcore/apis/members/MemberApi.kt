@@ -4,6 +4,7 @@ import com.zbl.api.BaseApi
 import com.zbl.api.base.BaseRetrofit
 import com.zj.imcore.Constance
 import com.zj.imcore.apis.ApiErrorHandler
+import okhttp3.ResponseBody
 import retrofit2.HttpException
 
 object MemberApi {
@@ -12,7 +13,7 @@ object MemberApi {
         return BaseApi.create<MemberApiService>(ApiErrorHandler).baseUrl(Constance.getBaseUrl()).header(Constance.getHeader()).build()
     }
 
-    fun fetchMembers(since: Long, result: (isSuccess: Boolean, data: String?, throwable: HttpException?) -> Unit): BaseRetrofit.RequestCompo {
+    fun fetchMembers(since: Long, result: (isSuccess: Boolean, data: ResponseBody?, throwable: HttpException?) -> Unit): BaseRetrofit.RequestCompo {
        return get().call({ it.fetchMembersBySince(since) }, result)
     }
 

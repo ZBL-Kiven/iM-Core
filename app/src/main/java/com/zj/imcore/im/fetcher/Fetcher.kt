@@ -58,9 +58,9 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
     private fun fetchMembers() {
         val since = SPUtils_Proxy.getMemberSyncSince(0)
         val cop = MemberApi.fetchMembers(since) { isSuccess, data, throwable ->
-            val obj = Gson().fromJson(data, JsonObject::class.java)
+            val obj = Gson().fromJson(data?.string(), JsonObject::class.java)
             if (isSuccess && obj != null) {
-                @Suppress("CAST_NEVER_SUCCEEDS") val nextTs = obj["next_ts"] as Long
+                @Suppress("CAST_NEVER_SUCCEEDS") val nextTs = obj["next_ts"].toString().toLong()
                 val d = obj["members"].toString()
                 SPUtils_Proxy.setMemberSyncSince(nextTs)
                 MemberRepository.insertOrUpdateAll(d) {

@@ -8,6 +8,7 @@ import com.zj.im.dispatcher.UIStore
 import com.zj.imcore.Constance
 import com.zj.imcore.apis.ApiErrorHandler
 import com.zj.imcore.im.transfer.MsgInfoTransfer
+import okhttp3.ResponseBody
 import retrofit2.HttpException
 
 object FetcherApi {
@@ -17,9 +18,10 @@ object FetcherApi {
     }
 
     fun syncDialogs(completed: (Boolean, HttpException?) -> Unit): BaseRetrofit.RequestCompo {
-        return get().call({ it.fetchDialogs() }) { isSuccess: Boolean, data: String?, throwable: HttpException? ->
+        return get().call({ it.fetchDialogs() }) { isSuccess: Boolean, data: ResponseBody?, throwable: HttpException? ->
             if (isSuccess) {
-                DialogRepository.insertOrUpdates(data) {
+                val d = data?.string()
+                DialogRepository.insertOrUpdates(d) {
                     UIStore.postData(it)
                     completed.invoke(true, null)
                 }
@@ -30,9 +32,10 @@ object FetcherApi {
     }
 
     fun syncMessages(dialogId: String, messageId: String, limit: Int, isNewer: Boolean, completed: ((Boolean, HttpException?) -> Unit)? = null): BaseRetrofit.RequestCompo {
-        val l: (isSuccess: Boolean, data: String?, throwable: HttpException?) -> Unit = { isSuccess, data, throwable ->
+        val l: (isSuccess: Boolean, data: ResponseBody?, throwable: HttpException?) -> Unit = { isSuccess, data, throwable ->
             if (isSuccess) {
-                MessageRepository.insertOrUpdates(data) {
+                val d = data?.string()
+                MessageRepository.insertOrUpdates(d) {
                     UIStore.postData(MsgInfoTransfer.transform(it))
                     completed?.invoke(true, null)
                 }
