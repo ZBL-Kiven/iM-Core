@@ -32,9 +32,11 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
         fetchMembers()
         fetchStep = { s, b ->
             if (!b) {
+                log("f----- ff  $s")
                 shutdown()
                 isCompleted?.invoke(s, false)
             } else if (isDialogsFetched && isMembersFetched) {
+                log("f----- tt $s")
                 isCompleted?.invoke(s, true)
             }
         }

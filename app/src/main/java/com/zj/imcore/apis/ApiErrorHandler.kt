@@ -15,7 +15,7 @@ object ApiErrorHandler : ErrorHandler {
                 val errorInfo = throwable.response()?.body()?.toString()
                 val e = Gson().fromJson(errorInfo, ErrorData::class.java)
                 when (e.code) {
-                    403->{
+                    403 -> {
                         FCApplication.logout("Token was expired")
                     }
 
@@ -23,6 +23,8 @@ object ApiErrorHandler : ErrorHandler {
             } catch (e: Exception) {
                 log("onHttpError ----- case: ${e.message}")
             }
+        } else {
+            throw throwable
         }
     }
 }
