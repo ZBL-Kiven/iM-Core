@@ -54,10 +54,10 @@ public abstract class MessageDaoImpl implements MessageDao {
     @Query("select * from messagebean where callId = :callId or id = :serviceId limit 1")
     public abstract _MessageBeanImpl queryIdOrCallIdImpl(String callId, long serviceId);
 
-
-    @Query("select kId,id from messagebean where id in (:id)")
+    @Query("select * from messagebean where id in (:id)")
     public abstract List<MessageBean> queryByIds(long... id);
 
+    @Transaction
     @Query("select * from messagebean where id in (:id)")
     public abstract List<_MessageBeanImpl> queryMessageByServiceIds(long... id);
 
