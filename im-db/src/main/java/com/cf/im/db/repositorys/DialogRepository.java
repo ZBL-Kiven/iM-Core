@@ -6,6 +6,7 @@ import com.cf.im.db.domain.DialogBean;
 import com.cf.im.db.domain.impl._DialogBeanImpl;
 import com.cf.im.db.listener.DBListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DialogRepository extends BaseRepository {
@@ -14,19 +15,29 @@ public class DialogRepository extends BaseRepository {
         return getDatabase().getDialogDao();
     }
 
-    public static void insertOrUpdate(String json, DBListener<DialogBean> listener) {
+    public static void insertOrUpdate(String json, DBListener<_DialogBeanImpl> listener) {
         getWriteExecutor().execute(() -> {
             DialogBean bean = JSON.parseObject(json, DialogBean.class);
             getDialogDao().insertOrUpdate(bean);
-            listener.onSuccess(bean);
+            _DialogBeanImpl _temp = new _DialogBeanImpl();
+            _temp.bean = bean;
+            listener.onSuccess(_temp);
         });
     }
 
-    public static void insertOrUpdates(String json, DBListener<List<DialogBean>> listener) {
+    public static void insertOrUpdates(String json, DBListener<List<_DialogBeanImpl>> listener) {
         getWriteExecutor().execute(() -> {
             List<DialogBean> beans = JSON.parseArray(json, DialogBean.class);
             getDialogDao().insertOrUpdate(beans);
-            listener.onSuccess(beans);
+            List<_DialogBeanImpl> list = new ArrayList<>();
+            _DialogBeanImpl _temp;
+            for (DialogBean bean : beans) {
+                _temp = new _DialogBeanImpl();
+                _temp.bean = bean;
+                list.add(_temp);
+            }
+
+            listener.onSuccess(list);
         });
     }
 
