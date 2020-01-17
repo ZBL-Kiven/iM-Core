@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.zj.im.chat.core.BaseOption
+import com.zj.im.chat.enums.SocketState
 import com.zj.im.chat.exceptions.NecessaryAttributeEmptyException
 import com.zj.im.chat.hub.ClientHub
 import com.zj.im.chat.hub.ServerHub
@@ -152,6 +153,10 @@ abstract class IMInterface<T> : MessageInterface<T>() {
 
     fun resume(code: Int) {
         getClient("IMInterface.resume")?.resume(code)
+    }
+
+    fun reconnect(case: String) {
+        getService("IMInterface.reconnect", true)?.correctConnectionState(SocketState.CONNECTED_ERROR, case)
     }
 
     open fun shutdown(case: String) {

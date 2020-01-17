@@ -10,31 +10,32 @@ import com.zj.im.log
 import com.zj.imcore.apis.fetcher.FetcherApi
 import com.zj.imcore.apis.members.MemberApi
 import com.zj.imcore.model.member.MembersEventMod
+import java.util.concurrent.ConcurrentHashMap
 
-class Fetcher(private var isCompleted: ((Boolean) -> Unit)?) {
+class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
 
     companion object {
         private const val FETCH_DIALOGT_CODE = 441
         private const val FETCH_MEMBERS_CODE = 442
     }
 
-    private var compons: HashMap<Int, BaseRetrofit.RequestCompo> = hashMapOf()
+    private var compons: ConcurrentHashMap<Int, BaseRetrofit.RequestCompo> = ConcurrentHashMap()
 
     private var isDialogsFetched = false
     private var isMessagesFetched = false
     private var isMembersFetched = false
 
-    private var fetchStep: ((Boolean) -> Unit)? = null
+    private var fetchStep: ((String, Boolean) -> Unit)? = null
 
     init {
         fetchDialogs()
         fetchMembers()
-        fetchStep = {
-            if (!it) {
+        fetchStep = { s, b ->
+            if (!b) {
                 shutdown()
-                isCompleted?.invoke(false)
+                isCompleted?.invoke(s, false)
             } else if (isDialogsFetched && isMembersFetched) {
-                isCompleted?.invoke(true)
+                isCompleted?.invoke(s, true)
             }
         }
     }
@@ -47,7 +48,7 @@ class Fetcher(private var isCompleted: ((Boolean) -> Unit)?) {
             } else {
                 log("fetch dialogs failed ,case: ${httpException?.response()?.errorBody()?.string()}")
             }
-            fetchStep?.invoke(b)
+            fetchStep?.invoke("dialogs", b)
         }
         compons[FETCH_DIALOGT_CODE] = cop
     }
@@ -63,10 +64,10 @@ class Fetcher(private var isCompleted: ((Boolean) -> Unit)?) {
                 MemberRepository.insertOrUpdateAll(d) {
                     UIStore.postData(MembersEventMod("fetch members fetchStep"))
                     isMembersFetched = true
-                    fetchStep?.invoke(true)
+                    fetchStep?.invoke("members", true)
                 }
             } else {
-                fetchStep?.invoke(false)
+                fetchStep?.invoke("members", false)
                 log("fetch dialogs failed ,case: ${throwable?.response()?.errorBody()?.string()}")
             }
         }
