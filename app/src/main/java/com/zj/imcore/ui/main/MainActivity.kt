@@ -32,7 +32,6 @@ class MainActivity : FCActivity() {
     }
 
     override fun initData() {
-//        SPUtils_Proxy.getRefreshToken()
         conversationFragment = ConversationFragment()
         contactFragment = ContactFragment()
         settingFragment = SettingFragment()

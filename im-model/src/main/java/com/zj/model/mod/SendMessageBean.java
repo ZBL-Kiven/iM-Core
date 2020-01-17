@@ -1,9 +1,7 @@
 package com.zj.model.mod;
 
-import com.google.gson.annotations.SerializedName;
-
 @SuppressWarnings("unused")
-public class MessageBean {
+public class SendMessageBean {
 
     public boolean deleted; // false,
     public String content; // null,
@@ -19,7 +17,6 @@ public class MessageBean {
     /**
      * local maintenance fields
      */
-    @SerializedName("call_id")
     public String callId;
     public int sendMsgState;
     public long localCreateTs;

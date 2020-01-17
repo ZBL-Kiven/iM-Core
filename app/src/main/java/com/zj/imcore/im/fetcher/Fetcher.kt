@@ -1,8 +1,7 @@
 package com.zj.imcore.im.fetcher
 
+import com.alibaba.fastjson.JSON
 import com.cf.im.db.repositorys.MemberRepository
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.zbl.api.base.BaseRetrofit
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.im.dispatcher.UIStore
@@ -58,7 +57,7 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
     private fun fetchMembers() {
         val since = SPUtils_Proxy.getMemberSyncSince(0)
         val cop = MemberApi.fetchMembers(since) { isSuccess, data, throwable ->
-            val obj = Gson().fromJson(data?.string(), JsonObject::class.java)
+            val obj = JSON.parseObject(data?.string())
             if (isSuccess && obj != null) {
                 @Suppress("CAST_NEVER_SUCCEEDS") val nextTs = obj["next_ts"].toString().toLong()
                 val d = obj["members"].toString()

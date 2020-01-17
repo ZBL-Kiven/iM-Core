@@ -3,20 +3,18 @@ package com.zj.imcore.im.transfer
 import com.alibaba.fastjson.JSON
 import com.cf.im.db.repositorys.DialogRepository
 import com.cf.im.db.repositorys.MessageRepository
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.dispatcher.UIStore
 import com.zj.model.chat.MsgInfo
 import com.zj.model.chat.ProgressInfo
-import com.zj.model.mod.MessageBean
+import com.zj.model.mod.SendMessageBean
 
 object DataTransferHub {
 
     //todo 临时拆分
     fun onSocketDataReceived(data: String?, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
-        val d = Gson().fromJson(data, JsonObject::class.java)
-        when (d.get("type").toString()) {
+        val d = JSON.parseObject(data)
+        when (d["type"].toString()) {
             "create_message" -> {
                 MsgInfoTransfer.transforMsg(d, callId, sendingState, onFinish)
             }
@@ -39,7 +37,7 @@ object DataTransferHub {
         }
     }
 
-    private fun getMockMsgs(data: MessageBean): MsgInfo {
+    private fun getMockMsgs(data: SendMessageBean): MsgInfo {
         return MsgInfoTransfer.transform(data)
     }
 }

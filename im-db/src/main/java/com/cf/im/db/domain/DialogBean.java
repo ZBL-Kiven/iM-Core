@@ -1,11 +1,8 @@
 package com.cf.im.db.domain;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-
-import com.zj.model.mod.MessageBean;
 
 import java.util.Map;
 

@@ -1,6 +1,6 @@
 package com.zj.imcore.apis
 
-import com.google.gson.Gson
+import com.alibaba.fastjson.JSON
 import com.zbl.api.interfaces.ErrorHandler
 import com.zj.im.log
 import com.zj.imcore.base.FCApplication
@@ -13,7 +13,7 @@ object ApiErrorHandler : ErrorHandler {
         if (throwable is HttpException) {
             try {
                 val errorInfo = throwable.response()?.body()?.toString()
-                val e = Gson().fromJson(errorInfo, ErrorData::class.java)
+                val e = JSON.parseObject(errorInfo, ErrorData::class.java)
                 when (e.code) {
                     403 -> {
                         FCApplication.logout("Token was expired")

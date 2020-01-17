@@ -2,7 +2,7 @@ package com.zj.imcore.im.options
 
 import android.app.Application
 import android.os.Handler
-import com.google.gson.Gson
+import com.alibaba.fastjson.JSON
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.im.chat.enums.SocketState
 import com.zj.im.chat.hub.ServerHub
@@ -94,7 +94,7 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
     }
 
     override fun onMessage(msg: String?) {
-        val mod = Gson().fromJson(msg, BaseMod::class.java)
+        val mod = JSON.parseObject(msg, BaseMod::class.java)
         if (recordShakeState(mod.type)) {
             println("----- received ==> ${mod.callId}")
             onMessageReceived(msg)
@@ -139,7 +139,7 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
                 this.callId = CALL_ID_HEART_BEATS
                 this.type = HEART_BEATS_PING
             }
-            send(Gson().toJson(heartbeats), CALL_ID_HEART_BEATS, object : SendingCallBack {
+            send(JSON.toJSONString(heartbeats), CALL_ID_HEART_BEATS, object : SendingCallBack {
                 override fun result(isOK: Boolean, throwable: Throwable?) {
                     heartBeatsTime = if (isOK) HEART_BEATS_TIME else HEART_BEATS_TIME_SPECIAL
                     nextHeartbeats()

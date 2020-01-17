@@ -1,10 +1,9 @@
 package com.zj.imcore.im.transfer
 
 import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONObject
 import com.cf.im.db.domain.impl._MessageBeanImpl
 import com.cf.im.db.repositorys.MessageRepository
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.im.dispatcher.UIStore
 import com.zj.imcore.base.FCApplication
@@ -13,14 +12,14 @@ import com.zj.imcore.enums.MsgType
 import com.zj.imcore.utils.unity.DateUtils
 import com.zj.model.chat.MsgInfo
 import com.zj.model.interfaces.MessageIn
-import com.zj.model.mod.MessageBean
+import com.zj.model.mod.SendMessageBean
 import kotlin.random.Random
 
 object MsgInfoTransfer {
 
-    fun transforMsg(d: JsonObject, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
-        val msg = Gson().fromJson(d.get("data").toString(), MessageBean::class.java)
-        msg.callId = if (callId.isNullOrEmpty()) d.get("call_id").asString else callId
+    fun transforMsg(d: JSONObject, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
+        val msg = JSON.parseObject(d["data"].toString(), SendMessageBean::class.java)
+        msg.callId = if (callId.isNullOrEmpty()) d["call_id"].toString() else callId
         msg.sendMsgState = sendingState?.type ?: 0
         msg.localCreateTs = System.currentTimeMillis()
 
@@ -41,7 +40,7 @@ object MsgInfoTransfer {
         return MsgInfo(bean)
     }
 
-    fun transform(data: MessageBean): MsgInfo {
+    fun transform(data: SendMessageBean): MsgInfo {
         data.subtype = null
         data.subtypeDetail = null
         return MsgInfo(object : MessageIn {

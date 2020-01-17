@@ -10,13 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.fastjson.JSON
 import com.cf.im.db.domain.MemberBean
 import com.cf.im.db.repositorys.MemberRepository
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.im.dispatcher.addReceiveObserver
+import com.zj.im.log
+import com.zj.im.mainHandler
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.apis.members.MemberApi
@@ -48,6 +49,7 @@ class ContactFragment : BaseLinkageFragment() {
     private var adapter: ContactListAdapter? = null
     private var searchHandler: Handler? = null
     private var cachedData: ArrayList<MemberBean>? = null
+    private var isContactLoading = false
 
     private fun initView() {
         etSearch = find(R.id.app_fragment_contact_et_search)
@@ -98,14 +100,8 @@ class ContactFragment : BaseLinkageFragment() {
             rvContent?.adapter = adapter
         } ?: loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_system_error_no_context))
         addReceiveObserver<MembersEventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).listen {
-            MemberRepository.queryAll {
-                if (it.isNullOrEmpty()) {
-                    loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
-                } else {
-
-                    loadingView?.setMode(BaseLoadingView.DisplayMode.NORMAL.delay(500))
-                }
-            }
+            log(it.case)
+            getLocalData()
         }
     }
 
@@ -125,7 +121,7 @@ class ContactFragment : BaseLinkageFragment() {
     private fun setData(data: List<MemberBean>?) {
         val map = mutableMapOf<String, MutableList<MemberBean>>()
         data?.groupByTo(map) {
-            it.indexSymbol
+            it.indexSymbol ?: "#"
         }
         val groupData = mutableListOf<ContactGroupInfo>()
         map.mapTo(groupData) {
@@ -134,23 +130,45 @@ class ContactFragment : BaseLinkageFragment() {
         adapter?.change(groupData)
     }
 
+    private fun getLocalData() {
+        if (isContactLoading) {
+            return
+        }
+        isContactLoading = true
+        MemberRepository.queryAll {
+            mainHandler.post {
+                if (it.isNullOrEmpty()) {
+                    getData()
+                } else {
+                    cachedData = ArrayList(it)
+                    setData(cachedData)
+                    loadingView?.setMode(BaseLoadingView.DisplayMode.NORMAL.delay(500))
+                    isContactLoading = false
+                }
+            }
+        }
+    }
+
     private fun getData() {
+        isContactLoading = true
         val since = SPUtils_Proxy.getMemberSyncSince(0)
         loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
         MemberApi.fetchMembers(since) { isSuccess, data, throwable ->
             if (isSuccess) {
-                val obj = Gson().fromJson(data?.string(), JsonObject::class.java)
+                val obj = JSON.parseObject(data?.string())
                 if (isSuccess && obj != null) {
                     @Suppress("CAST_NEVER_SUCCEEDS") val nextTs = obj["next_ts"] as Long
                     val d = obj["members"].toString()
                     MemberRepository.insertOrUpdateAll(d) {
-                        if (data == null || it.isNullOrEmpty()) {
-                            loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
-                        } else {
-                            SPUtils_Proxy.setMemberSyncSince(nextTs)
-                            cachedData = ArrayList(it)
-                            setData(cachedData)
-                            loadingView?.setMode(BaseLoadingView.DisplayMode.NORMAL.delay(500))
+                        mainHandler.post {
+                            if (data == null || it.isNullOrEmpty()) {
+                                loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
+                            } else {
+                                SPUtils_Proxy.setMemberSyncSince(nextTs)
+                                cachedData = ArrayList(it)
+                                setData(cachedData)
+                                loadingView?.setMode(BaseLoadingView.DisplayMode.NORMAL.delay(500))
+                            }
                         }
                     }
                 } else {
@@ -158,7 +176,13 @@ class ContactFragment : BaseLinkageFragment() {
                     loadingView?.setMode(BaseLoadingView.DisplayMode.NO_NETWORK)
                 }
             }
+            isContactLoading = false
         }
+    }
+
+    override fun onResumed() {
+        super.onResumed()
+        if (cachedData.isNullOrEmpty()) getLocalData()
     }
 
     override fun onDestroyed() {

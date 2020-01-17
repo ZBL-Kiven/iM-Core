@@ -4,8 +4,10 @@ import com.cf.im.db.repositorys.DialogRepository
 import com.cf.im.db.repositorys.MessageRepository
 import com.zbl.api.BaseApi
 import com.zbl.api.base.BaseRetrofit
+import com.zbl.api.interfaces.ApiFactory
 import com.zj.im.dispatcher.UIStore
 import com.zj.imcore.Constance
+import com.zj.imcore.apis.APIs.getDefaultApi
 import com.zj.imcore.apis.ApiErrorHandler
 import com.zj.imcore.im.transfer.MsgInfoTransfer
 import okhttp3.ResponseBody
@@ -14,7 +16,7 @@ import retrofit2.HttpException
 object FetcherApi {
 
     private fun get(): BaseApi<FetcherApiService> {
-        return BaseApi.create<FetcherApiService>(ApiErrorHandler).baseUrl(Constance.getBaseUrl()).header(Constance.getHeader()).timeOut(20000).build()
+        return getDefaultApi(20000)
     }
 
     fun syncDialogs(completed: (Boolean, HttpException?) -> Unit): BaseRetrofit.RequestCompo {
