@@ -19,7 +19,7 @@ public class DialogBean {
 
     public int teamId; // 1,
 
-    public String userId; // 4,
+    public long userId; // 4,
 
     public String type; // "p2p",
 

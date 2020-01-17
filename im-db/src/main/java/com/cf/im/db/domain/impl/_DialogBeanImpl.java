@@ -18,8 +18,8 @@ public class _DialogBeanImpl implements DialogIn {
 
     @Override
     @NonNull
-    public String getId() {
-        return String.valueOf(bean.dialogId);
+    public long getId() {
+        return bean.dialogId;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class _DialogBeanImpl implements DialogIn {
     }
 
     @Override
-    public String getUserId() {
+    public long getUserId() {
         return bean.userId;
     }
 

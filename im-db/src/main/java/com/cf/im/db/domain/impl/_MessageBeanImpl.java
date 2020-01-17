@@ -44,8 +44,8 @@ public class _MessageBeanImpl implements MessageIn {
     }
 
     @Override
-    public String uid() {
-        return message != null ? String.valueOf(message.uid) : "";
+    public long uid() {
+        return message.uid;
     }
 
     @Override
