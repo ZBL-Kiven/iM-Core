@@ -18,6 +18,9 @@ public class MemberBean {
     @PrimaryKey()
     public long uid;
 
+    
+    public long dialogId;
+
     /**
      * 用户是否活跃
      * sample：false
@@ -93,7 +96,8 @@ public class MemberBean {
     /**
      * 用户首字母
      */
-    public String indexSymbol;
+    public String indexSymbol = "#";
+
 
     /**
      * 填充 profile 内容
