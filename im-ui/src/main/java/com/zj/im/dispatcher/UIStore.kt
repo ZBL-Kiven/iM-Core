@@ -31,9 +31,9 @@ object UIStore {
         }
         msgObservers?.forEach {
             if (it.post(data)) {
-                debugLog("the observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class successful and received the data")
+//                debugLog("the observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class successful and received the data")
             } else {
-                debugLog("invalid observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class has abandon the data ${data.javaClass.simpleName}.class")
+//                debugLog("invalid observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class has abandon the data ${data.javaClass.simpleName}.class")
             }
         }
     }

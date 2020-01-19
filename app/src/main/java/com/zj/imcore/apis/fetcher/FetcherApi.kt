@@ -9,6 +9,7 @@ import com.zj.im.dispatcher.UIStore
 import com.zj.imcore.Constance
 import com.zj.imcore.apis.APIs.getDefaultApi
 import com.zj.imcore.apis.ApiErrorHandler
+import com.zj.imcore.im.transfer.DialogTransfer
 import com.zj.imcore.im.transfer.MsgInfoTransfer
 import okhttp3.ResponseBody
 import retrofit2.HttpException
@@ -24,7 +25,7 @@ object FetcherApi {
             if (isSuccess) {
                 val d = data?.string()
                 DialogRepository.insertOrUpdates(d) {
-                    UIStore.postData(it)
+                    UIStore.postData(DialogTransfer.transform(it))
                     completed.invoke(true, null)
                 }
             } else {

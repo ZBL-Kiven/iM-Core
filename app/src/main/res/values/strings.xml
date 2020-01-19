@@ -67,4 +67,7 @@
     <string name="pg_str_at_best">最多只能选择 %1$d 张图片</string>
     <string name="pg_permission_request_fail">%s 必要权限被拒绝!</string>
 
+    <!--user info-->
+    <string name="app_act_user_info_title_default">%s 的个人资料</string>
+
 </resources>

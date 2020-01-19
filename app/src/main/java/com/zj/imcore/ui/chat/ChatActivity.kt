@@ -26,6 +26,7 @@ import com.zj.imcore.ui.chat.emoticon.OnEmojiClickListener
 import com.zj.imcore.ui.chat.func.FuncEventListener
 import com.zj.imcore.ui.chat.func.FuncGridView
 import com.zj.imcore.ui.chat.func.FuncsAdapter
+import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.imcore.ui.views.IMRecyclerView
 import java.lang.Exception
 
@@ -34,23 +35,22 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
     companion object {
 
         private const val SESSION_ID = "session_id"
-        private const val USER_ID = "user_id"
+        private const val DIALOG_TYPE = "dialog_type"
         private const val DRAFT = "draft"
         private const val TITLE = "title"
-
         private const val NORMAL = "normal"
 
         fun start(activity: Activity?, id: Long, userId: Long, draft: String?, title: String) {
             val i = Intent(activity, ChatActivity::class.java)
             i.putExtra(SESSION_ID, id)
-            i.putExtra(USER_ID, userId)
+            i.putExtra(DIALOG_TYPE, userId)
             i.putExtra(DRAFT, draft)
             i.putExtra(TITLE, title)
             activity?.startActivity(i)
         }
     }
 
-    private var uid = 0L
+    private var dialogType = ""
     private var sessionId = 0L
     private var draft = ""
     private var conversasionTitle = ""
@@ -63,6 +63,21 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.app_act_chat_content)
+        try {
+            intent?.let {
+                if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
+                if (it.hasExtra(DIALOG_TYPE)) dialogType = it.getStringExtra(DIALOG_TYPE) ?: Constance.DIALOG_TYPE_P2P
+                if (it.hasExtra(DRAFT)) draft = it.getStringExtra(DRAFT) ?: ""
+                if (it.hasExtra(TITLE)) conversasionTitle = it.getStringExtra(TITLE) ?: ""
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        if (sessionId <= 0) {
+            FCApplication.showToast(getString(R.string.app_chat_error_empty_target))
+            finish()
+            return
+        }
         initView()
         initData()
         initListener()
@@ -73,6 +88,15 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         titleView = findViewById(R.id.app_act_chat_title)
         celBar = findViewById(R.id.ap_act_chat_cel)
         onFuncListener = FuncEventListener(this)
+        val rIcon = if (dialogType == Constance.DIALOG_TYPE_GROUP) {
+            R.mipmap.app_act_chat_icon_group_ditail
+        } else {
+            R.mipmap.app_act_chat_icon_user_ditail
+        }
+        titleView?.setRightIcon(rIcon)
+        titleView?.setRightClickListener {
+            UserInfoActivity.start(this, null, sessionId)
+        }
         celBar?.addOnFuncKeyBoardListener(this)
         celBar?.addFuncView(FuncGridView(this, onFuncListener))
         celBar?.etChat?.setOnSizeChangedListener { _, _, _, _ ->
@@ -90,21 +114,6 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
     }
 
     private fun initData() {
-        try {
-            intent?.let {
-                if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
-                if (it.hasExtra(USER_ID)) uid = it.getLongExtra(USER_ID, 0L)
-                if (it.hasExtra(DRAFT)) draft = it.getStringExtra(DRAFT) ?: ""
-                if (it.hasExtra(TITLE)) conversasionTitle = it.getStringExtra(TITLE) ?: ""
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        if (sessionId <= 0 && uid <= 0) {
-            FCApplication.showToast(getString(R.string.app_chat_error_empty_target))
-            finish()
-            return
-        }
         register()
         DataTransferHub.queryMsgInDb(sessionId)
     }
@@ -132,7 +141,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
             titleView?.setTitle(it.name)
         }
 
-        this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).listen { data ->
+        this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).filterIn { it.dialogId == sessionId }.listen { data ->
             if (!isFinishing) rvContent?.let {
                 handler.removeMessages(1999)
                 it.stopScroll()
@@ -155,7 +164,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
     private fun scrollToBottom() {
         rvContent?.requestLayout()
-        rvContent?.post { rvContent?.scrollToPosition(rvContent?.adapter?.itemCount ?: 1 - 1) }
+        rvContent?.post { rvContent?.scrollToPosition((rvContent?.adapter?.itemCount ?: 1) - 1) }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {

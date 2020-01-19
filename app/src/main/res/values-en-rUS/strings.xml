@@ -65,4 +65,7 @@
     <string name="pg_str_at_best">%1$s can only select up to %2$d files</string>
     <string name="pg_permission_request_fail">%s permissions denied!</string>
 
+    <!--user info-->
+    <string name="app_act_user_info_title_default">%s \'s \infomation</string>
+
 </resources>

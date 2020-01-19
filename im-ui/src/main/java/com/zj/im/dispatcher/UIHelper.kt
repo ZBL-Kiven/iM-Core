@@ -186,7 +186,7 @@ internal class UIExecutor<T, R>(private val creator: UIHelperCreator<T, R>, priv
             if (it.invoke(data)) postFilterInData(data)
             else {
                 log("the data $data may abandon with filter in")
-                null
+                return@postData null
             }
         } ?: postFilterInData(data)
     }
@@ -201,7 +201,7 @@ internal class UIExecutor<T, R>(private val creator: UIHelperCreator<T, R>, priv
             if (it.invoke(data)) data
             else {
                 log("the data $data may abandon with filter out")
-                null
+                return@postHandlerData null
             }
         } ?: data)
     }

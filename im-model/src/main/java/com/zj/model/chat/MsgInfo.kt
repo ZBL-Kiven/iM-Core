@@ -7,7 +7,7 @@ import com.zj.model.interfaces.MessageIn
 @Suppress("unused", "SpellCheckingInspection")
 class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
-    val channelId: String?; get() = impl.channelId()
+    val dialogId: Long; get(){ return impl.channelId()}
 
     val subType: String?; get() = impl.subType()
 
@@ -45,7 +45,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     /**------- */
 
-    val imageUrl: String?; get() = impl.channelId()
+    val imageUrl: Long; get() = impl.channelId()
 
     val imageWidth: Int; get() = impl.getImageWidth()
     val imageHeight: Int; get() = impl.getImageHeight()
@@ -80,7 +80,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
     val sendingState: Int; get() = impl.sendingState()
 
     //If the file is sent, the local path of the file needs to be saved for retransmission
-    val localFilePath: String?; get() = impl.channelId()
+    val localFilePath: String? = ""
 
     /** -------- db ignore properties ------- */
 

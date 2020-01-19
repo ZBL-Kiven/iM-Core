@@ -19,8 +19,8 @@ public class _MessageBeanImpl implements MessageIn {
     //~~~~~~~~~ 实现 UI 接口 ~~~~~~~~~
 
     @Override
-    public String channelId() {
-        return message != null ? String.valueOf(message.dialogId) : "";
+    public long channelId() {
+        return message.dialogId;
     }
 
     @Override
