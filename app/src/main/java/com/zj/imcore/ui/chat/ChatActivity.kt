@@ -10,6 +10,7 @@ import android.view.KeyEvent
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.zj.base.view.BaseTitleView
 import com.zj.im.dispatcher.addReceiveObserver
 import com.zj.im.emotionboard.CusEmoticonsLayout
@@ -29,6 +30,7 @@ import com.zj.imcore.ui.chat.func.FuncsAdapter
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.imcore.ui.views.IMRecyclerView
 import java.lang.Exception
+
 
 class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
@@ -56,6 +58,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
     private var conversasionTitle = ""
 
     private var rvContent: IMRecyclerView? = null
+    private var refreshLayout: SmartRefreshLayout? = null
     private var titleView: BaseTitleView? = null
     private var celBar: CusEmoticonsLayout? = null
     private var onFuncListener: FuncsAdapter.OnItemClickListener? = null
@@ -87,6 +90,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         rvContent = findViewById(R.id.app_act_chat_content_rv)
         titleView = findViewById(R.id.app_act_chat_title)
         celBar = findViewById(R.id.ap_act_chat_cel)
+        refreshLayout = findViewById(R.id.app_act_chat_refresh)
         onFuncListener = FuncEventListener(this)
         val rIcon = if (dialogType == Constance.DIALOG_TYPE_GROUP) {
             R.mipmap.app_act_chat_icon_group_ditail
@@ -111,6 +115,12 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
                 return this@ChatActivity.sessionId
             }
         }))
+        refreshLayout?.setOnRefreshListener {
+
+        }
+        refreshLayout?.setOnLoadMoreListener {
+
+        }
     }
 
     private fun initData() {
@@ -143,8 +153,8 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
         this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).filterIn { it.dialogId == sessionId }.listen { data ->
             if (!isFinishing) rvContent?.let {
-                handler.removeMessages(1999)
                 it.stopScroll()
+                handler.removeMessages(1999)
                 it.adapter.data().add(NORMAL, data)
                 val p = it.adapter.data().maxCurDataPosition()
                 val msg = Message.obtain()
@@ -164,7 +174,8 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
     private fun scrollToBottom() {
         rvContent?.requestLayout()
-        rvContent?.post { rvContent?.scrollToPosition((rvContent?.adapter?.itemCount ?: 1) - 1) }
+        val count = rvContent?.adapter?.itemCount ?: 1
+        rvContent?.post { rvContent?.scrollToPosition(count - 1) }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
@@ -175,7 +186,6 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
                 super.dispatchKeyEvent(event)
             }
         } else super.dispatchKeyEvent(event)
-
     }
 
     override fun onFuncPop(height: Int) {

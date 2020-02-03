@@ -19,33 +19,31 @@ object SyncManager {
         IMHelper.registerSocketStateChangeListener(SOCKET_STATE_LISTEN) {
             if (it == SocketState.CONNECTED) {
                 IMHelper.pause(FETCH_MSG_PAUSE_CODE)
-                onFetchStart { s, b ->
+                isCompleted = { s, b ->
                     if (b) {
                         fetchRecord.remove(s)
                         IMHelper.resume(FETCH_MSG_PAUSE_CODE)
                     } else {
                         val count = fetchRecord[s] ?: 0
                         fetchRecord[s] = count + 1
-//                        if (count < FETCH_RETRY_COUNT) IMHelper.reconnect("fetcher $s failed ,retrying on $count ")
-//                        else {
-//                            shutdown()
-//                            FCApplication.logout("fetch $s failed ,clear cache and require necessary to relogin")
-//                        }
+                        if (count < FETCH_RETRY_COUNT) IMHelper.reconnect("fetcher $s failed ,retrying on $count ")
+                        else {
+                            shutdown()
+                            FCApplication.logout("fetch $s failed ,clear cache and require necessary to relogin")
+                        }
                     }
                 }
+                onFetchStart()
             }
         }
     }
 
-    private fun onFetchStart(isContinue: (String, Boolean) -> Unit) {
+    private fun onFetchStart() {
         if (fetcher != null) {
             fetcher?.shutdown()
             fetcher = null
         }
-        isCompleted = isContinue
-        fetcher = Fetcher { s, b ->
-            isCompleted?.invoke(s, b)
-        }
+        fetcher = Fetcher(isCompleted)
     }
 
     fun shutdown() {

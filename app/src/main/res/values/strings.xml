@@ -70,4 +70,6 @@
     <!--user info-->
     <string name="app_act_user_info_title_default">%s 的个人资料</string>
 
+    <!--net-->
+    <string name="app_net_network_error">请检查网络连接</string>
 </resources>

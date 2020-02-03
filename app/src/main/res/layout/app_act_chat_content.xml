@@ -22,12 +22,30 @@
                 app:r_vHeight="25dp"
                 app:l_vTextColor="@color/color_primary_light_grey"/>
 
-        <com.zj.imcore.ui.views.IMRecyclerView
-                android:id="@+id/app_act_chat_content_rv"
-                android:layout_weight="1"
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/app_act_chat_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                android:layout_height="match_parent"
+                app:srlReboundDuration="300"
+                app:srlEnableOverScrollBounce="true"
+                app:srlEnableOverScrollDrag="false"
+                app:srlEnableNestedScrolling="true"
+                app:srlAccentColor="@color/color_primary">
+
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <com.zj.imcore.ui.views.IMRecyclerView
+                    android:id="@+id/app_act_chat_content_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            <com.scwang.smartrefresh.layout.footer.FalsifyFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     </LinearLayout>
 </com.zj.im.emotionboard.CusEmoticonsLayout>

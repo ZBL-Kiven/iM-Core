@@ -39,8 +39,6 @@ dependencies {
     }
     api 'com.cf.core:lib-room:1.0.8'
     annotationProcessor 'androidx.room:room-compiler:2.2.3'
-
     api 'com.alibaba:fastjson:1.2.62'
-
     api project(':im-model')
 }

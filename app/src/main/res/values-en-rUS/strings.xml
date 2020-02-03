@@ -68,4 +68,7 @@
     <!--user info-->
     <string name="app_act_user_info_title_default">%s \'s \infomation</string>
 
+
+    <!--net-->
+    <string name="app_net_network_error">network is not working</string>
 </resources>
