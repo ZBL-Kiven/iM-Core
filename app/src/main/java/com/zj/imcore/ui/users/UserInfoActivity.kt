@@ -5,6 +5,7 @@ import android.content.Intent
 import com.cf.im.db.domain.MemberBean
 import com.cf.im.db.repositorys.MemberRepository
 import com.zj.im.mainHandler
+import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.ui.chat.ChatActivity
@@ -58,7 +59,7 @@ class UserInfoActivity : FCActivity() {
         curUser?.let {
             setTitle(getString(R.string.app_act_user_info_title_default, it.name))
             app_act_user_info_btn_creat_dialog?.setOnClickListener { _ ->
-                ChatActivity.start(this, it.dialogId, it.uid, "", it.name)
+                ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, it.uid, "", it.name)
             }
         }
     }
@@ -66,5 +67,4 @@ class UserInfoActivity : FCActivity() {
     override fun initListener() {
 
     }
-
 }

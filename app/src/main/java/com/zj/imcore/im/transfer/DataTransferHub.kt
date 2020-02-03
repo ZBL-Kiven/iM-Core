@@ -32,7 +32,7 @@ object DataTransferHub {
     }
 
     fun queryMsgInDb(dialogId: Long) {
-        MessageRepository.queryMessageBy(dialogId, -1, 20, true) {
+        MessageRepository.queryMessageBy(dialogId, "-", -1, 20, true) {
             UIStore.postData(MsgInfoTransfer.transform(it))
         }
     }

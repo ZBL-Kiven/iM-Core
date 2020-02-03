@@ -7,7 +7,7 @@ import com.zj.model.interfaces.MessageIn
 @Suppress("unused", "SpellCheckingInspection")
 class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
-    val dialogId: Long; get(){ return impl.channelId()}
+    val dialogId: Long; get(){ return impl.dialogId()}
 
     val subType: String?; get() = impl.subType()
 
@@ -29,7 +29,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     val callId: String?; get() = impl.callId()
 
-    val key: String; get() = impl.key()
+    val key: Long; get() = impl.key()
 
     val avatarUrl: String?; get() = impl.getAvatarUrl()
 
@@ -45,7 +45,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     /**------- */
 
-    val imageUrl: Long; get() = impl.channelId()
+    val imageUrl: Long; get() = impl.dialogId()
 
     val imageWidth: Int; get() = impl.getImageWidth()
     val imageHeight: Int; get() = impl.getImageHeight()

@@ -44,7 +44,7 @@ object MsgInfoTransfer {
         data.subtype = null
         data.subtypeDetail = null
         return MsgInfo(object : MessageIn {
-            override fun channelId(): Long {
+            override fun dialogId(): Long {
                 return data.dialog_id
             }
 
@@ -110,8 +110,8 @@ object MsgInfoTransfer {
                 return data.callId
             }
 
-            override fun key(): String {
-                return "${data.id}"
+            override fun key(): Long {
+                return data.id
             }
 
             override fun getAvatarUrl(): String? {

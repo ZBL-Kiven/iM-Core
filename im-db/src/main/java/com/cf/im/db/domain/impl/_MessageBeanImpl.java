@@ -19,7 +19,7 @@ public class _MessageBeanImpl implements MessageIn {
     //~~~~~~~~~ 实现 UI 接口 ~~~~~~~~~
 
     @Override
-    public long channelId() {
+    public long dialogId() {
         return message.dialogId;
     }
 
@@ -75,9 +75,8 @@ public class _MessageBeanImpl implements MessageIn {
     }
 
     @Override
-    @NonNull
-    public String key() {
-        return message != null ? String.valueOf(message.id) : "";
+    public long key() {
+        return message != null ? message.id : -1;
     }
 
     @Override

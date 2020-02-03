@@ -46,7 +46,7 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
     override fun invoke(type: Int, data: DialogInfo, pos: Int, v: View) {
         when (type) {
             CONVERSATION_EVENT_ITEM -> {
-                ChatActivity.start(activity, data.channelId, data.userId, data.draft, data.title)
+                ChatActivity.start(activity, data.channelId, data.type, data.userId, data.draft, data.title)
             }
         }
     }

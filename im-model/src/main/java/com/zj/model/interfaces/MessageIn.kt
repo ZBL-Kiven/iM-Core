@@ -3,7 +3,7 @@ package com.zj.model.interfaces
 @Suppress("unused")
 interface MessageIn {
 
-    fun channelId(): Long
+    fun dialogId(): Long
 
     fun subType(): String?
 
@@ -25,7 +25,7 @@ interface MessageIn {
 
     fun callId(): String?
 
-    fun key(): String
+    fun key(): Long
 
     fun getAvatarUrl(): String?
 

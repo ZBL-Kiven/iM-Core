@@ -11,15 +11,18 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.zj.base.view.BaseTitleView
 import com.zj.im.dispatcher.addReceiveObserver
 import com.zj.im.emotionboard.CusEmoticonsLayout
 import com.zj.im.emotionboard.utils.EmoticonsKeyboardUtils
 import com.zj.im.emotionboard.widget.FuncLayout
+import com.zj.im.log
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication
+import com.zj.imcore.im.obtain.MessageObtainUtils
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.im.transfer.DataTransferHub
 import com.zj.imcore.ui.chat.emoticon.AdapterUtils
@@ -38,14 +41,16 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
         private const val SESSION_ID = "session_id"
         private const val DIALOG_TYPE = "dialog_type"
+        private const val USER_ID = "user_id"
         private const val DRAFT = "draft"
         private const val TITLE = "title"
         private const val NORMAL = "normal"
 
-        fun start(activity: Activity?, id: Long, userId: Long, draft: String?, title: String) {
+        fun start(activity: Activity?, id: Long, dialogType: String, userId: Long, draft: String?, title: String) {
             val i = Intent(activity, ChatActivity::class.java)
             i.putExtra(SESSION_ID, id)
-            i.putExtra(DIALOG_TYPE, userId)
+            i.putExtra(DIALOG_TYPE, dialogType)
+            i.putExtra(USER_ID, userId)
             i.putExtra(DRAFT, draft)
             i.putExtra(TITLE, title)
             activity?.startActivity(i)
@@ -54,6 +59,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
     private var dialogType = ""
     private var sessionId = 0L
+    private var userId = 0L
     private var draft = ""
     private var conversasionTitle = ""
 
@@ -70,6 +76,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
             intent?.let {
                 if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
                 if (it.hasExtra(DIALOG_TYPE)) dialogType = it.getStringExtra(DIALOG_TYPE) ?: Constance.DIALOG_TYPE_P2P
+                if (it.hasExtra(USER_ID)) userId = it.getLongExtra(USER_ID, 0)
                 if (it.hasExtra(DRAFT)) draft = it.getStringExtra(DRAFT) ?: ""
                 if (it.hasExtra(TITLE)) conversasionTitle = it.getStringExtra(TITLE) ?: ""
             }
@@ -84,6 +91,11 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         initView()
         initData()
         initListener()
+    }
+
+    private fun initData() {
+        register()
+        DataTransferHub.queryMsgInDb(sessionId)
     }
 
     private fun initView() {
@@ -116,16 +128,14 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
             }
         }))
         refreshLayout?.setOnRefreshListener {
+            log("----- refresh")
+            getMessage(false, 20, it)
 
         }
         refreshLayout?.setOnLoadMoreListener {
-
+            log("----- loadMore")
+            getMessage(true, 20, it)
         }
-    }
-
-    private fun initData() {
-        register()
-        DataTransferHub.queryMsgInDb(sessionId)
     }
 
     private fun initListener() {
@@ -202,6 +212,18 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
 
     fun getSessionId(): Long {
         return sessionId
+    }
+
+    private fun getMessage(isNewer: Boolean, limit: Int, rl: RefreshLayout) {
+        val msg = if (isNewer) rvContent?.adapter?.data?.lastOrNull() else rvContent?.adapter?.data?.firstOrNull()
+        if (msg == null) {
+            rl.finishRefresh()
+        } else {
+            MessageObtainUtils.fetchNewerMessage(msg, limit, false) { b, e ->
+                log("----- $b    ${e?.message}")
+                if (isNewer) rl.finishLoadMore() else rl.finishRefresh()
+            }
+        }
     }
 
     override fun finish() {

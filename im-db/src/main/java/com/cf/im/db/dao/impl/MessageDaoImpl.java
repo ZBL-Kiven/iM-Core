@@ -20,21 +20,23 @@ public abstract class MessageDaoImpl implements MessageDao {
     /**
      * 通过会话窗口id 查询信息（非离线消息）列表
      *
-     * @param dialogId 会话窗口Id
-     * @param kId      数据库自增Id
-     * @param limit    数量
-     * @param desc     排序方式
+     * @param dialogId   会话窗口Id
+     * @param kId        本地数据库消息的主键 Id
+     * @param limit      数量
+     * @param isPositive 排序方式
      * @return 消息列表
      */
-    public List<_MessageBeanImpl> queryMessageBy(long dialogId, int kId, int limit, boolean desc) {
-        String descStr = desc ? "desc" : "asc";
+    public List<_MessageBeanImpl> queryMessageBy(long dialogId, long kId, int limit, boolean isPositive) {
+        String oritation;
+        if (isPositive) oritation = ">";
+        else oritation = "<";
         String sql;
         if (kId <= 0) {
-            String sqlFormat = "select * from messagebean where dialogId = %d order by localCreateTs %s limit %d";
-            sql = String.format(Locale.getDefault(), sqlFormat, dialogId, descStr, limit);
+            String sqlFormat = "select * from messagebean where dialogId = %d order by localCreateTs desc limit %d";
+            sql = String.format(Locale.getDefault(), sqlFormat, dialogId, limit);
         } else {
-            String sqlFormat = "select * from messagebean where dialogId = %d and kid < %d order by localCreateTs %s limit %d";
-            sql = String.format(Locale.getDefault(), sqlFormat, dialogId, kId, descStr, limit);
+            String sqlFormat = "select * from messagebean where dialogId = %d and kid %s %d order by localCreateTs desc limit %d";
+            sql = String.format(Locale.getDefault(), sqlFormat, dialogId, oritation, kId, limit);
         }
         SimpleSQLiteQuery sqLiteQuery = new SimpleSQLiteQuery(sql);
         return queryBySqlImpl(sqLiteQuery);

@@ -71,14 +71,17 @@ public class MessageRepository extends BaseRepository {
     /**
      * 通过会话窗口id 查询信息（非离线消息）列表
      *
-     * @param dialogId 会话窗口Id
-     * @param kId      数据库自增Id
-     * @param limit    数量
-     * @param desc     排序方式
+     * @param dialogId   会话窗口Id
+     * @param callId     本地标识一条消息的唯一 Id
+     * @param msgKey     Server 的 MsgId
+     * @param limit      数量
+     * @param isPositive 方向，向上取还是向下取
      */
-    public static void queryMessageBy(long dialogId, int kId, int limit, boolean desc, DBListener<List<_MessageBeanImpl>> listener) {
+    public static void queryMessageBy(long dialogId, String callId, long msgKey, int limit, boolean isPositive, DBListener<List<_MessageBeanImpl>> listener) {
         AppDatabase.singleton.get().getReadExecutor().execute(() -> {
-            List<_MessageBeanImpl> beans = getMessageDao().queryMessageBy(dialogId, kId, limit, desc);
+            _MessageBeanImpl mpl = getMessageDao().queryIdOrCallIdImpl(callId, msgKey);
+            long kId = mpl == null ? -1 : mpl.message.kId;
+            List<_MessageBeanImpl> beans = getMessageDao().queryMessageBy(dialogId, kId, limit, isPositive);
             listener.onSuccess(beans);
         });
     }

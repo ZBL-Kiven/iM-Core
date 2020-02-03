@@ -5,6 +5,8 @@ import com.zj.model.interfaces.DialogIn
 
 class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
 
+    val type: String; get() = "p2p"
+
     //unique id for conversation
     val channelId: Long; get() = impl.getId()
 
