@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Fruit Chat</string>
 
     <string name="app_system_error_no_context">系统出错，请尝试重新开启您的 APP</string>
@@ -69,6 +69,12 @@
 
     <!--user info-->
     <string name="app_act_user_info_title_default">%s 的个人资料</string>
+    <string name="app_act_user_info_user_img_avatar_hint">头像</string>
+    <string name="app_act_user_info_user_nickname_hint">昵称</string>
+    <string name="app_act_user_info_user_name_hint">用户名</string>
+    <string name="app_act_user_info_user_describe_hint">个人签名</string>
+    <string name="app_act_user_info_user_describe_default">这个人太懒了，什么都没有留下</string>
+    <string name="app_act_user_info_send_msg">发消息</string>
 
     <!--net-->
     <string name="app_net_network_error">请检查网络连接</string>
