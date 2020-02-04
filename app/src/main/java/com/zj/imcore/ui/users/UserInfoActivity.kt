@@ -2,8 +2,15 @@ package com.zj.imcore.ui.users
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.cf.im.db.domain.MemberBean
 import com.cf.im.db.repositorys.MemberRepository
+import com.zj.album.AlbumIns
+import com.zj.album.options.AlbumOptions
+import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.BaseTitleView
 import com.zj.im.mainHandler
 import com.zj.imcore.Constance
@@ -35,8 +42,19 @@ class UserInfoActivity : FCActivity() {
     private var userId = 0L
     private var curUser: MemberBean? = null
 
+    ////view
+    private var ivUserAvatar: ImageView? = null
+    private var tvUserNickName: TextView? = null
+    private var tvUserName: TextView? = null
+    private var tvUserDescribe: TextView? = null
+
     override fun initView() {
         showTitleBar(true)
+
+        ivUserAvatar = findViewById(R.id.ivUserAvatar);
+        tvUserNickName = findViewById(R.id.tvUserNickName);
+        tvUserName = findViewById(R.id.tvUserName);
+        tvUserDescribe = findViewById(R.id.tvUserDescribe);
 
         try {
             intent?.let {
@@ -59,22 +77,70 @@ class UserInfoActivity : FCActivity() {
     }
 
     private fun setData() {
-        curUser?.let {
-            setTitle(getString(R.string.app_act_user_info_title_default, it.name))
-            app_act_user_info_btn_creat_dialog?.setOnClickListener { _ ->
+        curUser?.let { member ->
+            setTitle(getString(R.string.app_act_user_info_title_default, member.name))
+
+            btnSendMsg?.setOnClickListener { _ ->
                 ChatActivity.start(
                     this,
-                    it.dialogId,
+                    member.dialogId,
                     Constance.DIALOG_TYPE_P2P,
-                    it.uid,
+                    member.uid,
                     "",
-                    it.name
+                    member.name
                 )
             }
+
+            ivUserAvatar?.let { view ->
+                Glide.with(view).load(member.avatar)
+                    .error(R.mipmap.app_contact_avatar_default).into(view)
+            }
+
+            tvUserNickName?.text = member.title ?: ""
+            tvUserName?.text = member.name ?: ""
+            tvUserDescribe?.text = member.avatar ?: ""
+
+            btnSendMsg.visibility =
+                if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
         }
     }
 
     override fun initListener() {
+        tvUserName?.setOnClickListener {
+            //设置用户名称
+            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
+                return@setOnClickListener
+            }
+        }
+
+        tvUserNickName?.setOnClickListener {
+            //设置用户昵称
+            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
+                return@setOnClickListener
+            }
+        }
+
+        ivUserAvatar?.setOnClickListener {
+            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
+                return@setOnClickListener
+            }
+            //设置用户头像
+            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage())
+                .simultaneousSelection(true)
+                .setOriginalPolymorphism(true)
+                .maxSelectedCount(1)
+                .imgSizeRange(1024, Long.MAX_VALUE)
+                .start { isCancel, data ->
+                    if (isCancel && data != null && data.isNotEmpty()) {
+                        ivUserAvatar?.let {
+                            Glide.with(it).load(data[0].path)
+                                .error(R.mipmap.app_contact_avatar_default)
+                                .into(it)
+                        }
+                    }
+                }
+        }
+
 
     }
 }
