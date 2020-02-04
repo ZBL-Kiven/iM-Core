@@ -3,6 +3,8 @@ package com.zj.imcore.ui.main
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentTransaction
+import com.cf.im.db.databases.AppDatabase
+import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.SelectChangeIndexView
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.cf.managers.BaseFragmentManager
@@ -32,6 +34,7 @@ class MainActivity : FCActivity() {
     }
 
     override fun initData() {
+        AppDatabase.singleton.get("${SPUtils_Proxy.getUserId(0)}")
         conversationFragment = ConversationFragment()
         contactFragment = ContactFragment()
         settingFragment = SettingFragment()

@@ -26,7 +26,6 @@ class FCApplication : BaseApplication() {
         super.onCreate()
         SPUtils_Proxy.init(BuildConfig.APPLICATION_ID, this)
         DB.singleton.get().init(this)
-        AppDatabase.singleton.get("userId")
     }
 
     companion object {
@@ -41,6 +40,7 @@ class FCApplication : BaseApplication() {
                     in 200..299, 401 -> true
                     else -> false
                 }
+                AppDatabase.singleton.get("${SPUtils_Proxy.getUserId(0)}").exit()
                 if (isSuccess) {
                     SPUtils_Proxy.clear()
                 } else {
