@@ -128,12 +128,9 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
             }
         }))
         refreshLayout?.setOnRefreshListener {
-            log("----- refresh")
             getMessage(false, 20, it)
-
         }
         refreshLayout?.setOnLoadMoreListener {
-            log("----- loadMore")
             getMessage(true, 20, it)
         }
     }
@@ -220,7 +217,6 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
             rl.finishRefresh()
         } else {
             MessageObtainUtils.fetchNewerMessage(msg, limit, false) { b, e ->
-                log("----- $b    ${e?.message}")
                 if (isNewer) rl.finishLoadMore() else rl.finishRefresh()
             }
         }

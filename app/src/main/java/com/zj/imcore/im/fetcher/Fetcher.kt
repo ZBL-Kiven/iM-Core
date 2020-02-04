@@ -106,13 +106,13 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
 //    }
 
     private fun onFetchFailed(name: String) {
-        shutdown()
         isCompleted?.invoke(name, false)
+        shutdown()
     }
 
     private fun onFetchSuccessed(name: String) {
-        shutdown()
         isCompleted?.invoke(name, true)
+        shutdown()
     }
 
     fun shutdown() {
