@@ -24,5 +24,10 @@ public interface MemberDao extends IDao<MemberBean> {
     @Query("select * from memberbean where uid = :uids")
     MemberBean queryById(long uids);
 
+    @Query("select * from memberbean where dialogId = :dialogId")
+    MemberBean queryByDialogId(long dialogId);
+
+    @Query("select * from memberbean where dialogId in (:dialogId)")
+    List<MemberBean> queryByDialogIds(long... dialogId);
 
 }

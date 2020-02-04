@@ -18,4 +18,12 @@ public abstract class BaseSingleton<T> {
             return mInstance;
         }
     }
+
+    public final synchronized void exit() {
+        if (mInstance != null) {
+            //这里有可能做回收操作
+            mInstance = null;
+        }
+    }
+
 }

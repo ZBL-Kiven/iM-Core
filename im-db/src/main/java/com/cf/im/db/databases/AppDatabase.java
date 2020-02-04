@@ -45,7 +45,7 @@ public abstract class AppDatabase extends RoomDatabase implements IDatabase {
     private static final int NUMBER_OF_THREADS = 4;
 
     private final ExecutorService databaseWriteExecutor =
-            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+            Executors.newFixedThreadPool(1);
 
     private final ExecutorService databaseReadExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
@@ -61,7 +61,7 @@ public abstract class AppDatabase extends RoomDatabase implements IDatabase {
         return databaseReadExecutor;
     }
 
-    public static IDatabase create(String user) {
+    private static IDatabase create(String user) {
         SQLiteCipherSpec cipherSpec = new SQLiteCipherSpec()  // 指定加密方式，使用默认加密可以省略
                 .setPageSize(4096)
                 .setKDFIteration(64000);
@@ -82,8 +82,6 @@ public abstract class AppDatabase extends RoomDatabase implements IDatabase {
                 .build();
     }
 
-    public synchronized void exit() {
-        singleton = null;
-    }
+
 
 }

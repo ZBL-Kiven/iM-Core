@@ -8,8 +8,10 @@ import com.cf.im.db.databases.AppDatabase;
 import com.cf.im.db.domain.MessageBean;
 import com.cf.im.db.domain.impl._MessageBeanImpl;
 import com.cf.im.db.listener.DBListener;
+import com.cf.im.db.utils.DateUtils;
 import com.zj.model.interfaces.MessageIn;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MessageRepository extends BaseRepository {
@@ -33,15 +35,17 @@ public class MessageRepository extends BaseRepository {
         getWriteExecutor().execute(() -> {
             List<MessageBean> beans = JSON.parseArray(json, MessageBean.class);
             LongSparseArray<MessageBean> serviceBeans = new LongSparseArray<>();
-
+            Collections.sort(beans, (o1, o2) -> (o1.id > o2.id) ? 1 : -1);
 
             long[] ids = new long[beans.size()];
             int index = 0;
             for (MessageBean bean : beans) {
+                bean.localCreateTs = DateUtils.getTime(bean.localCreateTs, bean.created, bean.updated);
                 serviceBeans.put(bean.id, bean);
                 ids[index] = (bean.id);
                 index++;
             }
+
 
             List<MessageBean> dbList = getMessageDao().queryByIds(ids);
 
@@ -60,10 +64,6 @@ public class MessageRepository extends BaseRepository {
             serviceBeans.clear();
             dbList.clear();
 
-            beans = null;
-            serviceBeans = null;
-            ids = null;
-            dbList = null;
             listener.onSuccess(messages);
         });
     }
