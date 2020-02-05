@@ -11,7 +11,6 @@ import com.cf.im.db.repositorys.MemberRepository
 import com.zj.album.AlbumIns
 import com.zj.album.options.AlbumOptions
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
-import com.zj.base.view.BaseTitleView
 import com.zj.im.mainHandler
 import com.zj.imcore.Constance
 import com.zj.imcore.R
@@ -24,12 +23,12 @@ class UserInfoActivity : FCActivity() {
     companion object {
 
         private const val UID = "uid"
-        private const val SESSION_ID = "sessionId"
+        private const val CHAT_MOD = "chatMode"
 
-        fun start(context: Context?, uid: Long?, sessionId: Long?) {
+        fun start(context: Context?, uid: Long?, isChatMod: Boolean = false) {
             context?.startActivity(Intent(context, UserInfoActivity::class.java).apply {
                 if (uid != null) this.putExtra(UID, uid)
-                if (sessionId != null) this.putExtra(SESSION_ID, sessionId)
+                this.putExtra(CHAT_MOD, isChatMod)
             })
         }
     }
@@ -38,11 +37,11 @@ class UserInfoActivity : FCActivity() {
         return R.layout.app_act_user_info_content
     }
 
-    private var sessionId = 0L
     private var userId = 0L
+    private var isChatMod = false
     private var curUser: MemberBean? = null
 
-    ////view
+    //view
     private var ivUserAvatar: ImageView? = null
     private var tvUserNickName: TextView? = null
     private var tvUserName: TextView? = null
@@ -51,15 +50,15 @@ class UserInfoActivity : FCActivity() {
     override fun initView() {
         showTitleBar(true)
 
-        ivUserAvatar = findViewById(R.id.ivUserAvatar);
-        tvUserNickName = findViewById(R.id.tvUserNickName);
-        tvUserName = findViewById(R.id.tvUserName);
-        tvUserDescribe = findViewById(R.id.tvUserDescribe);
+        ivUserAvatar = findViewById(R.id.ivUserAvatar)
+        tvUserNickName = findViewById(R.id.tvUserNickName)
+        tvUserName = findViewById(R.id.tvUserName)
+        tvUserDescribe = findViewById(R.id.tvUserDescribe)
 
         try {
             intent?.let {
-                if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
                 if (it.hasExtra(UID)) userId = it.getLongExtra(UID, 0)
+                if (it.hasExtra(CHAT_MOD)) isChatMod = it.getBooleanExtra(CHAT_MOD, false)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -79,29 +78,15 @@ class UserInfoActivity : FCActivity() {
     private fun setData() {
         curUser?.let { member ->
             setTitle(getString(R.string.app_act_user_info_title_default, member.name))
-
-            btnSendMsg?.setOnClickListener { _ ->
-                ChatActivity.start(
-                    this,
-                    member.dialogId,
-                    Constance.DIALOG_TYPE_P2P,
-                    member.uid,
-                    "",
-                    member.name
-                )
-            }
-
             ivUserAvatar?.let { view ->
-                Glide.with(view).load(member.avatar)
-                    .error(R.mipmap.app_contact_avatar_default).into(view)
+                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default).into(view)
             }
 
             tvUserNickName?.text = member.title ?: ""
             tvUserName?.text = member.name ?: ""
             tvUserDescribe?.text = member.avatar ?: ""
 
-            btnSendMsg.visibility =
-                if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
+            btnSendMsg.visibility = if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
         }
     }
 
@@ -125,22 +110,19 @@ class UserInfoActivity : FCActivity() {
                 return@setOnClickListener
             }
             //设置用户头像
-            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage())
-                .simultaneousSelection(true)
-                .setOriginalPolymorphism(true)
-                .maxSelectedCount(1)
-                .imgSizeRange(1024, Long.MAX_VALUE)
-                .start { isCancel, data ->
-                    if (isCancel && data != null && data.isNotEmpty()) {
-                        ivUserAvatar?.let {
-                            Glide.with(it).load(data[0].path)
-                                .error(R.mipmap.app_contact_avatar_default)
-                                .into(it)
-                        }
+            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1).imgSizeRange(1024, Long.MAX_VALUE).start { isCancel, data ->
+                if (!isCancel && !data.isNullOrEmpty()) {
+                    ivUserAvatar?.let {
+                        Glide.with(it).load(data[0].path).error(R.mipmap.app_contact_avatar_default).into(it)
                     }
                 }
+            }
         }
 
-
+        btnSendMsg?.setOnClickListener { _ ->
+            curUser?.let {
+                if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, it.uid, "", it.name)
+            } ?: finish()
+        }
     }
 }

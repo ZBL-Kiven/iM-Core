@@ -1,5 +1,6 @@
 package com.zj.imcore.ui.main.contact
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -44,9 +45,11 @@ class ContactFragment : BaseLinkageFragment() {
     private val searchKey = 0xaac
     private var etSearch: EditText? = null
     private var vSearchClear: View? = null
+    private var vMyGroups: View? = null
     private var rvContent: RecyclerView? = null
     private var loadingView: BaseLoadingView? = null
     private var adapter: ContactListAdapter? = null
+
     private var searchHandler: Handler? = null
     private var cachedData: ArrayList<MemberBean>? = null
     private var isContactLoading = false
@@ -55,6 +58,7 @@ class ContactFragment : BaseLinkageFragment() {
         etSearch = find(R.id.app_fragment_contact_et_search)
         vSearchClear = find(R.id.app_fragment_contact_v_search_clear)
         rvContent = find(R.id.app_fragment_contact_rv)
+        vMyGroups = find(R.id.app_fragment_contact_tv_my_groups)
         loadingView = find(R.id.app_fragment_contact_loading)
     }
 
@@ -65,10 +69,13 @@ class ContactFragment : BaseLinkageFragment() {
         }
         adapter?.setOnChildClickListener { adapter, _, groupPosition, childPosition ->
             val member = adapter.getItem(groupPosition).children[childPosition]
-            UserInfoActivity.start(activity, member.uid, null)
+            UserInfoActivity.start(activity, member.uid)
         }
         vSearchClear?.setOnClickListener {
             etSearch?.setText("")
+        }
+        vMyGroups?.setOnClickListener {
+            startActivity(Intent(this.activity, MyGroupsActivity::class.java))
         }
         etSearch?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

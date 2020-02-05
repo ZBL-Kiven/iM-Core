@@ -92,7 +92,7 @@
         android:id="@+id/btnSendMsg"
         style="@style/btnStyle"
         android:layout_marginBottom="50dp"
-        android:backgroundTint="@color/bule_selector"
+        android:backgroundTint="@color/base_btn_selector"
         android:text="@string/app_act_user_info_send_msg" />
 
 </LinearLayout>

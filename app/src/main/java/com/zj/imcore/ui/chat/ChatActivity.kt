@@ -17,7 +17,6 @@ import com.zj.im.dispatcher.addReceiveObserver
 import com.zj.im.emotionboard.CusEmoticonsLayout
 import com.zj.im.emotionboard.utils.EmoticonsKeyboardUtils
 import com.zj.im.emotionboard.widget.FuncLayout
-import com.zj.im.log
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.model.chat.MsgInfo
@@ -111,7 +110,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         }
         titleView?.setRightIcon(rIcon)
         titleView?.setRightClickListener {
-            UserInfoActivity.start(this, null, sessionId)
+            UserInfoActivity.start(this, userId, true)
         }
         celBar?.addOnFuncKeyBoardListener(this)
         celBar?.addFuncView(FuncGridView(this, onFuncListener))
@@ -216,7 +215,7 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         if (msg == null) {
             rl.finishRefresh()
         } else {
-            MessageObtainUtils.fetchNewerMessage(msg, limit, false) { b, e ->
+            MessageObtainUtils.fetchNewerMessage(msg, limit, false) { _, _ ->
                 if (isNewer) rl.finishLoadMore() else rl.finishRefresh()
             }
         }

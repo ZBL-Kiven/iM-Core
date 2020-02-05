@@ -44,6 +44,8 @@
 
         <activity android:name=".ui.chat.ChatActivity" android:launchMode="singleTask"/>
 
+        <activity android:name=".ui.main.contact.MyGroupsActivity" android:launchMode="singleTask"/>
+
         <receiver
                 android:name=".gui.auth.TokenRefreshUtils"
                 android:enabled="true"
