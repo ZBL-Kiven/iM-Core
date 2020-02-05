@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.zj.base.view.BaseTitleView
-import com.zj.im.dispatcher.addReceiveObserver
-import com.zj.im.emotionboard.CusEmoticonsLayout
-import com.zj.im.emotionboard.utils.EmoticonsKeyboardUtils
-import com.zj.im.emotionboard.widget.FuncLayout
+import com.zj.ui.dispatcher.addReceiveObserver
+import com.zj.ui.emotionboard.CusEmoticonsLayout
+import com.zj.ui.emotionboard.utils.EmoticonsKeyboardUtils
+import com.zj.ui.emotionboard.widget.FuncLayout
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity

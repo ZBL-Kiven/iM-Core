@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.zj.im.list.utils.TimeLineInflateModel
+import com.zj.ui.list.utils.TimeLineInflateModel
 import com.zj.model.chat.DialogInfo
 import com.zj.imcore.R
 import com.zj.list.multiable.MultiRecyclerAdapter

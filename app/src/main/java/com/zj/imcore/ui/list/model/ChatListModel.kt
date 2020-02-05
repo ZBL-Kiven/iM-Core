@@ -2,10 +2,10 @@ package com.zj.imcore.ui.list.model
 
 import android.content.Context
 import com.bumptech.glide.Glide
-import com.zj.im.img.cache.ImageCacheUtil
+import com.zj.ui.img.cache.ImageCacheUtil
 import com.zj.imcore.utils.img.loader.AvatarLoadUtil
-import com.zj.im.list.interfaces.BaseChatModel
-import com.zj.im.list.views.ChatItemView
+import com.zj.ui.list.interfaces.BaseChatModel
+import com.zj.ui.list.views.ChatItemView
 import com.zj.model.Payloads
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication

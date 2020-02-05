@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.zj.im.list.views.ChatItemView
+import com.zj.ui.list.views.ChatItemView
 import com.zj.model.Payloads
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.model.chat.MsgInfo

@@ -2,8 +2,8 @@
 //
 //import android.text.Spannable;
 //import android.widget.EditText;
-//import com.zj.im.emotionboard.interfaces.EmoticonFilter;
-//import com.zj.im.emotionboard.utils.EmoticonsKeyboardUtils;
+//import com.zj.ui.emotionboard.interfaces.EmoticonFilter;
+//import com.zj.ui.emotionboard.utils.EmoticonsKeyboardUtils;
 //
 //@SuppressWarnings("SpellCheckingInspection")
 //public class EmojiFilter extends EmoticonFilter {

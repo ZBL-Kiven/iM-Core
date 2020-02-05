@@ -6,12 +6,12 @@
 //import android.view.*;
 //import android.widget.*;
 //import androidx.appcompat.app.AppCompatActivity;
-//import com.zj.im.emotionboard.CusEmoticonsLayout;
-//import com.zj.im.emotionboard.adpater.EmoticonPacksAdapter;
-//import com.zj.im.emotionboard.data.Emoticon;
-//import com.zj.im.emotionboard.interfaces.OnEmoticonClickListener;
-//import com.zj.im.emotionboard.widget.EmoticonsEditText;
-//import com.zj.im.emotionboard.widget.FuncLayout;
+//import com.zj.ui.emotionboard.CusEmoticonsLayout;
+//import com.zj.ui.emotionboard.adpater.EmoticonPacksAdapter;
+//import com.zj.ui.emotionboard.data.Emoticon;
+//import com.zj.ui.emotionboard.interfaces.OnEmoticonClickListener;
+//import com.zj.ui.emotionboard.widget.EmoticonsEditText;
+//import com.zj.ui.emotionboard.widget.FuncLayout;
 //import com.zj.imcore.R;
 //
 //
@@ -64,10 +64,10 @@
 //        });
 //
 //
-//        int width = (int) getResources().getDimension(com.zj.im.emotionboard.R.dimen.bar_tool_btn_width);
+//        int width = (int) getResources().getDimension(com.zj.ui.emotionboard.R.dimen.bar_tool_btn_width);
 //
-//        View leftView = LayoutInflater.from(this).inflate(com.zj.im.emotionboard.R.layout.left_toolbtn, null);
-//        ImageView iv_icon = (ImageView) leftView.findViewById(com.zj.im.emotionboard.R.id.iv_icon);
+//        View leftView = LayoutInflater.from(this).inflate(com.zj.ui.emotionboard.R.layout.left_toolbtn, null);
+//        ImageView iv_icon = (ImageView) leftView.findViewById(com.zj.ui.emotionboard.R.id.iv_icon);
 //        LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(width, RelativeLayout.LayoutParams.MATCH_PARENT);
 //        iv_icon.setLayoutParams(imgParams);
 //        iv_icon.setImageResource(R.mipmap.icon_add);
@@ -80,8 +80,8 @@
 //
 //        ekBar.getEmoticonsToolBarView().addFixedToolItemView(leftView, false);
 //
-//        View rightView = LayoutInflater.from(this).inflate(com.zj.im.emotionboard.R.layout.right_toolbtn, null);
-//        iv_icon = (ImageView) rightView.findViewById(com.zj.im.emotionboard.R.id.iv_icon);
+//        View rightView = LayoutInflater.from(this).inflate(com.zj.ui.emotionboard.R.layout.right_toolbtn, null);
+//        iv_icon = (ImageView) rightView.findViewById(com.zj.ui.emotionboard.R.id.iv_icon);
 //        iv_icon.setImageResource(R.mipmap.icon_setting);
 //        iv_icon.setLayoutParams(imgParams);
 //        rightView.setOnClickListener(new View.OnClickListener() {

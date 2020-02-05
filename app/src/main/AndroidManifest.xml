@@ -50,8 +50,7 @@
             android:launchMode="singleTask" />
 
         <activity android:name=".ui.chat.ChatActivity"
-                  android:launchMode="singleTask"
-                  android:windowSoftInputMode="adjustPan"/>
+                  android:launchMode="singleTask"/>
 
         <activity android:name=".ui.main.contact.group.MyGroupsActivity"
                   android:launchMode="singleTask"

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.zj.cf.fragments.BaseLinkageFragment
-import com.zj.im.dispatcher.addReceiveObserver
+import com.zj.ui.dispatcher.addReceiveObserver
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.im.transfer.DataTransferHub

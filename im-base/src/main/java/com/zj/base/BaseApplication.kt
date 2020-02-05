@@ -2,7 +2,6 @@ package com.zj.base
 
 import android.app.Activity
 import android.app.Application
-import com.zj.im.log
 
 @Suppress("unused")
 open class BaseApplication : Application() {

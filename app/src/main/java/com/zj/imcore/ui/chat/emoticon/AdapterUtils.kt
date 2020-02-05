@@ -2,11 +2,11 @@ package com.zj.imcore.ui.chat.emoticon
 
 import android.content.Context
 import com.sj.emoji.DefEmoticons
-import com.zj.im.emotionboard.adpater.EmoticonPacksAdapter
-import com.zj.im.emotionboard.data.Emoticon
-import com.zj.im.emotionboard.data.EmoticonPack
-import com.zj.im.emotionboard.interfaces.OnEmoticonClickListener
-import com.zj.im.emotionboard.utils.getResourceUri
+import com.zj.ui.emotionboard.adpater.EmoticonPacksAdapter
+import com.zj.ui.emotionboard.data.Emoticon
+import com.zj.ui.emotionboard.data.EmoticonPack
+import com.zj.ui.emotionboard.interfaces.OnEmoticonClickListener
+import com.zj.ui.emotionboard.utils.getResourceUri
 import com.zj.imcore.R
 
 object AdapterUtils {

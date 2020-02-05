@@ -4,8 +4,8 @@ import android.content.Context
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
-import com.zj.im.img.AutomationImageCalculateUtils
-import com.zj.im.list.views.ChatItemView
+import com.zj.ui.img.AutomationImageCalculateUtils
+import com.zj.ui.list.views.ChatItemView
 import com.zj.model.Payloads
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.R

@@ -1,7 +1,7 @@
 package com.zj.imcore.ui.list.model.sub
 
 import android.content.Context
-import com.zj.im.list.views.ChatItemView
+import com.zj.ui.list.views.ChatItemView
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.ui.list.model.BaseItemMod
 

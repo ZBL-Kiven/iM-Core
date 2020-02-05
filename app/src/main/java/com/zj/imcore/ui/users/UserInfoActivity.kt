@@ -13,7 +13,7 @@ import com.zj.album.AlbumIns
 import com.zj.album.options.AlbumOptions
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.BaseTitleView
-import com.zj.im.mainHandler
+import com.zj.ui.mainHandler
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity

@@ -1,2 +1,1 @@
-include ':app', ':im-core', ':im-ui', ':zj-list', ':im-preview', ':im-base',':zj-javaU',':zj-api', ':im-model'
-include ':im-db'
+include ':app', ':im-core',':im-ui', ':zj-list', ':im-preview', ':im-base', ':zj-javaU', ':zj-api', ':im-model', ':im-db'

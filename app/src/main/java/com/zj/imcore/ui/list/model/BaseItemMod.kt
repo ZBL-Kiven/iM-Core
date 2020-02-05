@@ -2,7 +2,7 @@ package com.zj.imcore.ui.list.model
 
 import android.content.Context
 import androidx.core.content.ContextCompat
-import com.zj.im.list.views.ChatItemView
+import com.zj.ui.list.views.ChatItemView
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication
 import java.lang.Exception

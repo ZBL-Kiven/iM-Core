@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject
 import com.cf.im.db.domain.impl._MessageBeanImpl
 import com.cf.im.db.repositorys.MessageRepository
 import com.zj.im.chat.enums.SendMsgState
-import com.zj.im.dispatcher.UIStore
+import com.zj.ui.dispatcher.UIStore
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.enums.MsgSubtype
 import com.zj.imcore.enums.MsgType

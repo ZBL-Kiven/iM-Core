@@ -4,10 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.ImageView
 import com.zj.im.chat.enums.SendMsgState
-import com.zj.im.list.interfaces.BaseChatModel
-import com.zj.im.list.ChatRecyclerView
-import com.zj.im.list.utils.TimeLineInflateModel
-import com.zj.im.list.ChatItemOptions
+import com.zj.ui.list.interfaces.BaseChatModel
+import com.zj.ui.list.ChatRecyclerView
+import com.zj.ui.list.utils.TimeLineInflateModel
+import com.zj.ui.list.ChatItemOptions
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication.Companion.isSelf
 import com.zj.imcore.ui.list.ChatOption

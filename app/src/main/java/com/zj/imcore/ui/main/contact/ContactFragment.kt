@@ -16,9 +16,9 @@ import com.cf.im.db.domain.MemberBean
 import com.cf.im.db.repositorys.MemberRepository
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
-import com.zj.im.dispatcher.addReceiveObserver
-import com.zj.im.log
-import com.zj.im.mainHandler
+import com.zj.ui.dispatcher.addReceiveObserver
+import com.zj.ui.log
+import com.zj.ui.mainHandler
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.apis.members.MemberApi

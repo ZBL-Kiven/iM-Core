@@ -8,8 +8,8 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
-import com.zj.im.img.CacheAble
-import com.zj.im.img.cache.ImageCacheUtil.Companion.CENTER_CROP
+import com.zj.ui.img.CacheAble
+import com.zj.ui.img.cache.ImageCacheUtil.Companion.CENTER_CROP
 import com.zj.imcore.R
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.genderIsLady

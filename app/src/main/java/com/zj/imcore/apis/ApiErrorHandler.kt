@@ -2,7 +2,7 @@ package com.zj.imcore.apis
 
 import com.alibaba.fastjson.JSON
 import com.zbl.api.interfaces.ErrorHandler
-import com.zj.im.log
+import com.zj.ui.log
 import com.zj.imcore.R
 import com.zj.imcore.base.FCApplication
 import retrofit2.HttpException

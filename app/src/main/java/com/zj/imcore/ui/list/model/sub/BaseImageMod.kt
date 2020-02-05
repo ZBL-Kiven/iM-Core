@@ -8,9 +8,9 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.zj.im.img.AutomationImageCalculateUtils
-import com.zj.im.img.cache.ImageCacheUtil
-import com.zj.im.list.views.ChatItemView
+import com.zj.ui.img.AutomationImageCalculateUtils
+import com.zj.ui.img.cache.ImageCacheUtil
+import com.zj.ui.list.views.ChatItemView
 import com.zj.imcore.R
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.ui.list.ChatOption

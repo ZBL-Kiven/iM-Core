@@ -1,7 +1,7 @@
 package com.zj.imcore.utils.img.loader
 
 import android.content.Context
-import com.zj.im.img.CacheAble
+import com.zj.ui.img.CacheAble
 
 class AvatarLoadUtil(context: Context, w: Int, h: Int, quality: Float, cache: CacheAble, fillType: Int = DEFAULT, payloads: String? = null) : BaseGlideLoader(context, w, h, quality, cache, fillType, payloads) {
 

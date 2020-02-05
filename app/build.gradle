@@ -12,29 +12,53 @@ android {
         applicationId "com.zj.imcore"
         flavorDimensions("none")
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
 
     signingConfigs {
         release {
-            File propFile = file('signing.properties')
-            if (propFile.exists()) {
-                Properties props = new Properties()
-                props.load(new FileInputStream(propFile))
-                if (props.containsKey('RELEASE_STOREFILE') && props.containsKey('RELEASE_KEY_ALIAS') && props.containsKey('RELEASE_KEY_PASSWORD') && props.containsKey('RELEASE_STOREPASSWORD')) {
-                    storeFile = file(props['RELEASE_STOREFILE'])
-                    storePassword = props['RELEASE_STOREPASSWORD']
-                    keyAlias = props['RELEASE_KEY_ALIAS']
-                    keyPassword = props['RELEASE_KEY_PASSWORD']
-                } else {
-                    android.buildTypes.release.signingConfig = null
+
+        }
+    }
+
+    File propFile = file('signing.properties')
+    if (propFile.exists()) {
+        Properties props = new Properties()
+        props.load(new FileInputStream(propFile))
+        if (props.containsKey('RELEASE_STOREFILE') && props.containsKey('RELEASE_KEY_ALIAS') && props.containsKey('RELEASE_KEY_PASSWORD') && props.containsKey('RELEASE_STOREPASSWORD')) {
+            android.signingConfigs.release.storeFile = file(props['RELEASE_STOREFILE'])
+            android.signingConfigs.release.storePassword = props['RELEASE_STOREPASSWORD']
+            android.signingConfigs.release.keyAlias = props['RELEASE_KEY_ALIAS']
+            android.signingConfigs.release.keyPassword = props['RELEASE_KEY_PASSWORD']
+        } else {
+            android.buildTypes.release.signingConfig = null
+        }
+    } else {
+        android.buildTypes.release.signingConfig = null
+    }
+    
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (variant.buildType.name != "debug") {
+            variant.outputs.all {
+                def time = new Date().format("MMddHHmm")
+                outputFileName = "${variant.productFlavors[0].name.toUpperCase()}_" +
+                        "${variant.buildType.name.toUpperCase()}_v${variant.versionName}_${time}.apk"
+            }
+            variant.getAssembleProvider().get().doLast { assemble ->
+                copy {
+                    from variant.outputs*.outputFile
+                    into "apks"
                 }
-            } else {
-                android.buildTypes.release.signingConfig = null
+                delete variant.outputs*.outputFile
             }
         }
     }

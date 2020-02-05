@@ -1,6 +1,6 @@
 package com.zj.imcore.im.renderer
 
-import com.zj.im.dispatcher.DataHandler
+import com.zj.ui.dispatcher.DataHandler
 import com.zj.model.chat.MsgInfo
 
 

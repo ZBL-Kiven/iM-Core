@@ -5,9 +5,9 @@
 //import android.text.Spannable;
 //import android.text.TextUtils;
 //import android.widget.EditText;
-//import com.zj.im.emotionboard.interfaces.EmoticonFilter;
-//import com.zj.im.emotionboard.utils.EmoticonsKeyboardUtils;
-//import com.zj.im.emotionboard.widget.EmoticonSpan;
+//import com.zj.ui.emotionboard.interfaces.EmoticonFilter;
+//import com.zj.ui.emotionboard.utils.EmoticonsKeyboardUtils;
+//import com.zj.ui.emotionboard.widget.EmoticonSpan;
 //
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;

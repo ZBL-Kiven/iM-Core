@@ -1,6 +1,6 @@
 package com.zj.model.chat
 
-import com.zj.im.list.interfaces.InfoImpl
+import com.zj.ui.list.interfaces.InfoImpl
 import com.zj.model.Payloads
 import com.zj.model.interfaces.MessageIn
 

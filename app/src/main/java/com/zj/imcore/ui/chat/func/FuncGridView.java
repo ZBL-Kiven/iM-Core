@@ -3,6 +3,7 @@ package com.zj.imcore.ui.chat.func;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.GridView;
+import androidx.core.content.ContextCompat;
 import com.zj.base.utils.DPUtils;
 import com.zj.imcore.R;
 
@@ -22,7 +23,7 @@ public class FuncGridView extends GridView {
     public FuncGridView(Context context, FuncsAdapter.OnItemClickListener listener) {
         super(context);
         setNumColumns(4);
-        setBackgroundColor(context.getResources().getColor(R.color.color_primary_color_mediu_light));
+        setBackgroundColor(ContextCompat.getColor(context, R.color.color_primary_color_mediu_light));
         setOverScrollMode(OVER_SCROLL_NEVER);
         setVerticalSpacing(DPUtils.dp2px(30));
         int pading = DPUtils.dp2px(10);

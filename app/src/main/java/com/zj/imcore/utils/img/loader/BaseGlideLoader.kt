@@ -7,8 +7,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.BaseRequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.zj.im.img.CacheAble
-import com.zj.im.img.cache.ImageCacheUtil
+import com.zj.ui.img.CacheAble
+import com.zj.ui.img.cache.ImageCacheUtil
 
 abstract class BaseGlideLoader(context: Context, w: Int, h: Int, quality: Float, cache: CacheAble, fillType: Int, payloads: String? = null) : ImageCacheUtil(context, w, h, quality, cache, fillType, payloads) {
 

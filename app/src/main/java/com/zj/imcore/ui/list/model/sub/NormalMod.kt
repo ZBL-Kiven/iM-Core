@@ -5,7 +5,7 @@ import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.zj.im.list.views.ChatItemView
+import com.zj.ui.list.views.ChatItemView
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.ui.list.model.BaseItemMod

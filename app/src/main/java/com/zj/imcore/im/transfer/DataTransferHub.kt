@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON
 import com.cf.im.db.repositorys.DialogRepository
 import com.cf.im.db.repositorys.MessageRepository
 import com.zj.im.chat.enums.SendMsgState
-import com.zj.im.dispatcher.UIStore
+import com.zj.ui.dispatcher.UIStore
 import com.zj.model.chat.MsgInfo
 import com.zj.model.chat.ProgressInfo
 import com.zj.model.mod.SendMessageBean

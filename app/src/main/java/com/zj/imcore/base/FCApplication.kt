@@ -13,8 +13,8 @@ import com.cf.im.db.databases.AppDatabase
 import com.cf.im.db.databases.DB
 import com.zj.base.BaseApplication
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
-import com.zj.im.log
-import com.zj.im.mainHandler
+import com.zj.ui.log
+import com.zj.ui.mainHandler
 import com.zj.imcore.BuildConfig
 import com.zj.imcore.apis.user.UserApi
 import com.zj.imcore.gui.SplashActivity

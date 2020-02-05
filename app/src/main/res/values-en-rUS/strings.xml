@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="sdk_name">Fruit Chat</string>
+    <string name="app_name">Fruit Chat</string>
 
     <string name="app_system_error_no_context">System error ,please restart app to repair!</string>
     <string name="app_contact_search">search</string>

@@ -1,7 +1,7 @@
 package com.zj.imcore.im.obtain
 
 import com.cf.im.db.repositorys.MessageRepository
-import com.zj.im.dispatcher.UIStore
+import com.zj.ui.dispatcher.UIStore
 import com.zj.imcore.apis.fetcher.FetcherApi
 import com.zj.imcore.im.transfer.MsgInfoTransfer
 import com.zj.model.chat.MsgInfo

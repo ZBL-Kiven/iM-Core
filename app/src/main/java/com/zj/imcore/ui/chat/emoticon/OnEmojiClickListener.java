@@ -4,8 +4,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.EditText;
-import com.zj.im.emotionboard.data.Emoticon;
-import com.zj.im.emotionboard.interfaces.OnEmoticonClickListener;
+import com.zj.ui.emotionboard.data.Emoticon;
+import com.zj.ui.emotionboard.interfaces.OnEmoticonClickListener;
 import com.zj.imcore.im.options.IMHelper;
 
 public abstract class OnEmojiClickListener implements OnEmoticonClickListener<Emoticon> {

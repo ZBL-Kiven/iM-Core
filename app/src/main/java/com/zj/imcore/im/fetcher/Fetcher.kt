@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON
 import com.cf.im.db.repositorys.MemberRepository
 import com.zbl.api.base.BaseRetrofit
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
-import com.zj.im.dispatcher.UIStore
-import com.zj.im.log
+import com.zj.ui.dispatcher.UIStore
+import com.zj.ui.log
 import com.zj.imcore.apis.fetcher.FetcherApi
 import com.zj.imcore.apis.members.MemberApi
 import com.zj.imcore.im.fetcher.interfaces.FetcherDialogsIn

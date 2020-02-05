@@ -1,7 +1,6 @@
 package com.zj.im.sender
 
 import com.zj.im.chat.hub.ServerHub
-import com.zj.im.main.StatusHub
 import com.zj.im.chat.modle.BaseMsgInfo
 import com.zj.im.chat.interfaces.SendingCallBack
 import com.zj.im.chat.modle.SendingUp

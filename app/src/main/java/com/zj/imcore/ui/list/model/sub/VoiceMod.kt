@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.zj.im.list.views.ChatItemView
+import com.zj.ui.list.views.ChatItemView
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.R
 import com.zj.model.chat.MsgInfo

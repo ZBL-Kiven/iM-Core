@@ -4,11 +4,8 @@ import com.cf.im.db.repositorys.DialogRepository
 import com.cf.im.db.repositorys.MessageRepository
 import com.zbl.api.BaseApi
 import com.zbl.api.base.BaseRetrofit
-import com.zbl.api.interfaces.ApiFactory
-import com.zj.im.dispatcher.UIStore
-import com.zj.imcore.Constance
+import com.zj.ui.dispatcher.UIStore
 import com.zj.imcore.apis.APIs.getDefaultApi
-import com.zj.imcore.apis.ApiErrorHandler
 import com.zj.imcore.im.transfer.DialogTransfer
 import com.zj.imcore.im.transfer.MsgInfoTransfer
 import okhttp3.ResponseBody
