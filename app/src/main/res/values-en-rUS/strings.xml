@@ -39,11 +39,12 @@
     <string name="app_main_title_contact">Contact</string>
     <string name="app_main_title_setting">Setting</string>
 
+    <string name="app_fragment_contact_my_groups">my groups</string>
+
     <string name="app_fragment_setting_clear_caches">clear app caches</string>
     <string name="app_fragment_setting_logout">logout</string>
 
     <string name="app_chat_error_empty_target">target was undifineded</string>
-
 
     <string name="loading_no_data">No picture fond</string>
     <string name="loading_progress">please wait…</string>

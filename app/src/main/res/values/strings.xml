@@ -40,6 +40,8 @@
     <string name="app_main_title_contact">联系人</string>
     <string name="app_main_title_setting">设置</string>
 
+    <string name="app_fragment_contact_my_groups">我的讨论组</string>
+
     <string name="app_fragment_setting_clear_caches">清除缓存</string>
     <string name="app_fragment_setting_logout">登出</string>
 

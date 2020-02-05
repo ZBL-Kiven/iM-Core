@@ -40,9 +40,25 @@
                 android:src="@mipmap/app_contact_icon_search_clear"
                 tools:ignore="ContentDescription"/>
     </LinearLayout>
-    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+
+        <TextView
+                android:id="@+id/app_fragment_contact_tv_my_groups"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/app_fragment_contact_my_groups"
+                android:background="@color/color_primary_light_grey_dark"
+                android:drawableEnd="@mipmap/app_common_icon_next"
+        />
+
         <com.zj.list.groupedadapter.widget.StickyHeaderLayout
                 android:layout_width="match_parent"
+                android:layout_below="@id/app_fragment_contact_tv_my_groups"
                 android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -61,6 +77,6 @@
         <include layout="@layout/app_import_base_loading_view"
                  android:id="@+id/app_fragment_contact_loading"/>
 
-    </FrameLayout>
+    </RelativeLayout>
 
 </LinearLayout>
