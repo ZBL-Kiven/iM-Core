@@ -40,7 +40,7 @@ class FCApplication : BaseApplication() {
                     in 200..299, 401 -> true
                     else -> false
                 }
-                AppDatabase.singleton.get("${SPUtils_Proxy.getUserId(0)}").exit()
+                AppDatabase.singleton.exit()
                 if (isSuccess) {
                     SPUtils_Proxy.clear()
                 } else {
