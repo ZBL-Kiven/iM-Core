@@ -1,5 +1,6 @@
 package com.zj.imcore.ui.users
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.View
@@ -54,7 +55,6 @@ class UserInfoActivity : FCActivity() {
         tvUserNickName = findViewById(R.id.tvUserNickName)
         tvUserName = findViewById(R.id.tvUserName)
         tvUserDescribe = findViewById(R.id.tvUserDescribe)
-
         try {
             intent?.let {
                 if (it.hasExtra(UID)) userId = it.getLongExtra(UID, 0)
@@ -63,16 +63,15 @@ class UserInfoActivity : FCActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun initData() {
         MemberRepository.queryMembersByUserId(userId) {
             curUser = it
             mainHandler.post {
                 setData()
             }
         }
-    }
-
-    override fun initData() {
-
     }
 
     private fun setData() {
@@ -82,7 +81,7 @@ class UserInfoActivity : FCActivity() {
                 Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default).into(view)
             }
 
-            tvUserNickName?.text = member.title ?: ""
+            tvUserNickName?.text = "--"
             tvUserName?.text = member.name ?: ""
             tvUserDescribe?.text = member.avatar ?: ""
             btnSendMsg.visibility = if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
@@ -90,18 +89,31 @@ class UserInfoActivity : FCActivity() {
     }
 
     override fun initListener() {
-        tvUserName?.setOnClickListener {
-            //设置用户名称
-            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
-                return@setOnClickListener
-            }
+        titleView?.setLeftClickListener {
+            onBackPressed()
         }
+
+//        tvUserName?.setOnClickListener {
+//            //设置用户名称
+//            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
+//                return@setOnClickListener
+//            }
+//            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_name_hint), tvUserName?.text?.toString() ?: "", 1, EditTextActivity.TYPE_USER_NAME)
+//        }
 
         tvUserNickName?.setOnClickListener {
             //设置用户昵称
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
+            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_nickname_hint), tvUserNickName?.text.toString(), 1, EditTextActivity.TYPE_USER_NIKE_NAME)
+        }
+
+        tvUserDescribe?.setOnClickListener {
+            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
+                return@setOnClickListener
+            }
+            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_describe_hint), tvUserDescribe?.text.toString(), 1, EditTextActivity.TYPE_USER_DESCRIBE)
         }
 
         ivUserAvatar?.setOnClickListener {
@@ -122,6 +134,29 @@ class UserInfoActivity : FCActivity() {
             curUser?.let {
                 if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, it.uid, "", it.name)
             } ?: finish()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (Activity.RESULT_OK != resultCode) {
+            return
+        }
+
+        data?.let {
+            val content = it.getStringExtra(EditTextActivity.KEY_CONTENT)
+            when (requestCode) {
+                EditTextActivity.TYPE_USER_NAME -> {
+                    tvUserName?.text = content ?: ""
+                }
+                EditTextActivity.TYPE_USER_NIKE_NAME -> {
+                    tvUserNickName?.text = content ?: ""
+                }
+                EditTextActivity.TYPE_USER_DESCRIBE -> {
+                    tvUserDescribe?.text = content ?: ""
+                }
+            }
         }
     }
 }

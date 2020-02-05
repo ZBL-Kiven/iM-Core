@@ -67,13 +67,18 @@
     <string name="pg_permission_request_fail">%s permissions denied!</string>
 
     <!--user info-->
-    <string name="app_act_user_info_title_default">%s \'s \infomation</string>
+    <string name="app_act_user_info_title_default">%s \'s \information</string>
+    <string name="app_act_user_info_title">personalInformation</string>
     <string name="app_act_user_info_user_img_avatar_hint">Avatar</string>
     <string name="app_act_user_info_user_nickname_hint">NickName</string>
     <string name="app_act_user_info_user_name_hint">UserName</string>
     <string name="app_act_user_info_user_describe_hint">Note</string>
     <string name="app_act_user_info_user_describe_default">a lazy people</string>
     <string name="app_act_user_info_send_msg">Send Message</string>
+
+    <!--user info edit-->
+    <string name="app_act_user_edit_text_hint">waiting for input</string>
+    <string name="app_act_user_edit_text_commit">Define</string>
 
     <!--net-->
     <string name="app_net_network_error">network is not working</string>

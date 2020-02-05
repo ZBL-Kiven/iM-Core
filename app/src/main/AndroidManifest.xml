@@ -1,47 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="com.zj.imcore">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.zj.imcore">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-            android:allowBackup="true"
-            android:name=".base.FCApplication"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        android:name=".base.FCApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <meta-data
-                android:name="APPLICATION_ID"
-                android:value="${applicationId}"/>
+            android:name="APPLICATION_ID"
+            android:value="${applicationId}" />
         <meta-data
-                android:name="ENV_HOST"
-                android:value="${ENV_HOST}"/>
+            android:name="ENV_HOST"
+            android:value="${ENV_HOST}" />
         <meta-data
-                android:name="ENV_PROTOCOL"
-                android:value="${ENV_PROTOCOL}"/>
+            android:name="ENV_PROTOCOL"
+            android:value="${ENV_PROTOCOL}" />
         <meta-data
-                android:name="ENV_APP_ID"
-                android:value="${ENV_APP_ID}"/>
+            android:name="ENV_APP_ID"
+            android:value="${ENV_APP_ID}" />
 
         <activity android:name=".gui.SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name="com.zj.imcore.gui.login.LoginActivity" android:launchMode="singleTask"/>
+        <activity
+            android:name="com.zj.imcore.gui.login.LoginActivity"
+            android:launchMode="singleTask" />
 
         <activity android:name="com.zj.imcore.ui.main.MainActivity"
                   android:launchMode="singleTask"
                   android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".ui.users.UserInfoActivity" android:launchMode="singleTask"/>
+        <activity
+            android:name=".ui.users.UserInfoActivity"
+            android:label="@string/app_act_user_info_title"
+            android:launchMode="singleTask" />
 
         <activity android:name=".ui.chat.ChatActivity"
                   android:launchMode="singleTask"
@@ -51,17 +57,21 @@
                   android:launchMode="singleTask"
                   android:windowSoftInputMode="adjustPan"/>
 
+        <activity android:name=".ui.users.EditTextActivity"
+            android:label="@string/app_act_user_info_title"
+            android:launchMode="singleTask" />
+
         <activity android:name=".ui.main.contact.group.CreateGroupActivity"
                   android:launchMode="singleTask"
                   android:windowSoftInputMode="adjustPan"/>
 
         <receiver
-                android:name=".gui.auth.TokenRefreshUtils"
-                android:enabled="true"
-                android:exported="true"
-                android:permission="android.permission.INTERNET">
+            android:name=".gui.auth.TokenRefreshUtils"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.INTERNET">
             <intent-filter>
-                <action android:name="com.fc.auth.refreshToken"/>
+                <action android:name="com.fc.auth.refreshToken" />
             </intent-filter>
         </receiver>
 

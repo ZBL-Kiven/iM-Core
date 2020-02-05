@@ -5,4 +5,5 @@ import com.zj.base.BaseActivity
 abstract class FCActivity : BaseActivity() {
 
 
+
 }
