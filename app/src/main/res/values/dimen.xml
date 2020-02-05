@@ -2,8 +2,6 @@
 <resources>
     <dimen name="app_base_line_width">1px</dimen>
 
-    <dimen name="app_title_text_size">18sp</dimen>
-
     <dimen name="app_sign_gender_size">35dp</dimen>
 
     <dimen name="app_search_bar_height">30dp</dimen>

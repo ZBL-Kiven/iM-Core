@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <color name="color_primary">#111a10</color>
-    <color name="color_primary_mixed">#212a20</color>
-    <color name="color_primary_dark">#111a10</color>
-    <color name="color_accent">#212a20</color>
-    <color name="color_primary_grey">#262c27</color>
-    <color name="color_primary_disable">#717c71</color>
-    <color name="color_primary_light_grey">#dbdbdb</color>
-    <color name="color_primary_light_grey_dark">#d3d3d3</color>
-    <color name="color_primary_light_dark">#c1c7c3</color>
-    <color name="color_primary_background">#a1a3a1</color>
-    <color name="color_primary_text_color">#e7f3e9</color>
-    <color name="color_primary_color_hight_light">#f7fff9</color>
-    <color name="color_primary_color_mediu_light">#eff0e9</color>
-    <color name="color_primary_color_error">#d73323</color>
-
-    <color name="color_primary_notify_red_dot_color">#df1729</color>
-
     <color name="chat_background">#D7D7D7</color>
     <color name="chat_bubble_shadow">#FFDDDDDD</color>
     <color name="chat_bubble_other">#FFFFFFFF</color>
@@ -27,12 +9,9 @@
     <color name="chat_text_info_line">#D0212A20</color>
     <color name="chat_text">#212A20</color>
 
-    <color name="app_base_background">#e3e6e9</color>
     <color name="app_base_text_color_333">#333333</color>
     <color name="app_base_text_color_666">#666666</color>
     <color name="app_base_text_color_999">#999999</color>
-    <color name="app_base_line_color">#1a2b21</color>
-    <color name="app_base_line_color_focused">#b6b2bc</color>
 
     <color name="app_base_color_disable">#787879</color>
     <color name="app_base_color_text_disable">#D0707174</color>

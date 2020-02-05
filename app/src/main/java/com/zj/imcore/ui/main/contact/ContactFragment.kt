@@ -25,6 +25,7 @@ import com.zj.imcore.apis.members.MemberApi
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.model.member.MembersEventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
+import com.zj.imcore.ui.main.contact.group.MyGroupsActivity
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.loading.BaseLoadingView
 import java.util.ArrayList
@@ -72,7 +73,7 @@ class ContactFragment : BaseLinkageFragment() {
             UserInfoActivity.start(activity, member.uid)
         }
         vSearchClear?.setOnClickListener {
-            etSearch?.setText("")
+            if (!etSearch?.text.isNullOrEmpty()) etSearch?.setText("")
         }
         vMyGroups?.setOnClickListener {
             startActivity(Intent(this.activity, MyGroupsActivity::class.java))

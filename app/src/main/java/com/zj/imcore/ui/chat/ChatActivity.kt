@@ -2,13 +2,11 @@ package com.zj.imcore.ui.chat
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.view.KeyEvent
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -19,6 +17,7 @@ import com.zj.im.emotionboard.utils.EmoticonsKeyboardUtils
 import com.zj.im.emotionboard.widget.FuncLayout
 import com.zj.imcore.Constance
 import com.zj.imcore.R
+import com.zj.imcore.base.FCActivity
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.im.obtain.MessageObtainUtils
@@ -34,7 +33,7 @@ import com.zj.imcore.ui.views.IMRecyclerView
 import java.lang.Exception
 
 
-class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
+class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
 
     companion object {
 
@@ -68,9 +67,11 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
     private var celBar: CusEmoticonsLayout? = null
     private var onFuncListener: FuncsAdapter.OnItemClickListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.app_act_chat_content)
+    override fun getContentId(): Int {
+        return R.layout.app_act_chat_content
+    }
+
+    override fun initBase() {
         try {
             intent?.let {
                 if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
@@ -87,17 +88,9 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
             finish()
             return
         }
-        initView()
-        initData()
-        initListener()
     }
 
-    private fun initData() {
-        register()
-        DataTransferHub.queryMsgInDb(sessionId)
-    }
-
-    private fun initView() {
+    override fun initView() {
         rvContent = findViewById(R.id.app_act_chat_content_rv)
         titleView = findViewById(R.id.app_act_chat_title)
         celBar = findViewById(R.id.ap_act_chat_cel)
@@ -134,7 +127,12 @@ class ChatActivity : AppCompatActivity(), FuncLayout.FuncKeyBoardListener {
         }
     }
 
-    private fun initListener() {
+    override fun initData() {
+        register()
+        DataTransferHub.queryMsgInDb(sessionId)
+    }
+
+    override fun initListener() {
         celBar?.btnSend?.setOnClickListener {
             val text = celBar?.etChat?.text?.toString()
             if (!text.isNullOrEmpty()) {

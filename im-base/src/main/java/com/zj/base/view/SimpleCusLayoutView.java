@@ -95,6 +95,9 @@ public class SimpleCusLayoutView extends View {
         if (drawableRes > 0) {
             this.drawableRes = ContextCompat.getDrawable(getContext(), drawableRes);
             this.text = "";
+        } else {
+            this.drawableRes = null;
+            this.text = "";
         }
         return this;
     }

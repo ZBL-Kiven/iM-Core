@@ -66,8 +66,10 @@ public abstract class GroupedListAdapter<R, T extends GroupedData<R>> extends Gr
 
     @Override
     public final void onBindHeaderViewHolder(BaseViewHolder holder, int groupPosition) {
-        T entity = getData().get(groupPosition);
-        bindHeader(holder, entity, groupPosition);
+        if (getData() != null && getData().size() > groupPosition) {
+            T entity = getData().get(groupPosition);
+            bindHeader(holder, entity, groupPosition);
+        }
     }
 
     @Override

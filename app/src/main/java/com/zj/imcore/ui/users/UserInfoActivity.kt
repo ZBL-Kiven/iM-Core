@@ -12,6 +12,7 @@ import com.cf.im.db.repositorys.MemberRepository
 import com.zj.album.AlbumIns
 import com.zj.album.options.AlbumOptions
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
+import com.zj.base.view.BaseTitleView
 import com.zj.im.mainHandler
 import com.zj.imcore.Constance
 import com.zj.imcore.R
@@ -46,16 +47,14 @@ class UserInfoActivity : FCActivity() {
     private var ivUserAvatar: ImageView? = null
     private var tvUserNickName: TextView? = null
     private var tvUserName: TextView? = null
+    private var titleView: BaseTitleView? = null
     private var tvUserDescribe: TextView? = null
 
     override fun initView() {
-        showTitleBar(true)
-
         ivUserAvatar = findViewById(R.id.ivUserAvatar)
         tvUserNickName = findViewById(R.id.tvUserNickName)
         tvUserName = findViewById(R.id.tvUserName)
         tvUserDescribe = findViewById(R.id.tvUserDescribe)
-
         try {
             intent?.let {
                 if (it.hasExtra(UID)) userId = it.getLongExtra(UID, 0)
@@ -64,6 +63,9 @@ class UserInfoActivity : FCActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun initData() {
         MemberRepository.queryMembersByUserId(userId) {
             curUser = it
             mainHandler.post {
@@ -72,44 +74,31 @@ class UserInfoActivity : FCActivity() {
         }
     }
 
-    override fun initData() {
-        baseTitleView?.setLeftIcon(R.mipmap.back)
-    }
-
     private fun setData() {
         curUser?.let { member ->
-            setTitle(getString(R.string.app_act_user_info_title_default, member.name))
+            titleView?.setTitle(getString(R.string.app_act_user_info_title_default, member.name))
             ivUserAvatar?.let { view ->
-                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default)
-                    .into(view)
+                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default).into(view)
             }
 
             tvUserNickName?.text = "--"
             tvUserName?.text = member.name ?: ""
-            tvUserDescribe?.text = member.describe ?: ""
-
-            btnSendMsg.visibility =
-                if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
+            tvUserDescribe?.text = member.avatar ?: ""
+            btnSendMsg.visibility = if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
         }
     }
 
     override fun initListener() {
-        baseTitleView?.setLeftClickListener {
+        titleView?.setLeftClickListener {
             onBackPressed()
         }
-//
+
 //        tvUserName?.setOnClickListener {
 //            //设置用户名称
 //            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
 //                return@setOnClickListener
 //            }
-//            EditTextActivity.startActivity(
-//                this,
-//                getString(R.string.app_act_user_info_user_name_hint),
-//                tvUserName?.text.toString() ?: "",
-//                1,
-//                EditTextActivity.TYPE_USER_NAME
-//            );
+//            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_name_hint), tvUserName?.text?.toString() ?: "", 1, EditTextActivity.TYPE_USER_NAME)
 //        }
 
         tvUserNickName?.setOnClickListener {
@@ -117,26 +106,14 @@ class UserInfoActivity : FCActivity() {
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
-            EditTextActivity.startActivity(
-                this,
-                getString(R.string.app_act_user_info_user_nickname_hint),
-                tvUserNickName?.text.toString(),
-                1,
-                EditTextActivity.TYPE_USER_NIKE_NAME
-            );
+            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_nickname_hint), tvUserNickName?.text.toString(), 1, EditTextActivity.TYPE_USER_NIKE_NAME)
         }
 
         tvUserDescribe?.setOnClickListener {
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
-            EditTextActivity.startActivity(
-                this,
-                getString(R.string.app_act_user_info_user_describe_hint),
-                tvUserDescribe?.text.toString(),
-                1,
-                EditTextActivity.TYPE_USER_DESCRIBE
-            );
+            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_describe_hint), tvUserDescribe?.text.toString(), 1, EditTextActivity.TYPE_USER_DESCRIBE)
         }
 
         ivUserAvatar?.setOnClickListener {
@@ -144,28 +121,18 @@ class UserInfoActivity : FCActivity() {
                 return@setOnClickListener
             }
             //设置用户头像
-            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1)
-                .imgSizeRange(1024, Long.MAX_VALUE).start { isCancel, data ->
-                    if (!data.isNullOrEmpty()) {
-                        ivUserAvatar?.let {
-                            Glide.with(it).load(data[0].path)
-                                .error(R.mipmap.app_contact_avatar_default)
-                                .into(it)
-                        }
+            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1).imgSizeRange(1024, Long.MAX_VALUE).start { isCancel, data ->
+                if (!isCancel && !data.isNullOrEmpty()) {
+                    ivUserAvatar?.let {
+                        Glide.with(it).load(data[0].path).error(R.mipmap.app_contact_avatar_default).into(it)
                     }
                 }
+            }
         }
 
         btnSendMsg?.setOnClickListener { _ ->
             curUser?.let {
-                if (isChatMod) finish() else ChatActivity.start(
-                    this,
-                    it.dialogId,
-                    Constance.DIALOG_TYPE_P2P,
-                    it.uid,
-                    "",
-                    it.name
-                )
+                if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, it.uid, "", it.name)
             } ?: finish()
         }
     }
@@ -174,11 +141,11 @@ class UserInfoActivity : FCActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (Activity.RESULT_OK != resultCode) {
-            return;
+            return
         }
 
         data?.let {
-            val content = it.getStringExtra(EditTextActivity.KEY_CONTENT);
+            val content = it.getStringExtra(EditTextActivity.KEY_CONTENT)
             when (requestCode) {
                 EditTextActivity.TYPE_USER_NAME -> {
                     tvUserName?.text = content ?: ""
