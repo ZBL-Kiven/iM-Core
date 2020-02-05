@@ -37,4 +37,7 @@
     <color name="app_base_color_text_disable">#D0707174</color>
 
     <color name="pg_color_primary">#111a10</color>
+
+    <color name="app_base_color_blue">#2196F3</color>
+    <color name="app_base_color_blue_selected">#03A9F4</color>
 </resources>
