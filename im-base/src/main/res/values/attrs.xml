@@ -53,34 +53,22 @@
     <declare-styleable name="BaseTitleView">
         <attr name="l_vDrawable" format="reference|color"/>
         <attr name="l_vText" format="reference|string"/>
-        <attr name="l_vWidth" format="dimension">
-            <enum name="WRAP_CONTENT" value="-2"/>
-            <enum name="MATCH_PARENT" value="-1"/>
-        </attr>
-        <attr name="l_vHeight" format="dimension">
-            <enum name="WRAP_CONTENT" value="-2"/>
-            <enum name="MATCH_PARENT" value="-1"/>
-        </attr>
+        <attr name="l_vWidth" format="dimension"/>
+        <attr name="l_vHeight" format="dimension"/>
         <attr name="l_vPadding" format="dimension"/>
-        <attr name="l_vTextSize" format="dimension"/>
+        <attr name="l_vTextSize" format="float"/>
         <attr name="l_vTextColor" format="reference|color"/>
         <attr name="l_vDrawableColor" format="reference|color"/>
         <attr name="r_vDrawable" format="reference|color"/>
         <attr name="r_vText" format="reference|string"/>
-        <attr name="r_vWidth" format="dimension">
-            <enum name="WRAP_CONTENT" value="-2"/>
-            <enum name="MATCH_PARENT" value="-1"/>
-        </attr>
-        <attr name="r_vHeight" format="dimension">
-            <enum name="WRAP_CONTENT" value="-2"/>
-            <enum name="MATCH_PARENT" value="-1"/>
-        </attr>
+        <attr name="r_vWidth" format="dimension"/>
+        <attr name="r_vHeight" format="dimension"/>
         <attr name="r_vPadding" format="dimension"/>
-        <attr name="r_vTextSize" format="dimension"/>
+        <attr name="r_vTextSize" format="float"/>
         <attr name="r_vTextColor" format="reference|color"/>
         <attr name="r_vDrawableColor" format="reference|color"/>
         <attr name="vTitle" format="reference|string"/>
-        <attr name="vTitleTextSize" format="dimension|reference|integer"/>
+        <attr name="vTitleTextSize" format="float"/>
         <attr name="vTitleTextColor" format="reference|color"/>
     </declare-styleable>
 </resources>

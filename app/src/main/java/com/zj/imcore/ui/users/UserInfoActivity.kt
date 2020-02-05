@@ -11,6 +11,7 @@ import com.cf.im.db.repositorys.MemberRepository
 import com.zj.album.AlbumIns
 import com.zj.album.options.AlbumOptions
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
+import com.zj.base.view.BaseTitleView
 import com.zj.im.mainHandler
 import com.zj.imcore.Constance
 import com.zj.imcore.R
@@ -45,11 +46,10 @@ class UserInfoActivity : FCActivity() {
     private var ivUserAvatar: ImageView? = null
     private var tvUserNickName: TextView? = null
     private var tvUserName: TextView? = null
+    private var titleView: BaseTitleView? = null
     private var tvUserDescribe: TextView? = null
 
     override fun initView() {
-        showTitleBar(true)
-
         ivUserAvatar = findViewById(R.id.ivUserAvatar)
         tvUserNickName = findViewById(R.id.tvUserNickName)
         tvUserName = findViewById(R.id.tvUserName)
@@ -77,7 +77,7 @@ class UserInfoActivity : FCActivity() {
 
     private fun setData() {
         curUser?.let { member ->
-            setTitle(getString(R.string.app_act_user_info_title_default, member.name))
+            titleView?.setTitle(getString(R.string.app_act_user_info_title_default, member.name))
             ivUserAvatar?.let { view ->
                 Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default).into(view)
             }
@@ -85,7 +85,6 @@ class UserInfoActivity : FCActivity() {
             tvUserNickName?.text = member.title ?: ""
             tvUserName?.text = member.name ?: ""
             tvUserDescribe?.text = member.avatar ?: ""
-
             btnSendMsg.visibility = if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
         }
     }

@@ -6,6 +6,10 @@
         android:background="@color/app_base_background"
         android:layout_height="match_parent">
 
+    <com.zj.base.view.BaseTitleView
+            android:id="@+id/app_act_main_title"
+            style="@style/BaseTitleViewStyle"/>
+
     <FrameLayout
             android:id="@+id/app_act_main_fl_content"
             android:layout_width="match_parent"

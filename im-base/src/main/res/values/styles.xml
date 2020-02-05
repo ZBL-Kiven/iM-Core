@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
     <style name="BaseLine">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.1dp</item>
@@ -7,4 +8,34 @@
         <item name="android:layout_marginLeft">5dp</item>
         <item name="android:layout_marginRight">5dp</item>
     </style>
+
+    <style name="BaseTitleViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/color_primary</item>
+        <item name="vTitleTextColor">@color/color_primary_light_grey</item>
+        <item name="l_vTextColor">@color/color_primary_light_grey</item>
+        <item name="r_vTextColor">@color/color_primary_light_grey</item>
+        <item name="vTitleTextSize">20</item>
+        <item name="l_vWidth">24dp</item>
+        <item name="l_vHeight">24dp</item>
+        <item name="r_vWidth">24dp</item>
+        <item name="r_vHeight">24dp</item>
+    </style>
+
+    <style name="BaseLoadingViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="loadingRes">@drawable/loading_progressbar</item>
+        <item name="noDataRes">@mipmap/app_common_loading_no_data</item>
+        <item name="noNetworkRes">@mipmap/app_common_loading_no_network</item>
+        <item name="backgroundFill">@color/app_base_background</item>
+        <item name="backgroundUnderTheContent">@drawable/loading_corner_bg</item>
+        <item name="hintColor">@color/color_primary</item>
+        <item name="refreshTextColor">@color/color_primary_grey</item>
+        <item name="loadingText">@string/loading_progress</item>
+        <item name="refreshText">@string/loading_refresh</item>
+        <item name="noDataText">@string/loading_no_data</item>
+    </style>
+
 </resources>

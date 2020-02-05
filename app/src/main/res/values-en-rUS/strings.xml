@@ -68,8 +68,18 @@
 
     <!--user info-->
     <string name="app_act_user_info_title_default">%s \'s \infomation</string>
-
+    <string name="app_act_user_info_user_img_avatar_hint">Avatar</string>
+    <string name="app_act_user_info_user_nickname_hint">NickName</string>
+    <string name="app_act_user_info_user_name_hint">UserName</string>
+    <string name="app_act_user_info_user_describe_hint">Note</string>
+    <string name="app_act_user_info_user_describe_default">a lazy people</string>
+    <string name="app_act_user_info_send_msg">Send Message</string>
 
     <!--net-->
     <string name="app_net_network_error">network is not working</string>
+
+    <!--group-->
+    <string name="app_act_groups_title">my groups</string>
+    <string name="app_act_create_groups_title">create group</string>
+
 </resources>

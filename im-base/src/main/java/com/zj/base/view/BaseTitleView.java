@@ -45,7 +45,7 @@ public class BaseTitleView extends FrameLayout {
     private float r_padding;
     private float r_textSize = dp2px(15);
     private String titleText = "";
-    private int titleTextSize = 19;
+    private float titleTextSize = 19;
     private int titleTextColor = Color.BLACK;
 
     public BaseTitleView(@NonNull Context context) {
@@ -85,7 +85,7 @@ public class BaseTitleView extends FrameLayout {
                 l_width = ta.getDimension(R.styleable.BaseTitleView_l_vWidth, WRAP_CONTENT);
                 l_height = ta.getDimension(R.styleable.BaseTitleView_l_vHeight, WRAP_CONTENT);
                 l_padding = ta.getDimension(R.styleable.BaseTitleView_l_vPadding, l_padding);
-                l_textSize = ta.getDimension(R.styleable.BaseTitleView_l_vTextSize, l_textSize);
+                l_textSize = ta.getFloat(R.styleable.BaseTitleView_l_vTextSize, l_textSize);
                 l_textColor = ta.getColor(R.styleable.BaseTitleView_l_vTextColor, l_textColor);
                 l_drawableRes = ta.getDrawable(R.styleable.SimpleCusLayoutView_vDrawable);
                 l_drawableColor = ta.getColor(R.styleable.BaseTitleView_l_vDrawableColor, l_drawableColor);
@@ -93,12 +93,12 @@ public class BaseTitleView extends FrameLayout {
                 r_width = ta.getDimension(R.styleable.BaseTitleView_r_vWidth, WRAP_CONTENT);
                 r_height = ta.getDimension(R.styleable.BaseTitleView_r_vHeight, WRAP_CONTENT);
                 r_padding = ta.getDimension(R.styleable.BaseTitleView_r_vPadding, r_padding);
-                r_textSize = ta.getDimension(R.styleable.BaseTitleView_r_vTextSize, r_textSize);
+                r_textSize = ta.getFloat(R.styleable.BaseTitleView_r_vTextSize, r_textSize);
                 r_textColor = ta.getColor(R.styleable.BaseTitleView_r_vTextColor, r_textColor);
                 r_drawableRes = ta.getDrawable(R.styleable.BaseTitleView_r_vDrawable);
                 r_drawableColor = ta.getColor(R.styleable.BaseTitleView_r_vDrawableColor, r_drawableColor);
                 titleText = ta.getString(R.styleable.BaseTitleView_vTitle);
-                titleTextSize = ta.getInt(R.styleable.BaseTitleView_vTitleTextSize, titleTextSize);
+                titleTextSize = ta.getFloat(R.styleable.BaseTitleView_vTitleTextSize, titleTextSize);
                 titleTextColor = ta.getColor(R.styleable.BaseTitleView_vTitleTextColor, titleTextColor);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -187,6 +187,10 @@ public class BaseTitleView extends FrameLayout {
 
     public void setTitle(String title) {
         tvTitle.setText(title);
+    }
+
+    public void setTitle(int titleId) {
+        tvTitle.setText(getContext().getString(titleId));
     }
 
     public void setTitleTextSize(float dpSize) {

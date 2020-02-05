@@ -37,14 +37,23 @@
 
         <activity android:name="com.zj.imcore.gui.login.LoginActivity" android:launchMode="singleTask"/>
 
-        <activity android:name="com.zj.imcore.ui.main.MainActivity" android:launchMode="singleTask"
+        <activity android:name="com.zj.imcore.ui.main.MainActivity"
+                  android:launchMode="singleTask"
                   android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".ui.users.UserInfoActivity" android:launchMode="singleTask"/>
 
-        <activity android:name=".ui.chat.ChatActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ui.chat.ChatActivity"
+                  android:launchMode="singleTask"
+                  android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".ui.main.contact.MyGroupsActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ui.main.contact.group.MyGroupsActivity"
+                  android:launchMode="singleTask"
+                  android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name=".ui.main.contact.group.CreateGroupActivity"
+                  android:launchMode="singleTask"
+                  android:windowSoftInputMode="adjustPan"/>
 
         <receiver
                 android:name=".gui.auth.TokenRefreshUtils"

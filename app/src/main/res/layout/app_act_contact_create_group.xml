@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:background="@color/app_base_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:background="@color/color_primary">
+
+        <EditText
+                android:id="@+id/app_act_contact_select_et_search"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/app_search_bar_height"
+                android:layout_weight="1"
+                android:textSize="@dimen/app_et_text_size_14"
+                android:textColorHint="@color/color_primary_disable"
+                android:drawablePadding="6dp"
+                android:drawableStart="@drawable/app_contact_icon_search"
+                android:paddingStart="5dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingBottom="5dp"
+                android:background="@drawable/app_base_click_bg_btn_corners"
+                android:layout_marginStart="10dp"
+                android:hint="@string/app_contact_search"
+                tools:ignore="Autofill,TextFields"/>
+
+        <ImageView
+                android:id="@+id/app_act_contact_select_v_search_clear"
+                android:layout_width="@dimen/app_search_bar_height"
+                android:layout_height="@dimen/app_search_bar_height"
+                android:padding="5dp"
+                android:src="@mipmap/app_contact_icon_search_clear"
+                tools:ignore="ContentDescription"/>
+    </LinearLayout>
+
+    <com.zj.list.groupedadapter.widget.StickyHeaderLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/app_fragment_contact_rv"
+                android:paddingTop="5dp"
+                android:clipToPadding="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:overScrollMode="never"/>
+
+    </com.zj.list.groupedadapter.widget.StickyHeaderLayout>
+
+</LinearLayout>

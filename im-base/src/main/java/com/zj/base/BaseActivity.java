@@ -3,16 +3,10 @@ package com.zj.base;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.zj.base.view.BaseTitleView;
-import com.zj.loading.BaseLoadingView;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
@@ -24,10 +18,6 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public abstract class BaseActivity extends AppCompatActivity {
 
-    public View rootView, titleLine;
-    private BaseLoadingView blvLoading;
-    private FrameLayout flContent;
-    private BaseTitleView baseTitleView;
     protected WeakReference<BaseActivity> weakReference;
     private static final int MSG_PERMISSION = 0x01a9;
 
@@ -45,61 +35,17 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract int getContentId();
 
+    public void initBase() {
+    }
+
     public abstract void initView();
 
     public abstract void initData();
 
     public abstract void initListener();
 
-    protected void initTitleBar(BaseTitleView baseTitleView) {
-
-    }
-
     protected void callRefresh() {
 
-    }
-
-    protected void showTitleBar(boolean show) {
-        if (show && baseTitleView != null) {
-            baseTitleView.setVisibility(View.VISIBLE);
-            initTitleBar(baseTitleView);
-        } else {
-            if (baseTitleView != null) {
-                baseTitleView.setVisibility(View.GONE);
-
-            }
-        }
-    }
-
-    protected void showTitleLine(boolean show) {
-        if (show && baseTitleView != null) {
-            titleLine.setVisibility(View.VISIBLE);
-        } else {
-            titleLine.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    public BaseTitleView getBaseTitleView() {
-        return baseTitleView;
-    }
-
-    protected void setTitle(String s) {
-        baseTitleView.setTitle(s + "");
-    }
-
-    public BaseLoadingView getBlvLoading() {
-        return blvLoading;
-    }
-
-    /**
-     * set loading
-     */
-    public void hint(final BaseLoadingView.DisplayMode mode, final String hint, final boolean showingOnActive) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            blvLoading.setMode(mode, hint, showingOnActive);
-        } else {
-            runOnUiThread(() -> blvLoading.setMode(mode, hint, showingOnActive));
-        }
     }
 
     protected WeakReference<BaseActivity> getWeakContext() {
@@ -112,19 +58,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lifecycle = Lifecycle.CREATE;
-        View v = LayoutInflater.from(getWeakContext().get()).inflate(R.layout.activity_base, null, false);
-        setContentView(v);
-        initBaseView();
-    }
-
-    private void initBaseView() {
-        flContent = f(R.id.base_flContent);
-        blvLoading = f(R.id.base_blvLoading);
-        baseTitleView = f(R.id.base_title);
-        titleLine = f(R.id.base_titleLine);
-        initTitleBar(baseTitleView);
-        blvLoading.setRefreshListener(this::callRefresh);
-        rootView = LayoutInflater.from(getWeakContext().get()).inflate(getContentId(), flContent, true);
+        setContentView(getContentId());
+        initBase();
         initView();
         initData();
         initListener();
@@ -148,13 +83,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends View> T f(int id) {
-        return (T) findViewById(id);
-    }
-
-    @SuppressWarnings("unchecked")
     protected <T extends View> T find(int id) {
-        return (T) rootView.findViewById(id);
+        return (T) findViewById(id);
     }
 
     @Override
@@ -172,14 +102,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         lifecycle = Lifecycle.DESTROY;
-        weakReference.clear();
+        if (weakReference != null) weakReference.clear();
         weakReference = null;
-        flContent.clearDisappearingChildren();
-        flContent.removeAllViews();
-        if (rootView instanceof ViewGroup) {
-            ((ViewGroup) rootView).removeAllViews();
-        }
-        rootView = null;
         super.onDestroy();
     }
 
@@ -230,5 +154,4 @@ public abstract class BaseActivity extends AppCompatActivity {
     public boolean isCreate() {
         return lifecycle.level > Lifecycle.CREATE.level && lifecycle.level < Lifecycle.DESTROY.level;
     }
-
 }
