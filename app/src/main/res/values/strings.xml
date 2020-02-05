@@ -71,12 +71,17 @@
 
     <!--user info-->
     <string name="app_act_user_info_title_default">%s 的个人资料</string>
-    <string name="app_act_user_info_user_img_avatar_hint">头像</string>
-    <string name="app_act_user_info_user_nickname_hint">昵称</string>
-    <string name="app_act_user_info_user_name_hint">用户名</string>
-    <string name="app_act_user_info_user_describe_hint">个人签名</string>
-    <string name="app_act_user_info_user_describe_default">这个人太懒了，什么都没有留下</string>
-    <string name="app_act_user_info_send_msg">发消息</string>
+    <string name="app_act_user_info_title" translatable="false">个人资料</string>
+    <string name="app_act_user_info_user_img_avatar_hint" translatable="false">头像</string>
+    <string name="app_act_user_info_user_nickname_hint" translatable="false">昵称</string>
+    <string name="app_act_user_info_user_name_hint" translatable="false">用户名</string>
+    <string name="app_act_user_info_user_describe_hint" translatable="false">个人签名</string>
+    <string name="app_act_user_info_user_describe_default" translatable="false">这个人太懒了，什么都没有留下</string>
+    <string name="app_act_user_info_send_msg" translatable="false">发消息</string>
+
+    <!--  用户信息修改 -->
+    <string name="app_act_user_edit_text_hint" translatable="false">等待输入内容</string>
+    <string name="app_act_user_edit_text_commit" translatable="false">确定</string>
 
     <!--net-->
     <string name="app_net_network_error">请检查网络连接</string>

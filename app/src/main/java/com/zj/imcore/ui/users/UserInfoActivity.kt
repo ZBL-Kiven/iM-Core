@@ -11,7 +11,6 @@ import com.cf.im.db.repositorys.MemberRepository
 import com.zj.album.AlbumIns
 import com.zj.album.options.AlbumOptions
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
-import com.zj.base.view.BaseTitleView
 import com.zj.im.mainHandler
 import com.zj.imcore.Constance
 import com.zj.imcore.R
@@ -73,7 +72,7 @@ class UserInfoActivity : FCActivity() {
     }
 
     override fun initData() {
-
+        baseTitleView?.setLeftIcon(R.mipmap.back)
     }
 
     private fun setData() {
@@ -106,11 +105,22 @@ class UserInfoActivity : FCActivity() {
     }
 
     override fun initListener() {
+        baseTitleView?.setLeftClickListener {
+            onBackPressed()
+        }
+
         tvUserName?.setOnClickListener {
             //设置用户名称
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
+            EditTextActivity.startActivity(
+                this,
+                getString(R.string.app_act_user_info_user_name_hint),
+                tvUserName?.text.toString() ?: "",
+                1,
+                1
+            );
         }
 
         tvUserNickName?.setOnClickListener {
@@ -118,6 +128,26 @@ class UserInfoActivity : FCActivity() {
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
+            EditTextActivity.startActivity(
+                this,
+                getString(R.string.app_act_user_info_user_nickname_hint),
+                tvUserNickName?.text.toString(),
+                1,
+                1
+            );
+        }
+
+        tvUserDescribe?.setOnClickListener {
+            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
+                return@setOnClickListener
+            }
+            EditTextActivity.startActivity(
+                this,
+                getString(R.string.app_act_user_info_user_describe_hint),
+                tvUserDescribe?.text.toString(),
+                1,
+                1
+            );
         }
 
         ivUserAvatar?.setOnClickListener {
