@@ -18,7 +18,7 @@ public class MemberBean {
     @PrimaryKey()
     public long uid;
 
-    
+
     public long dialogId;
 
     /**
@@ -84,6 +84,7 @@ public class MemberBean {
     public String gender;
 
     /**
+     * 职位
      * sample：仫佬
      */
     public String title;
@@ -98,6 +99,10 @@ public class MemberBean {
      */
     public String indexSymbol = "#";
 
+    /**
+     * 自己添加 个人签名
+     */
+    public String describe;
 
     /**
      * 填充 profile 内容
@@ -105,11 +110,8 @@ public class MemberBean {
      * @param profile 服务器返回Member 里面的 profile 对象
      */
     public void setProfile(HashMap<String, String> profile) {
-        this.gender = profile.get("gender");
-        this.email = profile.get("email");
-        this.title = profile.get("title");
-        this.avatar = profile.get("avatar");
         this.indexSymbol = profile.get("indexSymbol");
+        this.describe = profile.get("describe");
     }
     //####### profile MAP END #########
 

@@ -67,7 +67,7 @@ class SettingFragment : BaseLinkageFragment() {
 
         ivAvatar?.let {
             it.post {
-                AvatarLoadUtil(ctx, it.width, it.height, 0.5f, object : CacheAble {
+                AvatarLoadUtil(ctx, it.width, it.height, 1f, object : CacheAble {
                     override fun getCacheName(payloads: String?): String {
                         return "$userId"
                     }

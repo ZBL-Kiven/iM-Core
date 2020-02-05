@@ -13,4 +13,5 @@ abstract class FCActivity : BaseActivity() {
         baseTitleView?.setBackgroundColor(ContextCompat.getColor(this, R.color.color_primary))
     }
 
+
 }

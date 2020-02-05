@@ -1,5 +1,6 @@
 package com.zj.imcore.ui.users
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.View
@@ -79,14 +80,16 @@ class UserInfoActivity : FCActivity() {
         curUser?.let { member ->
             setTitle(getString(R.string.app_act_user_info_title_default, member.name))
             ivUserAvatar?.let { view ->
-                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default).into(view)
+                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default)
+                    .into(view)
             }
 
-            tvUserNickName?.text = member.title ?: ""
+            tvUserNickName?.text = "--"
             tvUserName?.text = member.name ?: ""
-            tvUserDescribe?.text = member.avatar ?: ""
+            tvUserDescribe?.text = member.describe ?: ""
 
-            btnSendMsg.visibility = if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
+            btnSendMsg.visibility =
+                if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
         }
     }
 
@@ -94,20 +97,20 @@ class UserInfoActivity : FCActivity() {
         baseTitleView?.setLeftClickListener {
             onBackPressed()
         }
-
-        tvUserName?.setOnClickListener {
-            //设置用户名称
-            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
-                return@setOnClickListener
-            }
-            EditTextActivity.startActivity(
-                this,
-                getString(R.string.app_act_user_info_user_name_hint),
-                tvUserName?.text.toString() ?: "",
-                1,
-                1
-            );
-        }
+//
+//        tvUserName?.setOnClickListener {
+//            //设置用户名称
+//            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
+//                return@setOnClickListener
+//            }
+//            EditTextActivity.startActivity(
+//                this,
+//                getString(R.string.app_act_user_info_user_name_hint),
+//                tvUserName?.text.toString() ?: "",
+//                1,
+//                EditTextActivity.TYPE_USER_NAME
+//            );
+//        }
 
         tvUserNickName?.setOnClickListener {
             //设置用户昵称
@@ -119,7 +122,7 @@ class UserInfoActivity : FCActivity() {
                 getString(R.string.app_act_user_info_user_nickname_hint),
                 tvUserNickName?.text.toString(),
                 1,
-                1
+                EditTextActivity.TYPE_USER_NIKE_NAME
             );
         }
 
@@ -132,7 +135,7 @@ class UserInfoActivity : FCActivity() {
                 getString(R.string.app_act_user_info_user_describe_hint),
                 tvUserDescribe?.text.toString(),
                 1,
-                1
+                EditTextActivity.TYPE_USER_DESCRIBE
             );
         }
 
@@ -141,19 +144,52 @@ class UserInfoActivity : FCActivity() {
                 return@setOnClickListener
             }
             //设置用户头像
-            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1).imgSizeRange(1024, Long.MAX_VALUE).start { isCancel, data ->
-                if (!isCancel && !data.isNullOrEmpty()) {
-                    ivUserAvatar?.let {
-                        Glide.with(it).load(data[0].path).error(R.mipmap.app_contact_avatar_default).into(it)
+            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1)
+                .imgSizeRange(1024, Long.MAX_VALUE).start { isCancel, data ->
+                    if (!data.isNullOrEmpty()) {
+                        ivUserAvatar?.let {
+                            Glide.with(it).load(data[0].path)
+                                .error(R.mipmap.app_contact_avatar_default)
+                                .into(it)
+                        }
                     }
                 }
-            }
         }
 
         btnSendMsg?.setOnClickListener { _ ->
             curUser?.let {
-                if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, it.uid, "", it.name)
+                if (isChatMod) finish() else ChatActivity.start(
+                    this,
+                    it.dialogId,
+                    Constance.DIALOG_TYPE_P2P,
+                    it.uid,
+                    "",
+                    it.name
+                )
             } ?: finish()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (Activity.RESULT_OK != resultCode) {
+            return;
+        }
+
+        data?.let {
+            val content = it.getStringExtra(EditTextActivity.KEY_CONTENT);
+            when (requestCode) {
+                EditTextActivity.TYPE_USER_NAME -> {
+                    tvUserName?.text = content ?: ""
+                }
+                EditTextActivity.TYPE_USER_NIKE_NAME -> {
+                    tvUserNickName?.text = content ?: ""
+                }
+                EditTextActivity.TYPE_USER_DESCRIBE -> {
+                    tvUserDescribe?.text = content ?: ""
+                }
+            }
         }
     }
 }
