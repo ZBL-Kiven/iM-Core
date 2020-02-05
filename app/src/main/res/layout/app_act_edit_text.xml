@@ -1,31 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/etEditData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="15dp"
-        android:background="@android:color/transparent"
-        android:hint="@string/app_act_user_edit_text_hint"
-        android:minLines="1"
-        tools:ignore="Autofill,TextFields" />
+    <com.zj.base.view.BaseTitleView
+            style="@style/BaseTitleViewStyle"
+            android:id="@+id/app_act_edit_text_title"/>
 
-    <View style="@style/userInfoItemInterval" />
+    <LinearLayout
+            android:layout_below="@id/app_act_edit_text_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvEditDataHint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="20dp"
-        android:text="0/0" />
 
-</LinearLayout>
+        <EditText
+                android:id="@+id/app_act_edit_text_et_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/app_act_user_edit_text_hint"
+                android:minLines="1"
+                tools:ignore="Autofill,TextFields"/>
+
+        <View style="@style/userInfoItemInterval"/>
+
+        <TextView
+                android:id="@+id/app_act_edit_text_tv_data_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:text="@string/app_act_user_edit_text_sum"/>
+    </LinearLayout>
+
+    <com.zj.loading.BaseLoadingView
+            android:layout_below="@id/app_act_edit_text_title"
+            android:id="@+id/app_act_edit_text_blv"
+            android:visibility="gone"
+            style="@style/BaseLoadingViewStyle"/>
+
+</RelativeLayout>

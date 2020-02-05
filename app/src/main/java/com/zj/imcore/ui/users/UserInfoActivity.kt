@@ -18,7 +18,6 @@ import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.ui.chat.ChatActivity
-import kotlinx.android.synthetic.main.app_act_user_info_content.*
 
 class UserInfoActivity : FCActivity() {
 
@@ -49,12 +48,15 @@ class UserInfoActivity : FCActivity() {
     private var tvUserName: TextView? = null
     private var titleView: BaseTitleView? = null
     private var tvUserDescribe: TextView? = null
+    private var btnSend: View? = null
 
     override fun initView() {
-        ivUserAvatar = findViewById(R.id.ivUserAvatar)
-        tvUserNickName = findViewById(R.id.tvUserNickName)
-        tvUserName = findViewById(R.id.tvUserName)
-        tvUserDescribe = findViewById(R.id.tvUserDescribe)
+        ivUserAvatar = findViewById(R.id.app_act_user_info_iv_avatar)
+        tvUserNickName = findViewById(R.id.app_act_user_info_tv_nick_name)
+        tvUserName = findViewById(R.id.app_act_user_info_tv_user_name)
+        btnSend = findViewById(R.id.app_act_user_info_btn_send_msg)
+        titleView = findViewById(R.id.app_act_uer_info_title)
+        tvUserDescribe = findViewById(R.id.app_act_user_info_tv_describe)
         try {
             intent?.let {
                 if (it.hasExtra(UID)) userId = it.getLongExtra(UID, 0)
@@ -80,11 +82,10 @@ class UserInfoActivity : FCActivity() {
             ivUserAvatar?.let { view ->
                 Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default).into(view)
             }
-
-            tvUserNickName?.text = "--"
+            tvUserNickName?.text = ""
             tvUserName?.text = member.name ?: ""
             tvUserDescribe?.text = member.avatar ?: ""
-            btnSendMsg.visibility = if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
+            btnSend?.visibility = if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
         }
     }
 
@@ -93,13 +94,13 @@ class UserInfoActivity : FCActivity() {
             onBackPressed()
         }
 
-//        tvUserName?.setOnClickListener {
-//            //设置用户名称
-//            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
-//                return@setOnClickListener
-//            }
-//            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_name_hint), tvUserName?.text?.toString() ?: "", 1, EditTextActivity.TYPE_USER_NAME)
-//        }
+        //        tvUserName?.setOnClickListener {
+        //            //设置用户名称
+        //            if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
+        //                return@setOnClickListener
+        //            }
+        //            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_name_hint), tvUserName?.text?.toString() ?: "", 1, EditTextActivity.TYPE_USER_NAME)
+        //        }
 
         tvUserNickName?.setOnClickListener {
             //设置用户昵称
@@ -130,7 +131,7 @@ class UserInfoActivity : FCActivity() {
             }
         }
 
-        btnSendMsg?.setOnClickListener { _ ->
+        btnSend?.setOnClickListener { _ ->
             curUser?.let {
                 if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, it.uid, "", it.name)
             } ?: finish()

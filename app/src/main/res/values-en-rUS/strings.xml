@@ -78,6 +78,7 @@
 
     <!--user info edit-->
     <string name="app_act_user_edit_text_hint">waiting for input</string>
+    <string name="app_act_user_edit_text_updating">updating…</string>
     <string name="app_act_user_edit_text_commit">Define</string>
 
     <!--net-->

@@ -6,14 +6,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.cf.im.db.domain.MemberBean;
-import com.cf.im.db.listener.DBListener;
 import com.cf.im.db.repositorys.MemberRepository;
 import com.zj.base.utils.storage.sp.SPUtils_Proxy;
+import com.zj.base.view.BaseTitleView;
 import com.zj.imcore.R;
 import com.zj.imcore.apis.user.UserApi;
-import com.zj.imcore.apis.user.UserApiService;
 import com.zj.imcore.base.FCActivity;
 import com.zj.imcore.utils.KeyboardUtils;
 import com.zj.loading.BaseLoadingView;
@@ -21,9 +18,6 @@ import com.zj.loading.BaseLoadingView;
 import java.util.HashMap;
 import java.util.Map;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function3;
-import retrofit2.HttpException;
 
 public class EditTextActivity extends FCActivity {
 
@@ -47,6 +41,8 @@ public class EditTextActivity extends FCActivity {
 
     private boolean commitIng = false;
     private EditText etEditData;
+    private BaseTitleView baseTitleView;
+    private BaseLoadingView baseLoadingView;
 
     @Override
     protected int getContentId() {
@@ -55,8 +51,9 @@ public class EditTextActivity extends FCActivity {
 
     @Override
     public void initView() {
-        showTitleBar(true);
-        etEditData = findViewById(R.id.etEditData);
+        etEditData = find(R.id.app_act_edit_text_et_data);
+        baseTitleView = find(R.id.app_act_edit_text_title);
+        baseLoadingView = find(R.id.app_act_edit_text_blv);
     }
 
     @Override
@@ -65,11 +62,9 @@ public class EditTextActivity extends FCActivity {
         String content = getIntent().getStringExtra(KEY_CONTENT);
         int size = getIntent().getIntExtra(KEY_SIZE, 0);
         int type = getIntent().getIntExtra(KEY_TYPE, 0);
-
-        getBaseTitleView().setLeftIcon(R.mipmap.back);
-        getBaseTitleView().setTitle(title);
-        getBaseTitleView().setRightTxt(getString(R.string.app_act_user_edit_text_commit));
-
+        baseTitleView.setLeftIcon(R.mipmap.back);
+        baseTitleView.setTitle(title);
+        baseTitleView.setRightTxt(getString(R.string.app_act_user_edit_text_commit));
         etEditData.setText(content);
     }
 
@@ -92,11 +87,9 @@ public class EditTextActivity extends FCActivity {
             }
         });
 
-        getBaseTitleView().setLeftClickListener(v -> {
-            onBackPressed();
-        });
+        baseTitleView.setLeftClickListener(v -> onBackPressed());
 
-        getBaseTitleView().setRightClickListener(v -> {
+        baseTitleView.setRightClickListener(v -> {
             //提交信息
             commit();
         });
@@ -105,7 +98,7 @@ public class EditTextActivity extends FCActivity {
     private void commit() {
         commitIng = true;
         KeyboardUtils.closeKeyBoard(this);
-        getBlvLoading().setMode(BaseLoadingView.DisplayMode.LOADING, "更新中");
+        baseLoadingView.setMode(BaseLoadingView.DisplayMode.LOADING, getString(R.string.app_act_user_edit_text_updating), true);
         commitUserInfo();
     }
 
@@ -121,21 +114,18 @@ public class EditTextActivity extends FCActivity {
                 long userId = SPUtils_Proxy.getUserId(0L);
                 MemberRepository.queryMembersByUserId(userId, memberBean1 -> {
                     memberBean1.describe = memberBean.describe;
-                    MemberRepository.insertOrUpdate(memberBean1, memberBean2 -> {
-                        runOnUiThread(() -> {
-                            Intent intent = new Intent();
-                            intent.putExtra(KEY_CONTENT, memberBean2.describe);
-                            setResult(Activity.RESULT_OK, intent);
-                            finish();
-                        });
-                    });
+                    MemberRepository.insertOrUpdate(memberBean1, memberBean2 -> runOnUiThread(() -> {
+                        Intent intent = new Intent();
+                        intent.putExtra(KEY_CONTENT, memberBean2.describe);
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
+                    }));
                 });
 
             } else {
-                getBlvLoading().setMode(BaseLoadingView.DisplayMode.NONE);
+                baseLoadingView.setMode(BaseLoadingView.DisplayMode.NONE, true);
                 Toast.makeText(this, R.string.app_net_network_error, Toast.LENGTH_SHORT).show();
             }
-
             return null;
         });
 
