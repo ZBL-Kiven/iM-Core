@@ -81,6 +81,7 @@
         <TextView
             android:id="@+id/app_act_user_info_tv_describe"
             style="@style/userInfoItemContent"
+            android:gravity="start|center"
             android:text="@string/app_act_user_info_user_describe_default" />
 
     </LinearLayout>
