@@ -48,8 +48,9 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
 
     override fun onClose(errorCode: Int, case: String?, isFromRemote: Boolean) {
         when (errorCode) {
-            1002 -> print("IMServer", "$case")
+            1002 -> print("IMServer", "socket erro with 1002  case: $case")
             -111 -> print("IMServer", case ?: "socket closed by shutdown")
+            1006 -> print("IMServer", "socket erro with 1006  case: $case")
             else -> curSocketState = SocketState.CONNECTED_ERROR.case("the socket have to reconnection with error: $case")
         }
     }

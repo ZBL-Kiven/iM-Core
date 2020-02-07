@@ -25,7 +25,6 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
 
     private var isDialogsFetched = false
     private var isMessagesFetched = false
-    private var isMembersFetched = false
     private var isCanceled = false
 
     init {
@@ -49,26 +48,28 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
     }
 
     private fun onFetchMessages() {
-//        fetchMessages(FetcherMsgIn { name, isSuccess ->
-//            if (!isCanceled) if (!isSuccess) {
-//                onFetchFailed(name)
-//            } else {
-                onFetchSuccessed(/***name*/"")
-//            }
-//        })
+        //        fetchMessages(FetcherMsgIn { name, isSuccess ->
+        //            if (!isCanceled) if (!isSuccess) {
+        //                onFetchFailed(name)
+        //            } else {
+        onFetchSuccessed(/***name*/
+            "")
+        //            }
+        //        })
     }
 
     private fun fetchMembers(fetcherMembersIn: FetcherMembersIn) {
         val since = SPUtils_Proxy.getMemberSyncSince(0)
         val cop = MemberApi.fetchMembers(since) { isSuccess, data, throwable ->
             val obj = JSON.parseObject(data?.string())
-            if (isSuccess && obj != null) {
+            if (isSuccess && !obj.isNullOrEmpty()) {
                 @Suppress("CAST_NEVER_SUCCEEDS") val nextTs = obj["next_ts"].toString().toLong()
                 val d = obj["members"].toString()
                 SPUtils_Proxy.setMemberSyncSince(nextTs)
                 MemberRepository.insertOrUpdateAll(d) {
-                    UIStore.postData(MembersEventMod("fetch members fetchStep"))
-                    isMembersFetched = true
+                    if (!it.isNullOrEmpty()) {
+                        UIStore.postData(MembersEventMod("fetch members fetchStep"))
+                    }
                     fetcherMembersIn.onResult("members", true)
                 }
             } else {
@@ -92,18 +93,18 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
         compons[FETCH_DIALOGT_CODE] = cop
     }
 
-//    private fun fetchMessages(dialogId: String, msgId: String, fetcherMsgIn: FetcherMsgIn) {
-//        val cop = FetcherApi.syncMessages(dialogId, msgId, 20, true) { b, httpException ->
-//            if (b) {
-//                compons.remove(FETCH_DIALOGT_CODE)
-//                isMessagesFetched = true
-//            } else {
-//                log("fetch messages failed ,case: ${httpException?.response()?.errorBody()?.string()}")
-//            }
-//            fetcherMsgIn.onResult("messages", b)
-//        }
-//        compons[FETCH_MSG_CODE] = cop
-//    }
+    //    private fun fetchMessages(dialogId: String, msgId: String, fetcherMsgIn: FetcherMsgIn) {
+    //        val cop = FetcherApi.syncMessages(dialogId, msgId, 20, true) { b, httpException ->
+    //            if (b) {
+    //                compons.remove(FETCH_DIALOGT_CODE)
+    //                isMessagesFetched = true
+    //            } else {
+    //                log("fetch messages failed ,case: ${httpException?.response()?.errorBody()?.string()}")
+    //            }
+    //            fetcherMsgIn.onResult("messages", b)
+    //        }
+    //        compons[FETCH_MSG_CODE] = cop
+    //    }
 
     private fun onFetchFailed(name: String) {
         isCompleted?.invoke(name, false)
@@ -119,7 +120,6 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
         isCompleted = null
         isDialogsFetched = false
         isMessagesFetched = false
-        isMembersFetched = false
         compons.forEach { (k, v) ->
             v.cancel()
             compons.remove(k)

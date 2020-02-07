@@ -82,17 +82,17 @@ public class BaseTitleView extends FrameLayout {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BaseTitleView);
             try {
                 l_text = ta.getString(R.styleable.BaseTitleView_l_vText);
-                l_width = ta.getDimension(R.styleable.BaseTitleView_l_vWidth, WRAP_CONTENT);
-                l_height = ta.getDimension(R.styleable.BaseTitleView_l_vHeight, WRAP_CONTENT);
-                l_padding = ta.getDimension(R.styleable.BaseTitleView_l_vPadding, l_padding);
+                l_width = ta.getFloat(R.styleable.BaseTitleView_l_vWidth, WRAP_CONTENT);
+                l_height = ta.getFloat(R.styleable.BaseTitleView_l_vHeight, WRAP_CONTENT);
+                l_padding = ta.getFloat(R.styleable.BaseTitleView_l_vPadding, l_padding);
                 l_textSize = ta.getFloat(R.styleable.BaseTitleView_l_vTextSize, l_textSize);
                 l_textColor = ta.getColor(R.styleable.BaseTitleView_l_vTextColor, l_textColor);
                 l_drawableRes = ta.getDrawable(R.styleable.SimpleCusLayoutView_vDrawable);
                 l_drawableColor = ta.getColor(R.styleable.BaseTitleView_l_vDrawableColor, l_drawableColor);
                 r_text = ta.getString(R.styleable.BaseTitleView_r_vText);
-                r_width = ta.getDimension(R.styleable.BaseTitleView_r_vWidth, WRAP_CONTENT);
-                r_height = ta.getDimension(R.styleable.BaseTitleView_r_vHeight, WRAP_CONTENT);
-                r_padding = ta.getDimension(R.styleable.BaseTitleView_r_vPadding, r_padding);
+                r_width = ta.getFloat(R.styleable.BaseTitleView_r_vWidth, WRAP_CONTENT);
+                r_height = ta.getFloat(R.styleable.BaseTitleView_r_vHeight, WRAP_CONTENT);
+                r_padding = ta.getFloat(R.styleable.BaseTitleView_r_vPadding, r_padding);
                 r_textSize = ta.getFloat(R.styleable.BaseTitleView_r_vTextSize, r_textSize);
                 r_textColor = ta.getColor(R.styleable.BaseTitleView_r_vTextColor, r_textColor);
                 r_drawableRes = ta.getDrawable(R.styleable.BaseTitleView_r_vDrawable);
@@ -114,11 +114,11 @@ public class BaseTitleView extends FrameLayout {
         vLeft = findById(R.id.base_title_vLeft);
         vRight = findById(R.id.base_title_vRight);
         tvTitle = findById(R.id.base_title_tvTitle);
-        vLeft.setText(l_text).setDrawableRes(l_drawableRes).setTextColor(l_textColor).setDrawableColor(l_drawableColor).setWidth(l_width).setHeight(l_height).setPadding(l_padding).setTextSize(l_textSize).draw();
-        vRight.setText(r_text).setDrawableRes(r_drawableRes).setTextColor(r_textColor).setDrawableColor(r_drawableColor).setWidth(r_width).setHeight(r_height).setPadding(r_padding).setTextSize(r_textSize).draw();
-        setTitle(titleText);
         setTitleColor(titleTextColor);
         setTitleTextSize(titleTextSize);
+        setTitle(titleText);
+        vLeft.setText(l_text).setDrawableRes(l_drawableRes).setTextColor(l_textColor).setDrawableColor(l_drawableColor).setWidth(l_width).setHeight(l_height).setPadding(l_padding).setTextSize(l_textSize).draw();
+        vRight.setText(r_text).setDrawableRes(r_drawableRes).setTextColor(r_textColor).setDrawableColor(r_drawableColor).setWidth(r_width).setHeight(r_height).setPadding(r_padding).setTextSize(r_textSize).draw();
     }
 
     public void setLeftTxt(String txt) {
@@ -146,19 +146,19 @@ public class BaseTitleView extends FrameLayout {
     }
 
     public void setLeftWidth(float width) {
-        vLeft.setWidth(dp2px(width)).draw();
+        vLeft.setWidth(width).draw();
     }
 
     public void setLeftHeight(float height) {
-        vLeft.setHeight(dp2px(height)).draw();
+        vLeft.setHeight(height).draw();
     }
 
     public void setLeftPadding(float padding) {
-        vLeft.setPadding(dp2px(padding)).draw();
+        vLeft.setPadding(padding).draw();
     }
 
     public void setLeftTextSize(float textSize) {
-        vLeft.setTextSize(dp2px(textSize)).draw();
+        vLeft.setTextSize(textSize).draw();
     }
 
     public void setRightTextColor(int textColor) {
@@ -170,19 +170,19 @@ public class BaseTitleView extends FrameLayout {
     }
 
     public void setRightWidth(float width) {
-        vRight.setWidth(dp2px(width)).draw();
+        vRight.setWidth(width).draw();
     }
 
     public void setRightHeight(float height) {
-        vRight.setHeight(dp2px(height)).draw();
+        vRight.setHeight(height).draw();
     }
 
     public void setRightPadding(float padding) {
-        vRight.setPadding(dp2px(padding)).draw();
+        vRight.setPadding(padding).draw();
     }
 
     public void setRightTextSize(float textSize) {
-        vRight.setTextSize(dp2px(textSize)).draw();
+        vRight.setTextSize(textSize).draw();
     }
 
     public void setTitle(String title) {

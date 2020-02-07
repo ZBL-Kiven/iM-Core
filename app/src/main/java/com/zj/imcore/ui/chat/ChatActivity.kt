@@ -32,11 +32,9 @@ import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.imcore.ui.views.IMRecyclerView
 import java.lang.Exception
 
-
 class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
 
     companion object {
-
         private const val SESSION_ID = "session_id"
         private const val DIALOG_TYPE = "dialog_type"
         private const val USER_ID = "user_id"
@@ -177,7 +175,6 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
     }
 
     private fun scrollToBottom() {
-        rvContent?.requestLayout()
         val count = rvContent?.adapter?.itemCount ?: 1
         rvContent?.post { rvContent?.scrollToPosition(count - 1) }
     }
@@ -220,6 +217,9 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
     }
 
     override fun finish() {
+        rvContent?.stopScroll()
+        rvContent?.clear()
+        rvContent = null
         IMHelper.removeSocketStateChangeListener(javaClass.simpleName)
         super.finish()
     }

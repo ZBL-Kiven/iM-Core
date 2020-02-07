@@ -17,10 +17,10 @@
         <item name="l_vTextColor">@color/color_primary_light_grey</item>
         <item name="r_vTextColor">@color/color_primary_light_grey</item>
         <item name="vTitleTextSize">20</item>
-        <item name="l_vWidth">24dp</item>
-        <item name="l_vHeight">24dp</item>
-        <item name="r_vWidth">24dp</item>
-        <item name="r_vHeight">24dp</item>
+        <item name="l_vWidth">25</item>
+        <item name="l_vHeight">25</item>
+        <item name="r_vWidth">25</item>
+        <item name="r_vHeight">25</item>
     </style>
 
     <style name="BaseLoadingViewStyle">

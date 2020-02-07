@@ -4,10 +4,10 @@
 
     <dimen name="app_sign_gender_size">35dp</dimen>
 
-    <dimen name="app_search_bar_height">30dp</dimen>
+    <dimen name="app_search_bar_height">33dp</dimen>
 
-    <dimen name="app_contact_avatar_height">40dp</dimen>
-    <dimen name="app_contact_avatar_width">40dp</dimen>
+    <dimen name="app_contact_avatar_height">45dp</dimen>
+    <dimen name="app_contact_avatar_width">45dp</dimen>
 
     <dimen name="app_et_text_size_16">16sp</dimen>
     <dimen name="app_et_text_size_18">18sp</dimen>

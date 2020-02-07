@@ -18,7 +18,6 @@ import com.zj.loading.BaseLoadingView;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class EditTextActivity extends FCActivity {
 
     public static final int TYPE_USER_NAME = 0x100;
@@ -62,9 +61,7 @@ public class EditTextActivity extends FCActivity {
         String content = getIntent().getStringExtra(KEY_CONTENT);
         int size = getIntent().getIntExtra(KEY_SIZE, 0);
         int type = getIntent().getIntExtra(KEY_TYPE, 0);
-        baseTitleView.setLeftIcon(R.mipmap.back);
         baseTitleView.setTitle(title);
-        baseTitleView.setRightTxt(getString(R.string.app_act_user_edit_text_commit));
         etEditData.setText(content);
     }
 
@@ -124,7 +121,7 @@ public class EditTextActivity extends FCActivity {
 
             } else {
                 baseLoadingView.setMode(BaseLoadingView.DisplayMode.NONE, true);
-                Toast.makeText(this, R.string.app_net_network_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.app_common_network_error, Toast.LENGTH_SHORT).show();
             }
             return null;
         });

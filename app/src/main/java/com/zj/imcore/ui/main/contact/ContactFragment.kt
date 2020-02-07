@@ -11,18 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
-import com.alibaba.fastjson.JSON
 import com.cf.im.db.domain.MemberBean
-import com.cf.im.db.repositorys.MemberRepository
-import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.ui.dispatcher.addReceiveObserver
 import com.zj.ui.log
-import com.zj.ui.mainHandler
 import com.zj.imcore.Constance
 import com.zj.imcore.R
-import com.zj.imcore.apis.members.MemberApi
-import com.zj.imcore.base.FCApplication
 import com.zj.imcore.model.member.MembersEventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.imcore.ui.main.contact.group.MyGroupsActivity
@@ -53,7 +47,6 @@ class ContactFragment : BaseLinkageFragment() {
 
     private var searchHandler: Handler? = null
     private var cachedData: ArrayList<MemberBean>? = null
-    private var isContactLoading = false
 
     private fun initView() {
         etSearch = find(R.id.app_fragment_contact_et_search)
@@ -66,7 +59,7 @@ class ContactFragment : BaseLinkageFragment() {
     private fun initListener() {
         loadingView?.setRefreshListener {
             loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
-            getData()
+            getData(false)
         }
         adapter?.setOnChildClickListener { adapter, _, groupPosition, childPosition ->
             val member = adapter.getItem(groupPosition).children[childPosition]
@@ -109,7 +102,7 @@ class ContactFragment : BaseLinkageFragment() {
         } ?: loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_system_error_no_context))
         addReceiveObserver<MembersEventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).listen {
             log(it.case)
-            getLocalData()
+            getData(false)
         }
     }
 
@@ -138,59 +131,24 @@ class ContactFragment : BaseLinkageFragment() {
         adapter?.change(groupData)
     }
 
-    private fun getLocalData() {
-        if (isContactLoading) {
-            return
-        }
-        isContactLoading = true
-        MemberRepository.queryAll {
-            mainHandler.post {
-                if (it.isNullOrEmpty()) {
-                    getData()
+    private fun getData(isFirst: Boolean) {
+        loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
+        MembersProvider.getMembersFromLocalOrServer(isFirst, object : MembersVisitor {
+            override fun onGot(m: List<MemberBean>?) {
+                if (m.isNullOrEmpty()) {
+                    loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_common_no_data), false)
                 } else {
-                    cachedData = ArrayList(it)
+                    cachedData = ArrayList(m)
                     setData(cachedData)
                     loadingView?.setMode(BaseLoadingView.DisplayMode.NORMAL.delay(500))
-                    isContactLoading = false
                 }
             }
-        }
-    }
-
-    private fun getData() {
-        isContactLoading = true
-        val since = SPUtils_Proxy.getMemberSyncSince(0)
-        loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
-        MemberApi.fetchMembers(since) { isSuccess, data, throwable ->
-            if (isSuccess) {
-                val obj = JSON.parseObject(data?.string())
-                if (isSuccess && obj != null) {
-                    @Suppress("CAST_NEVER_SUCCEEDS") val nextTs = obj["next_ts"] as Long
-                    val d = obj["members"].toString()
-                    MemberRepository.insertOrUpdateAll(d) {
-                        mainHandler.post {
-                            if (data == null || it.isNullOrEmpty()) {
-                                loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
-                            } else {
-                                SPUtils_Proxy.setMemberSyncSince(nextTs)
-                                cachedData = ArrayList(it)
-                                setData(cachedData)
-                                loadingView?.setMode(BaseLoadingView.DisplayMode.NORMAL.delay(500))
-                            }
-                        }
-                    }
-                } else {
-                    FCApplication.showToast(throwable?.response()?.errorBody()?.string() ?: getString(R.string.app_get_contact_failed))
-                    loadingView?.setMode(BaseLoadingView.DisplayMode.NO_NETWORK)
-                }
-            }
-            isContactLoading = false
-        }
+        })
     }
 
     override fun onResumed() {
         super.onResumed()
-        if (cachedData.isNullOrEmpty()) getLocalData()
+        if (cachedData.isNullOrEmpty()) getData(true)
     }
 
     override fun onDestroyed() {

@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
         android:background="@color/app_base_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <com.zj.base.view.BaseTitleView
+            android:id="@+id/app_act_contact_create_group_title"
+            style="@style/BaseTitleViewStyle"
+            app:vTitle="@string/app_act_create_groups_title"
+            app:r_vText="@string/app_common_completed"
+            app:r_vTextSize="16"
+            app:l_vDrawable="@mipmap/back"/>
+
     <LinearLayout
+            android:id="@+id/app_act_contact_create_group_search_bar"
             android:layout_width="match_parent"
             android:orientation="horizontal"
+            android:layout_below="@id/app_act_contact_create_group_title"
             android:layout_height="wrap_content"
             android:background="@color/color_primary">
 
         <EditText
-                android:id="@+id/app_act_contact_select_et_search"
+                android:id="@+id/app_act_contact_create_group_et_search"
+                style="@style/baseEtStyle.SingleLine"
+                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/app_search_bar_height"
-                android:layout_weight="1"
                 android:textSize="@dimen/app_et_text_size_14"
                 android:textColorHint="@color/color_primary_disable"
                 android:drawablePadding="6dp"
@@ -33,7 +43,7 @@
                 tools:ignore="Autofill,TextFields"/>
 
         <ImageView
-                android:id="@+id/app_act_contact_select_v_search_clear"
+                android:id="@+id/app_act_contact_create_group_v_search_clear"
                 android:layout_width="@dimen/app_search_bar_height"
                 android:layout_height="@dimen/app_search_bar_height"
                 android:padding="5dp"
@@ -42,11 +52,12 @@
     </LinearLayout>
 
     <com.zj.list.groupedadapter.widget.StickyHeaderLayout
+            android:layout_below="@id/app_act_contact_create_group_search_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/app_fragment_contact_rv"
+                android:id="@+id/app_act_contact_create_group_rv"
                 android:paddingTop="5dp"
                 android:clipToPadding="false"
                 android:layout_width="match_parent"
@@ -57,4 +68,9 @@
 
     </com.zj.list.groupedadapter.widget.StickyHeaderLayout>
 
-</LinearLayout>
+    <com.zj.loading.BaseLoadingView
+            android:layout_below="@id/app_act_contact_create_group_title"
+            style="@style/BaseLoadingViewStyle"
+            android:visibility="gone"
+            android:id="@+id/app_act_contact_create_group_blv"/>
+</RelativeLayout>

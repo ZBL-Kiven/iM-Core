@@ -13,14 +13,8 @@
 
         <com.zj.base.view.BaseTitleView
                 android:id="@+id/app_act_chat_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/color_primary"
-                app:l_vDrawable="@mipmap/back"
-                app:vTitleTextColor="@color/color_primary_light_grey"
-                app:r_vWidth="25dp"
-                app:r_vHeight="25dp"
-                app:l_vTextColor="@color/color_primary_light_grey"/>
+                style="@style/BaseTitleViewStyle"
+                app:l_vDrawable="@mipmap/back"/>
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
                 android:id="@+id/app_act_chat_refresh"

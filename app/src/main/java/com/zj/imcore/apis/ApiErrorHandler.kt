@@ -24,7 +24,7 @@ object ApiErrorHandler : ErrorHandler {
             }
         } else {
             if (throwable is UnknownHostException) {
-                FCApplication.showToast(R.string.app_net_network_error)
+                FCApplication.showToast(R.string.app_common_network_error)
             } else {
                 log("onHttpError ----- case: ${throwable.message}")
                 throw UnknownError(throwable.message)

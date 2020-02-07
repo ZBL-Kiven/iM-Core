@@ -4,6 +4,7 @@ import com.zj.im.chat.enums.LifeType
 import com.zj.im.chat.enums.SocketState
 import com.zj.im.chat.modle.IMLifecycle
 import com.zj.im.main.dispatcher.DataReceivedDispatcher
+import com.zj.im.utils.log.logger.printInFile
 
 internal object StatusHub {
 
