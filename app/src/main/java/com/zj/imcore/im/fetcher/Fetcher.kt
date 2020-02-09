@@ -53,13 +53,17 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
 //            if (!isCanceled) if (!isSuccess) {
 //                onFetchFailed(name)
 //            } else {
-                onFetchSuccessed(/***name*/"")
+        onFetchSuccessed(
+            /***name*/
+            ""
+        )
 //            }
 //        })
     }
 
     private fun fetchMembers(fetcherMembersIn: FetcherMembersIn) {
-        val since = SPUtils_Proxy.getMemberSyncSince(0)
+        var since = SPUtils_Proxy.getMemberSyncSince(0)
+        since = 0;
         val cop = MemberApi.fetchMembers(since) { isSuccess, data, throwable ->
             val obj = JSON.parseObject(data?.string())
             if (isSuccess && obj != null) {

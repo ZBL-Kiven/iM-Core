@@ -84,7 +84,9 @@ class SettingFragment : BaseLinkageFragment() {
             "id: $userId"
         }
         tvInfoBar?.setBackgroundResource(infoBarBackground)
-        tvInfoBar?.text = StringBuilder().append(gender).append("  ").append(userAddress).append("·").append(userCountry).toString()
+        tvInfoBar?.text =
+            StringBuilder().append(gender).append("  ").append(userAddress).append("·")
+                .append(userCountry).toString()
         tvEmail?.text = userEmail
         tvPhone?.text = userTel
         if (userNote.isNullOrEmpty()) {

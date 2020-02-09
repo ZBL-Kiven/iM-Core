@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.IntDef;
+
 import com.cf.im.db.repositorys.MemberRepository;
 import com.zj.base.utils.storage.sp.SPUtils_Proxy;
 import com.zj.base.view.BaseTitleView;
@@ -15,11 +19,22 @@ import com.zj.imcore.base.FCActivity;
 import com.zj.imcore.utils.KeyboardUtils;
 import com.zj.loading.BaseLoadingView;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class EditTextActivity extends FCActivity {
+
+    @IntDef(value = {
+            TYPE_USER_NAME,
+            TYPE_USER_NIKE_NAME,
+            TYPE_USER_DESCRIBE
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    @interface Type {
+    }
 
     public static final int TYPE_USER_NAME = 0x100;
     public static final int TYPE_USER_NIKE_NAME = 0x101;
@@ -30,7 +45,7 @@ public class EditTextActivity extends FCActivity {
     private static final String KEY_TITLE = "title";
     private static final String KEY_TYPE = "type";
 
-    public static void startActivity(Activity activity, String title, String content, int maxContent, int commitType) {
+    public static void startActivity(Activity activity, String title, String content, int maxContent, @Type int commitType) {
         Intent intent = new Intent(activity, EditTextActivity.class)
                 .putExtra(KEY_TITLE, title)
                 .putExtra(KEY_CONTENT, content)
@@ -64,7 +79,9 @@ public class EditTextActivity extends FCActivity {
         int type = getIntent().getIntExtra(KEY_TYPE, 0);
         baseTitleView.setLeftIcon(R.mipmap.back);
         baseTitleView.setTitle(title);
-        baseTitleView.setRightTxt(getString(R.string.app_act_user_edit_text_commit));
+        baseTitleView.setRightIcon(R.mipmap.commit);
+        baseTitleView.setRightVisibility(true);
+        baseTitleView.setRightTextColor(R.color.pg_color_white);
         etEditData.setText(content);
     }
 

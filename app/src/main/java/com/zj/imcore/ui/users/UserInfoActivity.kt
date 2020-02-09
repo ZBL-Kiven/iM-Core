@@ -56,6 +56,8 @@ class UserInfoActivity : FCActivity() {
         tvUserName = findViewById(R.id.app_act_user_info_tv_user_name)
         btnSend = findViewById(R.id.app_act_user_info_btn_send_msg)
         titleView = findViewById(R.id.app_act_uer_info_title)
+        titleView?.setLeftIcon(R.mipmap.back)
+
         tvUserDescribe = findViewById(R.id.app_act_user_info_tv_describe)
         try {
             intent?.let {
@@ -80,12 +82,14 @@ class UserInfoActivity : FCActivity() {
         curUser?.let { member ->
             titleView?.setTitle(getString(R.string.app_act_user_info_title_default, member.name))
             ivUserAvatar?.let { view ->
-                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default).into(view)
+                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default)
+                    .into(view)
             }
             tvUserNickName?.text = ""
             tvUserName?.text = member.name ?: ""
-            tvUserDescribe?.text = member.avatar ?: ""
-            btnSend?.visibility = if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
+            tvUserDescribe?.text = member.describe ?: ""
+            btnSend?.visibility =
+                if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
         }
     }
 
@@ -107,14 +111,26 @@ class UserInfoActivity : FCActivity() {
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
-            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_nickname_hint), tvUserNickName?.text.toString(), 1, EditTextActivity.TYPE_USER_NIKE_NAME)
+            EditTextActivity.startActivity(
+                this,
+                getString(R.string.app_act_user_info_user_nickname_hint),
+                tvUserNickName?.text.toString(),
+                1,
+                EditTextActivity.TYPE_USER_NIKE_NAME
+            )
         }
 
         tvUserDescribe?.setOnClickListener {
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
-            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_describe_hint), tvUserDescribe?.text.toString(), 1, EditTextActivity.TYPE_USER_DESCRIBE)
+            EditTextActivity.startActivity(
+                this,
+                getString(R.string.app_act_user_info_user_describe_hint),
+                tvUserDescribe?.text.toString(),
+                1,
+                EditTextActivity.TYPE_USER_DESCRIBE
+            )
         }
 
         ivUserAvatar?.setOnClickListener {
@@ -122,18 +138,28 @@ class UserInfoActivity : FCActivity() {
                 return@setOnClickListener
             }
             //设置用户头像
-            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1).imgSizeRange(1024, Long.MAX_VALUE).start { isCancel, data ->
-                if (!isCancel && !data.isNullOrEmpty()) {
-                    ivUserAvatar?.let {
-                        Glide.with(it).load(data[0].path).error(R.mipmap.app_contact_avatar_default).into(it)
+            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1)
+                .imgSizeRange(1024, Long.MAX_VALUE).start { isCancel, data ->
+                    if (!isCancel && !data.isNullOrEmpty()) {
+                        ivUserAvatar?.let {
+                            Glide.with(it).load(data[0].path)
+                                .error(R.mipmap.app_contact_avatar_default)
+                                .into(it)
+                        }
                     }
                 }
-            }
         }
 
         btnSend?.setOnClickListener { _ ->
             curUser?.let {
-                if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, it.uid, "", it.name)
+                if (isChatMod) finish() else ChatActivity.start(
+                    this,
+                    it.dialogId,
+                    Constance.DIALOG_TYPE_P2P,
+                    it.uid,
+                    "",
+                    it.name
+                )
             } ?: finish()
         }
     }

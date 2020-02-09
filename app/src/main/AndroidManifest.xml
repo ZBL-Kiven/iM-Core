@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.zj.imcore">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -40,29 +41,43 @@
             android:name="com.zj.imcore.gui.login.LoginActivity"
             android:launchMode="singleTask" />
 
-        <activity android:name="com.zj.imcore.ui.main.MainActivity"
-                  android:launchMode="singleTask"
-                  android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name="com.zj.imcore.ui.main.MainActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".ui.users.UserInfoActivity"
             android:label="@string/app_act_user_info_title"
             android:launchMode="singleTask" />
 
-        <activity android:name=".ui.chat.ChatActivity"
-                  android:launchMode="singleTask"/>
+        <activity
+            android:name=".ui.chat.ChatActivity"
+            android:launchMode="singleTask" />
 
-        <activity android:name=".ui.main.contact.group.MyGroupsActivity"
-                  android:launchMode="singleTask"
-                  android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".ui.main.contact.group.MyGroupsActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".ui.users.EditTextActivity"
+        <activity
+            android:name=".ui.users.EditTextActivity"
             android:label="@string/app_act_user_info_title"
             android:launchMode="singleTask" />
 
-        <activity android:name=".ui.main.contact.group.CreateGroupActivity"
-                  android:launchMode="singleTask"
-                  android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".ui.main.contact.group.CreateGroupActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
+
+        <receiver
+            android:name=".PushReceiver"
+            android:permission="android.permission.INTERNET">
+            <intent-filter>
+                <action android:name="com.cf.im.notification.PushReceiver" />
+            </intent-filter>
+
+        </receiver>
 
         <receiver
             android:name=".gui.auth.TokenRefreshUtils"
