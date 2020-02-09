@@ -77,7 +77,7 @@ public class EditTextActivity extends FCActivity {
         int size = getIntent().getIntExtra(KEY_SIZE, 0);
         int type = getIntent().getIntExtra(KEY_TYPE, 0);
         baseTitleView.setTitle(title);
-        baseTitleView.setRightIcon(R.mipmap.commit);
+//        baseTitleView.setRightIcon(R.mipmap.commit);
         baseTitleView.setRightVisibility(true);
         baseTitleView.setRightTextColor(R.color.pg_color_white);
         etEditData.setText(content);
@@ -141,6 +141,7 @@ public class EditTextActivity extends FCActivity {
                 baseLoadingView.setMode(BaseLoadingView.DisplayMode.NONE, true);
                 Toast.makeText(this, R.string.app_common_network_error, Toast.LENGTH_SHORT).show();
             }
+            commitIng = false;
             return null;
         });
 
