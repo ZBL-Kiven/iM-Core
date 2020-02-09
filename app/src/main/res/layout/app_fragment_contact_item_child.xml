@@ -9,10 +9,10 @@
     <ImageView
             android:id="@+id/app_fragment_contact_item_iv_avatar"
             android:layout_width="@dimen/app_contact_avatar_width"
+            android:layout_height="@dimen/app_contact_avatar_height"
             android:layout_marginEnd="15dp"
             android:layout_margin="10dp"
             android:layout_centerVertical="true"
-            android:layout_height="@dimen/app_contact_avatar_height"
             tools:ignore="ContentDescription"/>
 
     <TextView
@@ -21,7 +21,7 @@
             tools:text="a aa aaa a"
             android:textColor="@color/color_primary"
             android:layout_alignTop="@id/app_fragment_contact_item_iv_avatar"
-            android:textSize="@dimen/app_et_text_size_16"
+            android:textSize="@dimen/app_et_text_size_14"
             android:layout_toEndOf="@+id/app_fragment_contact_item_iv_avatar"
             android:layout_height="wrap_content"/>
 
@@ -29,7 +29,7 @@
     <TextView
             android:id="@+id/app_fragment_contact_item_tv_title"
             android:layout_width="wrap_content"
-            android:textSize="@dimen/app_et_text_size_12"
+            android:textSize="@dimen/app_et_text_size_10"
             android:layout_alignBottom="@id/app_fragment_contact_item_iv_avatar"
             tools:text="b v v a "
             android:layout_toEndOf="@+id/app_fragment_contact_item_iv_avatar"

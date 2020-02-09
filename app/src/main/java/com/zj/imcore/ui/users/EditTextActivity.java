@@ -24,7 +24,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class EditTextActivity extends FCActivity {
 
     @IntDef(value = {
@@ -77,7 +76,6 @@ public class EditTextActivity extends FCActivity {
         String content = getIntent().getStringExtra(KEY_CONTENT);
         int size = getIntent().getIntExtra(KEY_SIZE, 0);
         int type = getIntent().getIntExtra(KEY_TYPE, 0);
-        baseTitleView.setLeftIcon(R.mipmap.back);
         baseTitleView.setTitle(title);
         baseTitleView.setRightIcon(R.mipmap.commit);
         baseTitleView.setRightVisibility(true);
@@ -141,7 +139,7 @@ public class EditTextActivity extends FCActivity {
 
             } else {
                 baseLoadingView.setMode(BaseLoadingView.DisplayMode.NONE, true);
-                Toast.makeText(this, R.string.app_net_network_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.app_common_network_error, Toast.LENGTH_SHORT).show();
             }
             return null;
         });

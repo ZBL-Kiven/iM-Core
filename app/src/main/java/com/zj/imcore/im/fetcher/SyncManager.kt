@@ -26,7 +26,7 @@ object SyncManager {
                     } else {
                         val count = fetchRecord[s] ?: 0
                         fetchRecord[s] = count + 1
-                        if (count < FETCH_RETRY_COUNT) IMHelper.reconnect("fetcher $s failed ,retrying on $count ")
+                        if (count < FETCH_RETRY_COUNT) //IMHelper.reconnect("fetcher $s failed ,retrying on $count ")
                         else {
                             shutdown()
                             FCApplication.logout("fetch $s failed ,clear cache and require necessary to relogin")

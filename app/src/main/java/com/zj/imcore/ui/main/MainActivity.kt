@@ -67,7 +67,7 @@ class MainActivity : FCActivity() {
     override fun initListener() {
         baseTitleView?.setRightClickListener {
             if (fragmentManager?.getCurrentItemId() == conversationFragment?.fId) {
-                startActivity(Intent(this@MainActivity, CreateGroupActivity::class.java))
+                CreateGroupActivity.start(this, 0, -1)
             }
         }
     }

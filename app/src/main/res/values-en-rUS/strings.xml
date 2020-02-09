@@ -79,13 +79,17 @@
     <!--user info edit-->
     <string name="app_act_user_edit_text_hint">waiting for input</string>
     <string name="app_act_user_edit_text_updating">updating…</string>
+    <string name="app_act_create_groups_hint_not_create">fail to create an empty discussion groups</string>
     <string name="app_act_user_edit_text_commit">Define</string>
-
-    <!--net-->
-    <string name="app_net_network_error">network is not working</string>
 
     <!--group-->
     <string name="app_act_groups_title">my groups</string>
     <string name="app_act_create_groups_title">create group</string>
+    <string name="app_act_create_groups_hint">Creating discussion group…</string>
+
+    <!--in common use-->
+    <string name="app_common_network_error">network is not working</string>
+    <string name="app_common_no_data">no data found</string>
+    <string name="app_common_completed">done</string>
 
 </resources>

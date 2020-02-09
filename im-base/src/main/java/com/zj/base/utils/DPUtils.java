@@ -5,7 +5,8 @@ import android.content.res.Resources;
 @SuppressWarnings("unused")
 public class DPUtils {
     /**
-     *Conversion from dp units to px (pixels) according to the resolution of the phone
+     * Conversion from dp units to px (pixels) according to the resolution of the phone
+     *
      * @param dpValue virtual pixels
      * @return pixels
      */
@@ -15,6 +16,7 @@ public class DPUtils {
 
     /**
      * Conversion from px (pixels) to dp according to the resolution of the phone
+     *
      * @param pxValue pixels
      * @return virtual pixels
      */
@@ -22,4 +24,11 @@ public class DPUtils {
         return (pxValue / Resources.getSystem().getDisplayMetrics().density);
     }
 
+    public static float px2sp(float pxValue) {
+        return pxValue / Resources.getSystem().getDisplayMetrics().scaledDensity;
+    }
+
+    public static int sp2px(float spValue) {
+        return (int) (spValue * Resources.getSystem().getDisplayMetrics().scaledDensity + 0.5f);
+    }
 }

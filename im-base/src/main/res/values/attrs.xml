@@ -36,14 +36,8 @@
     <declare-styleable name="SimpleCusLayoutView">
         <attr name="vDrawable" format="reference|color"/>
         <attr name="vText" format="reference|string"/>
-        <attr name="vWidth" format="dimension">
-            <enum name="WRAP_CONTENT" value="-2"/>
-            <enum name="MATCH_PARENT" value="-1"/>
-        </attr>
-        <attr name="vHeight" format="dimension">
-            <enum name="WRAP_CONTENT" value="-2"/>
-            <enum name="MATCH_PARENT" value="-1"/>
-        </attr>
+        <attr name="vWidth" format="dimension"/>
+        <attr name="vHeight" format="dimension"/>
         <attr name="vPadding" format="dimension"/>
         <attr name="vTextSize" format="dimension"/>
         <attr name="vTextColor" format="integer|color"/>
@@ -53,17 +47,17 @@
     <declare-styleable name="BaseTitleView">
         <attr name="l_vDrawable" format="reference|color"/>
         <attr name="l_vText" format="reference|string"/>
-        <attr name="l_vWidth" format="dimension"/>
-        <attr name="l_vHeight" format="dimension"/>
-        <attr name="l_vPadding" format="dimension"/>
+        <attr name="l_vWidth" format="float"/>
+        <attr name="l_vHeight" format="float"/>
+        <attr name="l_vPadding" format="float"/>
         <attr name="l_vTextSize" format="float"/>
         <attr name="l_vTextColor" format="reference|color"/>
         <attr name="l_vDrawableColor" format="reference|color"/>
         <attr name="r_vDrawable" format="reference|color"/>
         <attr name="r_vText" format="reference|string"/>
-        <attr name="r_vWidth" format="dimension"/>
-        <attr name="r_vHeight" format="dimension"/>
-        <attr name="r_vPadding" format="dimension"/>
+        <attr name="r_vWidth" format="float"/>
+        <attr name="r_vHeight" format="float"/>
+        <attr name="r_vPadding" format="float"/>
         <attr name="r_vTextSize" format="float"/>
         <attr name="r_vTextColor" format="reference|color"/>
         <attr name="r_vDrawableColor" format="reference|color"/>

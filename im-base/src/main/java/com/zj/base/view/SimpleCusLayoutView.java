@@ -2,6 +2,7 @@ package com.zj.base.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ import com.zj.base.R;
 
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static com.zj.base.utils.DPUtils.sp2px;
 
 /**
  * Created by ZJJ on 2018/5/3.
@@ -119,38 +121,36 @@ public class SimpleCusLayoutView extends View {
     }
 
     public SimpleCusLayoutView setTextColor(int textColor) {
-        if (textColor > 0)
-            this.textColor = textColor;
+        this.textColor = textColor;
         return this;
     }
 
     public SimpleCusLayoutView setDrawableColor(int color) {
-        if (drawableColor > 0)
-            this.drawableColor = color;
+        this.drawableColor = color;
         return this;
     }
 
     public SimpleCusLayoutView setWidth(float width) {
         if (width > 0)
-            this.width = width;
+            this.width = dp2px(width);
         return this;
     }
 
     public SimpleCusLayoutView setHeight(float height) {
         if (height > 0)
-            this.height = height;
+            this.height = dp2px(height);
         return this;
     }
 
     public SimpleCusLayoutView setPadding(float padding) {
         if (padding > 0)
-            this.padding = padding;
+            this.padding = dp2px(padding);
         return this;
     }
 
     public SimpleCusLayoutView setTextSize(float textSize) {
         if (textSize > 0)
-            this.textSize = textSize;
+            this.textSize = sp2px(textSize);
         return this;
     }
 
@@ -158,13 +158,13 @@ public class SimpleCusLayoutView extends View {
      * refresh
      */
     public void draw() {
+        initPaint();
+        measureRect();
         postInvalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        initPaint();
-        measureRect();
         canvas.save();
         if (!TextUtils.isEmpty(text)) {
             drawTxt(canvas);
@@ -187,21 +187,15 @@ public class SimpleCusLayoutView extends View {
     }
 
     private void measureRect() {
-        if (width == WRAP_CONTENT || height == WRAP_CONTENT) {
-            if (width == WRAP_CONTENT) {
-                if (!TextUtils.isEmpty(text)) {
-                    width = mPaint.measureText(text);
-                } else if (drawableRes != null) {
-                    width = drawableRes.getIntrinsicWidth();
-                }
-            }
-            if (height == WRAP_CONTENT) {
-                if (!TextUtils.isEmpty(text)) {
-                    height = Math.abs(mPaint.getFontMetrics().top) + mPaint.getFontMetrics().bottom;
-                } else if (drawableRes != null) {
-                    height = drawableRes.getIntrinsicHeight();
-                }
-            }
+        if (!TextUtils.isEmpty(text)) {
+            width = mPaint.measureText(text);
+        } else if (width <= 0 && drawableRes != null) {
+            width = drawableRes.getIntrinsicWidth();
+        }
+        if (!TextUtils.isEmpty(text)) {
+            height = Math.abs(mPaint.getFontMetrics().top) + mPaint.getFontMetrics().bottom;
+        } else if (width <= 0 && drawableRes != null) {
+            height = drawableRes.getIntrinsicHeight();
         }
     }
 
@@ -224,5 +218,9 @@ public class SimpleCusLayoutView extends View {
             return drawable;
         }
         return d;
+    }
+
+    private int dp2px(float dpValue) {
+        return (int) (0.5f + dpValue * Resources.getSystem().getDisplayMetrics().density);
     }
 }
