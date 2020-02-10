@@ -7,7 +7,10 @@ import com.zj.model.interfaces.MessageIn
 @Suppress("unused", "SpellCheckingInspection")
 class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
-    val dialogId: Long; get(){ return impl.dialogId()}
+    val dialogId: Long
+        get() {
+            return impl.dialogId()
+        }
 
     val subType: String?; get() = impl.subType()
 
@@ -105,7 +108,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
     }
 
     override fun equals(other: Any?): Boolean {
-        return if (other !is MsgInfo) false else impl.key() == other.impl.key() || impl.callId() == other.impl.callId()
+        return if (other !is MsgInfo) false else (impl.key() >= 0 && impl.key() == other.impl.key()) || (!impl.callId().isNullOrEmpty() && impl.callId() == other.impl.callId())
     }
 
     override fun hashCode(): Int {

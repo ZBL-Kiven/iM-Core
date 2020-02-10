@@ -155,9 +155,10 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
 
         this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).filterIn { it.dialogId == sessionId }.listen { data ->
             if (!isFinishing) rvContent?.let {
+                it.adapter.data().add(NORMAL, data)
+                if (it.canScrollVertically(-1)) return@listen
                 it.stopScroll()
                 handler.removeMessages(1999)
-                it.adapter.data().add(NORMAL, data)
                 val p = it.adapter.data().maxCurDataPosition()
                 val msg = Message.obtain()
                 msg.what = 1999
