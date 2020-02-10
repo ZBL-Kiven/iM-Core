@@ -1,5 +1,6 @@
 package com.zj.imcore.ui.list.model
 
+import android.app.Activity
 import android.content.Context
 import com.bumptech.glide.Glide
 import com.zj.ui.img.cache.ImageCacheUtil
@@ -43,6 +44,9 @@ class ChatListModel : BaseChatModel<MsgInfo> {
                 AvatarLoadUtil(context, dpToPx(context, ChatOption.avatarWidth), dpToPx(context, ChatOption.avatarHeight), ChatOption.avatarQuality, data, ImageCacheUtil.CENTER_CROP, Payloads.MEMBERS_AVATAR).load { path ->
                     val avatarRadius = dpToPx(context, ChatOption.avatarRadius) * 1.0f
                     val transformer = RoundCorner(context, avatarRadius, avatarRadius, avatarRadius, avatarRadius)
+                    if (context is Activity) {
+                        if (context.isDestroyed || context.isFinishing) return@load
+                    }
                     Glide.with(context).load(path).transform(transformer).into(it)
                 }
             }
