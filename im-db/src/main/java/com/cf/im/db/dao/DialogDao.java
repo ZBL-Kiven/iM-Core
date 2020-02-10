@@ -40,7 +40,7 @@ public interface DialogDao extends IDao<DialogBean> {
      */
     @Transaction
     @Query("select * from dialogbean where userId = :userId limit 1")
-    DialogBean queryByUserId(String userId);
+    DialogBean queryByUserId(long userId);
 
     /**
      * 根据dialogId 获取dialog 信息

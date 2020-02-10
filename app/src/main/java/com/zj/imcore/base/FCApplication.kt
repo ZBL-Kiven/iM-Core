@@ -17,6 +17,7 @@ import com.zj.ui.log
 import com.zj.ui.mainHandler
 import com.zj.imcore.BuildConfig
 import com.zj.imcore.apis.user.UserApi
+import com.zj.imcore.core.notification.NotificationManager
 import com.zj.imcore.gui.SplashActivity
 import java.lang.Exception
 
@@ -25,6 +26,7 @@ class FCApplication : BaseApplication() {
     override fun onCreate() {
         super.onCreate()
         SPUtils_Proxy.init(BuildConfig.APPLICATION_ID, this)
+        NotificationManager.singleton.get().init(this)
         DB.singleton.get().init(this)
     }
 
@@ -68,7 +70,10 @@ class FCApplication : BaseApplication() {
 
         @SuppressLint("HardwareIds")
         fun getDeviceId(): String {
-            return Settings.Secure.getString(application.contentResolver, Settings.Secure.ANDROID_ID)
+            return Settings.Secure.getString(
+                application.contentResolver,
+                Settings.Secure.ANDROID_ID
+            )
         }
 
         fun showToast(s: String) {
@@ -87,8 +92,14 @@ class FCApplication : BaseApplication() {
 
         fun recordNewToken(expiresIn: Long) {
             try {
-                val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                val pendingIntentSet = PendingIntent.getBroadcast(application, 0, Intent("repeatAlarm"), PendingIntent.FLAG_UPDATE_CURRENT)
+                val alarmManager =
+                    application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val pendingIntentSet = PendingIntent.getBroadcast(
+                    application,
+                    0,
+                    Intent("repeatAlarm"),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
                 alarmManager.set(AlarmManager.RTC_WAKEUP, expiresIn, pendingIntentSet)
             } catch (e: Exception) {
                 e.printStackTrace()

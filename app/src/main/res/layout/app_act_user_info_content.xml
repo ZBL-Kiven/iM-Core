@@ -8,8 +8,8 @@
     android:orientation="vertical">
 
     <com.zj.base.view.BaseTitleView
-    style="@style/BaseTitleViewStyle"
-    android:id="@+id/app_act_uer_info_title"/>
+        android:id="@+id/app_act_uer_info_title"
+        style="@style/BaseTitleViewStyle" />
 
     <LinearLayout style="@style/userInfoItemGroup">
 

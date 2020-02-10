@@ -7,6 +7,7 @@ import com.cf.im.db.repositorys.MessageRepository
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.ui.dispatcher.UIStore
 import com.zj.imcore.base.FCApplication
+import com.zj.imcore.core.notification.NotificationManager
 import com.zj.imcore.enums.MsgSubtype
 import com.zj.imcore.enums.MsgType
 import com.zj.imcore.utils.unity.DateUtils
@@ -17,7 +18,12 @@ import kotlin.random.Random
 
 object MsgInfoTransfer {
 
-    fun transforMsg(d: JSONObject, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
+    fun transforMsg(
+        d: JSONObject,
+        callId: String?,
+        sendingState: SendMsgState?,
+        onFinish: () -> Unit
+    ) {
         val msg = JSON.parseObject(d["data"].toString(), SendMessageBean::class.java)
         msg.callId = if (callId.isNullOrEmpty()) d["call_id"].toString() else callId
         msg.sendMsgState = sendingState?.type ?: 0
@@ -25,6 +31,7 @@ object MsgInfoTransfer {
 
         MessageRepository.insertOrUpdate(JSON.toJSONString(msg)) {
             val info = transform(it)
+            NotificationManager.singleton.get().sendMessageNotification(info);
             UIStore.postData(info)
             onFinish()
         }

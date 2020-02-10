@@ -1,6 +1,7 @@
 package com.zj.imcore.im.options
 
 import android.app.Application
+import android.app.Notification
 import com.zj.album.nModule.FileInfo
 import com.zj.im.chat.core.BaseOption
 import com.zj.im.chat.hub.ClientHub
@@ -12,7 +13,10 @@ import com.zj.imcore.utils.sender.MsgSender
 object IMHelper : IMInterface<String>() {
 
     fun init(app: Application) {
-        val option = BaseOption.create(app).debug().logsCollectionAble { true }.logsFileName("IM").setLogsMaxRetain(3L * 24 * 60 * 60 * 1000).build()
+        val option = BaseOption.create(app).debug().logsCollectionAble { true }.logsFileName("IM")
+            .setLogsMaxRetain(3L * 24 * 60 * 60 * 1000)
+            .setNotify(Notification())
+            .build()
         initChat(option)
     }
 
