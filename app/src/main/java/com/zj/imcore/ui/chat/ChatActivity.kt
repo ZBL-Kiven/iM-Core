@@ -158,12 +158,12 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
                 it.adapter.data().add(NORMAL, data)
                 if (it.canScrollVertically(-1)) return@listen
                 it.stopScroll()
-                handler.removeMessages(1999)
-                val p = it.adapter.data().maxCurDataPosition()
-                val msg = Message.obtain()
-                msg.what = 1999
-                msg.arg1 = p
-                handler.sendMessageDelayed(msg, 30)
+//                handler.removeMessages(1999)
+//                val p = it.adapter.data().maxCurDataPosition()
+//                val msg = Message.obtain()
+//                msg.what = 1999
+//                msg.arg1 = p
+//                handler.sendMessageDelayed(msg, 30)
             }
         }
     }

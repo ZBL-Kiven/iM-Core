@@ -1,5 +1,7 @@
 package com.cf.im.db.repositorys;
 
+import android.util.Log;
+
 import androidx.collection.LongSparseArray;
 
 import com.alibaba.fastjson.JSON;
@@ -11,11 +13,11 @@ import com.cf.im.db.listener.DBListener;
 import com.cf.im.db.utils.DateUtils;
 import com.zj.model.interfaces.MessageIn;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MessageRepository extends BaseRepository {
-
 
     private static MessageDaoImpl getMessageDao() {
         return AppDatabase.singleton.get().getMessageDao();
@@ -79,9 +81,20 @@ public class MessageRepository extends BaseRepository {
      */
     public static void queryMessageBy(long dialogId, String callId, long msgKey, int limit, boolean isPositive, DBListener<List<_MessageBeanImpl>> listener) {
         AppDatabase.singleton.get().getReadExecutor().execute(() -> {
-            _MessageBeanImpl mpl = getMessageDao().queryIdOrCallIdImpl(callId, msgKey);
-            long kId = mpl == null ? -1 : mpl.message.kId;
-            List<_MessageBeanImpl> beans = getMessageDao().queryMessageBy(dialogId, kId, limit, isPositive);
+            long time;
+            if ("-".equals(callId) || msgKey == -1) {
+                time = 0L;
+            } else {
+                time = getMessageDao().queryLocalCreateTsOrCallIdImpl(callId, msgKey);
+            }
+            // _MessageBeanImpl mpl = getMessageDao().queryIdOrCallIdImpl(callId, msgKey);
+            // long kId = mpl == null ? -1 : mpl.message.kId;
+
+            List<_MessageBeanImpl> beans = getMessageDao().queryMessageBy(dialogId, time, limit, isPositive);
+
+            Log.e("DB___", dialogId + " " + callId + " " + msgKey + " " + beans.size());
+            
+            System.err.println("DB___  " + dialogId + " " + callId + " " + msgKey + " " + beans.size());
             listener.onSuccess(beans);
         });
     }
