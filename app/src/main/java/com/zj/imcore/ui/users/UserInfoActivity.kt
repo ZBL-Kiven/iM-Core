@@ -140,7 +140,7 @@ class UserInfoActivity : FCActivity() {
             //设置用户头像
             AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1)
                 .imgSizeRange(1024, Long.MAX_VALUE).start { isSelected, data ->
-                    if (!isSelected && !data.isNullOrEmpty()) {
+                    if (isSelected && !data.isNullOrEmpty()) {
                         ivUserAvatar?.let {
                             Glide.with(it).load(data[0].path)
                                 .error(R.mipmap.app_contact_avatar_default)
