@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.cf.im.db.domain.DialogBean;
-import com.cf.im.db.listener.DBListener;
 import com.cf.im.db.repositorys.DialogRepository;
 import com.zj.imcore.ui.chat.ChatActivity;
 
@@ -22,7 +20,6 @@ public class PushReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (ACTION_PUSH_CLICK.equals(action)) {
             System.out.println("收到点击广播");
-            Toast.makeText(context, "收到点击广播", Toast.LENGTH_SHORT).show();
             event(context, intent);
         }
 

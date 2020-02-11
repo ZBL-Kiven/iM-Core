@@ -1,5 +1,7 @@
 package com.cf.im.db.utils;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
@@ -36,6 +38,7 @@ public class DateUtils {
             return time;
         }
         if (timeStr == null) {
+            Log.e("DB___", "生成了时间");
             return System.currentTimeMillis();
         }
         for (String s : timeStr) {

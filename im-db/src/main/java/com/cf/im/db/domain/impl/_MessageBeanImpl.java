@@ -8,6 +8,8 @@ import com.cf.im.db.domain.MemberBean;
 import com.cf.im.db.domain.MessageBean;
 import com.zj.model.interfaces.MessageIn;
 
+import java.util.Objects;
+
 public class _MessageBeanImpl implements MessageIn {
 
     @Embedded
@@ -172,5 +174,19 @@ public class _MessageBeanImpl implements MessageIn {
     @Override
     public String localFilePath() {
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        _MessageBeanImpl that = (_MessageBeanImpl) o;
+        return Objects.equals(message, that.message) &&
+                Objects.equals(member, that.member);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(message, member);
     }
 }

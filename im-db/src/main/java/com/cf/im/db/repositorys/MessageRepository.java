@@ -11,6 +11,7 @@ import com.cf.im.db.domain.MessageBean;
 import com.cf.im.db.domain.impl._MessageBeanImpl;
 import com.cf.im.db.listener.DBListener;
 import com.cf.im.db.utils.DateUtils;
+import com.zj.im.utils.log.logger.DataUtils;
 import com.zj.model.interfaces.MessageIn;
 
 import java.util.ArrayList;
@@ -26,7 +27,16 @@ public class MessageRepository extends BaseRepository {
     public static void insertOrUpdate(String json, DBListener<_MessageBeanImpl> listener) {
         getWriteExecutor().execute(() -> {
             MessageBean bean = JSON.parseObject(json, MessageBean.class);
-            bean.kId = getMessageDao().queryKIdByIdOrCallId(bean.callId, bean.id);
+            MessageBean _temp = getMessageDao().queryByIdOrCallId(bean.callId, bean.id);
+
+            if (_temp != null) {
+                bean.kId = _temp.kId;
+                bean.callId = _temp.callId;
+                bean.localCreateTs = _temp.localCreateTs;
+            } else {
+                bean.localCreateTs = DateUtils.getTime(-1);
+            }
+
             getMessageDao().insertOrUpdate(bean);
             _MessageBeanImpl data = getMessageDao().queryIdOrCallIdImpl(bean.callId, bean.id);
             listener.onSuccess(data);
@@ -48,13 +58,15 @@ public class MessageRepository extends BaseRepository {
                 index++;
             }
 
-
             List<MessageBean> dbList = getMessageDao().queryByIds(ids);
 
-            for (MessageBean dbBean : dbList) {
-                MessageBean bean = serviceBeans.get(dbBean.id);
+            //如果本地存在，则更新localCreateTs 以及 kid
+            for (MessageBean _temp : dbList) {
+                MessageBean bean = serviceBeans.get(_temp.id);
                 if (bean != null) {
-                    bean.kId = dbBean.kId;
+                    bean.kId = _temp.kId;
+                    bean.callId = _temp.callId;
+                    bean.localCreateTs = _temp.localCreateTs;
                 }
             }
 
