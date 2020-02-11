@@ -98,7 +98,7 @@ public class NotificationManager {
                 notificationId = mNotificationIds.get(k);
             }
             if (notificationId == null) {
-                notificationId = mNotificationId.getAndIncrement();
+                notificationId = mNotificationId.addAndGet(1);
                 mNotificationIds.put(String.valueOf(key), notificationId);
             }
             messageNotification.sendNotification(notificationId, String.valueOf(key), taskTitle, taskContent);
