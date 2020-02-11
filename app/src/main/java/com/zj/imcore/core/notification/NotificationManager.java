@@ -111,7 +111,7 @@ public class NotificationManager {
             if (id != null) {
                 messageNotification.cancel(id);
             }
+            mNotificationIds.remove(key);
         }
     }
-
 }

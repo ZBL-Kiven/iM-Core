@@ -141,7 +141,7 @@ public class NotificationService extends ContextWrapper {
     }
 
     public void cancel(int id) {
-        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(id);
+        getManager().cancel(id);
     }
 }
 
