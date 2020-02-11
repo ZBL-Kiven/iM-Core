@@ -136,7 +136,6 @@ public class EditTextActivity extends FCActivity {
                         finish();
                     }));
                 });
-
             } else {
                 baseLoadingView.setMode(BaseLoadingView.DisplayMode.NONE, true);
                 Toast.makeText(this, R.string.app_common_network_error, Toast.LENGTH_SHORT).show();

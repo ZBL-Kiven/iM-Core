@@ -2,6 +2,7 @@ package com.zj.imcore.model.login
 
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.imcore.base.FCApplication
+import com.zj.imcore.model.teams.TeamInfo
 
 /**
  * Created by ZJJ on 19/12/23
@@ -13,11 +14,12 @@ import com.zj.imcore.base.FCApplication
 class LoginInfo {
 
     var user: LoginUserModel? = null
+    var teams: List<TeamInfo>? = null
     var token: LoginTokenModel? = null
 
     fun saveAsSP() {
         val expires = token?.expiresIn ?: 24 * 60 * 60 * 1000L
-        SPUtils_Proxy.setUserId(user?.id?:0)
+        SPUtils_Proxy.setUserId(user?.id ?: 0)
         SPUtils_Proxy.setAccessToken(token?.accessToken)
         SPUtils_Proxy.setRefreshToken(token?.refreshToken)
         SPUtils_Proxy.setUserName(user?.name)
