@@ -93,7 +93,7 @@ public class MessageRepository extends BaseRepository {
             List<_MessageBeanImpl> beans = getMessageDao().queryMessageBy(dialogId, time, limit, isPositive);
 
             Log.e("DB___", dialogId + " " + callId + " " + msgKey + " " + beans.size());
-            
+
             System.err.println("DB___  " + dialogId + " " + callId + " " + msgKey + " " + beans.size());
             listener.onSuccess(beans);
         });

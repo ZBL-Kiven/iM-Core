@@ -1,6 +1,7 @@
 package com.zj.imcore.ui.chat
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
@@ -20,6 +21,7 @@ import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication
+import com.zj.imcore.core.notification.NotificationManager
 import com.zj.imcore.im.obtain.MessageObtainUtils
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.im.transfer.DataTransferHub
@@ -42,7 +44,14 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
         private const val TITLE = "title"
         private const val NORMAL = "normal"
 
-        fun start(activity: Activity?, id: Long, dialogType: String, userId: Long, draft: String?, title: String) {
+        fun start(
+            activity: Activity?,
+            id: Long,
+            dialogType: String,
+            userId: Long,
+            draft: String?,
+            title: String
+        ) {
             val i = Intent(activity, ChatActivity::class.java)
             i.putExtra(SESSION_ID, id)
             i.putExtra(DIALOG_TYPE, dialogType)
@@ -50,6 +59,24 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
             i.putExtra(DRAFT, draft)
             i.putExtra(TITLE, title)
             activity?.startActivity(i)
+        }
+
+        fun start(
+            context: Context?,
+            id: Long,
+            dialogType: String,
+            userId: Long,
+            draft: String?,
+            title: String
+        ) {
+            val i = Intent(context, ChatActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            i.putExtra(SESSION_ID, id)
+            i.putExtra(DIALOG_TYPE, dialogType)
+            i.putExtra(USER_ID, userId)
+            i.putExtra(DRAFT, draft)
+            i.putExtra(TITLE, title)
+            context?.startActivity(i)
         }
     }
 
@@ -73,7 +100,8 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
         try {
             intent?.let {
                 if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
-                if (it.hasExtra(DIALOG_TYPE)) dialogType = it.getStringExtra(DIALOG_TYPE) ?: Constance.DIALOG_TYPE_P2P
+                if (it.hasExtra(DIALOG_TYPE)) dialogType =
+                    it.getStringExtra(DIALOG_TYPE) ?: Constance.DIALOG_TYPE_P2P
                 if (it.hasExtra(USER_ID)) userId = it.getLongExtra(USER_ID, 0)
                 if (it.hasExtra(DRAFT)) draft = it.getStringExtra(DRAFT) ?: ""
                 if (it.hasExtra(TITLE)) conversasionTitle = it.getStringExtra(TITLE) ?: ""
@@ -127,6 +155,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
 
     override fun initData() {
         register()
+        NotificationManager.singleton.get().removeNotification(sessionId.toString())
         DataTransferHub.queryMsgInDb(sessionId)
     }
 
@@ -153,19 +182,20 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
             titleView?.setTitle(it.name)
         }
 
-        this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).filterIn { it.dialogId == sessionId }.listen { data ->
-            if (!isFinishing) rvContent?.let {
-                it.adapter.data().add(NORMAL, data)
-                if (it.canScrollVertically(-1)) return@listen
-                it.stopScroll()
+        this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE)
+            .filterIn { it.dialogId == sessionId }.listen { data ->
+                if (!isFinishing) rvContent?.let {
+                    it.adapter.data().add(NORMAL, data)
+                    if (it.canScrollVertically(-1)) return@listen
+                    it.stopScroll()
 //                handler.removeMessages(1999)
 //                val p = it.adapter.data().maxCurDataPosition()
 //                val msg = Message.obtain()
 //                msg.what = 1999
 //                msg.arg1 = p
 //                handler.sendMessageDelayed(msg, 30)
+                }
             }
-        }
     }
 
     private val handler = Handler(Looper.getMainLooper()) {
@@ -207,11 +237,12 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
     }
 
     private fun getMessage(isNewer: Boolean, limit: Int, rl: RefreshLayout) {
-        val msg = if (isNewer) rvContent?.adapter?.data?.lastOrNull() else rvContent?.adapter?.data?.firstOrNull()
+        val msg =
+            if (isNewer) rvContent?.adapter?.data?.lastOrNull() else rvContent?.adapter?.data?.firstOrNull()
         if (msg == null) {
             rl.finishRefresh()
         } else {
-            MessageObtainUtils.fetchNewerMessage(msg, limit, false) { _, _ ->
+            MessageObtainUtils.fetchNewerMessage(msg, limit, isNewer) { _, _ ->
                 if (isNewer) rl.finishLoadMore() else rl.finishRefresh()
             }
         }

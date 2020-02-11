@@ -20,15 +20,17 @@ import androidx.core.app.NotificationCompat;
 import com.zj.imcore.PushReceiver;
 import com.zj.imcore.R;
 
+import static com.zj.imcore.PushReceiver.ACTION_PUSH_CLICK;
+import static com.zj.imcore.PushReceiver.ACTION_PUSH_DELETE;
+
 public class NotificationService extends ContextWrapper {
 
     public static final String DEFAULT_CHANNEL_ID = "DEFAULT_CHANNEL_ID";
     public static final String DEFAULT_CHANNEL_NAME = "DEFAULT_CHANNEL_NAME";
 
-
-    private String channelId;
-    private String channelName;
-    private String channelDescribe;
+    private String mChannelId;
+    private String mChannelName;
+    private String mChannelDescribe;
     private NotificationManager mManager;
 
     public NotificationService(Context context) {
@@ -39,18 +41,16 @@ public class NotificationService extends ContextWrapper {
         this(context, context.getString(channelId), context.getString(channelName), "");
     }
 
-
     public NotificationService(Context context, @StringRes int channelId, @StringRes int channelName, @StringRes int channelDescribe) {
         this(context, context.getString(channelId), context.getString(channelName), context.getString(channelDescribe));
     }
 
     public NotificationService(Context context, String channelId, String channelName, String channelDescribe) {
         super(context);
-        this.channelId = channelId;
-        this.channelName = channelName;
-        this.channelDescribe = channelDescribe;
+        this.mChannelId = channelId;
+        this.mChannelName = channelName;
+        this.mChannelDescribe = channelDescribe;
     }
-
 
     private NotificationManager getManager() {
         if (mManager == null) {
@@ -59,26 +59,26 @@ public class NotificationService extends ContextWrapper {
         return mManager;
     }
 
-    public void sendNotification(String title, String content) {
-        sendNotification(title, content, true, true);
+    public void sendNotification(int notificationId, String dialogId, String title, String content) {
+        sendNotification(notificationId, dialogId, title, content, true, true);
     }
 
-    public void sendNotification(String title, String content, boolean voice, boolean vibration) {
+    public void sendNotification(int notificationId, String dialogId, String title, String content, boolean voice, boolean vibration) {
         Notification notification;
         if (Build.VERSION.SDK_INT >= 26) {
-            createNotificationChannel(channelId, channelName, channelDescribe);
-            notification = getNotification_26(channelId, title, content).build();
+            createNotificationChannel();
+            notification = getNotification_26(dialogId, title, content).build();
         } else {
-            notification = getNotification_25(title, content).build();
+            notification = getNotification_25(dialogId, title, content).build();
         }
 
-        getManager().notify((int) (System.currentTimeMillis() / 1000), notification);
+        getManager().notify(notificationId, notification);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void createNotificationChannel(String channelId, String channelName, String channelDescribe) {
-        NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
-        channel.setDescription(channelDescribe);
+    public void createNotificationChannel() {
+        NotificationChannel channel = new NotificationChannel(this.mChannelId, this.mChannelName, NotificationManager.IMPORTANCE_HIGH);
+        channel.setDescription(this.mChannelDescribe);
 
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);//设置是否应在锁定屏幕上显示此频道的通知
         channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 600});//设置震动频率
@@ -94,14 +94,15 @@ public class NotificationService extends ContextWrapper {
         getManager().createNotificationChannel(channel);
     }
 
-    public NotificationCompat.Builder getNotification_25(String title, String content) {
+    public NotificationCompat.Builder getNotification_25(String key, String title, String content) {
         NotificationCompat.BigTextStyle style1 = new NotificationCompat.BigTextStyle();
         style1.setBigContentTitle(title);
         style1.bigText(content);
         return new NotificationCompat.Builder(getApplicationContext())
                 .setContentTitle(title)
                 .setContentText(content)
-                .setContentIntent(getIntent())
+                .setContentIntent(getClickIntent(key))
+                .setDeleteIntent(getDeleteIntent())
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
@@ -111,24 +112,36 @@ public class NotificationService extends ContextWrapper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Notification.Builder getNotification_26(String id, String title, String content) {
-
-        return new Notification.Builder(getApplicationContext(), id)
+    public Notification.Builder getNotification_26(String key, String title, String content) {
+        return new Notification.Builder(getApplicationContext(), this.mChannelId)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setPriority(Notification.PRIORITY_MAX)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                .setContentIntent(getIntent())
+                .setContentIntent(getClickIntent(key))
+                .setDeleteIntent(getDeleteIntent())
                 .setNumber(1)
                 .setAutoCancel(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setVibrate(new long[]{0, 200, 100, 200});
     }
 
-    private PendingIntent getIntent() {
+    private PendingIntent getClickIntent(String key) {
         Intent clickIntent = new Intent(getBaseContext(), PushReceiver.class); //点击通知之后要发送的广播
+        clickIntent.setAction(ACTION_PUSH_CLICK);
+        clickIntent.putExtra("key", key);
         return PendingIntent.getBroadcast(this.getApplicationContext(), 100, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private PendingIntent getDeleteIntent() {
+        Intent clickIntent = new Intent(getBaseContext(), PushReceiver.class); //点击通知之后要发送的广播
+        clickIntent.setAction(ACTION_PUSH_DELETE);
+        return PendingIntent.getBroadcast(this.getApplicationContext(), 100, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public void cancel(int id) {
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(id);
     }
 }
 

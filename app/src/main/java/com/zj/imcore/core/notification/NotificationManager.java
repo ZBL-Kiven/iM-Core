@@ -11,9 +11,12 @@ import com.cf.im.db.repositorys.DialogRepository;
 import com.zj.base.BaseApplication;
 import com.zj.base.utils.storage.sp.SPUtils_Proxy;
 import com.zj.imcore.R;
-import com.zj.imcore.base.FCApplication;
 import com.zj.imcore.ui.chat.ChatActivity;
 import com.zj.model.chat.MsgInfo;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class NotificationManager {
 
@@ -27,6 +30,9 @@ public class NotificationManager {
     private Handler mHandler;
 
     private Context mContext;
+
+    private AtomicInteger mNotificationId = new AtomicInteger(1000);
+    private Map<String, Integer> mNotificationIds = new ConcurrentHashMap<>();
 
     private NotificationManager() {
         mHandler = new Handler(Looper.getMainLooper());
@@ -68,26 +74,43 @@ public class NotificationManager {
         DialogRepository.queryByDialogId(info.getDialogId(), dialogBean -> {
             //判断当前消息是否是不提示状态 且消息不属于@ 本人
             String title = dialogBean != null ? dialogBean.getTitle() + "" : info.getName();
-
-
-
-            mHandler.post(new Task(title, info.getName() + ": " + info.getText()));
+            mHandler.post(new Task(info.getDialogId(), title, info.getName() + ": " + info.getText()));
         });
     }
 
     private class Task implements Runnable {
 
-        private String taskTitle;
-        private String taskContent;
+        private final long key;
+        private final String taskTitle;
+        private final String taskContent;
 
-        public Task(String taskTitle, String taskContent) {
+        public Task(long notificationId, String taskTitle, String taskContent) {
+            this.key = notificationId;
             this.taskTitle = taskTitle;
             this.taskContent = taskContent;
         }
 
         @Override
         public void run() {
-            messageNotification.sendNotification(taskTitle, taskContent);
+            Integer notificationId = null;
+            String k = String.valueOf(this.key);
+            if (mNotificationIds.containsKey(k)) {
+                notificationId = mNotificationIds.get(k);
+            }
+            if (notificationId == null) {
+                notificationId = mNotificationId.getAndIncrement();
+                mNotificationIds.put(String.valueOf(key), mNotificationId.intValue());
+            }
+            messageNotification.sendNotification(notificationId, String.valueOf(key), taskTitle, taskContent);
+        }
+    }
+
+    public void removeNotification(String key) {
+        if (mNotificationIds.containsKey(key)) {
+            Integer id = mNotificationIds.get(key);
+            if (id != null) {
+                messageNotification.cancel(id);
+            }
         }
     }
 
