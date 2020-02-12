@@ -8,6 +8,7 @@ import android.os.Looper
 import android.os.Message
 import android.view.KeyEvent
 import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -97,6 +98,10 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
     }
 
     override fun initBase() {
+        initBaseIntent(intent)
+    }
+
+    fun initBaseIntent(intent: Intent?) {
         try {
             intent?.let {
                 if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
@@ -114,6 +119,12 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
             finish()
             return
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        initBaseIntent(intent)
+        initData()
     }
 
     override fun initView() {
