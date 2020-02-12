@@ -4,13 +4,13 @@ import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
 import com.cf.im.db.domain.impl._MessageBeanImpl
 import com.cf.im.db.repositorys.MessageRepository
+import com.cf.im.db.utils.DateUtils
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.ui.dispatcher.UIStore
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.core.notification.NotificationManager
 import com.zj.imcore.enums.MsgSubtype
 import com.zj.imcore.enums.MsgType
-import com.zj.imcore.utils.unity.DateUtils
 import com.zj.model.chat.MsgInfo
 import com.zj.model.interfaces.MessageIn
 import com.zj.model.mod.SendMessageBean
@@ -22,7 +22,6 @@ object MsgInfoTransfer {
         val msg = JSON.parseObject(d["data"].toString(), SendMessageBean::class.java)
         msg.callId = if (callId.isNullOrEmpty()) d["call_id"].toString() else callId
         msg.sendMsgState = sendingState?.type ?: 0
-        msg.localCreateTs = System.currentTimeMillis()
 
         MessageRepository.insertOrUpdate(JSON.toJSONString(msg)) {
             val info = transform(it)

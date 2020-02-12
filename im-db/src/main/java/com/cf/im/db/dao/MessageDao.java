@@ -3,6 +3,7 @@ package com.cf.im.db.dao;
 import androidx.room.Query;
 
 import com.cf.im.db.domain.MessageBean;
+import com.cf.im.db.domain.impl._MessageBeanImpl;
 
 import java.util.List;
 
@@ -51,6 +52,15 @@ public interface MessageDao extends IDao<MessageBean> {
     @Query("select kId from messagebean where callId = :callId or id = :serviceId limit 1")
     int queryKIdByIdOrCallId(String callId, long serviceId);
 
+    /**
+     * 通过callId 或者 serviceId 查询消息主键Id
+     *
+     * @param callId    自发消息Id
+     * @param serviceId 服务器消息Id
+     * @return 消息主键Id（自增Id）
+     */
+    @Query("select * from messagebean where callId = :callId or id = :serviceId limit 1")
+    MessageBean queryByIdOrCallId(String callId, long serviceId);
 
     /**
      * 通过callId 或者 serviceId 查询消息主键Id

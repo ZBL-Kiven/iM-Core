@@ -108,7 +108,9 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
     }
 
     override fun equals(other: Any?): Boolean {
-        return if (other !is MsgInfo) false else (impl.key() >= 0 && impl.key() == other.impl.key()) || (!impl.callId().isNullOrEmpty() && impl.callId() == other.impl.callId())
+        return if (other !is MsgInfo) false else {
+            (impl.key() >= 0 && impl.key() == other.impl.key()) || (!impl.callId().isNullOrEmpty() && impl.callId() == other.impl.callId())
+        }
     }
 
     override fun hashCode(): Int {

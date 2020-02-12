@@ -1,12 +1,14 @@
 package com.zj.imcore.ui.chat
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.view.KeyEvent
 import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -20,6 +22,7 @@ import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 import com.zj.model.chat.MsgInfo
 import com.zj.imcore.base.FCApplication
+import com.zj.imcore.core.notification.NotificationManager
 import com.zj.imcore.im.obtain.MessageObtainUtils
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.im.transfer.DataTransferHub
@@ -51,6 +54,17 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
             i.putExtra(TITLE, title)
             activity?.startActivity(i)
         }
+
+        fun start(context: Context?, id: Long, dialogType: String, userId: Long, draft: String?, title: String) {
+            val i = Intent(context, ChatActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            i.putExtra(SESSION_ID, id)
+            i.putExtra(DIALOG_TYPE, dialogType)
+            i.putExtra(USER_ID, userId)
+            i.putExtra(DRAFT, draft)
+            i.putExtra(TITLE, title)
+            context?.startActivity(i)
+        }
     }
 
     private var dialogType = ""
@@ -70,6 +84,10 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
     }
 
     override fun initBase() {
+        initBaseIntent(intent)
+    }
+
+    private fun initBaseIntent(intent: Intent?) {
         try {
             intent?.let {
                 if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
@@ -86,6 +104,14 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
             finish()
             return
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        initBaseIntent(intent)
+        rvContent?.adapter?.clear()
+        rvContent?.adapter?.notifyDataSetChanged()
+        initData()
     }
 
     override fun initView() {
@@ -127,6 +153,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
 
     override fun initData() {
         register()
+        NotificationManager.singleton.get().removeNotification(sessionId.toString())
         DataTransferHub.queryMsgInDb(sessionId)
     }
 
@@ -211,7 +238,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
         if (msg == null) {
             rl.finishRefresh()
         } else {
-            MessageObtainUtils.fetchNewerMessage(msg, limit, false) { _, _ ->
+            MessageObtainUtils.fetchNewerMessage(msg, limit, isNewer) { _, _ ->
                 if (isNewer) rl.finishLoadMore() else rl.finishRefresh()
             }
         }
