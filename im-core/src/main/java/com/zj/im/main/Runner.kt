@@ -1,6 +1,7 @@
 package com.zj.im.main
 
 import android.app.Application
+import com.zj.im.BuildConfig
 import com.zj.im.chat.core.DataStore
 import com.zj.im.chat.enums.RuntimeEfficiency
 import com.zj.im.chat.enums.SendMsgState
@@ -210,6 +211,7 @@ internal abstract class Runner<T> : RunningObserver(), OnStatus, (Boolean, BaseM
                 if (!isFinishing(curRunningKey)) initHandler()
                 else printInFile("ChatBase.IM.LooperInterrupted", " the MsgLooper was stopped by SDK shutDown")
             }
+            else -> if (BuildConfig.DEBUG) throw e
         }
         imi?.postError(e)
     }

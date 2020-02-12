@@ -40,7 +40,7 @@ internal class SendingPool<T>(private val onStateChange: OnStatus) {
         sendMsgQueue.getFirst { it.ignoreConnecting }?.let {
             return it
         }
-        if (! DataReceivedDispatcher.isDataEnable()) {
+        if (!DataReceivedDispatcher.isDataEnable()) {
             sendMsgQueue.forEach {
                 it.joinInTop = true
                 DataReceivedDispatcher.pushData(it)

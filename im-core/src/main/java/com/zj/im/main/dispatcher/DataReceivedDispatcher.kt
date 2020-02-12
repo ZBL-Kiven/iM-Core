@@ -69,6 +69,11 @@ internal object DataReceivedDispatcher {
     }
 
     fun onSocketStateChange(connState: SocketState) {
+        val con = connState == SocketState.CONNECTED_ERROR || connState == SocketState.NETWORK_STATE_CHANGE
+        val rec = StatusHub.curSocketState.canConnect()
+        if (con && rec) {
+            getServer("socket need to reconnect")?.reConnect()
+        }
         StatusHub.curSocketState = connState
         getClient("on socket state changed")?.let {
             chatBase?.notify()?.onSocketStatusChanged(connState)

@@ -26,8 +26,9 @@ abstract class ServerHub<T> {
 
     abstract fun closeSocket(case: String)
 
+    abstract fun reConnect()
+
     internal fun sendToSocket(params: T, callId: String, callBack: SendingCallBack) {
-        println("----- send ==> $callId")
         val size = send(params, callId, callBack)
         if (size > 0) NetRecordUtils.recordLastModifySendData(size)
     }

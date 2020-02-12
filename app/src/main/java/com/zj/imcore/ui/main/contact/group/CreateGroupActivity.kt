@@ -113,7 +113,7 @@ class CreateGroupActivity : FCActivity() {
             return@Handler false
         }
         rvContent?.adapter = adapter
-        addReceiveObserver<MembersEventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).listen {
+        addReceiveObserver<MembersEventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).listen { it, s, c ->
             log(it.case)
             getData(false)
         }

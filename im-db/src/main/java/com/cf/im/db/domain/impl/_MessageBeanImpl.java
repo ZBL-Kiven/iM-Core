@@ -166,7 +166,7 @@ public class _MessageBeanImpl implements MessageIn {
 
     @Override
     public int sendingState() {
-        return 0;
+        return message.sendMsgState;
     }
 
     @Override

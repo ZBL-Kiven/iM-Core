@@ -18,12 +18,7 @@ import kotlin.random.Random
 
 object MsgInfoTransfer {
 
-    fun transforMsg(
-        d: JSONObject,
-        callId: String?,
-        sendingState: SendMsgState?,
-        onFinish: () -> Unit
-    ) {
+    fun transforMsg(d: JSONObject, callId: String?, sendingState: SendMsgState?, onFinish: () -> Unit) {
         val msg = JSON.parseObject(d["data"].toString(), SendMessageBean::class.java)
         msg.callId = if (callId.isNullOrEmpty()) d["call_id"].toString() else callId
         msg.sendMsgState = sendingState?.type ?: 0

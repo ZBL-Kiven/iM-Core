@@ -1,4 +1,5 @@
 package com.zj.ui.dispatcher
+
 import com.zj.ui.log
 
 object UIStore {
@@ -22,16 +23,16 @@ object UIStore {
      *
      * only supported type Data or List<Data>
      * */
-    fun postData(data: Any?) {
+    fun postData(data: Any?, payload: String? = null) {
         if (data == null) {
             log("why are you post a null object?")
             return
         }
         msgObservers?.forEach {
-            if (it.post(data)) {
-//                debugLog("the observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class successful and received the data")
+            if (it.post(data, payload)) {
+                //                debugLog("the observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class successful and received the data")
             } else {
-//                debugLog("invalid observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class has abandon the data ${data.javaClass.simpleName}.class")
+                //                debugLog("invalid observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class has abandon the data ${data.javaClass.simpleName}.class")
             }
         }
     }
