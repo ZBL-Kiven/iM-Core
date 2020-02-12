@@ -101,7 +101,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
         initBaseIntent(intent)
     }
 
-    fun initBaseIntent(intent: Intent?) {
+    private fun initBaseIntent(intent: Intent?) {
         try {
             intent?.let {
                 if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
@@ -124,6 +124,8 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         initBaseIntent(intent)
+        rvContent?.adapter?.clear()
+        rvContent?.adapter?.notifyDataSetChanged()
         initData()
     }
 
