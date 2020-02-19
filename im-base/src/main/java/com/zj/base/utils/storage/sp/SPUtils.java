@@ -20,5 +20,5 @@ class SPUtils {
     public static String userUpdateTs;
     public static Long expiresIn;
 
-    public static Long memberSyncSince;
+    public static Long dialogSyncSince;
 }

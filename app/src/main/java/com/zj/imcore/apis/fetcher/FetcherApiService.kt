@@ -6,8 +6,8 @@ import retrofit2.http.*
 
 interface FetcherApiService {
 
-    @GET("/message/v1/teams/cityfruit/recent_dialogs")
-    fun fetchDialogs(): Observable<ResponseBody>
+    @GET("/relation/v1/incremental_dialogs")
+    fun fetchDialogs(@Query("since_ts") ts: Long): Observable<ResponseBody>
 
     @GET("/message/v1/teams/cityfruit/dialogs/{dialogId}/newer_messages")
     fun fetchNewerMsg(@Path("dialogId") dialogId: Long, @Query("message_id") id: Long, @Query("limit") limit: Int): Observable<ResponseBody?>

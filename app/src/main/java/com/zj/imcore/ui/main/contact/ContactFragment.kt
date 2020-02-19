@@ -101,7 +101,7 @@ class ContactFragment : BaseLinkageFragment() {
             rvContent?.adapter = adapter
         } ?: loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_system_error_no_context))
         addReceiveObserver<MembersEventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).listen { it, s, c ->
-            log(it.case)
+            log(it?.case?:"")
             getData(false)
         }
     }

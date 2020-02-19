@@ -17,8 +17,8 @@ object FetcherApi {
         return getDefaultApi(20000)
     }
 
-    fun syncDialogs(completed: (Boolean, HttpException?) -> Unit): BaseRetrofit.RequestCompo {
-        return get().call({ it.fetchDialogs() }) { isSuccess: Boolean, data: ResponseBody?, throwable: HttpException? ->
+    fun syncDialogs(ts: Long, completed: (Boolean, HttpException?) -> Unit): BaseRetrofit.RequestCompo {
+        return get().call({ it.fetchDialogs(ts) }) { isSuccess: Boolean, data: ResponseBody?, throwable: HttpException? ->
             if (isSuccess) {
                 val d = data?.string()
                 DialogRepository.insertOrUpdates(d) {

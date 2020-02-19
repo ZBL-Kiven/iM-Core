@@ -86,7 +86,7 @@ abstract class ImageCacheUtil(private val context: Context, private val w: Int, 
             val cacheWidth = (w * quality).toInt()
             val cacheHeight = (h * quality).toInt()
             loadImgForOriginal(cacheOriginalPath, cacheWidth, cacheHeight, fillType) { bmp ->
-                if (bmp == null) {
+                if (bmp == null || bmp.isRecycled) {
                     onGot("")
                 } else imageSaverService.submit(ImageSaveTask(bmp, cacheDir, fileName) {
                     onGot.invoke(it)
