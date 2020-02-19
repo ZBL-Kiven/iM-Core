@@ -33,9 +33,14 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
     private fun initData() {
         adapter = ConversationAdapter(this::invoke)
         rvContent?.adapter = adapter
-        this.addReceiveObserver<DialogInfo>(Constance.REG_CODE_COVERSATION_FRAGMENT_DIALOG).listen { it, s, c ->
+        this.addReceiveObserver<DialogInfo>(Constance.REG_CODE_COVERSATION_FRAGMENT_DIALOG).listen { d, lst, payload ->
             if (activity?.isFinishing == true) return@listen
-            adapter?.data()?.add(normal, it)
+            if (d != null) {
+                adapter?.data()?.add(normal, d)
+            }
+            if (!lst.isNullOrEmpty()) {
+                adapter?.data()?.addAll(normal, lst)
+            }
         }
     }
 

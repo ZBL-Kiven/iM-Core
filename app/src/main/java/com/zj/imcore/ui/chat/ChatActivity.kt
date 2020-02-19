@@ -180,18 +180,26 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
             titleView?.setTitle(it.name)
         }
 
-        this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).filterIn { it, _, _ -> it.dialogId == sessionId }.listen { data, s, c ->
-            if (!isFinishing) rvContent?.let {
-                it.adapter.data().add(NORMAL, data)
-                if (it.canScrollVertically(-1)) return@listen
-                it.stopScroll()
-                //                handler.removeMessages(1999)
-                //                val p = it.adapter.data().maxCurDataPosition()
-                //                val msg = Message.obtain()
-                //                msg.what = 1999
-                //                msg.arg1 = p
-                //                handler.sendMessageDelayed(msg, 30)
+        this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).filterIn { it, _ -> it.dialogId == sessionId }.listen { data, lst, payload ->
+
+            if (data != null) {
+                println("-----   1111 ")
             }
+            if (!lst.isNullOrEmpty()) {
+                println("-----   2222  ${lst.size} ")
+            }
+
+            //            if (!isFinishing) rvContent?.let {
+            //                it.adapter.data().add(NORMAL, data)
+            //                if (it.canScrollVertically(-1)) return@listen
+            //                it.stopScroll()
+            //                //                handler.removeMessages(1999)
+            //                //                val p = it.adapter.data().maxCurDataPosition()
+            //                //                val msg = Message.obtain()
+            //                //                msg.what = 1999
+            //                //                msg.arg1 = p
+            //                //                handler.sendMessageDelayed(msg, 30)
+            //            }
         }
     }
 

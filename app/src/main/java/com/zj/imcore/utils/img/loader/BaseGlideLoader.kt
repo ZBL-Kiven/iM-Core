@@ -30,7 +30,7 @@ abstract class BaseGlideLoader(context: Context, w: Int, h: Int, quality: Float,
             }
 
             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                onResult(resource)
+                onResult(if (resource.isRecycled) null else resource)
             }
         })
     }

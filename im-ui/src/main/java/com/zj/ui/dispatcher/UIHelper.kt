@@ -14,57 +14,52 @@ import com.zj.ui.castNotSafety
 import com.zj.ui.log
 import java.io.Serializable
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 import java.util.concurrent.Executors
 
-enum class Category : Serializable {
+private class Category(val type: Int, var index: Int = 0, var end: Int = 0) : Serializable {
 
-    SINGLE, DATA;
-
-    var index: Int = 0
-    var end: Int = 0
-
-    fun setListDataIndexing(i: Int, i1: Int): Category {
-        DATA.index = i
-        DATA.end = i1
-        return this@Category
+    companion object {
+        const val SINGLE = 1
+        const val DATA = 2
     }
 }
 
-data class CacheData<R>(val d: R, val s: String?, val c: Category)
+data class CacheData<R : Any>(val d: R?, val lst: List<R>?, val payload: String?)
 
-inline fun <reified T, reified R> LifecycleOwner.addTransferObserver(uniqueCode: Any): UIHandlerCreator<T, R> {
+inline fun <reified T : Any, reified R : Any> LifecycleOwner.addTransferObserver(uniqueCode: Any): UIHandlerCreator<T, R> {
     return UIHandlerCreator(this, uniqueCode, T::class.java, R::class.java)
 }
 
-inline fun <reified T> LifecycleOwner.addReceiveObserver(uniqueCode: Any): UIHelperCreator<T, T> {
+inline fun <reified T : Any> LifecycleOwner.addReceiveObserver(uniqueCode: Any): UIHelperCreator<T, T> {
     return UIHelperCreator(this, uniqueCode, T::class.java, T::class.java, null)
 }
 
-class UIHandlerCreator<T, R>(private val owner: LifecycleOwner, private val uniqueCode: Any, private val inCls: Class<T>, private val outCls: Class<R>) {
+class UIHandlerCreator<T : Any, R : Any>(private val owner: LifecycleOwner, private val uniqueCode: Any, private val inCls: Class<T>, private val outCls: Class<R>) {
     fun addHandler(cls: Class<DataHandler<T, R>>): UIHelperCreator<T, R> {
         return UIHelperCreator(owner, uniqueCode, inCls, outCls, cls)
     }
 }
 
-class UIHelperCreator<T, R>(private val owner: LifecycleOwner, private val uniqueCode: Any, internal val inCls: Class<T>, internal val outCls: Class<R>, internal val handlerCls: Class<DataHandler<T, R>>?) {
+class UIHelperCreator<T : Any, R : Any>(private val owner: LifecycleOwner, private val uniqueCode: Any, internal val inCls: Class<T>, internal val outCls: Class<R>, internal val handlerCls: Class<DataHandler<T, R>>?) {
 
-    internal var filterIn: ((T, String?, Category) -> Boolean)? = null
-    internal var filterOut: ((R, String?, Category) -> Boolean)? = null
-    private var onDataReceived: ((R, String?, Category) -> Unit)? = null
+    internal var filterIn: ((T, String?) -> Boolean)? = null
+    internal var filterOut: ((R, String?) -> Boolean)? = null
+    private var onDataReceived: ((R?, List<R>?, String?) -> Unit)? = null
     private var isPaused: Boolean = false
     private val cacheDatas = hashSetOf<CacheData<R>>()
 
-    fun filterIn(filter: (T, String?, Category) -> Boolean): UIHelperCreator<T, R> {
+    fun filterIn(filter: (T, String?) -> Boolean): UIHelperCreator<T, R> {
         this.filterIn = filter
         return this
     }
 
-    fun filterOut(filter: (R, String?, Category) -> Boolean): UIHelperCreator<T, R> {
+    fun filterOut(filter: (R, String?) -> Boolean): UIHelperCreator<T, R> {
         this.filterOut = filter
         return this
     }
 
-    fun listen(onDataReceived: (R, String?, Category) -> Unit) {
+    fun listen(onDataReceived: (R?, List<R>?, String?) -> Unit) {
         this.onDataReceived = onDataReceived
         UIOptions(owner, uniqueCode, this) { d, s, c ->
             cacheDatas.add(CacheData(d, s, c))
@@ -76,7 +71,7 @@ class UIHelperCreator<T, R>(private val owner: LifecycleOwner, private val uniqu
 
     private fun notifyDataChanged() {
         cacheDatas.forEach {
-            onDataReceived?.invoke(it.d, it.s, it.c)
+            onDataReceived?.invoke(it.d, it.lst, it.payload)
         }
         cacheDatas.clear()
     }
@@ -99,20 +94,30 @@ class UIHelperCreator<T, R>(private val owner: LifecycleOwner, private val uniqu
     }
 }
 
-internal class UIOptions<T, R>(owner: LifecycleOwner, private val uniqueCode: Any, private val creator: UIHelperCreator<T, R>, result: (R, String?, Category) -> Unit) : LifecycleObserver {
+internal class UIOptions<T : Any, R : Any>(owner: LifecycleOwner, private val uniqueCode: Any, private val creator: UIHelperCreator<T, R>, private val result: (R?, List<R>?, String?) -> Unit) : LifecycleObserver {
 
     private val pal = "payload"
     private val cag = "category"
     private val handleWhat = 0x1101
-    private val executors = Executors.newFixedThreadPool(5)
+    private val executors = Executors.newSingleThreadExecutor()
+    private val cacheList: ArrayList<R> = arrayListOf()
+
     private val handler = Handler(Looper.getMainLooper()) {
         if (it.what == handleWhat) {
             val b = it.data
             val payload = if (b.containsKey(pal)) b.getString(pal) else null
-            val category = b.getSerializable(cag) as Category
-            castNotSafety<Any?, R?>(it.obj)?.let { r ->
-                result(r, payload, category)
-            } ?: log("the data ${it.obj} was handled but null result in cast transform")
+            when (b.getInt(cag)) {
+                Category.SINGLE -> {
+                    castNotSafety<Any?, R?>(it.obj)?.let { r ->
+                        result(r, null, payload)
+                    } ?: log("the data ${it.obj} was handled but null result in cast transform")
+                }
+                Category.DATA -> {
+                    castNotSafety<Any?, List<R>?>(it.obj)?.let { lst ->
+                        result(null, lst, payload)
+                    } ?: log("the data ${it.obj} was handled but null list result in cast transform")
+                }
+            }
         }
         return@Handler false
     }
@@ -170,7 +175,7 @@ internal class UIOptions<T, R>(owner: LifecycleOwner, private val uniqueCode: An
             }
         }
         if (data.javaClass == creator.inCls || data.javaClass.simpleName == creator.inCls.simpleName) {
-            postData(data as? T, payload, Category.SINGLE)
+            postData(data as? T, payload, Category(Category.SINGLE))
             return true
         }
         return false
@@ -179,7 +184,7 @@ internal class UIOptions<T, R>(owner: LifecycleOwner, private val uniqueCode: An
     private fun postListData(data: java.util.ArrayList<T>?, payload: String?) {
         val size = data?.size ?: 0
         data?.forEachIndexed { i, d ->
-            postData(d, payload, Category.DATA.setListDataIndexing(i, size))
+            postData(d, payload, Category(Category.DATA, i, size))
         }
     }
 
@@ -188,19 +193,41 @@ internal class UIOptions<T, R>(owner: LifecycleOwner, private val uniqueCode: An
             log("why are you post a null data and also register a type-null observer?");return
         }
         executors.submit(UIExecutor(creator, data, payload, category) { d, s, c ->
-            handler.sendMessage(Message.obtain().apply {
-                what = handleWhat
-                obj = d
-                val b = Bundle()
-                if (!payload.isNullOrEmpty()) b.putString(pal, s)
-                b.putSerializable(cag, c)
-                this.data = b
-            })
+            dispatchData(d, s, c)
+        })
+    }
+
+    private fun dispatchData(d: R, s: String?, c: Category) {
+        when (c.type) {
+            Category.DATA -> {
+                if (c.index > c.end) throw IllegalArgumentException("Isn’t it strange that the index is larger than the size?")
+                if (c.index <= c.end) {
+                    if (!cacheList.contains(d)) cacheList.add(d)
+                }
+                if (c.index + 1 == c.end) {
+                    postToMain(ArrayList(cacheList), s, c.type)
+                    cacheList.clear()
+                }
+            }
+            Category.SINGLE -> {
+                postToMain(d, s, c.type)
+            }
+        }
+    }
+
+    private fun postToMain(data: Any, payload: String?, c: Int) {
+        handler.sendMessage(Message.obtain().apply {
+            what = handleWhat
+            obj = data
+            val b = Bundle()
+            if (!payload.isNullOrEmpty()) b.putString(pal, payload)
+            b.putInt(cag, c)
+            this.data = b
         })
     }
 }
 
-internal class UIExecutor<T, R>(private val creator: UIHelperCreator<T, R>, private val data: T, private val payload: String?, private val category: Category, private val finishd: (R, String?, Category) -> Unit) : Runnable {
+private class UIExecutor<T : Any, R : Any>(private val creator: UIHelperCreator<T, R>, private val data: T, private val payload: String?, private val category: Category, private val finishd: (R, String?, Category) -> Unit) : Runnable {
 
     override fun run() {
         try {
@@ -214,7 +241,7 @@ internal class UIExecutor<T, R>(private val creator: UIHelperCreator<T, R>, priv
 
     private fun postData(data: T): R? {
         return creator.filterIn?.let {
-            if (it.invoke(data, payload, category)) postFilterInData(data)
+            if (it.invoke(data, payload)) postFilterInData(data)
             else {
                 log("the data $data may abandon with filter in")
                 return@postData null
@@ -229,7 +256,7 @@ internal class UIExecutor<T, R>(private val creator: UIHelperCreator<T, R>, priv
 
     private fun postHandlerData(data: R): R? {
         return (creator.filterOut?.let {
-            if (it.invoke(data, payload, category)) data
+            if (it.invoke(data, payload)) data
             else {
                 log("the data $data may abandon with filter out")
                 return@postHandlerData null

@@ -1,82 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:background="@color/chat_background"
         android:layout_height="match_parent">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content"
-            android:background="@color/color_primary">
+            android:layout_height="wrap_content">
 
-        <EditText
-                android:id="@+id/app_fragment_contact_et_search"
-                style="@style/baseEtStyle.SingleLine"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/app_search_bar_height"
-                android:textSize="@dimen/app_et_text_size_14"
-                android:textColorHint="@color/color_primary_disable"
-                android:drawablePadding="6dp"
-                android:drawableStart="@drawable/app_contact_icon_search"
-                android:paddingStart="5dp"
-                android:paddingEnd="10dp"
-                android:paddingTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:paddingBottom="5dp"
-                android:background="@drawable/app_base_click_bg_btn_corners"
-                android:layout_marginStart="10dp"
-                android:hint="@string/app_contact_search"
-                tools:ignore="Autofill,TextFields"/>
-
-        <ImageView
-                android:id="@+id/app_fragment_contact_v_search_clear"
-                android:layout_width="@dimen/app_search_bar_height"
-                android:layout_height="@dimen/app_search_bar_height"
-                android:padding="5dp"
-                android:src="@mipmap/app_contact_icon_search_clear"
-                tools:ignore="ContentDescription"/>
-    </LinearLayout>
-
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
-
-        <TextView
-                android:id="@+id/app_fragment_contact_tv_my_groups"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="@string/app_fragment_contact_my_groups"
-                android:background="@color/color_primary_light_grey_dark"
-                android:drawableEnd="@mipmap/app_common_icon_next"
-        />
-
-        <com.zj.list.groupedadapter.widget.StickyHeaderLayout
-                android:layout_width="match_parent"
-                android:layout_below="@id/app_fragment_contact_tv_my_groups"
-                android:layout_height="match_parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/app_fragment_contact_rv"
-                    android:paddingTop="5dp"
-                    android:clipToPadding="false"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:orientation="vertical">
+            <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollbars="none"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:overScrollMode="never"/>
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_primary">
 
-        </com.zj.list.groupedadapter.widget.StickyHeaderLayout>
+                <EditText
+                        android:id="@+id/app_fragment_contact_et_search"
+                        style="@style/baseEtStyle.SingleLine"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/app_search_bar_height"
+                        android:textSize="@dimen/app_et_text_size_14"
+                        android:textColorHint="@color/color_primary_disable"
+                        android:drawablePadding="6dp"
+                        android:drawableStart="@drawable/app_contact_icon_search"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:background="@drawable/app_base_click_bg_btn_corners"
+                        android:layout_marginStart="10dp"
+                        android:hint="@string/app_contact_search"
+                        tools:ignore="Autofill,TextFields"/>
 
-        <com.zj.loading.BaseLoadingView
-                style="@style/BaseLoadingViewStyle"
-                android:id="@+id/app_fragment_contact_loading"/>
+                <ImageView
+                        android:id="@+id/app_fragment_contact_v_search_clear"
+                        android:layout_width="@dimen/app_search_bar_height"
+                        android:layout_height="@dimen/app_search_bar_height"
+                        android:padding="5dp"
+                        android:src="@mipmap/app_contact_icon_search_clear"
+                        tools:ignore="ContentDescription"/>
+            </LinearLayout>
 
-    </RelativeLayout>
+            <TextView
+                    android:id="@+id/app_fragment_contact_tv_my_groups"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:padding="10dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/color_primary"
+                    android:text="@string/app_fragment_contact_my_groups"
+                    android:background="@color/color_primary_light_grey_dark"
+                    android:drawableEnd="@mipmap/app_common_icon_next"/>
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-</LinearLayout>
+    <com.zj.list.groupedadapter.widget.StickyHeaderLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/app_fragment_contact_rv"
+                android:clipToPadding="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:paddingBottom="20dp"
+                android:clipChildren="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:overScrollMode="never"/>
+
+    </com.zj.list.groupedadapter.widget.StickyHeaderLayout>
+
+    <com.zj.loading.BaseLoadingView
+            style="@style/BaseLoadingViewStyle"
+            tools:visibility="gone"
+            android:id="@+id/app_fragment_contact_loading"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
