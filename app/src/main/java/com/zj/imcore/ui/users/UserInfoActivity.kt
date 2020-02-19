@@ -9,8 +9,6 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.cf.im.db.domain.MemberBean
 import com.cf.im.db.repositorys.MemberRepository
-import com.zj.album.AlbumIns
-import com.zj.album.options.AlbumOptions
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.BaseTitleView
 import com.zj.ui.mainHandler
@@ -85,7 +83,7 @@ class UserInfoActivity : FCActivity() {
                 Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default)
                     .into(view)
             }
-            tvUserNickName?.text = ""
+            tvUserNickName?.text = member.nickname ?: ""
             tvUserName?.text = member.name ?: ""
             tvUserDescribe?.text = member.describe ?: ""
             btnSend?.visibility =
@@ -116,7 +114,7 @@ class UserInfoActivity : FCActivity() {
                 getString(R.string.app_act_user_info_user_nickname_hint),
                 tvUserNickName?.text.toString(),
                 1,
-                EditTextActivity.TYPE_USER_NIKE_NAME
+                EditTextActivity.TYPE_USER_NICK_NAME
             )
         }
 
@@ -137,17 +135,16 @@ class UserInfoActivity : FCActivity() {
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
-            //设置用户头像
-            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1)
-                .imgSizeRange(1024, Long.MAX_VALUE).start { isSelected, data ->
-                    if (isSelected && !data.isNullOrEmpty()) {
-                        ivUserAvatar?.let {
-                            Glide.with(it).load(data[0].path)
-                                .error(R.mipmap.app_contact_avatar_default)
-                                .into(it)
-                        }
+
+            PhotoMenuFragment()
+                .setListener {
+                    ivUserAvatar?.let { iv ->
+                        Glide.with(iv).load(it)
+                            .error(R.mipmap.app_contact_avatar_default)
+                            .into(iv)
                     }
                 }
+                .show(supportFragmentManager, "menu")
         }
 
         btnSend?.setOnClickListener { _ ->
@@ -177,7 +174,7 @@ class UserInfoActivity : FCActivity() {
                 EditTextActivity.TYPE_USER_NAME -> {
                     tvUserName?.text = content ?: ""
                 }
-                EditTextActivity.TYPE_USER_NIKE_NAME -> {
+                EditTextActivity.TYPE_USER_NICK_NAME -> {
                     tvUserNickName?.text = content ?: ""
                 }
                 EditTextActivity.TYPE_USER_DESCRIBE -> {

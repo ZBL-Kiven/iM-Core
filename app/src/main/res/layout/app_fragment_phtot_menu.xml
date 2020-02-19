@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/app_fragment_photo_menu_btn_camera"
+        style="@style/userPhotoMenuStyle"
+        android:background="@drawable/app_radius_20_top"
+        android:backgroundTint="@android:color/white"
+        android:text="拍照" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/app_base_background" />
+
+    <TextView
+        android:id="@+id/app_fragment_photo_menu_btn_album"
+        style="@style/userPhotoMenuStyle"
+        android:text="相册" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/app_base_background" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_base_background">
+
+        <TextView
+            android:id="@+id/app_fragment_photo_menu_btn_cancel"
+            style="@style/userPhotoMenuStyle"
+            android:background="@drawable/app_radius_20_top"
+            android:backgroundTint="@android:color/white"
+            android:paddingBottom="30dp"
+            android:text="取消" />
+    </FrameLayout>
+
+
+</LinearLayout>
