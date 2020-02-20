@@ -1,6 +1,5 @@
 package com.zj.imcore.ui.main
 
-import android.content.Intent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentTransaction

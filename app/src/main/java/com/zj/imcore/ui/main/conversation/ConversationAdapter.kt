@@ -39,7 +39,7 @@ class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int, 
 
         fun initAvatar() {
             avatar?.let {
-                val url = data.thumbUrl
+                val url = data.avatar
                 Glide.with(it).load(url).override(it.width, it.height).error(R.mipmap.app_contact_avatar_default).into(it)
             }
         }
@@ -64,25 +64,25 @@ class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int, 
         }
 
         fun initTime() {
-            var ts = data.sortTs
-            if (ts <= 0) ts = data.latestTs
+            var ts = data.updated
+            if (ts <= 0) ts = data.created
             time?.let { it.text = TimeLineInflateModel.getTimeString(it.context ?: return, ts) }
         }
 
         fun initPin() {
-            val isPin = data.isPin
+            val isPin = data.pin
             itemView.isSelected = isPin
             pin?.isSelected = isPin
         }
 
         fun initMute() {
-            val isMute = data.isMute
+            val isMute = data.mute
             mute?.isSelected = isMute
             muteDisplay?.visibility = if (isMute) View.VISIBLE else View.GONE
         }
 
         fun initDeleted() {
-            if (data.isDelete) throw IllegalArgumentException("the module for dialog was deleted? why inflate with there? ")
+            if (data.hidden) throw IllegalArgumentException("the module for dialog was deleted? why inflate with there? ")
         }
 
         when (payloads?.firstOrNull()) {

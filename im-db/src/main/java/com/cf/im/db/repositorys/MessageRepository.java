@@ -11,10 +11,7 @@ import com.cf.im.db.domain.MessageBean;
 import com.cf.im.db.domain.impl._MessageBeanImpl;
 import com.cf.im.db.listener.DBListener;
 import com.cf.im.db.utils.DateUtils;
-import com.zj.im.utils.log.logger.DataUtils;
-import com.zj.model.interfaces.MessageIn;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,7 +44,7 @@ public class MessageRepository extends BaseRepository {
         getWriteExecutor().execute(() -> {
             List<MessageBean> beans = JSON.parseArray(json, MessageBean.class);
             LongSparseArray<MessageBean> serviceBeans = new LongSparseArray<>();
-            Collections.sort(beans, (o1, o2) -> (o1.id > o2.id) ? 1 : -1);
+            Collections.sort(beans, (o1, o2) -> Long.compare(o1.id, o2.id));
 
             long[] ids = new long[beans.size()];
             int index = 0;
@@ -91,7 +88,7 @@ public class MessageRepository extends BaseRepository {
      * @param limit      数量
      * @param isPositive 方向，向上取还是向下取
      */
-    public static void queryMessageBy(long dialogId, String callId, long msgKey, int limit, boolean isPositive, DBListener<List<_MessageBeanImpl>> listener) {
+    public static void queryMessageBy(String dialogId, String callId, long msgKey, int limit, boolean isPositive, DBListener<List<_MessageBeanImpl>> listener) {
         AppDatabase.singleton.get().getReadExecutor().execute(() -> {
             long time;
             if ("-".equals(callId) || msgKey == -1) {

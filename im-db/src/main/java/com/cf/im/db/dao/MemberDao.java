@@ -19,15 +19,15 @@ public interface MemberDao extends IDao<MemberBean> {
     void clearAll();
 
     @Query("select * from memberbean where uid in (:uids)")
-    List<MemberBean> queryByIds(long... uids);
+    List<MemberBean> queryByIds(String... uids);
 
     @Query("select * from memberbean where uid = :uids")
-    MemberBean queryById(long uids);
+    MemberBean queryById(String uids);
 
     @Query("select * from memberbean where dialogId = :dialogId")
-    MemberBean queryByDialogId(long dialogId);
+    MemberBean queryByDialogId(String dialogId);
 
     @Query("select * from memberbean where dialogId in (:dialogId)")
-    List<MemberBean> queryByDialogIds(long... dialogId);
+    List<MemberBean> queryByDialogIds(String... dialogId);
 
 }

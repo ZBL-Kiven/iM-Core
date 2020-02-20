@@ -45,7 +45,7 @@ public class MemberRepository extends BaseRepository {
         });
     }
 
-    public static void queryMembersByUserId(Long userId, DBListener<MemberBean> listener) {
+    public static void queryMembersByUserId(String userId, DBListener<MemberBean> listener) {
         getReadExecutor().execute(() -> {
             MemberBean bean = getMemberDao().queryById(userId);
             listener.onSuccess(bean);

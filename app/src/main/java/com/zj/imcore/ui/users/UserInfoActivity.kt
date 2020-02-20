@@ -26,9 +26,9 @@ class UserInfoActivity : FCActivity() {
         private const val UID = "uid"
         private const val CHAT_MOD = "chatMode"
 
-        fun start(context: Context?, uid: Long?, isChatMod: Boolean = false) {
+        fun start(context: Context?, tmId: String?, isChatMod: Boolean = false) {
             context?.startActivity(Intent(context, UserInfoActivity::class.java).apply {
-                if (uid != null) this.putExtra(UID, uid)
+                if (tmId != null) this.putExtra(UID, tmId)
                 this.putExtra(CHAT_MOD, isChatMod)
             })
         }
@@ -38,7 +38,7 @@ class UserInfoActivity : FCActivity() {
         return R.layout.app_act_user_info_content
     }
 
-    private var userId = 0L
+    private var tmId: String = ""
     private var isChatMod = false
     private var curUser: MemberBean? = null
 
@@ -61,7 +61,7 @@ class UserInfoActivity : FCActivity() {
         tvUserDescribe = findViewById(R.id.app_act_user_info_tv_describe)
         try {
             intent?.let {
-                if (it.hasExtra(UID)) userId = it.getLongExtra(UID, 0)
+                if (it.hasExtra(UID)) tmId = it.getStringExtra(UID) ?: ""
                 if (it.hasExtra(CHAT_MOD)) isChatMod = it.getBooleanExtra(CHAT_MOD, false)
             }
         } catch (e: Exception) {
@@ -70,7 +70,7 @@ class UserInfoActivity : FCActivity() {
     }
 
     override fun initData() {
-        MemberRepository.queryMembersByUserId(userId) {
+        MemberRepository.queryMembersByUserId(tmId) {
             curUser = it
             mainHandler.post {
                 setData()
@@ -82,14 +82,12 @@ class UserInfoActivity : FCActivity() {
         curUser?.let { member ->
             titleView?.setTitle(getString(R.string.app_act_user_info_title_default, member.name))
             ivUserAvatar?.let { view ->
-                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default)
-                    .into(view)
+                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default).into(view)
             }
             tvUserNickName?.text = ""
             tvUserName?.text = member.name ?: ""
             tvUserDescribe?.text = member.describe ?: ""
-            btnSend?.visibility =
-                if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
+            btnSend?.visibility = if (SPUtils_Proxy.getUserId(0) == curUser?.uid) View.GONE else View.VISIBLE
         }
     }
 
@@ -111,26 +109,14 @@ class UserInfoActivity : FCActivity() {
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
-            EditTextActivity.startActivity(
-                this,
-                getString(R.string.app_act_user_info_user_nickname_hint),
-                tvUserNickName?.text.toString(),
-                1,
-                EditTextActivity.TYPE_USER_NIKE_NAME
-            )
+            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_nickname_hint), tvUserNickName?.text.toString(), 1, EditTextActivity.TYPE_USER_NIKE_NAME)
         }
 
         tvUserDescribe?.setOnClickListener {
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
-            EditTextActivity.startActivity(
-                this,
-                getString(R.string.app_act_user_info_user_describe_hint),
-                tvUserDescribe?.text.toString(),
-                1,
-                EditTextActivity.TYPE_USER_DESCRIBE
-            )
+            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_describe_hint), tvUserDescribe?.text.toString(), 1, EditTextActivity.TYPE_USER_DESCRIBE)
         }
 
         ivUserAvatar?.setOnClickListener {
@@ -138,35 +124,24 @@ class UserInfoActivity : FCActivity() {
                 return@setOnClickListener
             }
             //设置用户头像
-            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1)
-                .imgSizeRange(1024, Long.MAX_VALUE).start { isSelected, data ->
-                    if (isSelected && !data.isNullOrEmpty()) {
-                        ivUserAvatar?.let {
-                            Glide.with(it).load(data[0].path)
-                                .error(R.mipmap.app_contact_avatar_default)
-                                .into(it)
-                        }
+            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1).imgSizeRange(1024, Long.MAX_VALUE).start { isSelected, data ->
+                if (isSelected && !data.isNullOrEmpty()) {
+                    ivUserAvatar?.let {
+                        Glide.with(it).load(data[0].path).error(R.mipmap.app_contact_avatar_default).into(it)
                     }
                 }
+            }
         }
 
         btnSend?.setOnClickListener { _ ->
             curUser?.let {
-                if (isChatMod) finish() else ChatActivity.start(
-                    this,
-                    it.dialogId,
-                    Constance.DIALOG_TYPE_P2P,
-                    it.uid,
-                    "",
-                    it.name
-                )
+                if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, it.uid, "", it.name)
             } ?: finish()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (Activity.RESULT_OK != resultCode) {
             return
         }

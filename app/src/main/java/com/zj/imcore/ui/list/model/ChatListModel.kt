@@ -62,7 +62,7 @@ class ChatListModel : BaseChatModel<MsgInfo> {
 
         fun loadBubble() {
             view.getBubbleLayout()?.removeAllViews()
-            ModHub.getMode(data).initData(context, view, data, payloads)
+            ModHub.getMode(data).init(context, view, data, payloads)
         }
 
         if (!payloads.isNullOrEmpty()) {

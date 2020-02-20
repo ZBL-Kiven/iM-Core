@@ -15,16 +15,21 @@ import java.lang.Exception
 @Suppress("unused")
 abstract class BaseItemMod {
 
+    fun init(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
+
+        initData(context, view, data, payloads)
+    }
+
     abstract fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?)
 
-    protected fun isSelf(uid:Long): Boolean {
+    protected fun isSelf(uid: Long): Boolean {
         return FCApplication.isSelf(uid)
     }
 
     protected fun getColor(context: Context, c: Int): Int {
         return try {
             ContextCompat.getColor(context, c)
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             c
         }
     }

@@ -58,7 +58,7 @@ public class NotificationManager {
         if (info.isSelf(SPUtils_Proxy.getUserId(-1L))) {
             return;
         }
-        long currentDialogId = -1;
+        String currentDialogId = null;
 
         Activity activity = BaseApplication.Companion.getAct();
         if (activity instanceof ChatActivity) {
@@ -67,7 +67,7 @@ public class NotificationManager {
         }
 
         //判断当前窗口 dialogId 是否是 messageId
-        if (info.getDialogId() == currentDialogId) {
+        if (info.getDialogId().equals(currentDialogId)) {
             return;
         }
 
@@ -80,11 +80,11 @@ public class NotificationManager {
 
     private class Task implements Runnable {
 
-        private final long key;
+        private final String key;
         private final String taskTitle;
         private final String taskContent;
 
-        public Task(long notificationId, String taskTitle, String taskContent) {
+        public Task(String notificationId, String taskTitle, String taskContent) {
             this.key = notificationId;
             this.taskTitle = taskTitle;
             this.taskContent = taskContent;
@@ -93,9 +93,8 @@ public class NotificationManager {
         @Override
         public void run() {
             Integer notificationId = null;
-            String k = String.valueOf(this.key);
-            if (mNotificationIds.containsKey(k)) {
-                notificationId = mNotificationIds.get(k);
+            if (mNotificationIds.containsKey(key)) {
+                notificationId = mNotificationIds.get(key);
             }
             if (notificationId == null) {
                 notificationId = mNotificationId.addAndGet(1);

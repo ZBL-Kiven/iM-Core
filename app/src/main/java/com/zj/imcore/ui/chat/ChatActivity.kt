@@ -45,11 +45,11 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
         private const val TITLE = "title"
         private const val NORMAL = "normal"
 
-        fun start(activity: Activity?, id: Long, dialogType: String, userId: Long, draft: String?, title: String) {
+        fun start(activity: Activity?, dialogId: String, dialogType: String, tmId: String, draft: String?, title: String) {
             val i = Intent(activity, ChatActivity::class.java)
-            i.putExtra(SESSION_ID, id)
+            i.putExtra(SESSION_ID, dialogId)
             i.putExtra(DIALOG_TYPE, dialogType)
-            i.putExtra(USER_ID, userId)
+            i.putExtra(USER_ID, tmId)
             i.putExtra(DRAFT, draft)
             i.putExtra(TITLE, title)
             activity?.startActivity(i)
@@ -68,8 +68,8 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
     }
 
     private var dialogType = ""
-    private var sessionId = 0L
-    private var userId = 0L
+    private var sessionId = ""
+    private var tmId = ""
     private var draft = ""
     private var conversasionTitle = ""
 
@@ -90,16 +90,16 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
     private fun initBaseIntent(intent: Intent?) {
         try {
             intent?.let {
-                if (it.hasExtra(SESSION_ID)) sessionId = it.getLongExtra(SESSION_ID, 0)
+                if (it.hasExtra(SESSION_ID)) sessionId = it.getStringExtra(SESSION_ID) ?: ""
                 if (it.hasExtra(DIALOG_TYPE)) dialogType = it.getStringExtra(DIALOG_TYPE) ?: Constance.DIALOG_TYPE_P2P
-                if (it.hasExtra(USER_ID)) userId = it.getLongExtra(USER_ID, 0)
+                if (it.hasExtra(USER_ID)) tmId = it.getStringExtra(USER_ID) ?: ""
                 if (it.hasExtra(DRAFT)) draft = it.getStringExtra(DRAFT) ?: ""
                 if (it.hasExtra(TITLE)) conversasionTitle = it.getStringExtra(TITLE) ?: ""
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        if (sessionId <= 0) {
+        if (sessionId.isEmpty()) {
             FCApplication.showToast(getString(R.string.app_chat_error_empty_target))
             finish()
             return
@@ -127,7 +127,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
         }
         titleView?.setRightIcon(rIcon)
         titleView?.setRightClickListener {
-            UserInfoActivity.start(this, userId, true)
+            UserInfoActivity.start(this, tmId, true)
         }
         celBar?.addOnFuncKeyBoardListener(this)
         celBar?.addFuncView(FuncGridView(this, onFuncListener))
@@ -139,7 +139,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
                 return celBar?.etChat
             }
 
-            override fun getSessionId(): Long {
+            override fun getSessionId(): String {
                 return this@ChatActivity.sessionId
             }
         }))
@@ -153,7 +153,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
 
     override fun initData() {
         register()
-        NotificationManager.singleton.get().removeNotification(sessionId.toString())
+        NotificationManager.singleton.get().removeNotification(sessionId)
         DataTransferHub.queryMsgInDb(sessionId)
     }
 
@@ -181,25 +181,17 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
         }
 
         this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).filterIn { it, _ -> it.dialogId == sessionId }.listen { data, lst, payload ->
-
-            if (data != null) {
-                println("-----   1111 ")
+            if (!isFinishing) rvContent?.let {
+                it.adapter.data().add(NORMAL, data)
+                if (it.canScrollVertically(-1)) return@listen
+                it.stopScroll()
+                //                handler.removeMessages(1999)
+                //                val p = it.adapter.data().maxCurDataPosition()
+                //                val msg = Message.obtain()
+                //                msg.what = 1999
+                //                msg.arg1 = p
+                //                handler.sendMessageDelayed(msg, 30)
             }
-            if (!lst.isNullOrEmpty()) {
-                println("-----   2222  ${lst.size} ")
-            }
-
-            //            if (!isFinishing) rvContent?.let {
-            //                it.adapter.data().add(NORMAL, data)
-            //                if (it.canScrollVertically(-1)) return@listen
-            //                it.stopScroll()
-            //                //                handler.removeMessages(1999)
-            //                //                val p = it.adapter.data().maxCurDataPosition()
-            //                //                val msg = Message.obtain()
-            //                //                msg.what = 1999
-            //                //                msg.arg1 = p
-            //                //                handler.sendMessageDelayed(msg, 30)
-            //            }
         }
     }
 
@@ -237,7 +229,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
         celBar?.reset()
     }
 
-    fun getSessionId(): Long {
+    fun getSessionId(): String {
         return sessionId
     }
 

@@ -1,48 +1,45 @@
 package com.zj.model.interfaces
 
+import com.zj.model.chat.TeamMembers
+
 @Suppress("unused")
 interface DialogIn {
 
-    //unique id for conversation
-    fun getId(): Long
+    fun inactive(): Boolean
+    fun indexSymbol(): String
+    fun role(): String
+    fun department(): String
+    fun email(): String
+    fun phone(): String
+    fun name(): String
+    fun tmid(): String
+    fun type(): String // p2p , group
+    fun updated(): Long
+    fun created(): Long
+    fun title(): String
+    fun hidden(): Boolean
+    fun avatar(): String
+    fun teamId(): String
+    fun dialogId(): String
+    fun gender(): String
 
-    fun getTitle(): String
+    //--- group properties ---
 
-    fun getSubDetail(): String
+    fun description(): String = "" //null,
+    fun private(): String = "" //false,
+    fun mode(): String = "" //"admin_off",
+    fun topic(): String = "" //null,
+    fun leavable(): String = "" //true,
 
-    //the conversation last updated Ts
-    fun getLatestTs(): Long
+    //--- missing field ---
 
-    fun getSelfReadTs(): Long
+    fun pin(): Boolean
+    fun mute(): Boolean
+    fun draft(): String?
+    fun subDetail(): String?
+    fun unReadCount(): Long
 
-    fun getUnReadCount(): Int
 
-    //last time someone read the conversation
-    fun getOtherReadTs(): Long
+    fun getTeamMembers(lst: List<Map<String, Any>>): List<TeamMembers>
 
-    //user id of the peer during p2p conversation
-    fun getUserId(): Long
-
-    //are there favorite messages in the conversation
-    fun hasStar(): Boolean
-
-    //对话的草稿
-    fun getDraft(): String?
-
-    //对话是否显示
-    fun isShown(): Boolean
-
-    fun sortTs(): Long
-
-    fun notification(): Boolean
-
-    fun hideTs(): Long
-
-    fun getThumbUrl(): String
-
-    fun isPin(): Boolean
-
-    fun isMute(): Boolean
-
-    fun isDelete(): Boolean
 }

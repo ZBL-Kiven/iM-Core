@@ -36,7 +36,11 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
         this.addReceiveObserver<DialogInfo>(Constance.REG_CODE_COVERSATION_FRAGMENT_DIALOG).listen { d, lst, payload ->
             if (activity?.isFinishing == true) return@listen
             if (d != null) {
-                adapter?.data()?.add(normal, d)
+                if (!payload.isNullOrEmpty()) {
+                    adapter?.data()?.set(d, normal, payload)
+                } else {
+                    adapter?.data()?.add(normal, d)
+                }
             }
             if (!lst.isNullOrEmpty()) {
                 adapter?.data()?.addAll(normal, lst)
@@ -51,7 +55,7 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
     override fun invoke(type: Int, data: DialogInfo, pos: Int, v: View) {
         when (type) {
             CONVERSATION_EVENT_ITEM -> {
-                ChatActivity.start(activity, data.channelId, data.type, data.userId, data.draft, data.title)
+                ChatActivity.start(activity, data.dialogId, data.type, data.tmid, data.draft, data.title)
             }
         }
     }
