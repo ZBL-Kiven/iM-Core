@@ -73,6 +73,11 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
 
+        <activity
+            android:name=".ui.main.contact.group.GroupInfoActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
+
         <receiver
             android:name=".PushReceiver"
             android:permission="android.permission.INTERNET">

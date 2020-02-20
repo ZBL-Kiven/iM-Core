@@ -94,6 +94,16 @@
     <string name="app_act_create_groups_hint_not_create">请勿创建空的讨论组</string>
     <string name="app_act_create_groups_hint">正在创建讨论组…</string>
 
+    <!--group info-->
+    <string name="app_act_contact_group_info_avatar_hint">头像</string>
+    <string name="app_act_contact_group_info_name_hint">名称</string>
+    <string name="app_act_contact_group_info_theme_hint">主题</string>
+    <string name="app_act_contact_group_info_user_count_hint">成员</string>
+    <string name="app_act_contact_group_info_user_count">成员（%d）</string>
+    <string name="app_act_contact_group_info_dissolve">解散讨论组</string>
+    <string name="app_act_contact_group_info_exit">退出讨论组</string>
+
+
     <!--in common use-->
     <string name="app_common_network_error">请检查网络连接</string>
     <string name="app_common_no_data">暂无数据</string>

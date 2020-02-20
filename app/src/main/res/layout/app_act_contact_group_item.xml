@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageView
-            android:id="@+id/app_act_contact_group_item_iv_avatar"
-            android:layout_width="@dimen/app_contact_avatar_width"
-            android:layout_marginEnd="15dp"
-            android:layout_margin="10dp"
-            android:layout_centerVertical="true"
-            android:layout_height="@dimen/app_contact_avatar_height"
-            tools:ignore="ContentDescription"/>
+        android:id="@+id/app_act_contact_group_item_iv_avatar"
+        android:layout_width="@dimen/app_contact_avatar_width"
+        android:layout_height="@dimen/app_contact_avatar_height"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:layout_marginEnd="15dp"
+        tools:ignore="ContentDescription" />
 
     <TextView
-            android:id="@+id/app_act_contact_group_item_tv_name"
-            android:layout_width="wrap_content"
-            tools:text="a aa aaa a"
-            android:textColor="@color/color_primary"
-            android:layout_centerVertical="true"
-            android:textSize="@dimen/app_et_text_size_18"
-            android:layout_toEndOf="@+id/app_act_contact_group_item_iv_avatar"
-            android:layout_height="wrap_content"/>
+        android:id="@+id/app_act_contact_group_item_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/app_act_contact_group_item_iv_avatar"
+        android:textColor="@color/color_primary"
+        android:textSize="@dimen/app_et_text_size_18"
+        tools:text="a aa aaa a" />
 
     <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/app_base_line_width"
-            android:layout_marginEnd="15dp"
-            android:layout_toEndOf="@id/app_act_contact_group_item_iv_avatar"
-            android:layout_alignParentBottom="true"
-            android:background="@color/color_primary_grey"/>
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_base_line_width"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@id/app_act_contact_group_item_iv_avatar"
+        android:background="@color/color_primary_grey" />
 
 </RelativeLayout>

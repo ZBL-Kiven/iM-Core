@@ -28,14 +28,19 @@ import androidx.fragment.app.DialogFragment;
 import com.zj.album.AlbumIns;
 import com.zj.album.options.AlbumOptions;
 import com.zj.imcore.R;
-import com.zj.imcore.permission.PermissionListener;
-import com.zj.imcore.permission.PermissionManager;
-import com.zj.imcore.permission.ResponsePermission;
+import com.zj.imcore.yj.base.permission.PermissionListener;
+import com.zj.imcore.yj.base.permission.PermissionManager;
+import com.zj.imcore.yj.base.permission.ResponsePermission;
 
 import java.io.File;
 import java.util.List;
 
 
+/**
+ * 头像选择器
+ *
+ * @author yangji
+ */
 public class PhotoMenuFragment extends DialogFragment implements View.OnClickListener {
 
     private static final int CAMERA_CODE = 0x1000;

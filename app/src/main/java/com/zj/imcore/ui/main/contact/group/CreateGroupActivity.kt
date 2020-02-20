@@ -20,6 +20,7 @@ import com.zj.imcore.model.member.MembersEventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.imcore.ui.main.contact.MembersProvider
 import com.zj.imcore.ui.main.contact.MembersVisitor
+import com.zj.imcore.ui.main.contact.group.adapter.CreateGroupListAdapter
 import com.zj.loading.BaseLoadingView
 import com.zj.ui.dispatcher.addReceiveObserver
 import com.zj.ui.log
@@ -59,7 +60,11 @@ class CreateGroupActivity : FCActivity() {
         val selectedIds = if (intent.hasExtra(SELECTED)) {
             ArrayList(intent.getLongArrayExtra(SELECTED)?.toMutableList() ?: ArrayList())
         } else arrayListOf()
-        adapter = CreateGroupListAdapter(this, selectedIds)
+        adapter =
+            CreateGroupListAdapter(
+                this,
+                selectedIds
+            )
         if (intent.hasExtra(MAX_NUM)) {
             maxSelectCount = intent.getIntExtra(MAX_NUM, -1)
         }

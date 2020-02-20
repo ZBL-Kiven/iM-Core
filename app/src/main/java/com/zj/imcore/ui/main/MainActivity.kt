@@ -1,6 +1,5 @@
 package com.zj.imcore.ui.main
 
-import android.content.Intent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentTransaction
@@ -16,6 +15,7 @@ import com.zj.imcore.ui.main.contact.ContactFragment
 import com.zj.imcore.ui.main.setting.SettingFragment
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.ui.main.contact.group.CreateGroupActivity
+import com.zj.imcore.ui.main.contact.group.GroupInfoActivity
 import com.zj.imcore.ui.main.conversation.ConversationFragment
 import java.lang.NullPointerException
 
@@ -44,14 +44,26 @@ class MainActivity : FCActivity() {
         settingFragment = SettingFragment()
         IMHelper.init(this.application)
         llGroup?.let {
-            fragmentManager = object : BaseFragmentManager(this, R.id.app_act_main_fl_content, 0, it, conversationFragment, contactFragment, settingFragment) {
+            fragmentManager = object : BaseFragmentManager(
+                this,
+                R.id.app_act_main_fl_content,
+                0,
+                it,
+                conversationFragment,
+                contactFragment,
+                settingFragment
+            ) {
                 override fun onViewAttach(v: View) {
                     if (v is SelectChangeIndexView) {
                         v.init()
                     }
                 }
 
-                override fun beginTransaction(isHidden: Boolean, transaction: FragmentTransaction, frgCls: Class<BaseLinkageFragment>) {
+                override fun beginTransaction(
+                    isHidden: Boolean,
+                    transaction: FragmentTransaction,
+                    frgCls: Class<BaseLinkageFragment>
+                ) {
                     super.beginTransaction(isHidden, transaction, frgCls)
                     transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 }
@@ -67,7 +79,8 @@ class MainActivity : FCActivity() {
     override fun initListener() {
         baseTitleView?.setRightClickListener {
             if (fragmentManager?.getCurrentItemId() == conversationFragment?.fId) {
-                CreateGroupActivity.start(this, 0, -1)
+//                CreateGroupActivity.start(this, 0, -1)
+                GroupInfoActivity.startActivity(this)
             }
         }
     }
