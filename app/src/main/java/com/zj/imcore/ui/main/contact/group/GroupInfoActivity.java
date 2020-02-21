@@ -13,15 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.zj.base.view.BaseTitleView;
 import com.zj.imcore.R;
+import com.zj.imcore.apis.group.GroupApi;
 import com.zj.imcore.base.FCActivity;
+import com.zj.imcore.base.FCApplication;
 import com.zj.imcore.model.GroupInfo;
-import com.zj.imcore.model.TempGroupInfo;
 import com.zj.imcore.ui.main.contact.UserEventMenuDialog;
 import com.zj.imcore.ui.main.contact.group.adapter.UserGroupAdapter;
 import com.zj.imcore.ui.users.EditTextActivity;
 import com.zj.imcore.ui.users.PhotoMenuFragment;
 import com.zj.list.listeners.ItemClickListener;
 import com.zj.loading.BaseLoadingView;
+import com.zj.model.chat.TeamMembers;
+import com.zj.model.interfaces.DialogIn;
 
 /**
  * 讨论组详情
@@ -45,10 +48,11 @@ public class GroupInfoActivity extends FCActivity {
     //
     private UserGroupAdapter adapter;
 
-    private GroupInfo groupInfo;
+    private DialogIn mDialogBean;
 
-    public static void startActivity(Context context) {
-        context.startActivity(new Intent(context, GroupInfoActivity.class));
+    public static void startActivity(Context context, String dialogId) {
+        context.startActivity(new Intent(context, GroupInfoActivity.class)
+                .putExtra("dialogId", dialogId));
     }
 
     @Override
@@ -72,14 +76,11 @@ public class GroupInfoActivity extends FCActivity {
 
     @Override
     public void initData() {
-        groupInfo = new TempGroupInfo();
+        adapter = new UserGroupAdapter();
 
-        Glide.with(ivUserAvatar).load(groupInfo.getAvatar()).into(ivUserAvatar);
+        String dialogId = getIntent().getStringExtra("dialogId");
 
-        tvName.setText(groupInfo.getName());
-        tvTheme.setText(groupInfo.getTopic());
-
-        loadUsers();
+        queryDialogByDialogId(dialogId);
     }
 
     @Override
@@ -95,6 +96,7 @@ public class GroupInfoActivity extends FCActivity {
         // 编辑 讨论组名称
         tvName.setOnClickListener(v -> {
             EditTextActivity.startActivity(this,
+                    mDialogBean.dialogId(),
                     getString(R.string.app_act_contact_group_info_name_hint),
                     tvName.getText().toString(),
                     100,
@@ -104,6 +106,7 @@ public class GroupInfoActivity extends FCActivity {
         // 编辑 讨论组主题
         tvTheme.setOnClickListener(v -> {
             EditTextActivity.startActivity(this,
+                    mDialogBean.dialogId(),
                     getString(R.string.app_act_contact_group_info_theme_hint),
                     tvTheme.getText().toString(),
                     100,
@@ -111,9 +114,9 @@ public class GroupInfoActivity extends FCActivity {
         });
 
         //点击 用户处理
-        adapter.setOnItemClickListener(new ItemClickListener<GroupInfo.GroupMember>() {
+        adapter.setOnItemClickListener(new ItemClickListener<TeamMembers>() {
             @Override
-            public void onItemClick(int position, View v, @Nullable GroupInfo.GroupMember bean) {
+            public void onItemClick(int position, View v, @Nullable TeamMembers bean) {
                 if (adapter.isAddItem(position)) {
                     //跳转到 邀请 新成员界面
                     CreateGroupActivity.Companion.start(GroupInfoActivity.this, 1, 29, null);
@@ -138,8 +141,7 @@ public class GroupInfoActivity extends FCActivity {
      * 加载 讨论组用户
      */
     private void loadUsers() {
-        adapter = new UserGroupAdapter();
-        adapter.add(groupInfo.getMembers());
+        adapter.add(mDialogBean.getTeamMembers(null));
         rvUsers.setAdapter(adapter);
         tvUserCount.setText(getString(R.string.app_act_contact_group_info_user_count, adapter.getCount()));
     }
@@ -157,12 +159,12 @@ public class GroupInfoActivity extends FCActivity {
         });
     }
 
-    private void execClickUser(GroupInfo.GroupMember bean) {
+    private void execClickUser(TeamMembers bean) {
         // 判断 当前用户是否是管理员
 //        UserInfoActivity.Companion.start(this, 1L, false);
 
-        new UserEventMenuDialog().show(getSupportFragmentManager(), "userEventMenuDialog");
 
+        new UserEventMenuDialog().show(getSupportFragmentManager(), "userEventMenuDialog");
     }
 
     @Override
@@ -197,6 +199,32 @@ public class GroupInfoActivity extends FCActivity {
      */
     private void commitExitGroup() {
         loadingView.setMode(BaseLoadingView.DisplayMode.LOADING, getString(R.string.app_act_contact_group_info_exit_hint), true);
+    }
+
+    private void queryDialogByDialogId(String dialogId) {
+        GroupApi.INSTANCE.queryDialog(dialogId, (aBoolean, dialogBean, e) -> {
+            loadDialogBean(dialogBean);
+            return null;
+        });
+    }
+
+    private void loadDialogBean(DialogIn dialogBean) {
+        if (dialogBean == null) {
+            FCApplication.Companion.showToast("未查询到Dialog");
+            finish();
+            return;
+        }
+        this.mDialogBean = dialogBean;
+
+        titleView.setTitle(mDialogBean.name());
+
+        Glide.with(ivUserAvatar).load(mDialogBean.avatar()).into(ivUserAvatar);
+
+        tvName.setText(mDialogBean.name());
+        tvTheme.setText(mDialogBean.topic());
+
+        loadUsers();
+
     }
 
 }

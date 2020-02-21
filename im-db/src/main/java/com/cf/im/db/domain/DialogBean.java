@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.zj.model.chat.TeamMembers;
 import com.zj.model.interfaces.DialogIn;
@@ -62,6 +63,15 @@ public class DialogBean implements DialogIn {
     public String profile;
     public String members;
 
+    @JSONField(name = "private")
+    public String privateX;
+
+    public boolean leavable;
+    public String topic;
+    public String draft;
+    public String description;
+    public String mode;
+
     @Override
     public boolean inactive() {
         return false;
@@ -69,42 +79,42 @@ public class DialogBean implements DialogIn {
 
     @Override
     public String indexSymbol() {
-        return null;
+        return "#";
     }
 
     @Override
     public String role() {
-        return null;
+        return role;
     }
 
     @Override
     public String department() {
-        return null;
+        return department;
     }
 
     @Override
     public String email() {
-        return null;
+        return email;
     }
 
     @Override
     public String phone() {
-        return null;
+        return phone;
     }
 
     @Override
     public String name() {
-        return null;
+        return name;
     }
 
     @Override
     public String tmid() {
-        return null;
+        return tmId;
     }
 
     @Override
     public String type() {
-        return null;
+        return type;
     }
 
     @Override
@@ -119,7 +129,7 @@ public class DialogBean implements DialogIn {
 
     @Override
     public String title() {
-        return null;
+        return title;
     }
 
     @Override
@@ -129,22 +139,22 @@ public class DialogBean implements DialogIn {
 
     @Override
     public String avatar() {
-        return null;
+        return avatar;
     }
 
     @Override
     public String teamId() {
-        return null;
+        return teamId;
     }
 
     @Override
     public String dialogId() {
-        return null;
+        return dialogId;
     }
 
     @Override
     public String gender() {
-        return null;
+        return gender;
     }
 
     @Override
@@ -159,7 +169,7 @@ public class DialogBean implements DialogIn {
 
     @Override
     public String draft() {
-        return null;
+        return draft;
     }
 
     @Override
@@ -169,36 +179,44 @@ public class DialogBean implements DialogIn {
 
     @Override
     public long unReadCount() {
-        return 0;
+        return 100;
     }
 
     @Override
     public List<TeamMembers> getTeamMembers(List<? extends Map<String, ? extends Object>> lst) {
-        return null;
+        return JSON.parseArray(members, TeamMembers.class);
     }
 
     @Override
     public String description() {
-        return null;
+        return description;
     }
 
     @Override
     public String mode() {
-        return null;
+        return mode;
     }
 
     @Override
     public String topic() {
-        return null;
+        return topic;
     }
 
     @Override
-    public String leavable() {
-        return null;
+    public boolean leavable() {
+        return leavable;
     }
 
     @Override
     public String getPrivate() {
-        return null;
+        return privateX;
+    }
+
+    public String get(String key) {
+        return getProfileMap().get(key).toString();
+    }
+
+    public Map<String, Object> getProfileMap() {
+        return JSON.parseObject(profile, Map.class);
     }
 }

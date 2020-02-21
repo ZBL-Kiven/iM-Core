@@ -11,7 +11,11 @@ import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.alibaba.fastjson.JSON;
+import com.cf.im.db.domain.DialogBean;
 import com.cf.im.db.domain.MemberBean;
+import com.cf.im.db.listener.DBListener;
+import com.cf.im.db.repositorys.DialogRepository;
 import com.cf.im.db.repositorys.MemberRepository;
 import com.zj.base.utils.storage.sp.SPUtils_Proxy;
 import com.zj.base.view.BaseTitleView;
@@ -61,24 +65,6 @@ public class EditTextActivity extends FCActivity {
 
     private int mType;
     private String mId;
-
-    /**
-     * 开启编辑
-     *
-     * @param activity   用于编辑状态返回
-     * @param title      titleView 标题
-     * @param content    默认内容
-     * @param maxContent 文本最长
-     * @param commitType 内容 EditTextActivity.Type
-     */
-    public static void startActivity(Activity activity, String title, String content, int maxContent, @Type int commitType) {
-        Intent intent = new Intent(activity, EditTextActivity.class)
-                .putExtra(KEY_TITLE, title)
-                .putExtra(KEY_CONTENT, content)
-                .putExtra(KEY_SIZE, maxContent)
-                .putExtra(KEY_TYPE, commitType);
-        activity.startActivityForResult(intent, commitType);
-    }
 
     /**
      * 开启编辑
@@ -200,12 +186,10 @@ public class EditTextActivity extends FCActivity {
 
     private void execMember() {
         //获取用户信息
-        long userId = SPUtils_Proxy.getUserId(0L);
-        MemberRepository.queryMembersByUserId(userId + "", memberBean1 -> {
+        DialogRepository.queryByDialogId(mId, dialogBean -> {
+            Map<String, Object> profile = dialogBean.getProfileMap();
             Map<String, Object> request = new HashMap<>();
-            Map<String, String> profile = memberBean1.getProfile();
             request.put("profile", profile);
-
             String content = etEditData.getText().toString();
 
             switch (mType) {
@@ -217,27 +201,25 @@ public class EditTextActivity extends FCActivity {
                     break;
                 default:
             }
+            commitUserInfo(request, dialogBean);
 
-            commitUserInfo(request, memberBean1);
         });
+
     }
 
-    private void commitUserInfo(Map<String, Object> request, MemberBean memberBean1) {
+    private void commitUserInfo(Map<String, Object> request, DialogBean memberBean1) {
+
         UserApi.INSTANCE.updateUser(request, (isSuccess, memberBean, e) -> {
             if (isSuccess) {
-                if (mType == TYPE_USER_DESCRIBE) {
-                    memberBean1.describe = memberBean.describe;
-                }
-                if (mType == TYPE_USER_NICK_NAME) {
-                    memberBean1.nickname = memberBean.nickname;
-                }
-                MemberRepository.insertOrUpdate(memberBean1, memberBean2 -> runOnUiThread(() -> {
+                memberBean1.profile = memberBean.profile;
+
+                DialogRepository.insertOrUpdate(memberBean1, memberBean2 -> runOnUiThread(() -> {
                     String content = null;
                     if (mType == TYPE_USER_DESCRIBE) {
-                        content = memberBean2.describe;
+                        content = memberBean2.get("describe");
                     }
                     if (mType == TYPE_USER_NICK_NAME) {
-                        content = memberBean2.nickname;
+                        content = memberBean2.get("nickname");
                     }
                     commitResult(content);
                 }));

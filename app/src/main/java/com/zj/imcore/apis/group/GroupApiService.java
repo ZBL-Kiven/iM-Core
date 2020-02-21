@@ -1,6 +1,8 @@
 package com.zj.imcore.apis.group;
 
 
+import com.cf.im.db.domain.DialogBean;
+
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -31,8 +33,8 @@ public interface GroupApiService {
      * @param dialogId dialogId
      * @return 讨论组详情
      */
-    @GET("/relation/v1/dialogs/{dialogId}}")
-    Observable<String> queryDialog(@Path("dialogId") String dialogId);
+    @GET("/relation/v1/dialogs/{dialogId}")
+    Observable<DialogBean> queryDialog(@Path("dialogId") String dialogId);
 
     /**
      * 修改 讨论组 信息
@@ -41,7 +43,7 @@ public interface GroupApiService {
      * @param body     讨论组内容
      * @return 讨论组编辑成功，完整详情
      */
-    @PATCH("/relation/v1/users/{dialogId}")
+    @PATCH("/relation/v1/dialogs/{dialogId}")
     Observable<String> update(@Path("dialogId") String dialogId, @Body Object body);
 
 

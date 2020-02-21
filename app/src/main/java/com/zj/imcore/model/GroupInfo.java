@@ -16,6 +16,8 @@ public interface GroupInfo {
          * @return 用户 TeamId
          */
         String getTmId();
+
+        String getRole();
     }
 
     /**

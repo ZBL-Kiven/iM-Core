@@ -30,6 +30,7 @@ object ApiErrorHandler : ErrorHandler {
                 throw UnknownError(throwable.message)
             }
         }
+        throwable.printStackTrace()
     }
 }
 

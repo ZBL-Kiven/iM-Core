@@ -1,5 +1,6 @@
 package com.zj.imcore.apis.user
 
+import com.cf.im.db.domain.DialogBean
 import com.cf.im.db.domain.MemberBean
 import com.zbl.api.BaseApi
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
@@ -45,7 +46,7 @@ object UserApi {
     }
 
     /////杨吉 更新用户信息
-    fun updateUser(request: Map<String, Any>, result: (Boolean, MemberBean?, throwAble: HttpException?) -> Unit) {
+    fun updateUser(request: Map<String, Any>, result: (Boolean, DialogBean?, throwAble: HttpException?) -> Unit) {
         val name = SPUtils_Proxy.getUserName("");
         get().call({ it.update(name, request) }, result)
     }

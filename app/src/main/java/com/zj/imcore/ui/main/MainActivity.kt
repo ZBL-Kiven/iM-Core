@@ -79,8 +79,8 @@ class MainActivity : FCActivity() {
     override fun initListener() {
         baseTitleView?.setRightClickListener {
             if (fragmentManager?.getCurrentItemId() == conversationFragment?.fId) {
-//                CreateGroupActivity.start(this, 0, -1)
-                GroupInfoActivity.startActivity(this)
+                CreateGroupActivity.start(this, 0, -1)
+//                GroupInfoActivity.startActivity(this, "=bw53e")
             }
         }
     }

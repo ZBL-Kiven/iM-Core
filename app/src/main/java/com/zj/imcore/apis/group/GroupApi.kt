@@ -1,15 +1,16 @@
 package com.zj.imcore.apis.group
 
+import com.cf.im.db.domain.DialogBean
 import com.zbl.api.BaseApi
 import com.zj.imcore.apis.APIs
 import retrofit2.HttpException
 
-class CreateDialog(
-    var type: String,
-    var team_id: String,
-    var name: String,
-    var members: List<String>
-)
+class CreateDialog {
+    var type: String = "group"
+    var team_id: String? = null
+    var name: String? = null
+    var members: List<String>? = null
+}
 
 object GroupApi {
 
@@ -17,7 +18,7 @@ object GroupApi {
         return APIs.getDefaultApi()
     }
 
-    fun create(
+    fun createDialog(
         dialog: CreateDialog,
         result: (Boolean, String?, exception: HttpException?) -> Unit
     ) {
@@ -26,7 +27,7 @@ object GroupApi {
 
     fun queryDialog(
         dialogId: String,
-        result: (Boolean, String?, exception: HttpException?) -> Unit
+        result: (Boolean, DialogBean?, exception: HttpException?) -> Unit
     ) {
         get().call({ it.queryDialog(dialogId) }, result)
     }

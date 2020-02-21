@@ -30,7 +30,7 @@ public interface DialogDao extends IDao<DialogBean> {
      */
     @Transaction
     @Query("select * from dialogbean where dialogId = :dialogId limit 1")
-    List<DialogBean> queryDialogByIds(long... dialogId);
+    List<DialogBean> queryDialogByIds(String... dialogId);
 
     /**
      * 根据dialogId 获取dialog 信息
@@ -40,7 +40,7 @@ public interface DialogDao extends IDao<DialogBean> {
      */
     @Transaction
     @Query("select * from dialogbean where dialogId = :dialogId limit 1")
-    DialogBean queryById(long dialogId);
+    DialogBean queryById(String dialogId);
 
     /**
      * 查询所有会话列表

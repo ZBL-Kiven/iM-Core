@@ -1,6 +1,8 @@
 package com.zj.imcore.model;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,40 @@ import java.util.List;
  * @author yangji
  */
 public class TempGroupInfo implements GroupInfo {
+
+
+    /**
+     * inactive : false
+     * description : null
+     * private : false
+     * updated : 2020-02-20T08:07:43Z
+     * name : from API
+     * mode : admin_off
+     * type : group
+     * created : 2020-02-20T08:07:43Z
+     * topic : null
+     * avatar : null
+     * leavable : true
+     * team_id : =bw52O
+     * dialog_id : =bw53e
+     * members : [{"tmid":"=bw53i","role":"owner"},{"tmid":"=bw53j","role":"normal"},{"tmid":"=bw53k","role":"normal"}]
+     */
+
+    public boolean inactive;
+    public Object description;
+    @JSONField(name = "private")
+    public boolean privateX;
+    public String updated;
+    public String name;
+    public String mode;
+    public String type;
+    public String created;
+    public Object topic;
+    public Object avatar;
+    public boolean leavable;
+    public String team_id;
+    public String dialog_id;
+    public List<MembersBean> members;
 
     @Override
     public String getName() {
@@ -39,13 +75,20 @@ public class TempGroupInfo implements GroupInfo {
         return groupMembers;
     }
 
-    public static class MembersBean implements GroupInfo.GroupMember {
+    public static class MembersBean implements GroupMember {
 
-        public String tmid = "XXXXX";
+        public String tmid;
+        public String role;
 
         @Override
         public String getTmId() {
             return tmid;
         }
+
+        @Override
+        public String getRole() {
+            return role;
+        }
     }
+
 }
