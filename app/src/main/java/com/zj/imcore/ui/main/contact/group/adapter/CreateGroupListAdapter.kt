@@ -1,4 +1,4 @@
-package com.zj.imcore.ui.main.contact.group
+package com.zj.imcore.ui.main.contact.group.adapter
 
 import android.content.Context
 import android.widget.CheckBox

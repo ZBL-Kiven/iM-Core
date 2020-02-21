@@ -1,4 +1,4 @@
-package com.zj.imcore.permission;
+package com.zj.imcore.yj.base.permission;
 
 import android.content.Context;
 import android.os.Bundle;

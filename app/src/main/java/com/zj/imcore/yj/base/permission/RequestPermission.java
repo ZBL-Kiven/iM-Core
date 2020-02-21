@@ -1,4 +1,4 @@
-package com.zj.imcore.permission;
+package com.zj.imcore.yj.base.permission;
 
 import androidx.annotation.Nullable;
 

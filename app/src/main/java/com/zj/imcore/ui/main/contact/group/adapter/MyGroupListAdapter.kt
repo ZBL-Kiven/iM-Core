@@ -1,7 +1,6 @@
-package com.zj.imcore.ui.main.contact.group
+package com.zj.imcore.ui.main.contact.group.adapter
 
 import android.content.Context
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -10,7 +9,6 @@ import com.zj.imcore.R
 import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.list.groupedadapter.adapter.GroupedListAdapter
 import com.zj.list.holders.BaseViewHolder
-import java.util.ArrayList
 
 
 class MyGroupListAdapter(val context: Context) : GroupedListAdapter<MemberBean, ContactGroupInfo>(context) {
