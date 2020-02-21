@@ -32,7 +32,6 @@ class VideoMod : BaseImageMod() {
     }
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
-        super.initData(context, view, data, payloads)
         view.getBubbleLayout()?.let {
             val playBtnWidth = dpToPx(context, ChatOption.videoPlayViewWidth)
             val playBtnHeight = dpToPx(context, ChatOption.videoPlayViewHeight)

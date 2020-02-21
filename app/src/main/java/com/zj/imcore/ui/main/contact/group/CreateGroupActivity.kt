@@ -10,20 +10,18 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
-import com.cf.im.db.domain.MemberBean
 import com.zj.base.view.BaseTitleView
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.base.FCApplication
-import com.zj.imcore.model.member.MembersEventMod
+import com.zj.imcore.model.member.EventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
-import com.zj.imcore.ui.main.contact.MembersProvider
-import com.zj.imcore.ui.main.contact.MembersVisitor
-import com.zj.imcore.ui.main.contact.group.adapter.CreateGroupListAdapter
+import com.zj.imcore.ui.main.contact.DialogsProvider
+import com.zj.imcore.ui.main.contact.DialogsVisitor
 import com.zj.loading.BaseLoadingView
+import com.zj.model.chat.DialogInfo
 import com.zj.ui.dispatcher.addReceiveObserver
-import com.zj.ui.log
 import java.util.ArrayList
 
 class CreateGroupActivity : FCActivity() {
@@ -32,7 +30,7 @@ class CreateGroupActivity : FCActivity() {
 
         private const val SELECTED = "selected_list"
         private const val MAX_NUM = "max_select_size"
-        fun start(context: Activity, req: Int, maxNum: Int, selectedIds: ArrayList<Long>? = null) {
+        fun start(context: Activity, req: Int, maxNum: Int, selectedIds: ArrayList<String>? = null) {
             val i = Intent(context, CreateGroupActivity::class.java)
             if (!selectedIds.isNullOrEmpty()) i.putExtra(SELECTED, selectedIds)
             if (maxNum > 0) i.putExtra(MAX_NUM, maxNum)
@@ -53,18 +51,14 @@ class CreateGroupActivity : FCActivity() {
     private var titleBar: BaseTitleView? = null
 
     private var searchHandler: Handler? = null
-    private var cachedData: ArrayList<MemberBean>? = null
+    private var cachedData: ArrayList<DialogInfo>? = null
     private var maxSelectCount: Int = -1
 
     override fun initBase() {
         val selectedIds = if (intent.hasExtra(SELECTED)) {
-            ArrayList(intent.getLongArrayExtra(SELECTED)?.toMutableList() ?: ArrayList())
+            ArrayList(intent.getStringArrayListExtra(SELECTED)?.toMutableList() ?: ArrayList())
         } else arrayListOf()
-        adapter =
-            CreateGroupListAdapter(
-                this,
-                selectedIds
-            )
+        adapter = CreateGroupListAdapter(this, selectedIds)
         if (intent.hasExtra(MAX_NUM)) {
             maxSelectCount = intent.getIntExtra(MAX_NUM, -1)
         }
@@ -81,7 +75,7 @@ class CreateGroupActivity : FCActivity() {
     override fun initListener() {
         loadingView?.setRefreshListener {
             loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
-            getData(false)
+            getData()
         }
         vSearchClear?.setOnClickListener {
             if (!etSearch?.text.isNullOrEmpty()) etSearch?.setText("")
@@ -118,11 +112,10 @@ class CreateGroupActivity : FCActivity() {
             return@Handler false
         }
         rvContent?.adapter = adapter
-        addReceiveObserver<MembersEventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).listen { it, s, c ->
-            log(it?.case?:"")
-            getData(false)
+        addReceiveObserver<EventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).filterIn { it, _ -> it.code == Constance.REG_RESULT_CONTANCT }.listen { _, _, _ ->
+            getData()
         }
-        getData(true)
+        getData()
     }
 
     private fun doOnSearch(ets: String?) {
@@ -132,14 +125,14 @@ class CreateGroupActivity : FCActivity() {
         }
         cachedData?.let {
             val filterList = it.filterTo(arrayListOf()) { m ->
-                m.name?.contains(ets, true) ?: false || m.title?.contains(ets, true) ?: false || m.email?.contains(ets, true) ?: false
+                m.name.contains(ets, true) || m.title.contains(ets, true) || m.email.contains(ets, true)
             }
             setData(filterList)
         }
     }
 
-    private fun setData(data: List<MemberBean>?) {
-        val map = mutableMapOf<String, MutableList<MemberBean>>()
+    private fun setData(data: List<DialogInfo>?) {
+        val map = mutableMapOf<String, MutableList<DialogInfo>>()
         data?.groupByTo(map) {
             it.indexSymbol ?: "#"
         }
@@ -150,10 +143,10 @@ class CreateGroupActivity : FCActivity() {
         adapter?.change(groupData)
     }
 
-    private fun getData(isFirst: Boolean) {
+    private fun getData() {
         loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
-        MembersProvider.getMembersFromLocalOrServer(isFirst, object : MembersVisitor {
-            override fun onGot(m: List<MemberBean>?) {
+        DialogsProvider.getDialogsFromLocalOrServer( object : DialogsVisitor {
+            override fun onGot(m: List<DialogInfo>?) {
                 if (m.isNullOrEmpty()) {
                     loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_common_no_data), false)
                 } else {

@@ -7,7 +7,7 @@ import com.zj.model.interfaces.MessageIn
 @Suppress("unused", "SpellCheckingInspection")
 class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
-    val dialogId: Long
+    val dialogId: String
         get() {
             return impl.dialogId()
         }
@@ -48,8 +48,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     /**------- */
 
-    val imageUrl: Long; get() = impl.dialogId()
-
+    val imageUrl: String?; get() = impl.getImageUrl()
     val imageWidth: Int; get() = impl.getImageWidth()
     val imageHeight: Int; get() = impl.getImageHeight()
 

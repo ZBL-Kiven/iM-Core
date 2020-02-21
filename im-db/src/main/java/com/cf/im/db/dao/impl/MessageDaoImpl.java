@@ -28,7 +28,7 @@ public abstract class MessageDaoImpl implements MessageDao {
      * @param isPositive    排序方式
      * @return 消息列表
      */
-    public List<_MessageBeanImpl> queryMessageBy(long dialogId, long localCreateTs, int limit, boolean isPositive) {
+    public List<_MessageBeanImpl> queryMessageBy(String dialogId, long localCreateTs, int limit, boolean isPositive) {
         String oritation;
         if (isPositive) oritation = ">";
         else oritation = "<";

@@ -12,7 +12,7 @@ public abstract class OnEmojiClickListener implements OnEmoticonClickListener<Em
 
     public abstract EditText getEt();
 
-    public abstract long getSessionId();
+    public abstract String getSessionId();
 
     @Override
     public void onEmoticonClick(Emoticon emoticon) {

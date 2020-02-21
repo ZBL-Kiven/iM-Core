@@ -10,7 +10,7 @@ public class SendMessageBean {
     public String created; // "2020-01-03T09:38:11Z",
     public long id = System.currentTimeMillis(); // 991077318262784,
     public int team_id; // 1,
-    public long dialog_id; // 8589934596,
+    public String dialog_id; // 8589934596,
     public String subtype; // "normal",
     public String subtypeDetail; // "normal",
     public String text; // "1"

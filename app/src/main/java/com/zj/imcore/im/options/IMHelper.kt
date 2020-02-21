@@ -41,22 +41,22 @@ object IMHelper : IMInterface<String>() {
         super.shutdown(case)
     }
 
-    fun sendTxt(sessionId: Long, text: String?) {
+    fun sendTxt(sessionId: String, text: String?) {
         if (text.isNullOrEmpty()) return
         MsgSender.sendText(sessionId, text)
     }
 
-    fun sendSticker(sessionId: Long, uri: String?) {
+    fun sendSticker(sessionId: String, uri: String?) {
         if (uri.isNullOrEmpty()) return
         MsgSender.sendSticker(sessionId, uri)
     }
 
-    fun sendImage(sessionId: Long, info: FileInfo?) {
+    fun sendImage(sessionId: String, info: FileInfo?) {
         if (info == null) return
         MsgSender.sendImage(sessionId, info)
     }
 
-    fun sendVideo(sessionId: Long, info: FileInfo?) {
+    fun sendVideo(sessionId: String, info: FileInfo?) {
         if (info == null) return
         MsgSender.sendVideo(sessionId, info)
     }

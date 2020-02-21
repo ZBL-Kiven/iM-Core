@@ -9,6 +9,8 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.cf.im.db.domain.MemberBean
 import com.cf.im.db.repositorys.MemberRepository
+import com.zj.album.AlbumIns
+import com.zj.album.options.AlbumOptions
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.BaseTitleView
 import com.zj.ui.mainHandler
@@ -24,9 +26,9 @@ class UserInfoActivity : FCActivity() {
         private const val UID = "uid"
         private const val CHAT_MOD = "chatMode"
 
-        fun start(context: Context?, uid: Long?, isChatMod: Boolean = false) {
+        fun start(context: Context?, tmId: String?, isChatMod: Boolean = false) {
             context?.startActivity(Intent(context, UserInfoActivity::class.java).apply {
-                if (uid != null) this.putExtra(UID, uid)
+                if (tmId != null) this.putExtra(UID, tmId)
                 this.putExtra(CHAT_MOD, isChatMod)
             })
         }
@@ -36,7 +38,7 @@ class UserInfoActivity : FCActivity() {
         return R.layout.app_act_user_info_content
     }
 
-    private var userId = 0L
+    private var tmId: String = ""
     private var isChatMod = false
     private var curUser: MemberBean? = null
 
@@ -59,7 +61,7 @@ class UserInfoActivity : FCActivity() {
         tvUserDescribe = findViewById(R.id.app_act_user_info_tv_describe)
         try {
             intent?.let {
-                if (it.hasExtra(UID)) userId = it.getLongExtra(UID, 0)
+                if (it.hasExtra(UID)) tmId = it.getStringExtra(UID) ?: ""
                 if (it.hasExtra(CHAT_MOD)) isChatMod = it.getBooleanExtra(CHAT_MOD, false)
             }
         } catch (e: Exception) {
@@ -68,7 +70,7 @@ class UserInfoActivity : FCActivity() {
     }
 
     override fun initData() {
-        MemberRepository.queryMembersByUserId(userId) {
+        MemberRepository.queryMembersByUserId(tmId) {
             curUser = it
             mainHandler.post {
                 setData()
@@ -83,7 +85,7 @@ class UserInfoActivity : FCActivity() {
                 Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default)
                     .into(view)
             }
-            tvUserNickName?.text = member.nickname ?: ""
+            tvUserNickName?.text = ""
             tvUserName?.text = member.name ?: ""
             tvUserDescribe?.text = member.describe ?: ""
             btnSend?.visibility =
@@ -135,16 +137,17 @@ class UserInfoActivity : FCActivity() {
             if (SPUtils_Proxy.getUserId(0) != curUser?.uid) {
                 return@setOnClickListener
             }
-
-            PhotoMenuFragment()
-                .setListener {
-                    ivUserAvatar?.let { iv ->
-                        Glide.with(iv).load(it)
-                            .error(R.mipmap.app_contact_avatar_default)
-                            .into(iv)
+            //设置用户头像
+            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1)
+                .imgSizeRange(1024, Long.MAX_VALUE).start { isSelected, data ->
+                    if (isSelected && !data.isNullOrEmpty()) {
+                        ivUserAvatar?.let {
+                            Glide.with(it).load(data[0].path)
+                                .error(R.mipmap.app_contact_avatar_default)
+                                .into(it)
+                        }
                     }
                 }
-                .show(supportFragmentManager, "menu")
         }
 
         btnSend?.setOnClickListener { _ ->
@@ -163,7 +166,6 @@ class UserInfoActivity : FCActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (Activity.RESULT_OK != resultCode) {
             return
         }

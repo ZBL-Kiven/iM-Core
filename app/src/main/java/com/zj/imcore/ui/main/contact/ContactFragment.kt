@@ -11,17 +11,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
-import com.cf.im.db.domain.MemberBean
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.ui.dispatcher.addReceiveObserver
-import com.zj.ui.log
 import com.zj.imcore.Constance
 import com.zj.imcore.R
-import com.zj.imcore.model.member.MembersEventMod
+import com.zj.imcore.model.member.EventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.imcore.ui.main.contact.group.MyGroupsActivity
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.loading.BaseLoadingView
+import com.zj.model.chat.DialogInfo
 import java.util.ArrayList
 
 class ContactFragment : BaseLinkageFragment() {
@@ -46,7 +45,7 @@ class ContactFragment : BaseLinkageFragment() {
     private var adapter: ContactListAdapter? = null
 
     private var searchHandler: Handler? = null
-    private var cachedData: ArrayList<MemberBean>? = null
+    private var cachedData: ArrayList<DialogInfo>? = null
 
     private fun initView() {
         etSearch = find(R.id.app_fragment_contact_et_search)
@@ -59,11 +58,11 @@ class ContactFragment : BaseLinkageFragment() {
     private fun initListener() {
         loadingView?.setRefreshListener {
             loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
-            getData(false)
+            getData()
         }
         adapter?.setOnChildClickListener { adapter, _, groupPosition, childPosition ->
-            val member = adapter.getItem(groupPosition).children[childPosition]
-            UserInfoActivity.start(activity, member.uid)
+            val dialog = adapter.getItem(groupPosition).children[childPosition]
+            UserInfoActivity.start(activity, dialog.tmid)
         }
         vSearchClear?.setOnClickListener {
             if (!etSearch?.text.isNullOrEmpty()) etSearch?.setText("")
@@ -100,9 +99,10 @@ class ContactFragment : BaseLinkageFragment() {
             adapter = ContactListAdapter(it)
             rvContent?.adapter = adapter
         } ?: loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_system_error_no_context))
-        addReceiveObserver<MembersEventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).listen { it, s, c ->
-            log(it?.case?:"")
-            getData(false)
+        addReceiveObserver<EventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).filterIn { t, _ ->
+            t.code == Constance.REG_RESULT_CONTANCT
+        }.listen { _, _, _ ->
+            getData()
         }
     }
 
@@ -113,14 +113,14 @@ class ContactFragment : BaseLinkageFragment() {
         }
         cachedData?.let {
             val filterList = it.filterTo(arrayListOf()) { m ->
-                m.name?.contains(ets, true) ?: false || m.title?.contains(ets, true) ?: false || m.email?.contains(ets, true) ?: false
+                m.name.contains(ets, true)  || m.title.contains(ets, true) || m.email.contains(ets, true)
             }
             setData(filterList)
         }
     }
 
-    private fun setData(data: List<MemberBean>?) {
-        val map = mutableMapOf<String, MutableList<MemberBean>>()
+    private fun setData(data: List<DialogInfo>?) {
+        val map = mutableMapOf<String, MutableList<DialogInfo>>()
         data?.groupByTo(map) {
             it.indexSymbol ?: "#"
         }
@@ -131,10 +131,10 @@ class ContactFragment : BaseLinkageFragment() {
         adapter?.change(groupData)
     }
 
-    private fun getData(isFirst: Boolean) {
+    private fun getData() {
         loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
-        MembersProvider.getMembersFromLocalOrServer(isFirst, object : MembersVisitor {
-            override fun onGot(m: List<MemberBean>?) {
+        DialogsProvider.getDialogsFromLocalOrServer(object : DialogsVisitor {
+            override fun onGot(m: List<DialogInfo>?) {
                 if (m.isNullOrEmpty()) {
                     loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_common_no_data), false)
                 } else {
@@ -148,7 +148,7 @@ class ContactFragment : BaseLinkageFragment() {
 
     override fun onResumed() {
         super.onResumed()
-        if (cachedData.isNullOrEmpty()) getData(true)
+        if (cachedData.isNullOrEmpty()) getData()
     }
 
     override fun onDestroyed() {

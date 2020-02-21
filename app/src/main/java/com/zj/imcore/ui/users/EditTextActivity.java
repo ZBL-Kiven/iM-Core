@@ -201,7 +201,7 @@ public class EditTextActivity extends FCActivity {
     private void execMember() {
         //获取用户信息
         long userId = SPUtils_Proxy.getUserId(0L);
-        MemberRepository.queryMembersByUserId(userId, memberBean1 -> {
+        MemberRepository.queryMembersByUserId(userId + "", memberBean1 -> {
             Map<String, Object> request = new HashMap<>();
             Map<String, String> profile = memberBean1.getProfile();
             request.put("profile", profile);

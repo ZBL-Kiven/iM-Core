@@ -12,7 +12,7 @@ import java.util.*
 
 object MsgSender {
 
-    fun sendText(sessionId: Long, text: String) {
+    fun sendText(sessionId: String, text: String) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = SendMessageBean().apply {
@@ -30,7 +30,7 @@ object MsgSender {
         IMHelper.send(data, callId, 10000, false, false, null)
     }
 
-    fun sendSticker(sessionId: Long, path: String) {
+    fun sendSticker(sessionId: String, path: String) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = SendMessageBean().apply {
@@ -48,7 +48,7 @@ object MsgSender {
         IMHelper.send(data, callId, 10000, false, false, null)
     }
 
-    fun sendImage(sessionId: Long, info: FileInfo) {
+    fun sendImage(sessionId: String, info: FileInfo) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = SendMessageBean().apply {
@@ -67,7 +67,7 @@ object MsgSender {
         IMHelper.send(data, callId, 10000, false, false, null)
     }
 
-    fun sendVideo(sessionId: Long, info: FileInfo) {
+    fun sendVideo(sessionId: String, info: FileInfo) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = SendMessageBean().apply {
@@ -86,7 +86,7 @@ object MsgSender {
         IMHelper.send(data, callId, 10000, false, false, null)
     }
 
-    fun sendFile(sessionId: Long, info: FileInfo) {
+    fun sendFile(sessionId: String, info: FileInfo) {
         val callId = UUID.randomUUID().toString()
         val baseSendInfo = BaseMod()
         val m = SendMessageBean().apply {
