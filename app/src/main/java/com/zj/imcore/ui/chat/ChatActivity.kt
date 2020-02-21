@@ -55,7 +55,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
             activity?.startActivity(i)
         }
 
-        fun start(context: Context?, id: Long, dialogType: String, userId: Long, draft: String?, title: String) {
+        fun start(context: Context?, id: String, dialogType: String, userId: String, draft: String?, title: String) {
             val i = Intent(context, ChatActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             i.putExtra(SESSION_ID, id)

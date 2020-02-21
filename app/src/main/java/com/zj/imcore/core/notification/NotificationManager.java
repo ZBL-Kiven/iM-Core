@@ -73,7 +73,7 @@ public class NotificationManager {
 
         DialogRepository.queryByDialogId(info.getDialogId(), dialogBean -> {
             //判断当前消息是否是不提示状态 且消息不属于@ 本人
-            String title = dialogBean != null ? dialogBean.getTitle() + "" : info.getName();
+            String title = dialogBean != null ? dialogBean.title + "" : info.getName();
             mHandler.post(new Task(info.getDialogId(), title, info.getName() + ": " + info.getText()));
         });
     }

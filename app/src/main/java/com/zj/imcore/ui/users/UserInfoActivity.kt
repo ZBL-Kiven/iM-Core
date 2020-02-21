@@ -156,7 +156,7 @@ class UserInfoActivity : FCActivity() {
                     this,
                     it.dialogId,
                     Constance.DIALOG_TYPE_P2P,
-                    it.uid,
+                    "$it.uid",
                     "",
                     it.name
                 )

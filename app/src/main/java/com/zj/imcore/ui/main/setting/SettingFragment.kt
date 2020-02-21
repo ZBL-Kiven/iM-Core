@@ -99,7 +99,7 @@ class SettingFragment : BaseLinkageFragment() {
 
     private fun initListener() {
         ivAvatar?.setOnClickListener {
-            UserInfoActivity.start(context, SPUtils_Proxy.getUserId(0))
+            UserInfoActivity.start(context, SPUtils_Proxy.getTmId(""))
         }
         lbLogout?.setOnClickListener {
             lbLogout?.startLoading()

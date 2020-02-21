@@ -33,7 +33,7 @@ class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
 
     /** group properties */
     val description: String; get() = impl.description() //null,
-    val private: String; get() = impl.private() //false,
+    val private: String; get() = impl.getPrivate() //false,
     val mode: String; get() = impl.mode() //"admin_off",
     val topic: String; get() = impl.topic() //null,
     val leavable: String; get() = impl.leavable() //true,

@@ -14,7 +14,7 @@ public class UserEventMenuDialog extends BaseDialog {
 
     private String dialogId;
 
-    private String userId;
+    private String tmId;
 
     public static UserEventMenuDialog createDialog(String dialogId, String userId) {
         UserEventMenuDialog dialog = new UserEventMenuDialog();
@@ -23,8 +23,8 @@ public class UserEventMenuDialog extends BaseDialog {
         return dialog;
     }
 
-    private void setUserId(String userId) {
-        this.userId = userId;
+    private void setUserId(String tmId) {
+        this.tmId = tmId;
     }
 
     private void setDialogId(String dialogId) {
@@ -82,7 +82,7 @@ public class UserEventMenuDialog extends BaseDialog {
      * 从当前 讨论组 移除 当前选中用户
      */
     private void commitRemoveUser() {
-        GroupApi.INSTANCE.removeUserToDialog(dialogId, "", userId, (success, s, e) -> {
+        GroupApi.INSTANCE.removeUserToDialog(dialogId, "", tmId, (success, s, e) -> {
             if (success) {
                 Toast.makeText(getContext(), "移除讨论组成功", Toast.LENGTH_SHORT).show();
             } else {
@@ -107,7 +107,7 @@ public class UserEventMenuDialog extends BaseDialog {
     }
 
     private void execOpenUserActivity() {
-        UserInfoActivity.Companion.start(getContext(), (long) userId.hashCode(), false);
+        UserInfoActivity.Companion.start(getContext(), tmId, false);
         dismissAllowingStateLoss();
     }
 

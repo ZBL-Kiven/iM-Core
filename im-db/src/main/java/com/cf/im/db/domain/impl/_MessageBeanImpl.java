@@ -21,7 +21,7 @@ public class _MessageBeanImpl implements MessageIn {
     //~~~~~~~~~ 实现 UI 接口 ~~~~~~~~~
 
     @Override
-    public long dialogId() {
+    public String dialogId() {
         return message.dialogId;
     }
 

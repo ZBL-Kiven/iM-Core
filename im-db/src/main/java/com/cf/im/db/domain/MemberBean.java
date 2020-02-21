@@ -20,7 +20,7 @@ public class MemberBean {
     public long uid;
 
 
-    public long dialogId;
+    public String dialogId;
 
     /**
      * 用户是否活跃

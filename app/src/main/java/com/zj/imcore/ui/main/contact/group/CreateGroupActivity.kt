@@ -19,6 +19,7 @@ import com.zj.imcore.model.member.EventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.imcore.ui.main.contact.DialogsProvider
 import com.zj.imcore.ui.main.contact.DialogsVisitor
+import com.zj.imcore.ui.main.contact.group.adapter.CreateGroupListAdapter
 import com.zj.loading.BaseLoadingView
 import com.zj.model.chat.DialogInfo
 import com.zj.ui.dispatcher.addReceiveObserver

@@ -26,7 +26,7 @@ public class MessageBean {
 
     public int teamId; // 1
 
-    public long dialogId; // 8589934596
+    public String dialogId; // 8589934596
 
     public String subtype; // "normal"
 

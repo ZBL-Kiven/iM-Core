@@ -40,7 +40,7 @@ public class PushReceiver extends BroadcastReceiver {
                             context,
                             dialogBean.dialogId,
                             Constance.DIALOG_TYPE_P2P,
-                            dialogBean.userId,
+                            dialogBean.tmId,
                             "",
                             dialogBean.name
                     );

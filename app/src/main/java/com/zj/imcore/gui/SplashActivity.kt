@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkIsLogin() {
         if (SPUtils_Proxy.getAccessToken("").isNullOrEmpty()) {
-            this.startActivity(Intent(this, GroupInfoActivity::class.java))
+            this.startActivity(Intent(this, LoginActivity::class.java))
         } else {
             this.startActivity(Intent(this, MainActivity::class.java))
         }

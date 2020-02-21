@@ -35,16 +35,6 @@ public interface DialogDao extends IDao<DialogBean> {
     /**
      * 根据dialogId 获取dialog 信息
      *
-     * @param userId 对方用户Id
-     * @return 会话信息
-     */
-    @Transaction
-    @Query("select * from dialogbean where userId = :userId limit 1")
-    DialogBean queryByUserId(long userId);
-
-    /**
-     * 根据dialogId 获取dialog 信息
-     *
      * @param dialogId dialogId
      * @return 会话信息
      */
