@@ -16,7 +16,6 @@ import com.zj.imcore.R;
 import com.zj.imcore.apis.group.GroupApi;
 import com.zj.imcore.base.FCActivity;
 import com.zj.imcore.base.FCApplication;
-import com.zj.imcore.model.GroupInfo;
 import com.zj.imcore.ui.main.contact.UserEventMenuDialog;
 import com.zj.imcore.ui.main.contact.group.adapter.UserGroupAdapter;
 import com.zj.imcore.ui.users.EditTextActivity;
@@ -161,10 +160,8 @@ public class GroupInfoActivity extends FCActivity {
 
     private void execClickUser(TeamMembers bean) {
         // 判断 当前用户是否是管理员
-//        UserInfoActivity.Companion.start(this, 1L, false);
-
-
-        new UserEventMenuDialog().show(getSupportFragmentManager(), "userEventMenuDialog");
+        // UserInfoActivity.Companion.start(this, 1L, false);
+        UserEventMenuDialog.createDialog(mDialogBean.dialogId(), bean.getTmid()).show(getSupportFragmentManager(), "userEventMenuDialog");
     }
 
     @Override
@@ -191,7 +188,6 @@ public class GroupInfoActivity extends FCActivity {
      */
     private void commitDissolve() {
         loadingView.setMode(BaseLoadingView.DisplayMode.LOADING, getString(R.string.app_act_contact_group_info_dissolve_hint), true);
-
     }
 
     /**
@@ -222,9 +218,7 @@ public class GroupInfoActivity extends FCActivity {
 
         tvName.setText(mDialogBean.name());
         tvTheme.setText(mDialogBean.topic());
-
         loadUsers();
-
     }
 
 }

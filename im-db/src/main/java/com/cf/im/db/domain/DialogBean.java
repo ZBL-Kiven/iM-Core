@@ -213,7 +213,8 @@ public class DialogBean implements DialogIn {
     }
 
     public String get(String key) {
-        return getProfileMap().get(key).toString();
+        Object value = getProfileMap().get(key);
+        return value == null ? null : value.toString();
     }
 
     public Map<String, Object> getProfileMap() {

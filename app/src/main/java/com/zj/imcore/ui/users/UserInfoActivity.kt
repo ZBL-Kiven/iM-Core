@@ -15,6 +15,7 @@ import com.zj.base.view.BaseTitleView
 import com.zj.imcore.Constance
 import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
+import com.zj.imcore.base.FCApplication
 import com.zj.imcore.ui.chat.ChatActivity
 
 class UserInfoActivity : FCActivity() {
@@ -68,9 +69,13 @@ class UserInfoActivity : FCActivity() {
     }
 
     override fun initData() {
-        DialogRepository.queryDialogById(tmId) {
+        DialogRepository.queryDialogByTmId(tmId) {
             curUser = it
             runOnUiThread {
+                if (curUser == null) {
+                    FCApplication.showToast("用户不存在")
+                    finish()
+                }
                 setData()
             }
         }
@@ -83,7 +88,7 @@ class UserInfoActivity : FCActivity() {
                 Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default)
                     .into(view)
             }
-            tvUserNickName?.text = member.get("nickname") ?: ""
+            tvUserNickName?.text = member.get("nickname") ?: (member.name ?: "")
             tvUserName?.text = member.name ?: ""
             tvUserDescribe?.text = member.get("describe") ?: ""
             btnSend?.visibility = if (isFriends()) View.GONE else View.VISIBLE
@@ -95,13 +100,13 @@ class UserInfoActivity : FCActivity() {
             onBackPressed()
         }
 
-        //        tvUserName?.setOnClickListener {
-        //            //设置用户名称
-        //            if (isOneself()) {
-        //                return@setOnClickListener
-        //            }
-        //            EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_name_hint), tvUserName?.text?.toString() ?: "", 1, EditTextActivity.TYPE_USER_NAME)
-        //        }
+        // tvUserName?.setOnClickListener {
+        //    //设置用户名称
+        //    if (isOneself()) {
+        //        return@setOnClickListener
+        //    }
+        //    EditTextActivity.startActivity(this, getString(R.string.app_act_user_info_user_name_hint), tvUserName?.text?.toString() ?: "", 1, EditTextActivity.TYPE_USER_NAME)
+        //}
 
         tvUserNickName?.setOnClickListener {
             //设置用户昵称

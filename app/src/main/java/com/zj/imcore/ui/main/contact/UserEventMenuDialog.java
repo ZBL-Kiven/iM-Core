@@ -23,6 +23,9 @@ public class UserEventMenuDialog extends BaseDialog {
         return dialog;
     }
 
+    private UserEventMenuDialog() {
+    }
+
     private void setUserId(String tmId) {
         this.tmId = tmId;
     }

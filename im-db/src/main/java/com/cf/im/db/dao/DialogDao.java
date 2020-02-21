@@ -43,6 +43,16 @@ public interface DialogDao extends IDao<DialogBean> {
     DialogBean queryById(String dialogId);
 
     /**
+     * 根据dialogId 获取dialog 信息
+     *
+     * @param tmId tmid
+     * @return 会话信息
+     */
+    @Transaction
+    @Query("select * from dialogbean where tmId = :tmId limit 1")
+    DialogBean queryByTmId(String tmId);
+
+    /**
      * 查询所有会话列表
      *
      * @return 会话列表

@@ -67,7 +67,7 @@ class ContactFragment : BaseLinkageFragment() {
             if ("group" == dialog.type) {
                 GroupInfoActivity.startActivity(context, dialog.dialogId)
             } else {
-                UserInfoActivity.start(activity, dialog.dialogId)
+                UserInfoActivity.start(activity, dialog.tmid)
             }
         }
         vSearchClear?.setOnClickListener {
