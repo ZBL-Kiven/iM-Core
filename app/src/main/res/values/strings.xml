@@ -102,6 +102,8 @@
     <string name="app_act_contact_group_info_user_count">成员（%d）</string>
     <string name="app_act_contact_group_info_dissolve">解散讨论组</string>
     <string name="app_act_contact_group_info_exit">退出讨论组</string>
+    <string name="app_act_contact_group_info_exit_hint">正在退出讨论组&#8230;&#8230;&#8230;</string>
+    <string name="app_act_contact_group_info_dissolve_hint">正在解散讨论组&#8230;&#8230;&#8230;</string>
 
 
     <!--in common use-->

@@ -9,6 +9,7 @@ import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.imcore.R
 import com.zj.imcore.gui.login.LoginActivity
 import com.zj.imcore.ui.main.MainActivity
+import com.zj.imcore.ui.main.contact.group.GroupInfoActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkIsLogin() {
         if (SPUtils_Proxy.getAccessToken("").isNullOrEmpty()) {
-            this.startActivity(Intent(this, LoginActivity::class.java))
+            this.startActivity(Intent(this, GroupInfoActivity::class.java))
         } else {
             this.startActivity(Intent(this, MainActivity::class.java))
         }
