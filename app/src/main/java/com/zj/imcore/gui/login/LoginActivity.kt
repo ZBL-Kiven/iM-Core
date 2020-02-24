@@ -171,10 +171,10 @@ class LoginActivity : AppCompatActivity() {
             if (isSuccess) {
                 try {
                     data?.saveAsSP()
+                    btnLoginOrSign?.loadingSuccessful()
                 } catch (e: Exception) {
                     loginFailed(null)
                 }
-                btnLoginOrSign?.loadingSuccessful()
                 vp?.postDelayed({
                     enableViews(true)
                     btnLoginOrSign?.reset()

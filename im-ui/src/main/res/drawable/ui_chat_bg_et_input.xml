@@ -4,7 +4,7 @@
     <item android:state_focused="true">
         <shape>
             <corners android:radius="8dp"/>
-            <solid android:color="@color/color_primary_color_hight_light"/>
+            <solid android:color="@color/color_primary_color_high_light"/>
         </shape>
     </item>
 

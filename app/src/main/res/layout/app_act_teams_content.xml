@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.zj.base.view.BaseTitleView
+            style="@style/BaseTitleViewStyle"
+            app:vTitle="@string/app_act_teams_title"
+            android:layout_marginBottom="20dp"
+            app:l_vDrawable="@mipmap/back"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textColor="@color/color_primary_disable"
+            android:textSize="@dimen/app_et_text_size_18"
+            android:text="@string/app_act_teams_select"/>
+
+    <GridView
+            android:id="@+id/app_act_teams_gv"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:numColumns="4"/>
+
+</LinearLayout>
