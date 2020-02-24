@@ -44,9 +44,16 @@ object GroupApi {
     fun removeUserToDialog(
         dialogId: String,
         teamId: String,
-        userId: String,
         result: (Boolean, String?, throwable: HttpException?) -> Unit
     ) {
-        get().call({ it.removeUserToDialog(dialogId, teamId, userId) }, result)
+        get().call({ it.removeUserToDialog(dialogId, teamId, "kick") }, result)
+    }
+
+    fun editUserToDialog(
+        dialogId: String,
+        teamId: String,
+        result: (Boolean, String?, throwable: HttpException?) -> Unit
+    ) {
+        get().call({ it.removeUserToDialog(dialogId, teamId, "leave") }, result)
     }
 }

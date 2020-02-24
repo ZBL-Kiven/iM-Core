@@ -61,4 +61,14 @@ public interface DialogDao extends IDao<DialogBean> {
     @Query("select * from dialogbean")
     List<DialogBean> queryAll();
 
+    /**
+     * 查询会话
+     *
+     * @param type group 群组、p2p 个人
+     * @return
+     */
+    @Transaction
+    @Query("select * from dialogbean where type = :type")
+    List<DialogBean> queryDialogByType(String type);
+
 }

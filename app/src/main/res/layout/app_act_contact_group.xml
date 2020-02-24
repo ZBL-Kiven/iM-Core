@@ -50,14 +50,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.zj.list.views.EmptyRecyclerView
-            android:id="@+id/app_act_contact_groups_rv"
+        <com.zj.list.groupedadapter.widget.StickyHeaderLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/app_act_contact_groups_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/app_act_contact_group_item" />
+        </com.zj.list.groupedadapter.widget.StickyHeaderLayout>
 
         <com.zj.loading.BaseLoadingView
             android:id="@+id/app_act_contact_groups_blv"
-            style="@style/BaseLoadingViewStyle" />
+            style="@style/BaseLoadingViewStyle"
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

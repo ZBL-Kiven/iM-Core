@@ -25,6 +25,8 @@ import com.zj.loading.BaseLoadingView;
 import com.zj.model.chat.TeamMembers;
 import com.zj.model.interfaces.DialogIn;
 
+import java.util.List;
+
 /**
  * 讨论组详情
  *
@@ -38,6 +40,7 @@ public class GroupInfoActivity extends FCActivity {
     private TextView tvUserCount;
     private TextView tvExit;
     private TextView tvDissolve;
+    private TextView tvSendMsg;
     private RecyclerView rvUsers;
     private BaseTitleView titleView;
 
@@ -69,6 +72,7 @@ public class GroupInfoActivity extends FCActivity {
         this.rvUsers = findViewById(R.id.app_act_contact_group_info_rv_users);
         this.tvExit = findViewById(R.id.app_act_contact_group_info_tv_exit);
         this.tvDissolve = findViewById(R.id.app_act_contact_group_info_tv_dissolve);
+        this.tvSendMsg = findViewById(R.id.app_act_contact_group_info_tv_send_msg);
         //
         this.loadingView = findViewById(R.id.app_act_contact_group_info_blv);
     }
@@ -134,6 +138,10 @@ public class GroupInfoActivity extends FCActivity {
             commitDissolve();
         });
 
+        tvSendMsg.setOnClickListener(v -> {
+            FCApplication.Companion.showToast("发送消息？");
+        });
+
     }
 
     /**
@@ -161,7 +169,14 @@ public class GroupInfoActivity extends FCActivity {
     private void execClickUser(TeamMembers bean) {
         // 判断 当前用户是否是管理员
         // UserInfoActivity.Companion.start(this, 1L, false);
-        UserEventMenuDialog.createDialog(mDialogBean.dialogId(), bean.getTmid()).show(getSupportFragmentManager(), "userEventMenuDialog");
+        UserEventMenuDialog.createDialog(mDialogBean.dialogId(), bean.getTmid())
+                .setRemoveMemberListener((dialogId, tmId) -> {
+                    List<TeamMembers> list = adapter.getData();
+                    // int index = list.indexOf(bean);
+                    list.remove(bean);
+                    adapter.notifyDataSetChanged();
+                })
+                .show(getSupportFragmentManager(), "userEventMenuDialog");
     }
 
     @Override
@@ -195,6 +210,16 @@ public class GroupInfoActivity extends FCActivity {
      */
     private void commitExitGroup() {
         loadingView.setMode(BaseLoadingView.DisplayMode.LOADING, getString(R.string.app_act_contact_group_info_exit_hint), true);
+        GroupApi.INSTANCE.editUserToDialog(mDialogBean.dialogId(), "111", (success, content, err) -> {
+            if (success) {
+                FCApplication.Companion.showToast("退出成功");
+                finish();
+            } else {
+                FCApplication.Companion.showToast("退出失败");
+            }
+            loadingView.setMode(BaseLoadingView.DisplayMode.NONE);
+            return null;
+        });
     }
 
     private void queryDialogByDialogId(String dialogId) {

@@ -101,10 +101,18 @@
                 tools:itemCount="8"
                 tools:listitem="@layout/app_act_contact_group_info_item_user" />
 
+
+            <Button
+                android:id="@+id/app_act_contact_group_info_tv_send_msg"
+                style="@style/btnStyle"
+                android:layout_marginTop="40dp"
+                android:backgroundTint="@color/base_btn_selector"
+                android:text="@string/app_act_contact_group_info_send_msg_hint" />
+
             <Button
                 android:id="@+id/app_act_contact_group_info_tv_exit"
                 style="@style/btnStyle"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/base_btn_selector"
                 android:text="@string/app_act_contact_group_info_exit" />
 

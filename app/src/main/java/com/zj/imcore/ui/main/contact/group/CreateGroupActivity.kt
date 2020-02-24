@@ -33,6 +33,7 @@ class CreateGroupActivity : FCActivity() {
 
         private const val SELECTED = "selected_list"
         private const val MAX_NUM = "max_select_size"
+        
         fun start(
             context: Activity,
             req: Int,

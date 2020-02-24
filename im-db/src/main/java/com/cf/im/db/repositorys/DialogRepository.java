@@ -38,6 +38,19 @@ public class DialogRepository extends BaseRepository {
         });
     }
 
+    public static void queryGroupDialog(DBListener<List<DialogBean>> listener) {
+        getReadExecutor().execute(() -> {
+            listener.onSuccess(getDialogDao().queryDialogByType("group"));
+        });
+    }
+
+    public static void queryP2p(DBListener<List<DialogBean>> listener) {
+        getReadExecutor().execute(() -> {
+            List<DialogBean> beans = getDialogDao().queryDialogByType("p2p");
+            listener.onSuccess(beans);
+        });
+    }
+
     public static void queryDialog(DBListener<List<DialogBean>> listener) {
         getReadExecutor().execute(() -> {
             List<DialogBean> beans = getDialogDao().queryAll();

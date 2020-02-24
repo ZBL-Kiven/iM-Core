@@ -104,6 +104,7 @@
     <string name="app_act_contact_group_info_exit">退出讨论组</string>
     <string name="app_act_contact_group_info_exit_hint">正在退出讨论组&#8230;&#8230;&#8230;</string>
     <string name="app_act_contact_group_info_dissolve_hint">正在解散讨论组&#8230;&#8230;&#8230;</string>
+    <string name="app_act_contact_group_info_send_msg_hint">发消息</string>
 
 
     <!--in common use-->

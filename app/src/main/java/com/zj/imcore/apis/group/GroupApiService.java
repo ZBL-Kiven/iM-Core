@@ -10,6 +10,7 @@ import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * 讨论组接口
@@ -80,8 +81,8 @@ public interface GroupApiService {
      * @param action   kick or leave
      * @return 没有内容
      */
-    @DELETE("/relation/v1/dialogs/{dialogId}/members/{teamId}?action={action}")
+    @DELETE("/relation/v1/dialogs/{dialogId}/members/{teamId}")
     Observable<String> removeUserToDialog(@Path("dialogId") String dialogId,
                                           @Path("teamId") String teamId,
-                                          @Path("action") String action);
+                                          @Query("action") String action);
 }

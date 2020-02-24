@@ -12,6 +12,23 @@ import com.zj.imcore.yj.base.ui.BaseDialog;
  */
 public class UserEventMenuDialog extends BaseDialog {
 
+    public interface RemoveMemberListener {
+        /**
+         * 移除成员监听
+         *
+         * @param dialogId 讨论组编号
+         * @param tmId     成员编号
+         */
+        void success(String dialogId, String tmId);
+    }
+
+    private RemoveMemberListener removeMemberListener;
+
+    public UserEventMenuDialog setRemoveMemberListener(RemoveMemberListener removeMemberListener) {
+        this.removeMemberListener = removeMemberListener;
+        return this;
+    }
+
     private String dialogId;
 
     private String tmId;
@@ -73,7 +90,6 @@ public class UserEventMenuDialog extends BaseDialog {
                 });
     }
 
-
     /**
      * 取消当前 用户的管理员权限
      */
@@ -85,9 +101,13 @@ public class UserEventMenuDialog extends BaseDialog {
      * 从当前 讨论组 移除 当前选中用户
      */
     private void commitRemoveUser() {
-        GroupApi.INSTANCE.removeUserToDialog(dialogId, "", tmId, (success, s, e) -> {
+        GroupApi.INSTANCE.removeUserToDialog(dialogId, tmId, (success, s, e) -> {
             if (success) {
+                if (removeMemberListener != null) {
+                    removeMemberListener.success(dialogId, tmId);
+                }
                 Toast.makeText(getContext(), "移除讨论组成功", Toast.LENGTH_SHORT).show();
+                dismissAllowingStateLoss();
             } else {
                 Toast.makeText(getContext(), "移除讨论组失败", Toast.LENGTH_SHORT).show();
             }

@@ -26,7 +26,7 @@ object DataTransferHub {
     }
 
     fun queryDialogInDb() {
-        DialogRepository.queryDialog {
+        DialogRepository.queryP2p {
             UIStore.postData(DialogTransfer.transform(it))
         }
     }

@@ -12,7 +12,17 @@ interface DialogsVisitor {
 object DialogsProvider {
 
     fun getDialogsFromLocalOrServer(vistor: DialogsVisitor) {
-        DialogRepository.queryDialog {
+        DialogRepository.queryP2p {
+            if (!it.isNullOrEmpty()) {
+                mainHandler.post {
+                    vistor.onGot(DialogTransfer.transform(it))
+                }
+            }
+        }
+    }
+
+    fun getDialogByGroupFromLocalOrServer(vistor: DialogsVisitor) {
+        DialogRepository.queryGroupDialog {
             if (!it.isNullOrEmpty()) {
                 mainHandler.post {
                     vistor.onGot(DialogTransfer.transform(it))
