@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:background="@color/app_base_background">
+
+    <TextView
+        android:id="@+id/app_dialog_contact_group_info_user_menu_tv_user"
+        style="@style/userPhotoMenuStyle"
+        android:background="@drawable/app_radius_20_top"
+        android:backgroundTint="@android:color/white"
+        android:text="查看用户信息" />
+
+    <TextView
+        android:id="@+id/app_dialog_contact_group_info_user_menu_tv_set_admin"
+        style="@style/userPhotoMenuStyle"
+        android:layout_marginTop="1dp"
+        android:backgroundTint="@android:color/white"
+        android:text="设置管理员" />
+
+    <TextView
+        android:id="@+id/app_dialog_contact_group_info_user_menu_tv_transfer_group"
+        style="@style/userPhotoMenuStyle"
+        android:layout_marginTop="1dp"
+        android:backgroundTint="@android:color/white"
+        android:text="转让讨论组" />
+
+    <TextView
+        android:id="@+id/app_dialog_contact_group_info_user_menu_tv_remove"
+        style="@style/userPhotoMenuStyle"
+        android:layout_marginTop="1dp"
+        android:backgroundTint="@android:color/white"
+        android:text="移除讨论组" />
+
+    <TextView
+        android:id="@+id/app_dialog_contact_group_info_user_menu_tv_un_admin"
+        style="@style/userPhotoMenuStyle"
+        android:layout_marginTop="1dp"
+        android:backgroundTint="@android:color/white"
+        android:text="取消管理员" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/app_base_background" />
+
+    <TextView
+        android:id="@+id/app_dialog_contact_group_info_user_menu_tv_dismiss"
+        style="@style/userPhotoMenuStyle"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/app_radius_20_top"
+        android:backgroundTint="@android:color/white"
+        android:paddingBottom="30dp"
+        android:text="关闭" />
+
+
+</LinearLayout>

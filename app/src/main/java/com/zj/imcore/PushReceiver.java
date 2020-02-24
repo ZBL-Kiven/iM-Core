@@ -32,15 +32,14 @@ public class PushReceiver extends BroadcastReceiver {
     private void event(Context context, Intent intent) {
         String key = Objects.requireNonNull(intent.getExtras()).getString("key");
         if (key != null) {
-            long id = Long.parseLong(key);
             //如果APP 是打开的状态
-            DialogRepository.queryDialogById(id, dialogBean -> {
+            DialogRepository.queryDialogById(key, dialogBean -> {
                 if (dialogBean != null) {
                     ChatActivity.Companion.start(
                             context,
                             dialogBean.dialogId,
                             Constance.DIALOG_TYPE_P2P,
-                            dialogBean.userId,
+                            dialogBean.tmId,
                             "",
                             dialogBean.name
                     );

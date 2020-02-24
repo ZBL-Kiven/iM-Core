@@ -1,7 +1,6 @@
-package com.zj.imcore.ui.main.contact.group
+package com.zj.imcore.ui.main.contact.group.adapter
 
 import android.content.Context
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -10,20 +9,15 @@ import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.list.groupedadapter.adapter.GroupedListAdapter
 import com.zj.list.holders.BaseViewHolder
 import com.zj.model.chat.DialogInfo
-import java.util.ArrayList
 
-class CreateGroupListAdapter(val context: Context, val selectedIds: ArrayList<String> = arrayListOf()) : GroupedListAdapter<DialogInfo, ContactGroupInfo>(context) {
+
+class MyGroupListAdapter(val context: Context) :
+    GroupedListAdapter<DialogInfo, ContactGroupInfo>(context) {
 
     init {
         setOnChildClickListener { adapter, _, groupPosition, childPosition ->
-            val memberId = adapter.getItem(groupPosition).children[childPosition].tmid
-            selectedIds.let {
-                if (it.contains(memberId)) {
-                    it.remove(memberId)
-                } else {
-                    it.add(memberId)
-                }
-            }
+//            val memberId = adapter.getItem(groupPosition).children[childPosition].uid
+
             adapter.notifyChildChanged(groupPosition, childPosition)
         }
     }
@@ -41,7 +35,7 @@ class CreateGroupListAdapter(val context: Context, val selectedIds: ArrayList<St
     }
 
     override fun getChildResId(viewType: Int): Int {
-        return R.layout.app_act_contact_select_item_child
+        return R.layout.app_act_contact_group_item
     }
 
     override fun bindHeader(holder: BaseViewHolder?, t: ContactGroupInfo?, pos: Int) {
@@ -52,14 +46,15 @@ class CreateGroupListAdapter(val context: Context, val selectedIds: ArrayList<St
         val w = context.resources.getDimension(R.dimen.app_contact_avatar_width).toInt()
         val h = context.resources.getDimension(R.dimen.app_contact_avatar_height).toInt()
         holder?.getView<ImageView>(R.id.app_act_contact_select_item_iv_avatar)?.let { iv ->
-            Glide.with(context).load(r.avatar).override(w, h).placeholder(R.mipmap.app_contact_avatar_default).into(iv)
+            Glide.with(context).load(r.avatar).override(w, h)
+                .placeholder(R.mipmap.app_contact_avatar_default).into(iv)
         }
-        holder?.setText(R.id.app_act_contact_select_item_tv_name, r.name)
-        holder?.setText(R.id.app_act_contact_select_item_tv_title, r.title)
-        holder?.getView<CheckBox>(R.id.app_act_contact_select_item_cv)?.isChecked = selectedIds.contains(r.tmid)
+        holder?.setText(R.id.app_act_contact_select_item_tv_name, r.name ?: "null")
+        holder?.setText(R.id.app_act_contact_select_item_tv_title, r.title ?: "null")
     }
 
     override fun bindFooter(holder: BaseViewHolder?, t: ContactGroupInfo?, pos: Int) {
 
     }
+
 }

@@ -1,148 +1,223 @@
 package com.cf.im.db.domain;
 
-import android.text.TextUtils;
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.zj.model.chat.TeamMembers;
 import com.zj.model.interfaces.DialogIn;
+
+import java.util.List;
 import java.util.Map;
 
-@Entity(indices = {@Index("userId"), @Index("latestTs")})
+@Entity
 public class DialogBean implements DialogIn {
 
+    /**
+     * inactive : false
+     * role : normal
+     * department : null
+     * email : yan.li@cityfruit.io
+     * phone : 13521930955
+     * updated : 2019-12-26T03:16:26Z
+     * name : yan.li
+     * tmid : =bw52R
+     * type : p2p
+     * created : 2019-12-26T03:16:26Z
+     * title : null
+     * hidden : false
+     * avatar : null
+     * team_id : =bw52O
+     * dialog_id : =sMb4px
+     * gender : male
+     * members : [{"tmid":"=bw53h"},{"tmid":"=bw52R"}]
+     * profile : {"extra":"This is a sample which can add any kv pair here."}
+     */
+    @NonNull
     @PrimaryKey
-    public long dialogId; // 17179869197,
+    @JSONField(name = "dialog_id")
+    public String dialogId;
 
-    public String groupId; // null,
-
-    public int teamId; // 1,
-
-    public long userId; // 4,
-
-    public String type; // "p2p",
-
+    public boolean inactive;
+    public String role;
+    public String department;
+    public String email;
+    public String phone;
+    public String updated;
     public String name;
+    @JSONField(name = "tmid")
+    public String tmId;
+    public String type;
+    public String created;
+    public String title;
+    public boolean hidden;
 
     public String avatar;
 
-    //草稿
+    @JSONField(name = "team_id")
+    public String teamId;
+
+    public String gender;
+    public String profile;
+    public String members;
+
+    @JSONField(name = "private")
+    public String privateX;
+
+    public boolean leavable;
+    public String topic;
     public String draft;
-
-    public long latestTs; // 1578991414658
-
-    public void setInfo(Map<String, String> info) {
-        this.name = info.get("name");
-        this.avatar = info.get("avatar");
-    }
-
-    public long messageUserId;
-    public String updated;
-    public String messageText;
-    public String messageSubType;
-
-    public void setMessage(MessageBean bean) {
-        if (bean != null) {
-            this.messageUserId = bean.uid;
-            this.updated = bean.updated;
-            this.messageText = bean.text;
-            this.messageSubType = bean.subtype;
-        }
-    }
-
-    // ~~~~~~~~~~~ 实现前段接口
+    public String description;
+    public String mode;
 
     @Override
-    public long getId() {
-        return dialogId;
+    public boolean inactive() {
+        return false;
     }
 
     @Override
-    @NonNull
-    public String getTitle() {
+    public String indexSymbol() {
+        return "#";
+    }
+
+    @Override
+    public String role() {
+        return role;
+    }
+
+    @Override
+    public String department() {
+        return department;
+    }
+
+    @Override
+    public String email() {
+        return email;
+    }
+
+    @Override
+    public String phone() {
+        return phone;
+    }
+
+    @Override
+    public String name() {
         return name;
     }
 
     @Override
-    @NonNull
-    public String getSubDetail() {
-        return messageText;
+    public String tmid() {
+        return tmId;
     }
 
     @Override
-    public long getLatestTs() {
-        return latestTs;
+    public String type() {
+        return type;
     }
 
     @Override
-    public long getSelfReadTs() {
-        return latestTs;
-    }
-
-    @Override
-    public int getUnReadCount() {
-        return 1;
-    }
-
-    @Override
-    public long getOtherReadTs() {
-        return 1;
-    }
-
-    @Override
-    public long getUserId() {
-        return userId;
-    }
-
-    @Override
-    public boolean hasStar() {
-        return false;
-    }
-
-    @Override
-    public String getDraft() {
-        return "";
-    }
-
-    @Override
-    public boolean isShown() {
-        return false;
-    }
-
-    @Override
-    public long sortTs() {
-        return System.currentTimeMillis();
-    }
-
-    @Override
-    public boolean notification() {
-        return false;
-    }
-
-    @Override
-    public long hideTs() {
+    public long updated() {
         return 0;
     }
 
     @Override
-    @NonNull
-    public String getThumbUrl() {
-        return TextUtils.isEmpty(avatar) ? "" : avatar;
+    public long created() {
+        return 0;
     }
 
     @Override
-    public boolean isPin() {
+    public String title() {
+        return title;
+    }
+
+    @Override
+    public boolean hidden() {
         return false;
     }
 
     @Override
-    public boolean isMute() {
+    public String avatar() {
+        return avatar;
+    }
+
+    @Override
+    public String teamId() {
+        return teamId;
+    }
+
+    @Override
+    public String dialogId() {
+        return dialogId;
+    }
+
+    @Override
+    public String gender() {
+        return gender;
+    }
+
+    @Override
+    public boolean pin() {
         return false;
     }
 
     @Override
-    public boolean isDelete() {
+    public boolean mute() {
         return false;
+    }
+
+    @Override
+    public String draft() {
+        return draft;
+    }
+
+    @Override
+    public String subDetail() {
+        return null;
+    }
+
+    @Override
+    public long unReadCount() {
+        return 100;
+    }
+
+    @Override
+    public List<TeamMembers> getTeamMembers(List<? extends Map<String, ? extends Object>> lst) {
+        return JSON.parseArray(members, TeamMembers.class);
+    }
+
+    @Override
+    public String description() {
+        return description;
+    }
+
+    @Override
+    public String mode() {
+        return mode;
+    }
+
+    @Override
+    public String topic() {
+        return topic;
+    }
+
+    @Override
+    public boolean leavable() {
+        return leavable;
+    }
+
+    @Override
+    public String getPrivate() {
+        return privateX;
+    }
+
+    public String get(String key) {
+        Object value = getProfileMap().get(key);
+        return value == null ? null : value.toString();
+    }
+
+    public Map<String, Object> getProfileMap() {
+        return JSON.parseObject(profile, Map.class);
     }
 }

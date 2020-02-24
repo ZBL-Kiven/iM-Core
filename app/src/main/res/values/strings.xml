@@ -101,6 +101,19 @@
     <string name="app_notification_new_message_describe">收到信消息时的通知类别</string>
     <string name="app_notification_new_message_id">new_message_id</string>
 
+    <!--group info-->
+    <string name="app_act_contact_group_info_avatar_hint">头像</string>
+    <string name="app_act_contact_group_info_name_hint">名称</string>
+    <string name="app_act_contact_group_info_theme_hint">主题</string>
+    <string name="app_act_contact_group_info_user_count_hint">成员</string>
+    <string name="app_act_contact_group_info_user_count">成员（%d）</string>
+    <string name="app_act_contact_group_info_dissolve">解散讨论组</string>
+    <string name="app_act_contact_group_info_exit">退出讨论组</string>
+    <string name="app_act_contact_group_info_exit_hint">正在退出讨论组&#8230;&#8230;&#8230;</string>
+    <string name="app_act_contact_group_info_dissolve_hint">正在解散讨论组&#8230;&#8230;&#8230;</string>
+    <string name="app_act_contact_group_info_send_msg_hint">发消息</string>
+
+
     <!--in common use-->
     <string name="app_common_network_error">请检查网络连接</string>
     <string name="app_common_no_data">暂无数据</string>

@@ -9,6 +9,7 @@ import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.imcore.R
 import com.zj.imcore.gui.login.LoginActivity
 import com.zj.imcore.ui.main.MainActivity
+import com.zj.imcore.ui.main.contact.group.GroupInfoActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

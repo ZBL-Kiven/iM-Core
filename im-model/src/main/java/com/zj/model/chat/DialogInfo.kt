@@ -11,11 +11,11 @@ class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
     val role: String; get() = impl.role() //"owner",
     val department: String; get() = impl.department() //null,
     val email: String; get() = impl.email() //"xing.li@cityfruit.io",
-    val type:String ;get() = impl.type()
+    val type: String; get() = impl.type()
     val phone: String; get() = impl.phone() //"13521930955",
     val updated: Long; get() = impl.updated() //"2019-12-26T03:11:34Z",
     val name: String; get() = impl.name() //"xing.li",
-    val tmid: String; get() = impl.type() //"p2p",
+    val tmid: String; get() = impl.tmid() //"p2p",
     val created: Long; get() = impl.created() //"2019-12-26T03:11:34Z",
     val title: String; get() = impl.title() //null,
     val hidden: Boolean; get() = impl.hidden() //false,
@@ -33,10 +33,10 @@ class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
 
     /** group properties */
     val description: String; get() = impl.description() //null,
-    val private: String; get() = impl.private() //false,
+    val private: String; get() = impl.getPrivate() //false,
     val mode: String; get() = impl.mode() //"admin_off",
     val topic: String; get() = impl.topic() //null,
-    val leavable: String; get() = impl.leavable() //true,
+    val leavable: Boolean; get() = impl.leavable() //true,
 
     /** extends */
     private val members: List<Map<String, Any>>? = null

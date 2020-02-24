@@ -13,12 +13,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zj.base.view.BaseTitleView
 import com.zj.imcore.Constance
 import com.zj.imcore.R
+import com.zj.imcore.apis.group.CreateDialog
+import com.zj.imcore.apis.group.GroupApi
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.model.member.EventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.imcore.ui.main.contact.DialogsProvider
 import com.zj.imcore.ui.main.contact.DialogsVisitor
+import com.zj.imcore.ui.main.contact.group.adapter.CreateGroupListAdapter
 import com.zj.loading.BaseLoadingView
 import com.zj.model.chat.DialogInfo
 import com.zj.ui.dispatcher.addReceiveObserver
@@ -30,7 +33,13 @@ class CreateGroupActivity : FCActivity() {
 
         private const val SELECTED = "selected_list"
         private const val MAX_NUM = "max_select_size"
-        fun start(context: Activity, req: Int, maxNum: Int, selectedIds: ArrayList<String>? = null) {
+        
+        fun start(
+            context: Activity,
+            req: Int,
+            maxNum: Int,
+            selectedIds: ArrayList<String>? = null
+        ) {
             val i = Intent(context, CreateGroupActivity::class.java)
             if (!selectedIds.isNullOrEmpty()) i.putExtra(SELECTED, selectedIds)
             if (maxNum > 0) i.putExtra(MAX_NUM, maxNum)
@@ -112,9 +121,10 @@ class CreateGroupActivity : FCActivity() {
             return@Handler false
         }
         rvContent?.adapter = adapter
-        addReceiveObserver<EventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).filterIn { it, _ -> it.code == Constance.REG_RESULT_CONTANCT }.listen { _, _, _ ->
-            getData()
-        }
+        addReceiveObserver<EventMod>(Constance.REG_CODE_FRAGMENT_CONTACT).filterIn { it, _ -> it.code == Constance.REG_RESULT_CONTANCT }
+            .listen { _, _, _ ->
+                getData()
+            }
         getData()
     }
 
@@ -125,7 +135,10 @@ class CreateGroupActivity : FCActivity() {
         }
         cachedData?.let {
             val filterList = it.filterTo(arrayListOf()) { m ->
-                m.name.contains(ets, true) || m.title.contains(ets, true) || m.email.contains(ets, true)
+                m.name.contains(ets, true) || m.title.contains(ets, true) || m.email.contains(
+                    ets,
+                    true
+                )
             }
             setData(filterList)
         }
@@ -145,10 +158,14 @@ class CreateGroupActivity : FCActivity() {
 
     private fun getData() {
         loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING)
-        DialogsProvider.getDialogsFromLocalOrServer( object : DialogsVisitor {
+        DialogsProvider.getDialogsFromLocalOrServer(object : DialogsVisitor {
             override fun onGot(m: List<DialogInfo>?) {
                 if (m.isNullOrEmpty()) {
-                    loadingView?.setMode(BaseLoadingView.DisplayMode.NO_DATA, getString(R.string.app_common_no_data), false)
+                    loadingView?.setMode(
+                        BaseLoadingView.DisplayMode.NO_DATA,
+                        getString(R.string.app_common_no_data),
+                        false
+                    )
                 } else {
                     cachedData = ArrayList(m)
                     setData(cachedData)
@@ -163,8 +180,26 @@ class CreateGroupActivity : FCActivity() {
         if (ids.isNullOrEmpty()) {
             FCApplication.showToast(R.string.app_act_create_groups_hint_not_create)
         } else {
-            loadingView?.setMode(BaseLoadingView.DisplayMode.LOADING, getString(R.string.app_act_create_groups_hint), true)
+            loadingView?.setMode(
+                BaseLoadingView.DisplayMode.LOADING,
+                getString(R.string.app_act_create_groups_hint),
+                true
+            )
             //todo create group
+            val dialog = CreateDialog();
+            dialog.name = "Android ${ids.size}"
+            dialog.members = ids
+            dialog.team_id = "1"
+
+            GroupApi.createDialog(dialog) { success, content, exception ->
+                if (success) {
+                    FCApplication.showToast("创建成功$content")
+                    finish()
+                } else {
+                    FCApplication.showToast("创建失败$content")
+                    loadingView?.setMode(BaseLoadingView.DisplayMode.NONE)
+                }
+            }
         }
     }
 

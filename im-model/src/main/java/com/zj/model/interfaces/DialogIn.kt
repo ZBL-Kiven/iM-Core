@@ -26,10 +26,10 @@ interface DialogIn {
     //--- group properties ---
 
     fun description(): String = "" //null,
-    fun private(): String = "" //false,
+    fun getPrivate(): String = "" //false,
     fun mode(): String = "" //"admin_off",
     fun topic(): String = "" //null,
-    fun leavable(): String = "" //true,
+    fun leavable(): Boolean = false //true,
 
     //--- missing field ---
 
@@ -40,6 +40,6 @@ interface DialogIn {
     fun unReadCount(): Long
 
 
-    fun getTeamMembers(lst: List<Map<String, Any>>): List<TeamMembers>
+    fun getTeamMembers(lst: List<Map<String, Any>>?): List<TeamMembers>
 
 }

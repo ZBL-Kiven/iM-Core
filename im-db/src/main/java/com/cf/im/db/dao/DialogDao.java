@@ -30,17 +30,7 @@ public interface DialogDao extends IDao<DialogBean> {
      */
     @Transaction
     @Query("select * from dialogbean where dialogId = :dialogId limit 1")
-    List<DialogBean> queryDialogByIds(long... dialogId);
-
-    /**
-     * 根据dialogId 获取dialog 信息
-     *
-     * @param userId 对方用户Id
-     * @return 会话信息
-     */
-    @Transaction
-    @Query("select * from dialogbean where userId = :userId limit 1")
-    DialogBean queryByUserId(long userId);
+    List<DialogBean> queryDialogByIds(String... dialogId);
 
     /**
      * 根据dialogId 获取dialog 信息
@@ -50,7 +40,17 @@ public interface DialogDao extends IDao<DialogBean> {
      */
     @Transaction
     @Query("select * from dialogbean where dialogId = :dialogId limit 1")
-    DialogBean queryById(long dialogId);
+    DialogBean queryById(String dialogId);
+
+    /**
+     * 根据dialogId 获取dialog 信息
+     *
+     * @param tmId tmid
+     * @return 会话信息
+     */
+    @Transaction
+    @Query("select * from dialogbean where tmId = :tmId limit 1")
+    DialogBean queryByTmId(String tmId);
 
     /**
      * 查询所有会话列表
@@ -60,5 +60,15 @@ public interface DialogDao extends IDao<DialogBean> {
     @Transaction
     @Query("select * from dialogbean")
     List<DialogBean> queryAll();
+
+    /**
+     * 查询会话
+     *
+     * @param type group 群组、p2p 个人
+     * @return
+     */
+    @Transaction
+    @Query("select * from dialogbean where type = :type")
+    List<DialogBean> queryDialogByType(String type);
 
 }

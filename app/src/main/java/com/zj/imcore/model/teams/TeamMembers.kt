@@ -17,7 +17,8 @@ class TeamMembers {
     var hidden: Boolean = false //false,
     var id: Long = 0L //2,
     var avatar: String? = "" //null,
-    var team_id: Long = 0L //2,
+    var team_id: String? = "" //2,
     var gender: String? = "" //"male",
     var profile: UserProfileModel? = null
+    var tmid: String? = null
 }

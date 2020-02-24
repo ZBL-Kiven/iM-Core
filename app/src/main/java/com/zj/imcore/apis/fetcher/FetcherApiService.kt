@@ -10,9 +10,9 @@ interface FetcherApiService {
     fun fetchDialogs(@Query("since_ts") ts: Long): Observable<ResponseBody>
 
     @GET("/message/v1/teams/cityfruit/dialogs/{dialogId}/newer_messages")
-    fun fetchNewerMsg(@Path("dialogId") dialogId: Long, @Query("message_id") id: Long, @Query("limit") limit: Int): Observable<ResponseBody?>
+    fun fetchNewerMsg(@Path("dialogId") dialogId: String, @Query("message_id") id: Long, @Query("limit") limit: Int): Observable<ResponseBody?>
 
     @GET("/message/v1/teams/cityfruit/dialogs/{dialogId}/older_messages")
-    fun fetchOlderMsg(@Path("dialogId") dialogId: Long, @Query("message_id") id: Long, @Query("limit") limit: Int): Observable<ResponseBody?>
+    fun fetchOlderMsg(@Path("dialogId") dialogId: String, @Query("message_id") id: Long, @Query("limit") limit: Int): Observable<ResponseBody?>
 
 }

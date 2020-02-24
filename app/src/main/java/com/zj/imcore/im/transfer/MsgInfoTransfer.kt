@@ -45,7 +45,7 @@ object MsgInfoTransfer {
         data.subtype = null
         data.subtypeDetail = null
         return MsgInfo(object : MessageIn {
-            override fun dialogId(): Long {
+            override fun dialogId(): String {
                 return data.dialog_id
             }
 

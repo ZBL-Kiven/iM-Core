@@ -34,7 +34,7 @@ android {
     } else {
         android.buildTypes.release.signingConfig = null
     }
-    
+
     buildTypes {
         release {
             minifyEnabled false

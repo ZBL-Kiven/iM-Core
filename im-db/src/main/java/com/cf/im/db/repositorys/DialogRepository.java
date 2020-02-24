@@ -22,10 +22,31 @@ public class DialogRepository extends BaseRepository {
         });
     }
 
+    public static void insertOrUpdate(DialogBean bean, DBListener<DialogBean> listener) {
+        getWriteExecutor().execute(() -> {
+            //更新数据库
+            getDialogDao().insertOrUpdate(bean);
+            listener.onSuccess(bean);
+        });
+    }
+
     public static void insertOrUpdates(String json, DBListener<List<DialogBean>> listener) {
         getWriteExecutor().execute(() -> {
-            List<DialogBean> beans = JSON.parseArray(json, DialogBean.class);
+            List<DialogBean> beans = JSON.parseArray(JSON.parseObject(json).getString("dialogs"), DialogBean.class);
             getDialogDao().insertOrUpdate(beans);
+            listener.onSuccess(beans);
+        });
+    }
+
+    public static void queryGroupDialog(DBListener<List<DialogBean>> listener) {
+        getReadExecutor().execute(() -> {
+            listener.onSuccess(getDialogDao().queryDialogByType("group"));
+        });
+    }
+
+    public static void queryP2p(DBListener<List<DialogBean>> listener) {
+        getReadExecutor().execute(() -> {
+            List<DialogBean> beans = getDialogDao().queryDialogByType("p2p");
             listener.onSuccess(beans);
         });
     }
@@ -37,16 +58,16 @@ public class DialogRepository extends BaseRepository {
         });
     }
 
-    public static void queryDialogById(long dialogId, DBListener<DialogBean> listener) {
+    public static void queryDialogById(String dialogId, DBListener<DialogBean> listener) {
         getReadExecutor().execute(() -> {
             DialogBean bean = getDialogDao().queryById(dialogId);
             listener.onSuccess(bean);
         });
     }
 
-    public static void queryByUserId(long userId, DBListener<DialogBean> listener) {
+    public static void queryDialogByTmId(String tmId, DBListener<DialogBean> listener) {
         getReadExecutor().execute(() -> {
-            DialogBean bean = getDialogDao().queryByUserId(userId);
+            DialogBean bean = getDialogDao().queryByTmId(tmId);
             listener.onSuccess(bean);
         });
     }

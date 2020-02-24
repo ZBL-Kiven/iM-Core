@@ -31,7 +31,7 @@ object FetcherApi {
         }
     }
 
-    fun syncMessages(dialogId: Long, messageId: Long, limit: Int, isNewer: Boolean, completed: ((Boolean, HttpException?) -> Unit)? = null): BaseRetrofit.RequestCompo {
+    fun syncMessages(dialogId: String, messageId: Long, limit: Int, isNewer: Boolean, completed: ((Boolean, HttpException?) -> Unit)? = null): BaseRetrofit.RequestCompo {
         val l: (isSuccess: Boolean, data: ResponseBody?, throwable: HttpException?) -> Unit = { isSuccess, data, throwable ->
             if (isSuccess) {
                 val d = data?.string()

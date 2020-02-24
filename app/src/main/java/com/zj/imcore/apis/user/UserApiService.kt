@@ -1,6 +1,7 @@
 package com.zj.imcore.apis.user
 
 
+import com.cf.im.db.domain.DialogBean
 import com.cf.im.db.domain.MemberBean
 import com.zj.imcore.model.login.LoginInfo
 import com.zj.imcore.model.sign.SignInfo
@@ -31,5 +32,5 @@ interface UserApiService {
 
     //更新用户信息
     @PATCH("/relation/v1/users/{user}")
-    fun update(@Path("user") user: String, @Body obj: Any): Observable<MemberBean>;
+    fun update(@Path("user") user: String, @Body obj: Any): Observable<DialogBean>;
 }

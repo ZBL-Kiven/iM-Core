@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 用户通讯录
@@ -19,7 +20,7 @@ public class MemberBean {
     public long uid;
 
 
-    public long dialogId;
+    public String dialogId;
 
     /**
      * 用户是否活跃
@@ -105,15 +106,28 @@ public class MemberBean {
     public String describe;
 
     /**
+     * 自己添加 个人签名
+     */
+    public String nickname;
+
+    /**
      * 填充 profile 内容
      *
      * @param profile 服务器返回Member 里面的 profile 对象
      */
     public void setProfile(HashMap<String, String> profile) {
         this.indexSymbol = profile.get("indexSymbol");
+        this.nickname = profile.get("nickname");
         this.describe = profile.get("describe");
     }
     //####### profile MAP END #########
 
+    public HashMap<String, String> getProfile() {
+        HashMap<String, String> profile = new HashMap<>();
+        profile.put("indexSymbol", indexSymbol);
+        profile.put("nickname", nickname);
+        profile.put("describe", describe);
+        return profile;
+    }
 
 }
