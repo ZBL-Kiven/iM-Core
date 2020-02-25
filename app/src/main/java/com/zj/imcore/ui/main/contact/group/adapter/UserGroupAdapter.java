@@ -52,8 +52,13 @@ public class UserGroupAdapter extends BaseSimpleAdapter<TeamMembers> {
             tvUserName.setText("");
             ivUserAvatar.setImageResource(R.drawable.app_act_contact_group_user_add);
         } else {
-            Glide.with(ivUserAvatar).load(getItem(position).getAvatar()).into(ivUserAvatar);
-            tvUserName.setText(getItem(position).getName() + "" + getItem(position).getTmid());
+
+            Glide.with(ivUserAvatar)
+                    .load(getItem(position).getAvatar())
+                    .placeholder(R.mipmap.app_contact_avatar_default)
+                    .into(ivUserAvatar);
+
+            tvUserName.setText(getItem(position).getName());
         }
     }
 }

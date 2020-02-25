@@ -3,6 +3,9 @@ package com.zj.imcore.apis.group;
 
 import com.cf.im.db.domain.DialogBean;
 
+import java.util.List;
+import java.util.Map;
+
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -64,13 +67,13 @@ public interface GroupApiService {
 
 
     /**
-     * 邀请成员假如讨论组（接口不对）
+     * 邀请成员加入讨论组
      *
      * @param dialogId 讨论组编号
      * @return 没有内容
      */
-    @POST("/relation/v1/dialogs/{dialogId}}/members")
-    Observable<String> addUserToDialog(@Path("dialogId") String dialogId);
+    @POST("/relation/v1/dialogs/{dialogId}/members")
+    Observable<String> addUserToDialog(@Path("dialogId") String dialogId, @Body Map<String, List<String>> map);
 
 
     /**

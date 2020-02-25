@@ -94,7 +94,7 @@ public class DialogBean implements DialogIn {
 
     @Override
     public String email() {
-        return email;
+        return email == null ? "" : email;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class DialogBean implements DialogIn {
 
     @Override
     public String name() {
-        return name;
+        return name == null ? "" : name;
     }
 
     @Override
@@ -129,7 +129,7 @@ public class DialogBean implements DialogIn {
 
     @Override
     public String title() {
-        return title;
+        return title == null ? "" : title;
     }
 
     @Override

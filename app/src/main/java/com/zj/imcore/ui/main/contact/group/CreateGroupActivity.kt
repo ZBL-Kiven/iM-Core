@@ -19,6 +19,7 @@ import com.zj.imcore.base.FCActivity
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.model.member.EventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
+import com.zj.imcore.ui.chat.ChatActivity
 import com.zj.imcore.ui.main.contact.DialogsProvider
 import com.zj.imcore.ui.main.contact.DialogsVisitor
 import com.zj.imcore.ui.main.contact.group.adapter.CreateGroupListAdapter
@@ -33,16 +34,29 @@ class CreateGroupActivity : FCActivity() {
 
         private const val SELECTED = "selected_list"
         private const val MAX_NUM = "max_select_size"
-        
-        fun start(
+        private const val KEY_EDIT_DIALOG_ID = "edit_dialog_id"
+
+        fun startCreateGroup(
+            context: Activity,
+            req: Int,
+            maxNum: Int
+        ) {
+            val i = Intent(context, CreateGroupActivity::class.java)
+            if (maxNum > 0) i.putExtra(MAX_NUM, maxNum)
+            context.startActivityForResult(i, req)
+        }
+
+        fun startGroupAddUser(
             context: Activity,
             req: Int,
             maxNum: Int,
-            selectedIds: ArrayList<String>? = null
+            selectedIds: ArrayList<String>,
+            dialogId: String
         ) {
             val i = Intent(context, CreateGroupActivity::class.java)
             if (!selectedIds.isNullOrEmpty()) i.putExtra(SELECTED, selectedIds)
             if (maxNum > 0) i.putExtra(MAX_NUM, maxNum)
+            i.putExtra(KEY_EDIT_DIALOG_ID, dialogId)
             context.startActivityForResult(i, req)
         }
     }
@@ -58,16 +72,23 @@ class CreateGroupActivity : FCActivity() {
     private var loadingView: BaseLoadingView? = null
     private var adapter: CreateGroupListAdapter? = null
     private var titleBar: BaseTitleView? = null
-
     private var searchHandler: Handler? = null
     private var cachedData: ArrayList<DialogInfo>? = null
     private var maxSelectCount: Int = -1
+
+    private var dialogId: String? = null
 
     override fun initBase() {
         val selectedIds = if (intent.hasExtra(SELECTED)) {
             ArrayList(intent.getStringArrayListExtra(SELECTED)?.toMutableList() ?: ArrayList())
         } else arrayListOf()
-        adapter = CreateGroupListAdapter(this, selectedIds)
+
+        this.dialogId = intent.getStringExtra(KEY_EDIT_DIALOG_ID)
+
+        adapter = CreateGroupListAdapter(this, selectedIds) {
+            val num = adapter?.selectedIds?.size
+            titleBar?.setRightTxt(getString(R.string.app_common_completed_num_hint, num))
+        }
         if (intent.hasExtra(MAX_NUM)) {
             maxSelectCount = intent.getIntExtra(MAX_NUM, -1)
         }
@@ -93,7 +114,11 @@ class CreateGroupActivity : FCActivity() {
             finish()
         }
         titleBar?.setRightClickListener {
-            createAGroup()
+            if (dialogId.isNullOrEmpty()) {
+                createGroup()
+            } else {
+                addUserToGroup();
+            }
         }
         etSearch?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -175,30 +200,65 @@ class CreateGroupActivity : FCActivity() {
         })
     }
 
-    private fun createAGroup() {
+    private fun addUserToGroup() {
+        val ids = adapter?.selectedIds
+        if (ids.isNullOrEmpty()) {
+            FCApplication.showToast(R.string.app_act_create_groups_hint_add_not_user_to_group)
+            return
+        }
+
+        loadingView?.setMode(
+            BaseLoadingView.DisplayMode.LOADING,
+            getString(R.string.app_act_create_groups_hint_add_user_to_group),
+            true
+        )
+
+        val request = HashMap<String, List<String>>()
+        request["members"] = ids
+
+        GroupApi.addUserToDialog(dialogId!!, request) { success, content, e ->
+            loadingView?.setMode(
+                BaseLoadingView.DisplayMode.NONE
+            )
+            if (success) {
+                FCApplication.showToast(R.string.app_act_create_groups_hint_add_user_to_group_success)
+                setResult(Activity.RESULT_OK)
+                finish()
+            } else {
+                FCApplication.showToast(R.string.app_act_create_groups_hint_add_user_to_group_fail)
+            }
+        }
+
+    }
+
+    private fun createGroup() {
         val ids = adapter?.selectedIds
         if (ids.isNullOrEmpty()) {
             FCApplication.showToast(R.string.app_act_create_groups_hint_not_create)
-        } else {
-            loadingView?.setMode(
-                BaseLoadingView.DisplayMode.LOADING,
-                getString(R.string.app_act_create_groups_hint),
-                true
-            )
-            //todo create group
-            val dialog = CreateDialog();
-            dialog.name = "Android ${ids.size}"
-            dialog.members = ids
-            dialog.team_id = "1"
+            return
+        }
+        if (ids.size == 1) {
+            FCApplication.showToast(R.string.app_act_create_groups_hint_create_count1)
+            return
+        }
+        loadingView?.setMode(
+            BaseLoadingView.DisplayMode.LOADING,
+            getString(R.string.app_act_create_groups_hint),
+            true
+        )
+        //todo create group
+        val dialog = CreateDialog();
+        dialog.name = "Android ${ids.size}"
+        dialog.members = ids
+        dialog.team_id = "1"
 
-            GroupApi.createDialog(dialog) { success, content, exception ->
-                if (success) {
-                    FCApplication.showToast("创建成功$content")
-                    finish()
-                } else {
-                    FCApplication.showToast("创建失败$content")
-                    loadingView?.setMode(BaseLoadingView.DisplayMode.NONE)
-                }
+        GroupApi.createDialog(dialog) { success, content, exception ->
+            if (success) {
+                FCApplication.showToast("创建成功$content")
+                finish()
+            } else {
+                FCApplication.showToast("创建失败$content")
+                loadingView?.setMode(BaseLoadingView.DisplayMode.NONE)
             }
         }
     }

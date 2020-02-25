@@ -56,4 +56,12 @@ object GroupApi {
     ) {
         get().call({ it.removeUserToDialog(dialogId, teamId, "leave") }, result)
     }
+
+    fun addUserToDialog(
+        dialogId: String,
+        map: Map<String, List<String>>,
+        result: (Boolean, String?, throwable: HttpException?) -> Unit
+    ) {
+        get().call({ it.addUserToDialog(dialogId, map) }, result)
+    }
 }
