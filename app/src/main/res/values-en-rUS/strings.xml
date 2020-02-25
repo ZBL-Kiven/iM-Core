@@ -66,6 +66,11 @@
     <string name="pg_str_at_best">%1$s can only select up to %2$d files</string>
     <string name="pg_permission_request_fail">%s permissions denied!</string>
 
+    <!--teams-->
+    <string name="app_act_teams_title">my teams</string>
+    <string name="app_act_teams_loading">wating for team information loading…</string>
+    <string name="app_act_teams_select">select a team in your joined ,to start FruitChat</string>
+
     <!--user info-->
     <string name="app_act_user_info_title_default">%s \'s \information</string>
     <string name="app_act_user_info_title">personalInformation</string>
@@ -86,6 +91,12 @@
     <string name="app_act_groups_title">my groups</string>
     <string name="app_act_create_groups_title">create group</string>
     <string name="app_act_create_groups_hint">Creating discussion group…</string>
+
+
+    <!--notify-->
+    <string name="app_notification_new_message">new messages</string>
+    <string name="app_notification_new_message_describe">Notification category when receiving a letter message</string>
+    <string name="app_notification_new_message_id">new_message_id</string>
 
     <!--in common use-->
     <string name="app_common_network_error">network is not working</string>

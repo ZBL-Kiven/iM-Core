@@ -10,7 +10,7 @@
     <color name="color_primary_light_dark">#c1c7c3</color>
     <color name="color_primary_background">#a1a3a1</color>
     <color name="color_primary_text_color">#e7f3e9</color>
-    <color name="color_primary_color_hight_light">#f7fff9</color>
+    <color name="color_primary_color_high_light">#f7fff9</color>
     <color name="color_primary_color_mediu_light">#eff0e9</color>
 
 </resources>
