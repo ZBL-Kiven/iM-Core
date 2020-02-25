@@ -25,15 +25,16 @@
 
     <TextView
         android:id="@+id/app_act_contact_group_info_item_tv_user_nickname"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
         android:ellipsize="end"
+        android:gravity="center"
         android:lines="1"
         android:textColor="@color/color_primary"
-        android:textSize="@dimen/app_et_text_size_14" />
+        android:textSize="@dimen/app_et_text_size_12" />
 
     <View
         android:layout_width="0dp"

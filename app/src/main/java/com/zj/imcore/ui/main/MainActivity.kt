@@ -15,7 +15,6 @@ import com.zj.imcore.ui.main.contact.ContactFragment
 import com.zj.imcore.ui.main.setting.SettingFragment
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.ui.main.contact.group.CreateGroupActivity
-import com.zj.imcore.ui.main.contact.group.GroupInfoActivity
 import com.zj.imcore.ui.main.conversation.ConversationFragment
 import java.lang.NullPointerException
 
@@ -79,7 +78,7 @@ class MainActivity : FCActivity() {
     override fun initListener() {
         baseTitleView?.setRightClickListener {
             if (fragmentManager?.getCurrentItemId() == conversationFragment?.fId) {
-                CreateGroupActivity.start(this, 0, -1)
+                CreateGroupActivity.startCreateGroup(this, 0, -1)
 //                GroupInfoActivity.startActivity(this, "=bw53e")
             }
         }

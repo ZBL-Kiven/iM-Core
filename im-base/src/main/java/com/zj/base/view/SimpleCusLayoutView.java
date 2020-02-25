@@ -17,6 +17,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+
 import com.zj.base.R;
 
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
@@ -160,6 +161,7 @@ public class SimpleCusLayoutView extends View {
     public void draw() {
         initPaint();
         measureRect();
+        requestLayout();
         postInvalidate();
     }
 

@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.cf.im.db.domain.DialogBean;
+import com.cf.im.db.repositorys.DialogRepository;
 import com.zj.base.view.BaseTitleView;
 import com.zj.imcore.R;
 import com.zj.imcore.apis.group.GroupApi;
@@ -25,6 +27,7 @@ import com.zj.loading.BaseLoadingView;
 import com.zj.model.chat.TeamMembers;
 import com.zj.model.interfaces.DialogIn;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +36,8 @@ import java.util.List;
  * @author yangji
  */
 public class GroupInfoActivity extends FCActivity {
+
+    private final int KEY_ADD_USER = 0x1001;
 
     private ImageView ivUserAvatar;
     private TextView tvName;
@@ -121,8 +126,13 @@ public class GroupInfoActivity extends FCActivity {
             @Override
             public void onItemClick(int position, View v, @Nullable TeamMembers bean) {
                 if (adapter.isAddItem(position)) {
+                    List<TeamMembers> beans = adapter.getData();
+                    ArrayList<String> ids = new ArrayList<>();
+                    for (TeamMembers info : beans) {
+                        ids.add(info.getTmid());
+                    }
                     //跳转到 邀请 新成员界面
-                    CreateGroupActivity.Companion.start(GroupInfoActivity.this, 1, 29, null);
+                    CreateGroupActivity.Companion.startGroupAddUser(GroupInfoActivity.this, KEY_ADD_USER, 29, ids, mDialogBean.dialogId());
                 } else {
                     //处理当前用户界面
                     execClickUser(bean);
@@ -148,9 +158,34 @@ public class GroupInfoActivity extends FCActivity {
      * 加载 讨论组用户
      */
     private void loadUsers() {
-        adapter.add(mDialogBean.getTeamMembers(null));
-        rvUsers.setAdapter(adapter);
-        tvUserCount.setText(getString(R.string.app_act_contact_group_info_user_count, adapter.getCount()));
+
+        List<TeamMembers> list = mDialogBean.getTeamMembers(null);
+        String[] ids = new String[list.size()];
+
+        for (int i = 0; i < list.size(); i++) {
+            ids[i] = list.get(i).getTmid();
+        }
+
+
+        DialogRepository.queryDialogByTmIds(ids, beans -> {
+            for (TeamMembers tm : list) {
+                for (DialogBean bean : beans) {
+                    if (tm.getTmid().equals(bean.tmid())) {
+                        tm.setAvatar(bean.avatar());
+                        tm.setName(bean.name());
+                        tm.setRole(bean.role());
+                    }
+                }
+            }
+
+            runOnUiThread(() -> {
+                adapter.add(list);
+                rvUsers.setAdapter(adapter);
+                tvUserCount.setText(getString(R.string.app_act_contact_group_info_user_count, adapter.getCount()));
+            });
+        });
+
+
     }
 
     /**
@@ -193,10 +228,17 @@ public class GroupInfoActivity extends FCActivity {
             case EditTextActivity.TYPE_GROUP_THEME:
                 tvTheme.setText(EditTextActivity.getIntentContent(data));
                 break;
+            case KEY_ADD_USER:
+                // 刷新成员
+                refreshUser();
+                break;
             default:
         }
     }
 
+    private void refreshUser() {
+        queryDialogByDialogId(mDialogBean.dialogId());
+    }
 
     /**
      * 提交解散讨论组
@@ -237,6 +279,7 @@ public class GroupInfoActivity extends FCActivity {
         }
         this.mDialogBean = dialogBean;
 
+
         titleView.setTitle(mDialogBean.name());
 
         Glide.with(ivUserAvatar).load(mDialogBean.avatar()).into(ivUserAvatar);
@@ -245,5 +288,6 @@ public class GroupInfoActivity extends FCActivity {
         tvTheme.setText(mDialogBean.topic());
         loadUsers();
     }
+
 
 }

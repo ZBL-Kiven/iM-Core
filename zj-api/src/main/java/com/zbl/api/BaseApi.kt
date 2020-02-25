@@ -113,11 +113,9 @@ class BaseApi<T : Any>(
             },
             { throwable ->
                 throwable?.let {
-                    if (throwable is HttpException) {
-                        if (throwable.code() == 204) {
-                            subscribe?.invoke(true, null, throwable);
-                        }
-                    } else {
+                    if (throwable is HttpException && throwable.code() == 204) {
+                        subscribe?.invoke(true, null, throwable);
+                    } else if (throwable is HttpException) {
                         subscribe?.invoke(false, null, throwable as? HttpException)
                     }
                     errorHandler?.onError(it)

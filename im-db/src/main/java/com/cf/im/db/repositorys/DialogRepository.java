@@ -72,6 +72,13 @@ public class DialogRepository extends BaseRepository {
         });
     }
 
+    public static void queryDialogByTmIds(String[] tmId, DBListener<List<DialogBean>> listener) {
+        getReadExecutor().execute(() -> {
+            List<DialogBean> beans = getDialogDao().queryByTmIds(tmId);
+            listener.onSuccess(beans);
+        });
+    }
+
     public static void queryByDialogId(String dialogId, DBListener<DialogBean> listener) {
         getReadExecutor().execute(() -> {
             DialogBean bean = getDialogDao().queryDialogById(dialogId);

@@ -7,11 +7,12 @@
     android:background="@color/app_base_background"
     android:orientation="vertical">
 
+    <!-- app:r_vText="@string/app_common_completed"-->
+
     <com.zj.base.view.BaseTitleView
         android:id="@+id/app_act_contact_group_info_titleView"
         style="@style/BaseTitleViewStyle"
         app:l_vDrawable="@mipmap/back"
-        app:r_vText="@string/app_common_completed"
         app:r_vTextSize="16"
         tools:vTitle="@string/app_act_create_groups_title" />
 

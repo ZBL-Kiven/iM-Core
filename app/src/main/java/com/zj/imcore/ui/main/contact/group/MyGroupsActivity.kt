@@ -138,4 +138,9 @@ class MyGroupsActivity : FCActivity() {
             }
         })
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mHandler.removeMessages(what)
+    }
 }

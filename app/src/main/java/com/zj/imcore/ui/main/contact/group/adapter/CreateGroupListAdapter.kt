@@ -12,7 +12,13 @@ import com.zj.list.holders.BaseViewHolder
 import com.zj.model.chat.DialogInfo
 import java.util.ArrayList
 
-class CreateGroupListAdapter(val context: Context, val selectedIds: ArrayList<String> = arrayListOf()) : GroupedListAdapter<DialogInfo, ContactGroupInfo>(context) {
+class CreateGroupListAdapter(
+    val context: Context,
+    private val defaultSelectedId: ArrayList<String> = arrayListOf(),
+    listener: (() -> Unit)
+) : GroupedListAdapter<DialogInfo, ContactGroupInfo>(context) {
+
+    val selectedIds: ArrayList<String> = arrayListOf()
 
     init {
         setOnChildClickListener { adapter, _, groupPosition, childPosition ->
@@ -23,6 +29,7 @@ class CreateGroupListAdapter(val context: Context, val selectedIds: ArrayList<St
                 } else {
                     it.add(memberId)
                 }
+                listener.invoke()
             }
             adapter.notifyChildChanged(groupPosition, childPosition)
         }
@@ -52,11 +59,21 @@ class CreateGroupListAdapter(val context: Context, val selectedIds: ArrayList<St
         val w = context.resources.getDimension(R.dimen.app_contact_avatar_width).toInt()
         val h = context.resources.getDimension(R.dimen.app_contact_avatar_height).toInt()
         holder?.getView<ImageView>(R.id.app_act_contact_select_item_iv_avatar)?.let { iv ->
-            Glide.with(context).load(r.avatar).override(w, h).placeholder(R.mipmap.app_contact_avatar_default).into(iv)
+            Glide.with(context).load(r.avatar).override(w, h)
+                .placeholder(R.mipmap.app_contact_avatar_default).into(iv)
         }
         holder?.setText(R.id.app_act_contact_select_item_tv_name, r.name)
         holder?.setText(R.id.app_act_contact_select_item_tv_title, r.title)
-        holder?.getView<CheckBox>(R.id.app_act_contact_select_item_cv)?.isChecked = selectedIds.contains(r.tmid)
+        if (defaultSelectedId.contains(r.tmid)) {
+            holder?.getView<CheckBox>(R.id.app_act_contact_select_item_cv)?.isChecked = true
+            holder?.getView<CheckBox>(R.id.app_act_contact_select_item_cv)?.isEnabled = false
+            holder?.itemView?.isEnabled = false
+        } else {
+            holder?.getView<CheckBox>(R.id.app_act_contact_select_item_cv)?.isChecked =
+                selectedIds.contains(r.tmid)
+            holder?.getView<CheckBox>(R.id.app_act_contact_select_item_cv)?.isEnabled = true
+            holder?.itemView?.isEnabled = true
+        }
     }
 
     override fun bindFooter(holder: BaseViewHolder?, t: ContactGroupInfo?, pos: Int) {
