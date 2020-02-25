@@ -14,14 +14,6 @@ import com.zj.model.chat.DialogInfo
 class MyGroupListAdapter(val context: Context) :
     GroupedListAdapter<DialogInfo, ContactGroupInfo>(context) {
 
-    init {
-        setOnChildClickListener { adapter, _, groupPosition, childPosition ->
-//            val memberId = adapter.getItem(groupPosition).children[childPosition].uid
-
-            adapter.notifyChildChanged(groupPosition, childPosition)
-        }
-    }
-
     override fun hasFooter(groupPosition: Int): Boolean {
         return false
     }
@@ -49,7 +41,10 @@ class MyGroupListAdapter(val context: Context) :
             Glide.with(context).load(r.avatar).override(w, h)
                 .placeholder(R.mipmap.app_contact_avatar_default).into(iv)
         }
-        holder?.setText(R.id.app_act_contact_select_item_tv_name, r.name)
+        
+        val count = r.getTeamMembers()?.size ?: 0;
+
+        holder?.setText(R.id.app_act_contact_select_item_tv_name, r.name + "($count)")
         holder?.setText(R.id.app_act_contact_select_item_tv_title, r.title)
     }
 

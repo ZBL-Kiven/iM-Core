@@ -14,6 +14,7 @@ import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.imcore.ui.main.contact.ContactListAdapter
 import com.zj.imcore.ui.main.contact.DialogsProvider
 import com.zj.imcore.ui.main.contact.DialogsVisitor
+import com.zj.imcore.ui.main.contact.group.adapter.MyGroupListAdapter
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.loading.BaseLoadingView
 import com.zj.model.chat.DialogInfo
@@ -28,7 +29,7 @@ class MyGroupsActivity : FCActivity() {
     private var rvDialog: RecyclerView? = null
     private var etSearch: EditText? = null
 
-    private var adapter: ContactListAdapter? = null
+    private var adapter: MyGroupListAdapter? = null
     private var cachedData: ArrayList<DialogInfo>? = null
 
     private val mHandler = Handler {
@@ -70,7 +71,7 @@ class MyGroupsActivity : FCActivity() {
     }
 
     override fun initData() {
-        adapter = ContactListAdapter(this)
+        adapter = MyGroupListAdapter(this)
         rvDialog?.adapter = adapter;
 
         adapter?.setOnChildClickListener { adapter, _, groupPosition, childPosition ->

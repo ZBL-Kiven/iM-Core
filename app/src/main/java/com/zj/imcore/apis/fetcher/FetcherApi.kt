@@ -17,7 +17,10 @@ object FetcherApi {
         return getDefaultApi(20000)
     }
 
-    fun syncDialogs(ts: Long, completed: (Boolean, HttpException?) -> Unit): BaseRetrofit.RequestCompo {
+    fun syncDialogs(
+        ts: Long,
+        completed: (Boolean, HttpException?) -> Unit
+    ): BaseRetrofit.RequestCompo {
         return get().call({ it.fetchDialogs(ts) }) { isSuccess: Boolean, data: ResponseBody?, throwable: HttpException? ->
             if (isSuccess) {
                 val d = data?.string()
@@ -31,18 +34,31 @@ object FetcherApi {
         }
     }
 
-    fun syncMessages(dialogId: String, messageId: Long, limit: Int, isNewer: Boolean, completed: ((Boolean, HttpException?) -> Unit)? = null): BaseRetrofit.RequestCompo {
-        val l: (isSuccess: Boolean, data: ResponseBody?, throwable: HttpException?) -> Unit = { isSuccess, data, throwable ->
-            if (isSuccess) {
-                val d = data?.string()
-                MessageRepository.insertOrUpdates(d) {
-                    UIStore.postData(MsgInfoTransfer.transform(it))
-                    completed?.invoke(true, null)
+    fun syncMessages(
+        dialogId: String,
+        messageId: Long,
+        limit: Int,
+        isNewer: Boolean,
+        completed: ((Boolean, HttpException?) -> Unit)? = null
+    ): BaseRetrofit.RequestCompo {
+        val l: (isSuccess: Boolean, data: ResponseBody?, throwable: HttpException?) -> Unit =
+            { isSuccess, data, throwable ->
+                if (isSuccess) {
+                    val d = data?.string()
+                    MessageRepository.insertOrUpdates(d) {
+                        UIStore.postData(MsgInfoTransfer.transform(it))
+                        completed?.invoke(true, null)
+                    }
+                } else {
+                    completed?.invoke(false, throwable)
                 }
-            } else {
-                completed?.invoke(false, throwable)
             }
-        }
-        return get().call({ if (isNewer) it.fetchNewerMsg(dialogId, messageId, limit) else it.fetchOlderMsg(dialogId, messageId, limit) }, l)
+        return get().call({
+            if (isNewer) it.fetchNewerMsg(
+                dialogId,
+                messageId,
+                limit
+            ) else it.fetchOlderMsg(dialogId, messageId, limit)
+        }, l)
     }
 }

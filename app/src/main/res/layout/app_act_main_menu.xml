@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_main_menu_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_app_act_main_menu_tv_crate_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="@string/app_act_create_groups_title"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/app_et_text_size_16" />
+
+
+</LinearLayout>
