@@ -6,7 +6,7 @@ public class SendMessageBean {
     public boolean deleted; // false,
     public String content; // null,
     public String updated; // "2020-01-03T09:38:11Z",
-    public long uid; // 4,
+    public String uid; // 4,
     public String created; // "2020-01-03T09:38:11Z",
     public long id = System.currentTimeMillis(); // 991077318262784,
     public int team_id; // 1,

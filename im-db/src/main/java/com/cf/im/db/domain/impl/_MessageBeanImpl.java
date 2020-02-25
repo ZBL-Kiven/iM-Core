@@ -46,7 +46,7 @@ public class _MessageBeanImpl implements MessageIn {
     }
 
     @Override
-    public long uid() {
+    public String uid() {
         return message.uid;
     }
 

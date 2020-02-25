@@ -49,8 +49,8 @@ class MyGroupListAdapter(val context: Context) :
             Glide.with(context).load(r.avatar).override(w, h)
                 .placeholder(R.mipmap.app_contact_avatar_default).into(iv)
         }
-        holder?.setText(R.id.app_act_contact_select_item_tv_name, r.name ?: "null")
-        holder?.setText(R.id.app_act_contact_select_item_tv_title, r.title ?: "null")
+        holder?.setText(R.id.app_act_contact_select_item_tv_name, r.name)
+        holder?.setText(R.id.app_act_contact_select_item_tv_title, r.title)
     }
 
     override fun bindFooter(holder: BaseViewHolder?, t: ContactGroupInfo?, pos: Int) {

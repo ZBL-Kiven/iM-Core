@@ -52,7 +52,7 @@ class SettingFragment : BaseLinkageFragment() {
     private fun initData() {
         val ctx = this.context ?: return
         val userAvatar = SPUtils_Proxy.getUserAvatar("")
-        val userId = SPUtils_Proxy.getUserId(0)
+        val userId = SPUtils_Proxy.getUserId("-")
         val gender = SPUtils_Proxy.getUserGender(getString(R.string.app_user_info_secret))
         val userName = SPUtils_Proxy.getUserName("none")
         val userCountry = SPUtils_Proxy.getUserCountry("China")
@@ -69,7 +69,7 @@ class SettingFragment : BaseLinkageFragment() {
             it.post {
                 AvatarLoadUtil(ctx, it.width, it.height, 1f, object : CacheAble {
                     override fun getCacheName(payloads: String?): String {
-                        return "$userId"
+                        return userId
                     }
 
                     override fun getOriginalPath(payloads: String?): String? {
@@ -84,9 +84,7 @@ class SettingFragment : BaseLinkageFragment() {
             "id: $userId"
         }
         tvInfoBar?.setBackgroundResource(infoBarBackground)
-        tvInfoBar?.text =
-            StringBuilder().append(gender).append("  ").append(userAddress).append("·")
-                .append(userCountry).toString()
+        tvInfoBar?.text = StringBuilder().append(gender).append("  ").append(userAddress).append("·").append(userCountry).toString()
         tvEmail?.text = userEmail
         tvPhone?.text = userTel
         if (userNote.isNullOrEmpty()) {

@@ -15,7 +15,6 @@ import com.zj.imcore.ui.main.contact.ContactFragment
 import com.zj.imcore.ui.main.setting.SettingFragment
 import com.zj.imcore.im.options.IMHelper
 import com.zj.imcore.ui.main.contact.group.CreateGroupActivity
-import com.zj.imcore.ui.main.contact.group.GroupInfoActivity
 import com.zj.imcore.ui.main.conversation.ConversationFragment
 import java.lang.NullPointerException
 
@@ -38,7 +37,7 @@ class MainActivity : FCActivity() {
     }
 
     override fun initData() {
-        AppDatabase.singleton.get("${SPUtils_Proxy.getUserId(0)}")
+        AppDatabase.singleton.get(SPUtils_Proxy.getUserId("-"))
         conversationFragment = ConversationFragment()
         contactFragment = ContactFragment()
         settingFragment = SettingFragment()

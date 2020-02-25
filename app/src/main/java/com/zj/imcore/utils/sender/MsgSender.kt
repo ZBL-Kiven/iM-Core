@@ -17,7 +17,7 @@ object MsgSender {
         val baseSendInfo = BaseMod()
         val m = SendMessageBean().apply {
             this.subtype = "normal"
-            this.uid = SPUtils_Proxy.getUserId(0)
+            this.uid = SPUtils_Proxy.getUserId("-")
             this.team_id = 1
             this.dialog_id = sessionId
             this.text = text
@@ -35,7 +35,7 @@ object MsgSender {
         val baseSendInfo = BaseMod()
         val m = SendMessageBean().apply {
             this.subtype = MsgType.STICKER.name
-            this.uid = SPUtils_Proxy.getUserId(0)
+            this.uid = SPUtils_Proxy.getUserId("_")
             this.team_id = 1
             this.dialog_id = sessionId
             this.text = "[sticker]$path"
@@ -54,7 +54,7 @@ object MsgSender {
         val m = SendMessageBean().apply {
             this.subtype = MsgType.FILE.name
             this.subtypeDetail = MsgSubtype.IMAGE.name
-            this.uid = SPUtils_Proxy.getUserId(0)
+            this.uid = SPUtils_Proxy.getUserId("_")
             this.team_id = 1
             this.dialog_id = sessionId
             this.text = "[image]${info.path}"
@@ -73,7 +73,7 @@ object MsgSender {
         val m = SendMessageBean().apply {
             this.subtype = MsgType.FILE.name
             this.subtypeDetail = MsgSubtype.VIDEO.name
-            this.uid = SPUtils_Proxy.getUserId(0)
+            this.uid = SPUtils_Proxy.getUserId("_")
             this.team_id = 1
             this.dialog_id = sessionId
             this.text = "[video]${info.path}"
@@ -92,7 +92,7 @@ object MsgSender {
         val m = SendMessageBean().apply {
             this.subtype = MsgType.FILE.name
             this.subtypeDetail = MsgSubtype.FILE.name
-            this.uid = SPUtils_Proxy.getUserId(0)
+            this.uid = SPUtils_Proxy.getUserId("_")
             this.team_id = 1
             this.dialog_id = sessionId
             this.text = "[file]${info.path}"

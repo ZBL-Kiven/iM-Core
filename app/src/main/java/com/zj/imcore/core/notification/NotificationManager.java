@@ -55,7 +55,7 @@ public class NotificationManager {
         }
 
         //判断是否是当前自己
-        if (info.isSelf(SPUtils_Proxy.getUserId(-1L))) {
+        if (info.isSelf(SPUtils_Proxy.getUserId("-"))) {
             return;
         }
         String currentDialogId = null;

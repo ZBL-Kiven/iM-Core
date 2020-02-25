@@ -87,7 +87,7 @@ object MsgInfoTransfer {
                 return DateUtils.getDate("yyyy-MM-dd'T'HH-mm-ss", data.created)?.time ?: 0
             }
 
-            override fun uid(): Long {
+            override fun uid(): String {
                 return data.uid
             }
 

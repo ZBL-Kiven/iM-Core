@@ -19,7 +19,7 @@ class LoginInfo {
 
     fun saveAsSP() {
         val expires = token?.expiresIn ?: 24 * 60 * 60 * 1000L
-        SPUtils_Proxy.setUserId(user?.id ?: 0)
+        SPUtils_Proxy.setUserId(user?.id)
         SPUtils_Proxy.setAccessToken(token?.accessToken)
         SPUtils_Proxy.setRefreshToken(token?.refreshToken)
         SPUtils_Proxy.setUserName(user?.name)

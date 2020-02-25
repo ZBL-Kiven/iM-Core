@@ -64,8 +64,8 @@ class FCApplication : BaseApplication() {
             }
         }
 
-        fun isSelf(uid: Long): Boolean {
-            return uid == SPUtils_Proxy.getUserId(0)
+        fun isSelf(uid: String): Boolean {
+            return uid == SPUtils_Proxy.getUserId("-")
         }
 
         @SuppressLint("HardwareIds")

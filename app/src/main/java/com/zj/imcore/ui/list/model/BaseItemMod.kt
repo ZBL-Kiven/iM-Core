@@ -22,7 +22,7 @@ abstract class BaseItemMod {
 
     abstract fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?)
 
-    protected fun isSelf(uid: Long): Boolean {
+    protected fun isSelf(uid: String): Boolean {
         return FCApplication.isSelf(uid)
     }
 

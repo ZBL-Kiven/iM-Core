@@ -1,14 +1,11 @@
 package com.zj.imcore.ui.chat
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.os.Message
 import android.view.KeyEvent
 import android.widget.EditText
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -31,6 +28,7 @@ import com.zj.imcore.ui.chat.emoticon.OnEmojiClickListener
 import com.zj.imcore.ui.chat.func.FuncEventListener
 import com.zj.imcore.ui.chat.func.FuncGridView
 import com.zj.imcore.ui.chat.func.FuncsAdapter
+import com.zj.imcore.ui.main.contact.group.GroupInfoActivity
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.imcore.ui.views.IMRecyclerView
 import java.lang.Exception
@@ -40,30 +38,32 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
     companion object {
         private const val SESSION_ID = "session_id"
         private const val DIALOG_TYPE = "dialog_type"
-        private const val USER_ID = "user_id"
         private const val DRAFT = "draft"
         private const val TITLE = "title"
+        private const val TEAM_ID = "title"
         private const val NORMAL = "normal"
 
-        fun start(activity: Activity?, dialogId: String, dialogType: String, tmId: String, draft: String?, title: String) {
-            val i = Intent(activity, ChatActivity::class.java)
-            i.putExtra(SESSION_ID, dialogId)
-            i.putExtra(DIALOG_TYPE, dialogType)
-            i.putExtra(USER_ID, tmId)
-            i.putExtra(DRAFT, draft)
-            i.putExtra(TITLE, title)
-            activity?.startActivity(i)
-        }
-
-        fun start(context: Context?, id: String, dialogType: String, userId: String, draft: String?, title: String) {
-            val i = Intent(context, ChatActivity::class.java)
+        fun start(ctx: Context?, dialogId: String, dialogType: String, tmId: String?, draft: String?, title: String?) {
+            val i = Intent(ctx, ChatActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            i.putExtra(SESSION_ID, id)
+            if (dialogId.isEmpty()) {
+                FCApplication.showToast("failed to jump to dialog with null id")
+                return
+            }
+            i.putExtra(SESSION_ID, dialogId)
+            if (dialogType != Constance.DIALOG_TYPE_P2P && dialogType != Constance.DIALOG_TYPE_GROUP) {
+                FCApplication.showToast("failed to jump to dialog with unkown type")
+                return
+            }
             i.putExtra(DIALOG_TYPE, dialogType)
-            i.putExtra(USER_ID, userId)
-            i.putExtra(DRAFT, draft)
-            i.putExtra(TITLE, title)
-            context?.startActivity(i)
+            if (dialogId.isEmpty()) {
+                FCApplication.showToast("failed to jump to dialog with null id")
+                return
+            }
+            if (!tmId.isNullOrEmpty()) i.putExtra(TEAM_ID, tmId)
+            if (!draft.isNullOrEmpty()) i.putExtra(DRAFT, draft)
+            if (!title.isNullOrEmpty()) i.putExtra(TITLE, title)
+            ctx?.startActivity(i)
         }
     }
 
@@ -92,7 +92,7 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
             intent?.let {
                 if (it.hasExtra(SESSION_ID)) sessionId = it.getStringExtra(SESSION_ID) ?: ""
                 if (it.hasExtra(DIALOG_TYPE)) dialogType = it.getStringExtra(DIALOG_TYPE) ?: Constance.DIALOG_TYPE_P2P
-                if (it.hasExtra(USER_ID)) tmId = it.getStringExtra(USER_ID) ?: ""
+                if (it.hasExtra(TEAM_ID)) tmId = it.getStringExtra(TEAM_ID) ?: ""
                 if (it.hasExtra(DRAFT)) draft = it.getStringExtra(DRAFT) ?: ""
                 if (it.hasExtra(TITLE)) conversasionTitle = it.getStringExtra(TITLE) ?: ""
             }
@@ -127,7 +127,11 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
         }
         titleView?.setRightIcon(rIcon)
         titleView?.setRightClickListener {
-            UserInfoActivity.start(this, tmId, true)
+            if (dialogType == Constance.DIALOG_TYPE_GROUP) {
+                GroupInfoActivity.startActivity(this, sessionId)
+            } else {
+                UserInfoActivity.start(this, tmId, true)
+            }
         }
         celBar?.addOnFuncKeyBoardListener(this)
         celBar?.addFuncView(FuncGridView(this, onFuncListener))
@@ -182,7 +186,17 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
 
         this@ChatActivity.addReceiveObserver<MsgInfo>(Constance.REG_CODE_CHAT_ACTIVITY_MESSAGE).filterIn { it, _ -> it.dialogId == sessionId }.listen { data, lst, payload ->
             if (!isFinishing) rvContent?.let {
-                it.adapter.data().add(NORMAL, data)
+                it.adapter.data().let { adapter ->
+                    if (data != null) {
+                        adapter.add(NORMAL, data)
+                    }
+                    if (lst != null) {
+
+                        adapter.addAll(NORMAL, lst)
+                    }
+
+                }
+
                 if (it.canScrollVertically(-1)) return@listen
                 it.stopScroll()
                 //                handler.removeMessages(1999)

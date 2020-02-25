@@ -35,16 +35,8 @@ public class PushReceiver extends BroadcastReceiver {
             //如果APP 是打开的状态
             DialogRepository.queryDialogById(key, dialogBean -> {
                 if (dialogBean != null) {
-                    ChatActivity.Companion.start(
-                            context,
-                            dialogBean.dialogId,
-                            Constance.DIALOG_TYPE_P2P,
-                            dialogBean.tmId,
-                            "",
-                            dialogBean.name
-                    );
+                    ChatActivity.Companion.start(context, dialogBean.dialogId, Constance.DIALOG_TYPE_P2P, dialogBean.tmId, "", dialogBean.name);
                 }
-
             });
         }
     }

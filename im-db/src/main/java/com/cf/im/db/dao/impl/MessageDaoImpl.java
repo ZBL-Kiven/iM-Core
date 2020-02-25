@@ -34,10 +34,10 @@ public abstract class MessageDaoImpl implements MessageDao {
         else oritation = "<";
         String sql;
         if (localCreateTs <= 0) {
-            String sqlFormat = "select * from messagebean where dialogId = %d order by localCreateTs desc limit %d";
+            String sqlFormat = "select * from messagebean where dialogId = %s order by localCreateTs desc limit %d";
             sql = String.format(Locale.getDefault(), sqlFormat, dialogId, limit);
         } else {
-            String sqlFormat = "select * from messagebean where dialogId = %d and localCreateTs %s %d order by localCreateTs desc limit %d";
+            String sqlFormat = "select * from messagebean where dialogId = %s and localCreateTs %s %d order by localCreateTs desc limit %d";
             sql = String.format(Locale.getDefault(), sqlFormat, dialogId, oritation, localCreateTs, limit);
         }
         Log.e("DB___", sql);

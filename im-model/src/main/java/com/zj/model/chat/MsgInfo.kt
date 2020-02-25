@@ -20,7 +20,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     val createdTs: Long; get() = impl.createdTs()
 
-    val uid: Long; get() = impl.uid()
+    val uid: String; get() = impl.uid()
 
     val referKey: String; get() = impl.referKey()
 
@@ -93,7 +93,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
     /** -------- db ignore properties ------- */
 
     //return curUserId == this.uid
-    fun isSelf(curUserId: Long): Boolean {
+    fun isSelf(curUserId: String): Boolean {
         return impl.uid() == curUserId
     }
 

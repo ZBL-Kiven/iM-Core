@@ -11,7 +11,7 @@ class SPUtils {
     public static String userTel;
     public static String userEmail;
     public static String userNote;
-    public static Long userId;
+    public static String userId;
     public static String tmId;
     public static String userAvatar;
     public static String userGender;

@@ -12,11 +12,7 @@ interface UserApiService {
 
     @FormUrlEncoded
     @POST("/v1/login")
-    fun login(
-        @Field("identity") ac: String, @Field("password") pwd: String, @Field("app_id") appId: String, @Field(
-            "device_id"
-        ) deviceId: String
-    ): Observable<LoginInfo>
+    fun login(@Field("identity") ac: String, @Field("password") pwd: String, @Field("app_id") appId: String, @Field("device_id") deviceId: String): Observable<LoginInfo>
 
     @POST("/v1/users")
     fun sign(@Body model: SignModel): Observable<SignInfo>

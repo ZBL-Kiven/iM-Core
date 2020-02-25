@@ -157,14 +157,7 @@ class UserInfoActivity : FCActivity() {
 
         btnSend?.setOnClickListener { _ ->
             curUser?.let {
-                if (isChatMod) finish() else ChatActivity.start(
-                    this,
-                    it.dialogId,
-                    Constance.DIALOG_TYPE_P2P,
-                    "$it.uid",
-                    "",
-                    it.name
-                )
+                if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, "$it.uid", "", it.name)
             } ?: finish()
         }
     }
