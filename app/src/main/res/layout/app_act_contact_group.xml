@@ -10,6 +10,7 @@
     <com.zj.base.view.BaseTitleView
         android:id="@+id/app_act_contact_groups_title"
         style="@style/BaseTitleViewStyle"
+        app:l_vDrawable="@mipmap/back"
         app:vTitle="@string/app_fragment_contact_my_groups" />
 
     <LinearLayout
@@ -58,7 +59,9 @@
                 android:id="@+id/app_act_contact_groups_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/app_act_contact_group_item" />
+
         </com.zj.list.groupedadapter.widget.StickyHeaderLayout>
 
         <com.zj.loading.BaseLoadingView
