@@ -2,7 +2,6 @@ package com.zj.imcore.apis.user
 
 
 import com.cf.im.db.domain.DialogBean
-import com.cf.im.db.domain.MemberBean
 import com.zj.imcore.model.login.LoginInfo
 import com.zj.imcore.model.sign.SignInfo
 import io.reactivex.Observable
@@ -26,7 +25,7 @@ interface UserApiService {
     @GET("/oauth/v1/refresh")
     fun refresh(): Observable<String>
 
-    //更新用户信息
+    //update user info
     @PATCH("/relation/v1/users/{user}")
-    fun update(@Path("user") user: String, @Body obj: Any): Observable<DialogBean>;
+    fun update(@Path("user") user: String, @Body obj: Any): Observable<DialogBean>
 }

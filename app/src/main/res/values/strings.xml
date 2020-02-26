@@ -72,6 +72,9 @@
     <!--teams-->
     <string name="app_act_teams_title">我的团队</string>
     <string name="app_act_teams_loading">团队信息载入中，请稍后…</string>
+    <string name="app_act_teams_error">团队数据错误，请尝试重新登录</string>
+    <string name="app_act_teams_no_one">您还没有加入任何团队</string>
+    <string name="app_act_teams_re_select_teams">载入团队信息错误，请重新选择团队…</string>
     <string name="app_act_teams_select">选择一个已加入的团队，开始果聊</string>
 
     <!--user info-->
@@ -93,15 +96,15 @@
     <!--group-->
     <string name="app_act_groups_title">我的讨论组</string>
     <string name="app_act_create_groups_title">新建讨论组</string>
+    <string name="app_act_create_groups_hint">正在创建讨论组…</string>
     <string name="app_act_create_groups_hint_not_create">请勿创建空的讨论组</string>
     <string name="app_act_create_groups_hint_add_not_user_to_group">新添用户不能为空</string>
     <string name="app_act_create_groups_hint_create_count1">请勿创建只有一个用户的讨论组</string>
-    <string name="app_act_create_groups_hint">正在创建讨论组…</string>
     <string name="app_act_create_groups_hint_add_user_to_group">正在邀请成员到讨论组&#8230;&#8230;&#8230;</string>
     <string name="app_act_create_groups_hint_add_user_to_group_success">邀请成员到讨论组完成</string>
     <string name="app_act_create_groups_hint_add_user_to_group_fail">邀请成员到讨论组失败</string>
 
-    <!--nitify-->
+    <!--notify-->
     <string name="app_notification_new_message">新消息通知</string>
     <string name="app_notification_new_message_describe">收到信消息时的通知类别</string>
     <string name="app_notification_new_message_id">new_message_id</string>

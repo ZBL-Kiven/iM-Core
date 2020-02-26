@@ -1,6 +1,8 @@
 package com.zj.imcore.model.teams
 
-class TeamInfo {
+import java.io.Serializable
+
+class TeamInfo : Serializable {
 
     var inactive: Boolean = false //false,
     var description: String? = "" //"卓越智视科技有限公司",

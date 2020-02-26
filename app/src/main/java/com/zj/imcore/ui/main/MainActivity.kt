@@ -4,8 +4,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentTransaction
-import com.cf.im.db.databases.AppDatabase
-import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.base.view.BaseTitleView
 import com.zj.base.view.SelectChangeIndexView
 import com.zj.cf.fragments.BaseLinkageFragment
@@ -39,7 +37,6 @@ class MainActivity : FCActivity() {
     }
 
     override fun initData() {
-        AppDatabase.singleton.get(SPUtils_Proxy.getUserId("-"))
         conversationFragment = ConversationFragment()
         contactFragment = ContactFragment()
         settingFragment = SettingFragment()

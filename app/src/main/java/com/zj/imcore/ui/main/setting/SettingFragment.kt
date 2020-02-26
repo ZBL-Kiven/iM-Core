@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.ui.img.CacheAble
 import com.zj.ui.img.cache.ImageCacheUtil.Companion.CENTER_CROP
 import com.zj.imcore.R
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.genderIsLady
+import com.zj.imcore.gui.login.TeamManager
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.imcore.ui.views.LoadingButton
 import com.zj.imcore.utils.img.loader.AvatarLoadUtil
@@ -51,15 +51,16 @@ class SettingFragment : BaseLinkageFragment() {
 
     private fun initData() {
         val ctx = this.context ?: return
-        val userAvatar = SPUtils_Proxy.getUserAvatar("")
-        val userId = SPUtils_Proxy.getUserId("-")
-        val gender = SPUtils_Proxy.getUserGender(getString(R.string.app_user_info_secret))
-        val userName = SPUtils_Proxy.getUserName("none")
-        val userCountry = SPUtils_Proxy.getUserCountry("China")
-        val userTel = SPUtils_Proxy.getUserTel(getString(R.string.app_user_info_unset))
-        val userEmail = SPUtils_Proxy.getUserEmail(getString(R.string.app_user_info_unset))
-        val userAddress = SPUtils_Proxy.getUserAddress("Beijing")
-        val userNote = SPUtils_Proxy.getUserNote("")
+        val tm = TeamManager.getTeamUser()
+        val userAvatar = tm?.avatar
+        val userId = tm?.id
+        val gender = tm?.gender ?: getString(R.string.app_user_info_secret)
+        val userName = tm?.name
+        val userCountry = tm?.department
+        val userTel = tm?.phone ?: getString(R.string.app_user_info_unset)
+        val userEmail = tm?.email ?: getString(R.string.app_user_info_unset)
+        val userAddress = tm?.profile?.get("address") ?: ""
+        val userNote = tm?.title ?: getString(R.string.app_act_user_info_user_describe_default)
 
         val infoBarBackground = if (genderIsLady(gender)) {
             R.mipmap.app_user_info_icon_gender_lady
@@ -69,7 +70,7 @@ class SettingFragment : BaseLinkageFragment() {
             it.post {
                 AvatarLoadUtil(ctx, it.width, it.height, 1f, object : CacheAble {
                     override fun getCacheName(payloads: String?): String {
-                        return userId
+                        return userId ?: "default"
                     }
 
                     override fun getOriginalPath(payloads: String?): String? {
@@ -87,7 +88,7 @@ class SettingFragment : BaseLinkageFragment() {
         tvInfoBar?.text = StringBuilder().append(gender).append("  ").append(userAddress).append("·").append(userCountry).toString()
         tvEmail?.text = userEmail
         tvPhone?.text = userTel
-        if (userNote.isNullOrEmpty()) {
+        if (userNote.isEmpty()) {
             tvNote?.visibility = View.GONE
         } else {
             tvNote?.visibility = View.VISIBLE
@@ -97,7 +98,7 @@ class SettingFragment : BaseLinkageFragment() {
 
     private fun initListener() {
         ivAvatar?.setOnClickListener {
-            UserInfoActivity.start(context, SPUtils_Proxy.getTmId(""))
+            UserInfoActivity.start(context, TeamManager.getCurrentTeamId())
         }
         lbLogout?.setOnClickListener {
             lbLogout?.startLoading()

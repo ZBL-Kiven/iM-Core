@@ -1,6 +1,8 @@
 package com.zj.imcore.model.login
 
-class LoginUserModel {
+import java.io.Serializable
+
+class LoginUserModel : Serializable {
     var id: String = ""
     var name: String? = ""
     var inactive: Boolean = false

@@ -1,31 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     <com.zj.base.view.BaseTitleView
+            android:id="@+id/app_act_teams_title"
             style="@style/BaseTitleViewStyle"
             app:vTitle="@string/app_act_teams_title"
-            android:layout_marginBottom="20dp"
             app:l_vDrawable="@mipmap/back"/>
 
     <TextView
+            android:id="@+id/app_act_teams_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
+            android:layout_below="@id/app_act_teams_title"
             android:textColor="@color/color_primary_disable"
             android:textSize="@dimen/app_et_text_size_18"
             android:text="@string/app_act_teams_select"/>
 
-    <GridView
-            android:id="@+id/app_act_teams_gv"
+    <com.zj.list.views.EmptyRecyclerView
+            android:id="@+id/app_act_teams_rv"
             android:layout_gravity="center"
             android:layout_width="match_parent"
+            android:layout_below="@id/app_act_teams_tv"
             android:layout_height="match_parent"
             android:padding="10dp"
-            android:numColumns="4"/>
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            tools:listitem="@layout/app_act_teams_item_content"/>
 
-</LinearLayout>
+    <com.zj.loading.BaseLoadingView
+            android:id="@+id/app_act_teams_blv"
+            style="@style/BaseLoadingViewStyle"
+            android:visibility="gone"
+            android:layout_below="@id/app_act_teams_title"/>
+</RelativeLayout>

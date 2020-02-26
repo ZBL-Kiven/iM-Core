@@ -16,9 +16,12 @@ import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.ui.log
 import com.zj.ui.mainHandler
 import com.zj.imcore.BuildConfig
+import com.zj.imcore.R
 import com.zj.imcore.apis.user.UserApi
 import com.zj.imcore.core.notification.NotificationManager
 import com.zj.imcore.gui.SplashActivity
+import com.zj.imcore.gui.login.TeamManager
+import com.zj.imcore.gui.login.TeamsActivity
 import java.lang.Exception
 
 class FCApplication : BaseApplication() {
@@ -64,16 +67,24 @@ class FCApplication : BaseApplication() {
             }
         }
 
+        fun selectionTeams() {
+            mainHandler.post {
+                val ctx = application
+                clearAct()
+                val intent = Intent(ctx, TeamsActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                ctx.startActivity(intent)
+                Toast.makeText(application, R.string.app_act_teams_re_select_teams, Toast.LENGTH_SHORT).show()
+            }
+        }
+
         fun isSelf(uid: String): Boolean {
-            return uid == SPUtils_Proxy.getUserId("-")
+            return uid == TeamManager.getTmId()
         }
 
         @SuppressLint("HardwareIds")
         fun getDeviceId(): String {
-            return Settings.Secure.getString(
-                application.contentResolver,
-                Settings.Secure.ANDROID_ID
-            )
+            return Settings.Secure.getString(application.contentResolver, Settings.Secure.ANDROID_ID)
         }
 
         fun showToast(s: String) {
@@ -92,14 +103,8 @@ class FCApplication : BaseApplication() {
 
         fun recordNewToken(expiresIn: Long) {
             try {
-                val alarmManager =
-                    application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                val pendingIntentSet = PendingIntent.getBroadcast(
-                    application,
-                    0,
-                    Intent("repeatAlarm"),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                )
+                val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val pendingIntentSet = PendingIntent.getBroadcast(application, 0, Intent("repeatAlarm"), PendingIntent.FLAG_UPDATE_CURRENT)
                 alarmManager.set(AlarmManager.RTC_WAKEUP, expiresIn, pendingIntentSet)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -109,7 +114,7 @@ class FCApplication : BaseApplication() {
         fun refreshToken() {
             val token = SPUtils_Proxy.getAccessToken("")
             val refresh = SPUtils_Proxy.getRefreshToken("")
-            UserApi.refreshToken(token, refresh) { b, s, throwable ->
+            UserApi.refreshToken(token, refresh) { _, _, _ ->
 
             }
         }

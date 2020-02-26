@@ -7,12 +7,15 @@ import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
+import com.cf.im.db.databases.AppDatabase
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.imcore.R
 import com.zj.imcore.apis.user.UserApi
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.gui.login.pager.LoginViewPager
+import com.zj.imcore.model.login.LoginInfo
 import com.zj.imcore.ui.main.MainActivity
 import com.zj.imcore.ui.views.LoadingButton
 import retrofit2.HttpException
@@ -168,9 +171,10 @@ class LoginActivity : AppCompatActivity() {
         }
         enableViews(false)
         UserApi.login(ac, pwd) { isSuccess, data, throwable ->
-            if (isSuccess) {
+            if (isSuccess && data != null) {
                 try {
-                    data?.saveAsSP()
+                    TeamManager.saveAsSp(data)
+                    AppDatabase.singleton.get(data.user?.id ?: "default")
                     btnLoginOrSign?.loadingSuccessful()
                 } catch (e: Exception) {
                     loginFailed(null)
@@ -178,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
                 vp?.postDelayed({
                     enableViews(true)
                     btnLoginOrSign?.reset()
-                    startMainAct()
+                    startTeamsAct()
                 }, 1000)
             } else {
                 loginFailed(throwable)
@@ -187,8 +191,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun startMainAct() {
-        startActivity(Intent(this, MainActivity::class.java))
+    private fun startTeamsAct() {
+        TeamsActivity.startAct(this@LoginActivity)
         finish()
     }
 

@@ -1,6 +1,8 @@
 package com.zj.imcore.model.login
 
-class LoginTokenModel {
+import java.io.Serializable
+
+class LoginTokenModel : Serializable {
     var accessToken: String? = ""
 
     var refreshToken: String? = ""

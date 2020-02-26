@@ -10,6 +10,7 @@ import com.zj.imcore.Constance.getHeader
 import com.zj.imcore.apis.APIs
 import com.zj.imcore.apis.ApiErrorHandler
 import com.zj.imcore.getGender
+import com.zj.imcore.gui.login.TeamManager
 import com.zj.imcore.model.login.LoginInfo
 import com.zj.imcore.model.login.UserProfileModel
 import com.zj.imcore.model.sign.SignInfo
@@ -45,9 +46,8 @@ object UserApi {
         get().call({ it.ping() }, isOk)
     }
 
-    /////杨吉 更新用户信息
     fun updateUser(request: Map<String, Any>, result: (Boolean, DialogBean?, throwAble: HttpException?) -> Unit) {
-        val name = SPUtils_Proxy.getUserName("");
+        val name = TeamManager.getTeamUser()?.name ?: ""
         get().call({ it.update(name, request) }, result)
     }
 

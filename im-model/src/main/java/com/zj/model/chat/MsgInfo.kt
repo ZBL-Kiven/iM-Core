@@ -92,11 +92,6 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     /** -------- db ignore properties ------- */
 
-    //return curUserId == this.uid
-    fun isSelf(curUserId: String): Boolean {
-        return impl.uid() == curUserId
-    }
-
     override fun compareTo(other: MsgInfo): Int {
         other.impl.localCreatedTs().let { ot ->
             impl.localCreatedTs().let {
