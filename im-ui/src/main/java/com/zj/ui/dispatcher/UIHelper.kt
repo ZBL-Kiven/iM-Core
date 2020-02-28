@@ -12,18 +12,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.zj.ui.castNotSafety
 import com.zj.ui.log
-import java.io.Serializable
 import java.lang.Exception
-import java.lang.IllegalArgumentException
 import java.util.concurrent.Executors
-
-private class Category(val type: Int, var index: Int = 0, var end: Int = 0) : Serializable {
-
-    companion object {
-        const val SINGLE = 1
-        const val DATA = 2
-    }
-}
 
 data class CacheData<R : Any>(val d: R?, val lst: List<R>?, val payload: String?)
 
@@ -107,12 +97,12 @@ internal class UIOptions<T : Any, R : Any>(owner: LifecycleOwner, private val un
             val b = it.data
             val payload = if (b.containsKey(pal)) b.getString(pal) else null
             when (b.getInt(cag)) {
-                Category.SINGLE -> {
+                0 -> {
                     castNotSafety<Any?, R?>(it.obj)?.let { r ->
                         result(r, null, payload)
                     } ?: log("the data ${it.obj} was handled but null result in cast transform")
                 }
-                Category.DATA -> {
+                1 -> {
                     castNotSafety<Any?, List<R>?>(it.obj)?.let { lst ->
                         result(null, lst, payload)
                     } ?: log("the data ${it.obj} was handled but null list result in cast transform")
@@ -167,7 +157,7 @@ internal class UIOptions<T : Any, R : Any>(owner: LifecycleOwner, private val un
                 it.firstOrNull()?.let { c ->
                     if (c.javaClass == creator.inCls) {
                         (data as? Collection<T>)?.let { co ->
-                            postListData(java.util.ArrayList(co), payload)
+                            postData(null, co, payload)
                             return true
                         }
                     }
@@ -175,44 +165,20 @@ internal class UIOptions<T : Any, R : Any>(owner: LifecycleOwner, private val un
             }
         }
         if (data.javaClass == creator.inCls || data.javaClass.simpleName == creator.inCls.simpleName) {
-            postData(data as? T, payload, Category(Category.SINGLE))
+            postData(data as? T?, null, payload)
             return true
         }
         return false
     }
 
-    private fun postListData(data: java.util.ArrayList<T>?, payload: String?) {
-        val size = data?.size ?: 0
-        data?.forEachIndexed { i, d ->
-            postData(d, payload, Category(Category.DATA, i, size))
-        }
-    }
-
-    private fun postData(data: T?, payload: String?, category: Category) {
+    private fun postData(data: T?, lst: Collection<T>?, payload: String?) {
         if (data == null) {
             log("why are you post a null data and also register a type-null observer?");return
         }
-        executors.submit(UIExecutor(creator, data, payload, category) { d, s, c ->
-            dispatchData(d, s, c)
+        executors.submit(UIExecutor(creator, data, lst, payload) { d, ls, p ->
+            val a: Any = d ?: (ls ?: return@UIExecutor)
+            postToMain(a, p, if (a == d) 0 else 1)
         })
-    }
-
-    private fun dispatchData(d: R, s: String?, c: Category) {
-        when (c.type) {
-            Category.DATA -> {
-                if (c.index > c.end) throw IllegalArgumentException("Isn’t it strange that the index is larger than the size?")
-                if (c.index <= c.end) {
-                    if (!cacheList.contains(d)) cacheList.add(d)
-                }
-                if (c.index + 1 == c.end) {
-                    postToMain(ArrayList(cacheList), s, c.type)
-                    cacheList.clear()
-                }
-            }
-            Category.SINGLE -> {
-                postToMain(d, s, c.type)
-            }
-        }
     }
 
     private fun postToMain(data: Any, payload: String?, c: Int) {
@@ -227,12 +193,25 @@ internal class UIOptions<T : Any, R : Any>(owner: LifecycleOwner, private val un
     }
 }
 
-private class UIExecutor<T : Any, R : Any>(private val creator: UIHelperCreator<T, R>, private val data: T, private val payload: String?, private val category: Category, private val finishd: (R, String?, Category) -> Unit) : Runnable {
+private class UIExecutor<T : Any, R : Any>(private val creator: UIHelperCreator<T, R>, private val data: T?, private val lst: Collection<T>?, private val payload: String?, private val finishd: (R?, List<R>?, String?) -> Unit) : Runnable {
 
     override fun run() {
+
         try {
-            postData(data)?.let {
-                finishd(it, payload, category)
+            val ds = arrayListOf<T>()
+            if (lst != null) ds.addAll(lst)
+            if (data != null) ds.add(data)
+
+            val handled = arrayListOf<R>()
+            ds.forEach {
+                postData(it)?.let { r ->
+                    handled.add(r)
+                }
+            }
+            if (handled.isNullOrEmpty()) finishd(null, null, payload) else {
+                val hd = if (handled.size == 1) handled.first() else null
+                val hds = if (handled.size > 1) handled else null
+                finishd(hd, hds, payload)
             }
         } catch (e: Exception) {
             e.printStackTrace()

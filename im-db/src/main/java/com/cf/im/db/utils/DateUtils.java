@@ -38,7 +38,6 @@ public class DateUtils {
             return time;
         }
         if (timeStr == null) {
-            Log.e("DB___", "生成了时间");
             return System.currentTimeMillis();
         }
         for (String s : timeStr) {

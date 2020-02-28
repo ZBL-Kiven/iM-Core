@@ -1,5 +1,6 @@
 package com.zj.ui.dispatcher
 
+import com.zj.ui.debugLog
 import com.zj.ui.log
 
 object UIStore {
@@ -28,12 +29,13 @@ object UIStore {
             log("why are you post a null object?")
             return
         }
+        var isUsed = false
         msgObservers?.forEach {
             if (it.post(data, payload)) {
-                //                debugLog("the observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class successful and received the data")
-            } else {
-                //                debugLog("invalid observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class has abandon the data ${data.javaClass.simpleName}.class")
+                isUsed = true
+                debugLog("the observer names ${it.getUniquen()} and subscirbe of ${it.getSubscirbeClassName()}.class successful and received the data")
             }
         }
+        if (!isUsed) debugLog("the data ${data.javaClass.simpleName}.class has been abandon with none consumer")
     }
 }
