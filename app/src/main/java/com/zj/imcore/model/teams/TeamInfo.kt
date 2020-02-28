@@ -12,5 +12,5 @@ class TeamInfo : Serializable {
     var subdomain: String? = "" //"toptensor",
     var id: String? = "" //2,
     var email_domain: String? = "" //"toptensor.io"
-    var teamMember: TeamMembers? = null
+    var member: TeamMembers? = null
 }

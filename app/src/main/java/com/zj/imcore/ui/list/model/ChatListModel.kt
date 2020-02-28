@@ -13,6 +13,7 @@ import com.zj.imcore.base.FCApplication
 import com.zj.imcore.enums.MsgType
 import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.utils.img.transactions.RoundCorner
+import java.lang.ref.WeakReference
 
 /**
  * Created by ZJJ on 19/12/12
@@ -34,13 +35,13 @@ class ChatListModel : BaseChatModel<MsgInfo> {
     }
 
     override fun getOrientation(data: MsgInfo): ChatItemView.Orientation {
-        return if (FCApplication.isSelf(data.uid)) ChatItemView.Orientation.SELF else ChatItemView.Orientation.OTHERS
+        return if (FCApplication.isSelf(data.tmid)) ChatItemView.Orientation.SELF else ChatItemView.Orientation.OTHERS
     }
 
     override fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?) {
 
         fun loadAvatar() {
-            view.getAvatarView()?.let {
+            WeakReference(view.getAvatarView()).get()?.let {
                 AvatarLoadUtil(context, dpToPx(context, ChatOption.avatarWidth), dpToPx(context, ChatOption.avatarHeight), ChatOption.avatarQuality, data, ImageCacheUtil.CENTER_CROP, Payloads.MEMBERS_AVATAR).load { path ->
                     val avatarRadius = dpToPx(context, ChatOption.avatarRadius) * 1.0f
                     val transformer = RoundCorner(context, avatarRadius, avatarRadius, avatarRadius, avatarRadius)

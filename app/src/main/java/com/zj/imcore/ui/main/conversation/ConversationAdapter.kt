@@ -6,11 +6,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.cf.im.db.repositorys.MessageRepository
+import com.zj.base.utils.DPUtils
+import com.zj.im.chat.enums.SendMsgState
 import com.zj.ui.list.utils.TimeLineInflateModel
 import com.zj.model.chat.DialogInfo
 import com.zj.imcore.R
+import com.zj.imcore.ui.list.ChatOption
+import com.zj.imcore.utils.img.transactions.RoundCorner
 import com.zj.list.multiable.MultiRecyclerAdapter
 import com.zj.model.Payloads
+import com.zj.ui.mainHandler
 import java.lang.IllegalArgumentException
 
 class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int, v: View) -> Unit) : MultiRecyclerAdapter<DialogInfo>() {
@@ -40,7 +46,9 @@ class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int, 
         fun initAvatar() {
             avatar?.let {
                 val url = data.avatar
-                Glide.with(it).load(url).override(it.width, it.height).error(R.mipmap.app_contact_avatar_default).into(it)
+                val radius = DPUtils.dp2px(ChatOption.avatarRadius) * 1.0f
+                val transformer = RoundCorner(it.context, radius, radius, radius, radius)
+                Glide.with(it).load(url).override(it.width, it.height).transform(transformer).error(R.mipmap.app_contact_avatar_default).into(it)
             }
         }
 
@@ -56,17 +64,25 @@ class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int, 
         }
 
         fun initName() {
-            name?.text = data.title
+            name?.text = data.name
         }
 
         fun initSubDetail() {
-            subDetail?.text = data.draft ?: data.subDetail
-        }
-
-        fun initTime() {
-            var ts = data.updated
-            if (ts <= 0) ts = data.created
-            time?.let { it.text = TimeLineInflateModel.getTimeString(it.context ?: return, ts) }
+            MessageRepository.queryLast(data.dialogId) {
+                mainHandler.post {
+                    subDetail?.text = if (data.draft != null) "[草稿] ${data.draft}" else {
+                        if (it.text.isNullOrEmpty()) "" else {
+                            "${if (it?.sendMsgState == SendMsgState.SENDING.type) "← " else ""}${it.text}"
+                        }
+                    }
+                    time?.context?.let { ctx ->
+                        var ts = it?.localCreateTs ?: 0
+                        if (ts <= 0) ts = data.updated
+                        if (ts <= 0) ts = data.created
+                        time.text = TimeLineInflateModel.getTimeString(ctx, ts)
+                    }
+                }
+            }
         }
 
         fun initPin() {
@@ -87,13 +103,13 @@ class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int, 
 
         when (payloads?.firstOrNull()) {
             null -> {
-                initAvatar();initName();initSubDetail();initUnReadCount();initTime();initMute();initPin();initDeleted()
+                initAvatar();initName();initSubDetail();initUnReadCount();initMute();initPin();initDeleted()
             }
             Payloads.CONVERSATION_AVATAR -> {
                 initAvatar()
             }
             Payloads.CONVERSATION_NEW_MSG -> {
-                initSubDetail();initUnReadCount();initTime()
+                initSubDetail();initUnReadCount()
             }
             Payloads.CONVERSATION_TITLE -> {
                 initName()

@@ -174,7 +174,6 @@ class LoginActivity : AppCompatActivity() {
             if (isSuccess && data != null) {
                 try {
                     TeamManager.saveAsSp(data)
-                    AppDatabase.singleton.get(data.user?.id ?: "default")
                     btnLoginOrSign?.loadingSuccessful()
                 } catch (e: Exception) {
                     loginFailed(null)

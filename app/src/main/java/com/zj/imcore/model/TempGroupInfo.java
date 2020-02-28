@@ -29,7 +29,7 @@ public class TempGroupInfo implements GroupInfo {
      * leavable : true
      * team_id : =bw52O
      * dialog_id : =bw53e
-     * members : [{"tmid":"=bw53i","role":"owner"},{"tmid":"=bw53j","role":"normal"},{"tmid":"=bw53k","role":"normal"}]
+     * members : [{"tmId":"=bw53i","role":"owner"},{"tmId":"=bw53j","role":"normal"},{"tmId":"=bw53k","role":"normal"}]
      */
 
     public boolean inactive;

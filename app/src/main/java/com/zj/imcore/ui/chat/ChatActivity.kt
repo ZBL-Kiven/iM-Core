@@ -2,8 +2,6 @@ package com.zj.imcore.ui.chat
 
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +30,7 @@ import com.zj.imcore.ui.main.contact.group.GroupInfoActivity
 import com.zj.imcore.ui.users.UserInfoActivity
 import com.zj.imcore.ui.views.IMRecyclerView
 import java.lang.Exception
+import kotlin.math.max
 
 class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
 
@@ -188,37 +187,24 @@ class ChatActivity : FCActivity(), FuncLayout.FuncKeyBoardListener {
             if (!isFinishing) rvContent?.let {
                 it.adapter.data().let { adapter ->
                     if (data != null) {
-                        adapter.add(NORMAL, data)
+                        adapter.set(data, NORMAL, payload)
+                        scrollToBottom()
                     }
                     if (lst != null) {
-
                         adapter.addAll(NORMAL, lst)
                     }
-
                 }
-
-                if (it.canScrollVertically(-1)) return@listen
-                it.stopScroll()
-                //                handler.removeMessages(1999)
-                //                val p = it.adapter.data().maxCurDataPosition()
-                //                val msg = Message.obtain()
-                //                msg.what = 1999
-                //                msg.arg1 = p
-                //                handler.sendMessageDelayed(msg, 30)
             }
         }
     }
 
-    private val handler = Handler(Looper.getMainLooper()) {
-        if (it.what == 1999) {
-            rvContent?.scrollToPosition(it.arg1)
-        }
-        return@Handler false
-    }
-
     private fun scrollToBottom() {
-        val count = rvContent?.adapter?.itemCount ?: 1
-        rvContent?.post { rvContent?.scrollToPosition(count - 1) }
+        rvContent?.post {
+            rvContent?.let {
+                val count = it.adapter.itemCount
+                it.smoothScrollToPosition(max(0, count - 1))
+            }
+        }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {

@@ -3,8 +3,7 @@ package com.cf.im.db.domain.impl;
 import androidx.annotation.NonNull;
 import androidx.room.Embedded;
 import androidx.room.Relation;
-
-import com.cf.im.db.domain.MemberBean;
+import com.cf.im.db.domain.DialogBean;
 import com.cf.im.db.domain.MessageBean;
 import com.zj.model.interfaces.MessageIn;
 
@@ -15,11 +14,12 @@ public class _MessageBeanImpl implements MessageIn {
     @Embedded
     public MessageBean message;
 
-    @Relation(parentColumn = "uid", entityColumn = "uid", entity = MemberBean.class)
+    @Relation(parentColumn = "tmId", entityColumn = "tmId", entity = DialogBean.class)
     public _MessageMemberBean member;
 
     //~~~~~~~~~ 实现 UI 接口 ~~~~~~~~~
 
+    @NonNull
     @Override
     public String dialogId() {
         return message.dialogId;
@@ -42,18 +42,19 @@ public class _MessageBeanImpl implements MessageIn {
 
     @Override
     public long createdTs() {
-        return message != null ? message.localCreateTs : System.currentTimeMillis();
+        return message.createdTs;
     }
 
+    @NonNull
     @Override
-    public String uid() {
-        return message.uid;
+    public String tmid() {
+        return message.tmId;
     }
 
     @Override
     @NonNull
     public String referKey() {
-        return "";
+        return message.referId;
     }
 
     @Override
@@ -68,7 +69,11 @@ public class _MessageBeanImpl implements MessageIn {
 
     @Override
     public long localCreatedTs() {
-        return message != null ? message.localCreateTs : System.currentTimeMillis();
+        if (message != null) {
+            if (message.createdTs > 0) return message.createdTs;
+            if (message.localCreateTs > 0) return message.localCreateTs;
+        }
+        return System.currentTimeMillis();
     }
 
     @Override
@@ -77,8 +82,8 @@ public class _MessageBeanImpl implements MessageIn {
     }
 
     @Override
-    public long key() {
-        return message != null ? message.id : -1;
+    public String key() {
+        return message != null ? message.id : "";
     }
 
     @Override

@@ -20,7 +20,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     val createdTs: Long; get() = impl.createdTs()
 
-    val uid: String; get() = impl.uid()
+    val tmid: String; get() = impl.tmid()
 
     val referKey: String; get() = impl.referKey()
 
@@ -32,7 +32,7 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     val callId: String?; get() = impl.callId()
 
-    val key: Long; get() = impl.key()
+    val key: String; get() = impl.key() ?: ""
 
     val avatarUrl: String?; get() = impl.getAvatarUrl()
 
@@ -103,7 +103,9 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
 
     override fun equals(other: Any?): Boolean {
         return if (other !is MsgInfo) false else {
-            (impl.key() >= 0 && impl.key() == other.impl.key()) || (!impl.callId().isNullOrEmpty() && impl.callId() == other.impl.callId())
+            val okey = other.impl.key()
+            val oCallId = other.impl.callId()
+            ((key.isNotEmpty()) && key == okey) || (!callId.isNullOrEmpty() && callId == oCallId)
         }
     }
 
@@ -111,16 +113,20 @@ class MsgInfo(private val impl: MessageIn) : InfoImpl<MsgInfo> {
         return impl.callId().hashCode()
     }
 
+    override fun isDataEquals(t: MsgInfo): Boolean {
+        return text == t.text && key == t.key && callId == t.callId && name == t.name && referKey == t.referKey && avatarUrl == t.avatarUrl && sendingState == t.sendingState && localFilePath == t.localFilePath
+    }
+
     override fun getCacheName(payloads: String?): String {
-        return "${impl.uid()}"
+        return impl.tmid()
     }
 
     override fun getOriginalPath(payloads: String?): String? {
         return when (payloads) {
-            Payloads.MEMBERS_AVATAR -> impl.getAvatarUrl()
-            Payloads.BUBBLE_STICKER -> impl.getStickerUrl()
-            Payloads.BUBBLE_IMAGE -> impl.getImageUrl()
-            Payloads.BUBBLE_VIDEO -> impl.getVideoThumb()
+            Payloads.MEMBERS_AVATAR -> avatarUrl
+            Payloads.BUBBLE_STICKER -> stickerUrl
+            Payloads.BUBBLE_IMAGE -> imageUrl
+            Payloads.BUBBLE_VIDEO -> videoThumb
             else -> ""
         }
     }

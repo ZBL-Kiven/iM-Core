@@ -5,11 +5,14 @@ import android.content.Intent
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.zj.base.utils.DPUtils
 import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.model.teams.TeamInfo
+import com.zj.imcore.ui.list.ChatOption
 import com.zj.imcore.ui.main.MainActivity
+import com.zj.imcore.utils.img.transactions.RoundCorner
 import com.zj.list.adapters.BaseAdapterDataSet
 import com.zj.list.holders.BaseViewHolder
 import com.zj.list.views.EmptyRecyclerView
@@ -44,7 +47,9 @@ class TeamsActivity : FCActivity() {
         gv?.setData(R.layout.app_act_teams_item_content, false, TeamManager.getTeams(), object : BaseAdapterDataSet<TeamInfo>() {
             override fun initData(holder: BaseViewHolder?, position: Int, module: TeamInfo?) {
                 holder?.getView<ImageView>(R.id.app_act_teams_item_iv)?.let {
-                    Glide.with(this@TeamsActivity).load(module?.teamMember?.avatar).circleCrop().error(R.mipmap.app_contact_avatar_default).into(it)
+                    val radius = DPUtils.dp2px(ChatOption.avatarRadius) * 1.0f
+                    val transformer = RoundCorner(this@TeamsActivity, radius, radius, radius, radius)
+                    Glide.with(this@TeamsActivity).load(module?.member?.avatar).transform(transformer).error(R.mipmap.app_contact_avatar_default).into(it)
                 }
                 holder?.setText(R.id.app_act_teams_item_tv_name, module?.name)
                 holder?.setText(R.id.app_act_teams_item_tv_description, module?.description)

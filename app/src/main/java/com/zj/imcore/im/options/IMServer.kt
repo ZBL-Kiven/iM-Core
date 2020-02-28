@@ -42,13 +42,11 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
     }
 
     override fun onOpen(s: ServerHandshake?) {
-        log("----- 55555")
         curSocketState = SocketState.CONNECTED
         nextHeartbeats()
     }
 
     override fun onClose(errorCode: Int, case: String?, isFromRemote: Boolean) {
-        log("----- 44444")
         when (errorCode) {
             1002 -> print("IMServer", "socket erro with 1002  case: $case")
             -111 -> print("IMServer", case ?: "socket closed by shutdown")
@@ -58,17 +56,14 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
     }
 
     override fun reConnect() {
-        log("----- 333333")
         connectDelay()
     }
 
     override fun onError(e: Exception?) {
-        log("----- 22222")
         curSocketState = SocketState.CONNECTED_ERROR.case("the socket have to reconnection with error: ${e?.message}")
     }
 
     private fun connect() {
-        log("----- 111111")
         curSocketState = SocketState.CONNECTION
         val connInfo = getConnectionInfo()
         try {
@@ -86,7 +81,6 @@ class IMServer : ServerHub<String>(), WebSocketImpl {
                 mSocket?.connect()
             }
         } catch (e: Exception) {
-            log("----- eeeeee")
             e.printStackTrace()
         }
     }

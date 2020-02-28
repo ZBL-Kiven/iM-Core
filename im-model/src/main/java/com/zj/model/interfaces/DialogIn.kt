@@ -26,7 +26,6 @@ interface DialogIn {
     //--- group properties ---
 
     fun description(): String = "" //null,
-    fun getPrivate(): String = "" //false,
     fun mode(): String = "" //"admin_off",
     fun topic(): String = "" //null,
     fun leavable(): Boolean = false //true,

@@ -11,6 +11,10 @@
 
     <string name="app_get_contact_failed">拉取通讯录信息失败</string>
 
+    <string name="app_get_conversation">会话载入中…</string>
+    <string name="app_get_conversation_failed">您还没有对话</string>
+    <string name="app_get_conversation_failed_refresh_hint">轻触屏幕以重新加载</string>
+
     <string name="app_login_hint_account">昵称</string>
     <string name="app_login_hint_password">密码</string>
     <string name="app_login_hint_password_ensure">确认密码</string>

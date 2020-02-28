@@ -14,4 +14,9 @@ public interface MultiAbleData<T> extends Comparable<T> {
      */
     int hashCode();
 
+    /**
+     * Override this method if the data must be refresh
+     */
+    boolean isDataEquals(T t);
+
 }

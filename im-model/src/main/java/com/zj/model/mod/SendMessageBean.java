@@ -4,16 +4,13 @@ package com.zj.model.mod;
 public class SendMessageBean {
 
     public boolean deleted; // false,
-    public String content; // null,
-    public String updated; // "2020-01-03T09:38:11Z",
-    public String uid; // 4,
-    public String created; // "2020-01-03T09:38:11Z",
-    public long id = System.currentTimeMillis(); // 991077318262784,
-    public int team_id; // 1,
+    public String refer_id; //
+    public String tmid; // 4,
+    public String team_id; // 1,
     public String dialog_id; // 8589934596,
     public String subtype; // "normal",
-    public String subtypeDetail; // "normal",
     public String text; // "1"
+    public String subtypeDetail; // "normal",
     /**
      * local maintenance fields
      */

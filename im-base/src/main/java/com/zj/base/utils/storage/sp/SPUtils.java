@@ -10,6 +10,6 @@ class SPUtils {
     public static String loginInfo;
     public static String curTeamId;
     public static Long expiresIn;
-
+    public static String userId;
     public static Long dialogSyncSince;
 }

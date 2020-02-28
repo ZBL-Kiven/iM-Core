@@ -22,8 +22,8 @@ abstract class BaseItemMod {
 
     abstract fun initData(context: Context, view: ChatItemView, data: MsgInfo, payloads: List<Any>?)
 
-    protected fun isSelf(uid: String): Boolean {
-        return FCApplication.isSelf(uid)
+    protected fun isSelf(tmId: String): Boolean {
+        return FCApplication.isSelf(tmId)
     }
 
     protected fun getColor(context: Context, c: Int): Int {

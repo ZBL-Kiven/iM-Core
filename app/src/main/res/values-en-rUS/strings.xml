@@ -10,6 +10,10 @@
     <string name="app_sign_failed">sign failed</string>
     <string name="app_get_contact_failed">fetch contact failed</string>
 
+    <string name="app_get_conversation">loading conversations…</string>
+    <string name="app_get_conversation_failed">no conversations</string>
+    <string name="app_get_conversation_failed_refresh_hint">tap the screen to refresh</string>
+
     <string name="app_login_hint_account">your account</string>
     <string name="app_login_hint_password">your password</string>
     <string name="app_login_hint_password_ensure">confirm password</string>

@@ -2,9 +2,14 @@ package com.zj.base
 
 import android.app.Activity
 import android.app.Application
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Suppress("unused")
 open class BaseApplication : Application() {
+
+    private var activities: ConcurrentLinkedQueue<Activity> = ConcurrentLinkedQueue()
+
+    private var curAct: Activity? = null
 
     companion object {
         lateinit var application: Application
@@ -18,17 +23,12 @@ open class BaseApplication : Application() {
         }
 
         fun clearAct() {
-            val acts = (application as? BaseApplication)?.activities
-            acts?.forEach {
-                it.finish()
-                acts.remove(it)
+            val acts = (application as? BaseApplication)?.activities ?: return
+            repeat((0..acts.size).count()) {
+                acts.poll()?.finish()
             }
         }
     }
-
-    private var activities: LinkedHashSet<Activity> = linkedSetOf()
-
-    private var curAct: Activity? = null
 
     override fun onCreate() {
         super.onCreate()

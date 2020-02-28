@@ -22,7 +22,7 @@ class UserInfoActivity : FCActivity() {
 
     companion object {
 
-        private const val UID = "uid"
+        private const val UID = "tmId"
         private const val CHAT_MOD = "chatMode"
 
         fun start(context: Context?, tmId: String?, isChatMod: Boolean = false) {
@@ -85,8 +85,7 @@ class UserInfoActivity : FCActivity() {
         curUser?.let { member ->
             titleView?.setTitle(getString(R.string.app_act_user_info_title_default, member.name))
             ivUserAvatar?.let { view ->
-                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default)
-                    .into(view)
+                Glide.with(view).load(member.avatar).error(R.mipmap.app_contact_avatar_default).into(view)
             }
             tvUserNickName?.text = member.get("nickname") ?: (member.name ?: "")
             tvUserName?.text = member.name ?: ""
@@ -114,28 +113,14 @@ class UserInfoActivity : FCActivity() {
                 return@setOnClickListener
             }
 
-            EditTextActivity.startActivity(
-                this,
-                curUser?.dialogId() ?: "",
-                getString(R.string.app_act_user_info_user_nickname_hint),
-                tvUserNickName?.text.toString(),
-                10,
-                EditTextActivity.TYPE_USER_NICK_NAME
-            )
+            EditTextActivity.startActivity(this, curUser?.dialogId() ?: "", getString(R.string.app_act_user_info_user_nickname_hint), tvUserNickName?.text.toString(), 10, EditTextActivity.TYPE_USER_NICK_NAME)
         }
 
         tvUserDescribe?.setOnClickListener {
             if (isFriends()) {
                 return@setOnClickListener
             }
-            EditTextActivity.startActivity(
-                this,
-                curUser?.dialogId() ?: "",
-                getString(R.string.app_act_user_info_user_describe_hint),
-                tvUserDescribe?.text.toString(),
-                1,
-                EditTextActivity.TYPE_USER_DESCRIBE
-            )
+            EditTextActivity.startActivity(this, curUser?.dialogId() ?: "", getString(R.string.app_act_user_info_user_describe_hint), tvUserDescribe?.text.toString(), 1, EditTextActivity.TYPE_USER_DESCRIBE)
         }
 
         ivUserAvatar?.setOnClickListener {
@@ -143,13 +128,10 @@ class UserInfoActivity : FCActivity() {
                 return@setOnClickListener
             }
             //设置用户头像
-            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1)
-                .imgSizeRange(1024, Long.MAX_VALUE).start { isSelected, data ->
+            AlbumIns.with(this).mimeTypes(AlbumOptions.ofImage()).maxSelectedCount(1).imgSizeRange(1024, Long.MAX_VALUE).start { isSelected, data ->
                     if (isSelected && !data.isNullOrEmpty()) {
                         ivUserAvatar?.let {
-                            Glide.with(it).load(data[0].path)
-                                .error(R.mipmap.app_contact_avatar_default)
-                                .into(it)
+                            Glide.with(it).load(data[0].path).error(R.mipmap.app_contact_avatar_default).into(it)
                         }
                     }
                 }
@@ -157,7 +139,7 @@ class UserInfoActivity : FCActivity() {
 
         btnSend?.setOnClickListener { _ ->
             curUser?.let {
-                if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, "$it.uid", "", it.name)
+                if (isChatMod) finish() else ChatActivity.start(this, it.dialogId, Constance.DIALOG_TYPE_P2P, "$it.tmId", "", it.name)
             } ?: finish()
         }
     }
@@ -185,7 +167,6 @@ class UserInfoActivity : FCActivity() {
     }
 
     private fun isFriends(): Boolean {
-        // SPUtils_Proxy.getUserId(0) != curUser?.uid
-        return false;
+        return false
     }
 }

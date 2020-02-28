@@ -1,7 +1,6 @@
 package com.zj.imcore.im.fetcher
 
 import com.zbl.api.base.BaseRetrofit
-import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.ui.log
 import com.zj.imcore.apis.fetcher.FetcherApi
 import com.zj.imcore.im.fetcher.interfaces.FetcherDialogsIn
@@ -12,7 +11,6 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
     companion object {
         private const val FETCH_MSG_CODE = 440
         private const val FETCH_DIALOGT_CODE = 441
-        private const val FETCH_MEMBERS_CODE = 442
     }
 
     private var compons: ConcurrentHashMap<Int, BaseRetrofit.RequestCompo> = ConcurrentHashMap()
@@ -48,8 +46,7 @@ class Fetcher(private var isCompleted: ((String, Boolean) -> Unit)?) {
     }
 
     private fun fetchDialogs(fetcherDialogsIn: FetcherDialogsIn) {
-        val since = SPUtils_Proxy.getDialogSyncSince(0)
-        val cop = FetcherApi.syncDialogs(since) { b, httpException ->
+        val cop = FetcherApi.syncDialogs { b, httpException ->
             if (b) {
                 compons.remove(FETCH_DIALOGT_CODE)
                 isDialogsFetched = true

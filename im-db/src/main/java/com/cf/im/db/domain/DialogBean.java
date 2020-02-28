@@ -23,7 +23,7 @@ public class DialogBean implements DialogIn {
      * phone : 13521930955
      * updated : 2019-12-26T03:16:26Z
      * name : yan.li
-     * tmid : =bw52R
+     * tmId : =bw52R
      * type : p2p
      * created : 2019-12-26T03:16:26Z
      * title : null
@@ -32,13 +32,14 @@ public class DialogBean implements DialogIn {
      * team_id : =bw52O
      * dialog_id : =sMb4px
      * gender : male
-     * members : [{"tmid":"=bw53h"},{"tmid":"=bw52R"}]
+     * members : [{"tmId":"=bw53h"},{"tmId":"=bw52R"}]
      * profile : {"extra":"This is a sample which can add any kv pair here."}
      */
+
     @NonNull
     @PrimaryKey
     @JSONField(name = "dialog_id")
-    public String dialogId;
+    public String dialogId = "";
 
     public boolean inactive;
     public String role;
@@ -47,8 +48,10 @@ public class DialogBean implements DialogIn {
     public String phone;
     public String updated;
     public String name;
+
     @JSONField(name = "tmid")
     public String tmId;
+
     public String type;
     public String created;
     public String title;
@@ -62,10 +65,6 @@ public class DialogBean implements DialogIn {
     public String gender;
     public String profile;
     public String members;
-
-    @JSONField(name = "private")
-    public String privateX;
-
     public boolean leavable;
     public String topic;
     public String draft;
@@ -205,11 +204,6 @@ public class DialogBean implements DialogIn {
     @Override
     public boolean leavable() {
         return leavable;
-    }
-
-    @Override
-    public String getPrivate() {
-        return privateX;
     }
 
     public String get(String key) {

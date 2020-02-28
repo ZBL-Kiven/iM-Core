@@ -13,11 +13,7 @@ import com.tencent.wcdb.room.db.WCDBOpenHelperFactory;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(version = 1, entities = {
-        MessageBean.class,
-        MemberBean.class,
-        DialogBean.class
-}, exportSchema = false)
+@Database(version = 1, entities = {MessageBean.class, MemberBean.class, DialogBean.class}, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase implements IDatabase {
 
     public static BaseSingleton<IDatabase> singleton = new BaseSingleton<IDatabase>() {
@@ -81,7 +77,6 @@ public abstract class AppDatabase extends RoomDatabase implements IDatabase {
                 .openHelperFactory(factory) // 重要：使用WCDB打开Room
                 .build();
     }
-
 
 
 }

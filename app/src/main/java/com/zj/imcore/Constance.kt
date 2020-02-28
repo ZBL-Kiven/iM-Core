@@ -27,6 +27,14 @@ object Constance {
         }
     }
 
+    fun getUserId(case: String = ""): String {
+        val uid = SPUtils_Proxy.getUserId("")
+        if (uid.isNullOrEmpty()) {
+            FCApplication.logout(case)
+        }
+        return uid
+    }
+
     fun getAppId(): String {
         return Environment.getEnv().appId
     }

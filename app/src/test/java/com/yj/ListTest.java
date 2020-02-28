@@ -12,7 +12,7 @@
 //    public void test() {
 //        MemberManager manager = new MemberManager();
 //        MemberBean bean = new MemberBean();
-//        bean.uid = 1;
+//        bean.tmId = 1;
 //        manager.putMember(bean);
 //        bean = null;
 //        System.gc();

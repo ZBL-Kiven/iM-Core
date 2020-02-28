@@ -1,8 +1,7 @@
 package com.cf.im.db.repositorys;
 
+import android.text.TextUtils;
 import android.util.Log;
-
-import androidx.collection.LongSparseArray;
 
 import com.alibaba.fastjson.JSON;
 import com.cf.im.db.dao.impl.MessageDaoImpl;
@@ -12,7 +11,7 @@ import com.cf.im.db.domain.impl._MessageBeanImpl;
 import com.cf.im.db.listener.DBListener;
 import com.cf.im.db.utils.DateUtils;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class MessageRepository extends BaseRepository {
@@ -43,15 +42,13 @@ public class MessageRepository extends BaseRepository {
     public static void insertOrUpdates(String json, DBListener<List<_MessageBeanImpl>> listener) {
         getWriteExecutor().execute(() -> {
             List<MessageBean> beans = JSON.parseArray(json, MessageBean.class);
-            LongSparseArray<MessageBean> serviceBeans = new LongSparseArray<>();
-            Collections.sort(beans, (o1, o2) -> Long.compare(o1.id, o2.id));
-
-            long[] ids = new long[beans.size()];
+            HashMap<String, MessageBean> serviceBeans = new HashMap<>();
+            String[] ids = new String[beans.size()];
             int index = 0;
             for (MessageBean bean : beans) {
                 bean.localCreateTs = DateUtils.getTime(bean.localCreateTs, bean.created, bean.updated);
                 serviceBeans.put(bean.id, bean);
-                ids[index] = (bean.id);
+                ids[index] = bean.id;
                 index++;
             }
 
@@ -88,10 +85,10 @@ public class MessageRepository extends BaseRepository {
      * @param limit      数量
      * @param isPositive 方向，向上取还是向下取
      */
-    public static void queryMessageBy(String dialogId, String callId, long msgKey, int limit, boolean isPositive, DBListener<List<_MessageBeanImpl>> listener) {
+    public static void queryMessageBy(String dialogId, String callId, String msgKey, int limit, boolean isPositive, DBListener<List<_MessageBeanImpl>> listener) {
         AppDatabase.singleton.get().getReadExecutor().execute(() -> {
             long time;
-            if ("-".equals(callId) || msgKey == -1) {
+            if ("-".equals(callId) || TextUtils.isEmpty(msgKey)) {
                 time = 0L;
             } else {
                 time = getMessageDao().queryLocalCreateTsOrCallIdImpl(callId, msgKey);
@@ -106,5 +103,13 @@ public class MessageRepository extends BaseRepository {
             System.err.println("DB___  " + dialogId + " " + callId + " " + msgKey + " " + beans.size());
             listener.onSuccess(beans);
         });
+    }
+
+    public static void queryDialogIdsByMessages(String teamId, DBListener<List<String>> listener) {
+        getReadExecutor().execute(() -> listener.onSuccess(getMessageDao().queryDialogIdsByMessages(teamId)));
+    }
+
+    public static void queryLast(String dialog, DBListener<MessageBean> listener) {
+        getReadExecutor().execute(() -> listener.onSuccess(getMessageDao().queryLast(dialog)));
     }
 }

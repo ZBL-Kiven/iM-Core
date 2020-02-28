@@ -10,6 +10,7 @@ import com.zj.ui.list.views.ChatItemView
 import com.zj.list.multiable.MultiAbleData
 import com.zj.list.multiable.MultiRecyclerAdapter
 import com.zj.list.multiable.holder.MultiHolder
+import java.lang.ref.WeakReference
 
 abstract class ChatRecyclerView<T : MultiAbleData<T>> @JvmOverloads constructor(context: Context, attr: AttributeSet? = null, defStyle: Int = 0) : RecyclerView(context, attr, defStyle) {
 
@@ -94,7 +95,7 @@ abstract class ChatRecyclerView<T : MultiAbleData<T>> @JvmOverloads constructor(
                     } else {
                         it.removeBaseBubbleView()
                     }
-                    mode.initData(context, it, data, payloads)
+                    WeakReference(context).get()?.let { ctx -> mode.initData(ctx, it, data, payloads) }
                 }
             }
         }

@@ -26,23 +26,27 @@ object TeamManager {
     fun saveAsSp(info: LoginInfo) {
         val infoStr = JSON.toJSONString(info)
         SPUtils_Proxy.setLoginInfo(infoStr)
+        SPUtils_Proxy.setUserId(info.user?.id)
+        SPUtils_Proxy.setAccessToken(info.token?.accessToken)
+        SPUtils_Proxy.setRefreshToken(info.token?.refreshToken)
+        SPUtils_Proxy.setExpiresIn(info.token?.expiresIn)
     }
 
-    fun getCurrentTeamId(): String? {
+    fun getCurrentTeamId(): String {
         return SPUtils_Proxy.getCurTeamId("")
     }
 
     fun getTeamUser(): TeamMembers? {
-        return getCurrentTeam()?.teamMember
+        return getCurrentTeam()?.member
     }
 
     fun getTmId(): String {
-        return getTeamUser()?.tmid?:""
+        return getTeamUser()?.tmid ?: ""
     }
 
     private fun getCurrentTeam(): TeamInfo? {
         val tmId = getCurrentTeamId()
-        if (tmId.isNullOrEmpty()) {
+        if (tmId.isEmpty()) {
             FCApplication.selectionTeams()
             return null
         }

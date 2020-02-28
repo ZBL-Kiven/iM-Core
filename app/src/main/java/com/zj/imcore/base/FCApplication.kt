@@ -7,6 +7,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.provider.Settings
 import android.widget.Toast
 import com.cf.im.db.databases.AppDatabase
@@ -14,7 +17,6 @@ import com.cf.im.db.databases.DB
 import com.zj.base.BaseApplication
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.ui.log
-import com.zj.ui.mainHandler
 import com.zj.imcore.BuildConfig
 import com.zj.imcore.R
 import com.zj.imcore.apis.user.UserApi
@@ -34,8 +36,34 @@ class FCApplication : BaseApplication() {
     }
 
     companion object {
+        private var isCleared = false
+        private const val LO = 0x10cc
+        private const val RS = 0x10cd
+        private val handler = Handler(Looper.getMainLooper()) {
+            when (it.what) {
+                LO -> {
+                    val ctx = application
+                    clearAct()
+                    val intent = Intent(ctx, SplashActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    ctx.startActivity(intent)
+                    it.obj?.toString()?.let { s -> Toast.makeText(application, s, Toast.LENGTH_SHORT).show() }
+                }
+                RS -> {
+                    val ctx = application
+                    clearAct()
+                    val intent = Intent(ctx, TeamsActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    ctx.startActivity(intent)
+                    Toast.makeText(application, R.string.app_act_teams_re_select_teams, Toast.LENGTH_SHORT).show()
+                }
+            }
+            return@Handler false
+        }
 
         fun logout(case: String?, done: ((isOK: Boolean) -> Unit)? = null) {
+            if (isCleared) return
+            isCleared = true
             if (SPUtils_Proxy.getAccessToken("") == null) {
                 SPUtils_Proxy.clear()
                 return
@@ -53,33 +81,24 @@ class FCApplication : BaseApplication() {
                 }
                 done?.invoke(isSuccess)
                 if (isSuccess) {
-                    mainHandler.postDelayed({
-                        val ctx = application
-                        clearAct()
-                        val intent = Intent(ctx, SplashActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        ctx.startActivity(intent)
-                        case?.let {
-                            Toast.makeText(application, it, Toast.LENGTH_SHORT).show()
-                        }
+                    handler.removeMessages(LO)
+                    handler.sendMessageDelayed(Message.obtain().apply {
+                        what = LO
+                        obj = case
                     }, 700)
+
                 }
+                isCleared = false
             }
         }
 
         fun selectionTeams() {
-            mainHandler.post {
-                val ctx = application
-                clearAct()
-                val intent = Intent(ctx, TeamsActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                ctx.startActivity(intent)
-                Toast.makeText(application, R.string.app_act_teams_re_select_teams, Toast.LENGTH_SHORT).show()
-            }
+            handler.removeMessages(RS)
+            handler.sendEmptyMessageDelayed(RS, 100)
         }
 
-        fun isSelf(uid: String): Boolean {
-            return uid == TeamManager.getTmId()
+        fun isSelf(tmId: String): Boolean {
+            return tmId == TeamManager.getTmId()
         }
 
         @SuppressLint("HardwareIds")

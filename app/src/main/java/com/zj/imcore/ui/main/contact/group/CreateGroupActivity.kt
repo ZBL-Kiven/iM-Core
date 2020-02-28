@@ -19,7 +19,6 @@ import com.zj.imcore.base.FCActivity
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.model.member.EventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
-import com.zj.imcore.ui.chat.ChatActivity
 import com.zj.imcore.ui.main.contact.DialogsProvider
 import com.zj.imcore.ui.main.contact.DialogsVisitor
 import com.zj.imcore.ui.main.contact.group.adapter.CreateGroupListAdapter
@@ -117,7 +116,7 @@ class CreateGroupActivity : FCActivity() {
             if (dialogId.isNullOrEmpty()) {
                 createGroup()
             } else {
-                addUserToGroup();
+                addUserToGroup()
             }
         }
         etSearch?.addTextChangedListener(object : TextWatcher {
@@ -216,7 +215,7 @@ class CreateGroupActivity : FCActivity() {
         val request = HashMap<String, List<String>>()
         request["members"] = ids
 
-        GroupApi.addUserToDialog(dialogId!!, request) { success, content, e ->
+        GroupApi.addUserToDialog(dialogId!!, request) { success, _, _ ->
             loadingView?.setMode(
                 BaseLoadingView.DisplayMode.NONE
             )
@@ -246,13 +245,12 @@ class CreateGroupActivity : FCActivity() {
             getString(R.string.app_act_create_groups_hint),
             true
         )
-        //todo create group
-        val dialog = CreateDialog();
+        val dialog = CreateDialog()
         dialog.name = "Android ${ids.size}"
         dialog.members = ids
         dialog.team_id = "1"
 
-        GroupApi.createDialog(dialog) { success, content, exception ->
+        GroupApi.createDialog(dialog) { success, content, _ ->
             if (success) {
                 FCApplication.showToast("创建成功$content")
                 finish()

@@ -5,9 +5,7 @@ import com.cf.im.db.repositorys.DialogRepository
 import com.cf.im.db.repositorys.MessageRepository
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.ui.dispatcher.UIStore
-import com.zj.model.chat.MsgInfo
 import com.zj.model.chat.ProgressInfo
-import com.zj.model.mod.SendMessageBean
 
 object DataTransferHub {
 
@@ -25,19 +23,25 @@ object DataTransferHub {
         UIStore.postData(ProgressInfo(callId, process))
     }
 
-    fun queryDialogInDb() {
-        DialogRepository.queryP2p {
-            UIStore.postData(DialogTransfer.transform(it))
+    fun queryDialogInDb(teamId: String, onGotEmpty: () -> Unit) {
+        MessageRepository.queryDialogIdsByMessages(teamId) {
+            if (it.isNullOrEmpty()) {
+                onGotEmpty()
+                return@queryDialogIdsByMessages
+            }
+            DialogRepository.queryDialogsByMessageIds(it) { dialogs ->
+                if (dialogs.isNullOrEmpty()) {
+                    onGotEmpty()
+                    return@queryDialogsByMessageIds
+                }
+                UIStore.postData(DialogTransfer.transform(dialogs))
+            }
         }
     }
 
     fun queryMsgInDb(dialogId: String) {
-        MessageRepository.queryMessageBy(dialogId, "-", -1, 20, true) {
+        MessageRepository.queryMessageBy(dialogId, "-", null, 20, true) {
             UIStore.postData(MsgInfoTransfer.transform(it))
         }
-    }
-
-    private fun getMockMsgs(data: SendMessageBean): MsgInfo {
-        return MsgInfoTransfer.transform(data)
     }
 }

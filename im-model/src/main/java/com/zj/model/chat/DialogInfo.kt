@@ -15,7 +15,7 @@ class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
     val phone: String; get() = impl.phone() //"13521930955",
     val updated: Long; get() = impl.updated() //"2019-12-26T03:11:34Z",
     val name: String; get() = impl.name() //"xing.li",
-    val tmid: String; get() = impl.tmid() //"p2p",
+    val tmid: String; get() = impl.tmid()
     val created: Long; get() = impl.created() //"2019-12-26T03:11:34Z",
     val title: String; get() = impl.title() //null,
     val hidden: Boolean; get() = impl.hidden() //false,
@@ -33,7 +33,6 @@ class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
 
     /** group properties */
     val description: String; get() = impl.description() //null,
-    val private: String; get() = impl.getPrivate() //false,
     val mode: String; get() = impl.mode() //"admin_off",
     val topic: String; get() = impl.topic() //null,
     val leavable: Boolean; get() = impl.leavable() //true,
@@ -70,5 +69,15 @@ class DialogInfo(private val impl: DialogIn) : MultiAbleData<DialogInfo> {
 
     override fun hashCode(): Int {
         return dialogId.hashCode()
+    }
+
+    override fun isDataEquals(t: DialogInfo): Boolean {
+        return inactive ==t.inactive
+                && indexSymbol == t.indexSymbol
+                && title ==t.title
+                &&avatar==t.avatar
+                &&teamId ==t.teamId
+                &&draft ==t.draft
+                &&description ==t.description
     }
 }

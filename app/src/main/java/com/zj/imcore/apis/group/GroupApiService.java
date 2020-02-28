@@ -58,7 +58,7 @@ public interface GroupApiService {
      * @return 讨论组成员
      * [
      * {
-     * "tmid": "=bw52P",
+     * "tmId": "=bw52P",
      * "role": "normal"
      * },.....
      */

@@ -13,7 +13,7 @@ interface MessageIn {
 
     fun createdTs(): Long
 
-    fun uid(): String
+    fun tmid(): String
 
     fun referKey(): String
 
@@ -25,7 +25,7 @@ interface MessageIn {
 
     fun callId(): String?
 
-    fun key(): Long
+    fun key(): String?
 
     fun getAvatarUrl(): String?
 

@@ -24,7 +24,7 @@ class VoiceMod : BaseItemMod() {
         view.getBubbleLayout()?.let { p ->
             val voiceParent = RelativeLayout(context)
             val rlp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            val isSelf = isSelf(data.uid)
+            val isSelf = isSelf(data.tmid)
             val voiceView = VoiceView(context)
             voiceView.id = R.id.im_chat_item_bubble_voice
             voiceView.setOrientation(if (isSelf) VoiceView.ORIENTATION_LEFT else VoiceView.ORIENTATION_RIGHT)

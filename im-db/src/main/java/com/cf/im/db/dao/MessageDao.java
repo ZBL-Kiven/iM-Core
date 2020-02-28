@@ -3,7 +3,6 @@ package com.cf.im.db.dao;
 import androidx.room.Query;
 
 import com.cf.im.db.domain.MessageBean;
-import com.cf.im.db.domain.impl._MessageBeanImpl;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public interface MessageDao extends IDao<MessageBean> {
      * @return 离线消息列表
      */
     @Query("select * from messagebean where dialogId = :dialogId")
-    List<MessageBean> queryMessageByOfflineAndDialogId(long dialogId);
+    List<MessageBean> queryMessageByOfflineAndDialogId(String dialogId);
 
     /**
      * 通过callId 或者 serviceId 查询消息主键Id
@@ -50,7 +49,7 @@ public interface MessageDao extends IDao<MessageBean> {
      * @return 消息主键Id（自增Id）
      */
     @Query("select kId from messagebean where callId = :callId or id = :serviceId limit 1")
-    int queryKIdByIdOrCallId(String callId, long serviceId);
+    int queryKIdByIdOrCallId(String callId, String serviceId);
 
     /**
      * 通过callId 或者 serviceId 查询消息主键Id
@@ -60,7 +59,7 @@ public interface MessageDao extends IDao<MessageBean> {
      * @return 消息主键Id（自增Id）
      */
     @Query("select * from messagebean where callId = :callId or id = :serviceId limit 1")
-    MessageBean queryByIdOrCallId(String callId, long serviceId);
+    MessageBean queryByIdOrCallId(String callId, String serviceId);
 
     /**
      * 通过callId 或者 serviceId 查询消息主键Id
@@ -70,5 +69,12 @@ public interface MessageDao extends IDao<MessageBean> {
      * @return 消息主键Id（自增Id）
      */
     @Query("select * from messagebean where callId = :callId or id = :serviceId limit 1")
-    MessageBean queryIdOrCallId(String callId, long serviceId);
+    MessageBean queryIdOrCallId(String callId, String serviceId);
+
+    @Query("select * from messagebean where dialogId = :dialogId order by localCreateTs desc limit 1")
+    MessageBean queryLast(String dialogId);
+
+    /**查询一个所以 dialog 消息的分组信息*/
+    @Query("select dialogId from messageBean where teamId = :teamId")
+    List<String> queryDialogIdsByMessages(String teamId);
 }

@@ -5,7 +5,7 @@ import com.cf.im.db.dao.DialogDao;
 import com.cf.im.db.domain.DialogBean;
 import com.cf.im.db.listener.DBListener;
 
-import java.util.List;
+import java.util.*;
 
 public class DialogRepository extends BaseRepository {
 
@@ -32,7 +32,7 @@ public class DialogRepository extends BaseRepository {
 
     public static void insertOrUpdates(String json, DBListener<List<DialogBean>> listener) {
         getWriteExecutor().execute(() -> {
-            List<DialogBean> beans = JSON.parseArray(JSON.parseObject(json).getString("dialogs"), DialogBean.class);
+            List<DialogBean> beans = JSON.parseArray(json, DialogBean.class);
             getDialogDao().insertOrUpdate(beans);
             listener.onSuccess(beans);
         });
@@ -83,6 +83,15 @@ public class DialogRepository extends BaseRepository {
         getReadExecutor().execute(() -> {
             DialogBean bean = getDialogDao().queryDialogById(dialogId);
             listener.onSuccess(bean);
+        });
+    }
+
+    public static void queryDialogsByMessageIds(List<String> dialogIds, DBListener<List<DialogBean>> listener) {
+        getReadExecutor().execute(() -> {
+            HashSet<String> set = new HashSet<>(dialogIds);
+            List<String> l = new ArrayList<>(set);
+            List<DialogBean> lst = getDialogDao().queryDialogsByIds(l);
+            listener.onSuccess(lst);
         });
     }
 }

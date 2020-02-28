@@ -31,7 +31,7 @@ class StickerMod : BaseItemMod() {
         val w = calculate.second[0]
         val h = calculate.second[1]
         val lp = RelativeLayout.LayoutParams(w, h)
-        if (isSelf(data.uid)) {
+        if (isSelf(data.tmid)) {
             lp.addRule(RelativeLayout.BELOW, nickNameId)
             lp.addRule(RelativeLayout.START_OF, avatarId)
         } else {

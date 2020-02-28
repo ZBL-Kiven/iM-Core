@@ -32,6 +32,16 @@ public interface DialogDao extends IDao<DialogBean> {
     @Query("select * from dialogbean where dialogId = :dialogId limit 1")
     List<DialogBean> queryDialogByIds(String... dialogId);
 
+
+    /**
+     * 根据dialogId 获取dialogs
+     *
+     * @return 会话信息
+     */
+    @Transaction
+    @Query("select * from dialogbean where dialogId in (:dialogIds)")
+    List<DialogBean> queryDialogsByIds(List<String> dialogIds);
+
     /**
      * 根据dialogId 获取dialog 信息
      *
@@ -45,7 +55,7 @@ public interface DialogDao extends IDao<DialogBean> {
     /**
      * 根据dialogId 获取dialog 信息
      *
-     * @param tmId tmid
+     * @param tmId tmId
      * @return 会话信息
      */
     @Transaction
@@ -55,7 +65,7 @@ public interface DialogDao extends IDao<DialogBean> {
     /**
      * 根据dialogId 获取dialog 信息
      *
-     * @param tmId tmid
+     * @param tmId tmId
      * @return 会话信息
      */
     @Transaction
@@ -80,5 +90,4 @@ public interface DialogDao extends IDao<DialogBean> {
     @Transaction
     @Query("select * from dialogbean where type = :type")
     List<DialogBean> queryDialogByType(String type);
-
 }

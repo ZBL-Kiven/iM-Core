@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import com.cf.im.db.databases.BaseSingleton;
 import com.cf.im.db.repositorys.DialogRepository;
 import com.zj.base.BaseApplication;
-import com.zj.base.utils.storage.sp.SPUtils_Proxy;
 import com.zj.imcore.R;
 import com.zj.imcore.base.FCApplication;
 import com.zj.imcore.ui.chat.ChatActivity;
@@ -56,7 +55,7 @@ public class NotificationManager {
         }
 
         //判断是否是当前自己
-        if (FCApplication.Companion.isSelf(info.getUid())) {
+        if (FCApplication.Companion.isSelf(info.getTmid())) {
             return;
         }
         String currentDialogId = null;

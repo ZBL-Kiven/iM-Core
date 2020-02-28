@@ -7,14 +7,14 @@
 //
 //public class MemberReference extends WeakReference<MemberBean> {
 //
-//    private final int uid;
+//    private final int tmId;
 //
 //    public MemberReference(MemberBean referent, ReferenceQueue<? super MemberBean> q) {
 //        super(referent, q);
-//        this.uid = referent.uid;
+//        this.tmId = referent.tmId;
 //    }
 //
-//    public int getUid() {
-//        return uid;
+//    public int getTmid() {
+//        return tmId;
 //    }
 //}

@@ -17,7 +17,7 @@ public abstract class MultiRecyclerAdapter<T extends MultiAbleData<T>> extends R
     private List<T> dataList;
 
     protected boolean isEqual(T d1, T d2) {
-        return d1.equals(d2);
+        return d1.isDataEquals(d2);
     }
 
     public MultiRecyclerAdapter() {

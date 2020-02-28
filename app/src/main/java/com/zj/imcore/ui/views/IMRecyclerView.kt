@@ -83,7 +83,7 @@ class IMRecyclerView @JvmOverloads constructor(context: Context, attr: Attribute
 
             override fun getBubbleColor(): Int {
                 val selfColor = if (data.sendingState == SendMsgState.SENDING.type) ChatOption.bubbleColorSelfSending else ChatOption.bubbleColorSelf
-                return if (isSelf(data.uid)) selfColor else ChatOption.bubbleColorOthers
+                return if (isSelf(data.tmid)) selfColor else ChatOption.bubbleColorOthers
             }
 
             override fun getBubbleRadius(): Float {

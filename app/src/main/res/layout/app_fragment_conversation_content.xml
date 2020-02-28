@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/chat_background"
-    android:orientation="vertical">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/chat_background"
+                android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/app_fragment_conversation_rv_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        app:fastScrollEnabled="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/app_fragment_conversation_item" />
+            android:id="@+id/app_fragment_conversation_rv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            app:fastScrollEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/app_fragment_conversation_item"/>
+
+    <com.zj.loading.BaseLoadingView
+            android:id="@+id/app_fragment_conversation_blv"
+            style="@style/BaseLoadingViewStyle"
+            app:loadingText="@string/app_get_conversation"
+            app:noDataText="@string/app_get_conversation_failed"
+            app:refreshText="@string/app_get_conversation_failed_refresh_hint"/>
+
 </RelativeLayout>

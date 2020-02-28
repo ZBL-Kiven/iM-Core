@@ -1,7 +1,6 @@
 package com.zj.imcore.ui.main.contact.group
 
 import android.os.Handler
-import android.os.Message
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -11,7 +10,6 @@ import com.zj.base.view.BaseTitleView
 import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.model.member.contact.ContactGroupInfo
-import com.zj.imcore.ui.main.contact.ContactListAdapter
 import com.zj.imcore.ui.main.contact.DialogsProvider
 import com.zj.imcore.ui.main.contact.DialogsVisitor
 import com.zj.imcore.ui.main.contact.group.adapter.MyGroupListAdapter
@@ -22,7 +20,7 @@ import java.util.ArrayList
 
 class MyGroupsActivity : FCActivity() {
 
-    private val what: Int = 0x1;
+    private val what: Int = 0x1
 
     private var titleView: BaseTitleView? = null
     private var loadingView: BaseLoadingView? = null
@@ -37,8 +35,7 @@ class MyGroupsActivity : FCActivity() {
             return@Handler true
         }
 
-        val content = etSearch?.text.toString() ?: ""
-
+        val content = etSearch?.text.toString()
         if (content == "") {
             setData(cachedData)
             return@Handler true
@@ -46,18 +43,17 @@ class MyGroupsActivity : FCActivity() {
 
         cachedData?.let {
             val filterList = it.filterTo(arrayListOf()) { m ->
-                m.name.contains(content, true) || (m.title ?: "").contains(
+                m.name.contains(content, true) || (m.title).contains(
                     content,
                     true
-                ) || (m.email ?: "").contains(
+                ) || (m.email).contains(
                     content, true
                 )
             }
             setData(filterList)
         }
-
         true
-    };
+    }
 
     override fun getContentId(): Int {
         return R.layout.app_act_contact_group
@@ -72,8 +68,7 @@ class MyGroupsActivity : FCActivity() {
 
     override fun initData() {
         adapter = MyGroupListAdapter(this)
-        rvDialog?.adapter = adapter;
-
+        rvDialog?.adapter = adapter
         adapter?.setOnChildClickListener { adapter, _, groupPosition, childPosition ->
             val dialog = adapter.getItem(groupPosition).children[childPosition]
             if ("group" == dialog.type) {

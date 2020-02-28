@@ -34,10 +34,10 @@ public abstract class MessageDaoImpl implements MessageDao {
         else oritation = "<";
         String sql;
         if (localCreateTs <= 0) {
-            String sqlFormat = "select * from messagebean where dialogId = %s order by localCreateTs desc limit %d";
+            String sqlFormat = "select * from messagebean where dialogId = '%s' order by localCreateTs desc limit %d";
             sql = String.format(Locale.getDefault(), sqlFormat, dialogId, limit);
         } else {
-            String sqlFormat = "select * from messagebean where dialogId = %s and localCreateTs %s %d order by localCreateTs desc limit %d";
+            String sqlFormat = "select * from messagebean where dialogId = '%s' and localCreateTs %s %d order by localCreateTs desc limit %d";
             sql = String.format(Locale.getDefault(), sqlFormat, dialogId, oritation, localCreateTs, limit);
         }
         Log.e("DB___", sql);
@@ -58,7 +58,7 @@ public abstract class MessageDaoImpl implements MessageDao {
      */
     @Transaction
     @Query("select * from messagebean where callId = :callId or id = :serviceId limit 1")
-    public abstract _MessageBeanImpl queryIdOrCallIdImpl(String callId, long serviceId);
+    public abstract _MessageBeanImpl queryIdOrCallIdImpl(String callId, String serviceId);
 
     /**
      * 通过callId 或者 serviceId 查询消息排序时间
@@ -69,13 +69,12 @@ public abstract class MessageDaoImpl implements MessageDao {
      */
     @Transaction
     @Query("select localCreateTs from messagebean where callId = :callId or id = :serviceId limit 1")
-    public abstract long queryLocalCreateTsOrCallIdImpl(String callId, long serviceId);
+    public abstract long queryLocalCreateTsOrCallIdImpl(String callId, String serviceId);
 
     @Query("select * from messagebean where id in (:id)")
-    public abstract List<MessageBean> queryByIds(long... id);
+    public abstract List<MessageBean> queryByIds(String... id);
 
     @Transaction
     @Query("select * from messagebean where id in (:id)")
-    public abstract List<_MessageBeanImpl> queryMessageByServiceIds(long... id);
-
+    public abstract List<_MessageBeanImpl> queryMessageByServiceIds(String... id);
 }

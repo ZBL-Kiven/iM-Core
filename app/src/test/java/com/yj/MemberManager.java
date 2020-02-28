@@ -18,27 +18,27 @@
 //        queue = new ReferenceQueue<>();
 //    }
 //
-//    public void getMember(int uid, DBListener<MemberBean> listener) {
+//    public void getMember(int tmId, DBListener<MemberBean> listener) {
 //        clear();
-//        MemberReference reference = members.get(uid);
+//        MemberReference reference = members.get(tmId);
 //        MemberBean bean;
 //        if (reference != null && (bean = reference.get()) != null) {
 //            listener.onSuccess(bean);
 //        } else {
-//            getMemberByDb(uid, listener);
+//            getMemberByDb(tmId, listener);
 //        }
 //    }
 //
 //    public void putMember(MemberBean bean) {
 //        clear();
-//        members.put(bean.uid, new MemberReference(bean, queue));
+//        members.put(bean.tmId, new MemberReference(bean, queue));
 //    }
 //
 //    private void clear() {
 //        MemberReference reference = (MemberReference) queue.poll();
 //        if (reference != null) {
-//            int uid = reference.getUid();
-//            members.remove(uid);
+//            int tmId = reference.getTmid();
+//            members.remove(tmId);
 //        }
 //    }
 //
@@ -46,8 +46,8 @@
 //        System.gc();
 //    }
 //
-//    private void getMemberByDb(int uid, DBListener<MemberBean> listener) {
-//        MemberRepository.queryMembersByUserId(uid, bean -> {
+//    private void getMemberByDb(int tmId, DBListener<MemberBean> listener) {
+//        MemberRepository.queryMembersByUserId(tmId, bean -> {
 //            putMember(bean);
 //            listener.onSuccess(bean);
 //        });

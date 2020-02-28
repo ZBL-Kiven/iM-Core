@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="55dp">
+        android:layout_height="wrap_content">
 
     <ImageView
             android:id="@+id/app_fragment_contact_item_iv_avatar"
@@ -40,7 +40,7 @@
             android:layout_height="@dimen/app_base_line_width"
             android:layout_marginEnd="15dp"
             android:layout_toEndOf="@id/app_fragment_contact_item_iv_avatar"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@id/app_fragment_contact_item_iv_avatar"
             android:background="@color/color_primary_grey"/>
 
 </RelativeLayout>

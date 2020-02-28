@@ -13,7 +13,7 @@ fun makeSentParams(callId: String, localFilePath: String? = null): Map<String, A
     map["call_id"] = callId
     map["local_created_ts"] = System.currentTimeMillis()
     if (localFilePath != null) map["localFilePath"] = localFilePath
-    map["uid"] = uid
+    map["tmId"] = uid
     return map
 }
 
