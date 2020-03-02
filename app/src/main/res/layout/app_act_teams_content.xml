@@ -10,7 +10,9 @@
             android:id="@+id/app_act_teams_title"
             style="@style/BaseTitleViewStyle"
             app:vTitle="@string/app_act_teams_title"
-            app:l_vDrawable="@mipmap/back"/>
+            app:l_vText="@string/app_act_teams_relogin"
+            app:l_vTextColor="@color/app_base_text_color_999"
+            app:l_vTextSize="16"/>
 
     <TextView
             android:id="@+id/app_act_teams_tv"

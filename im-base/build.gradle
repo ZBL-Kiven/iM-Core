@@ -26,7 +26,7 @@ dependencies {
     implementation project(path: ':zj-javaU')
     api 'com.github.bumptech.glide:glide:4.10.0'
     api 'com.cf.core:constrainFragment:2.0.6'
-    api 'com.cf.core:loading:1.0.1'
+    api 'com.cf.core:loading:1.0.2'
     api project(path: ':zj-api')
     api project(path: ':im-db')
     api project(path: ':im-preview')

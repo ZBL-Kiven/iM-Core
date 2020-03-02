@@ -15,7 +15,7 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
     private final LinkedHashMap<String, DataSource<R>> multiAbleDataSource;
     private final T adapter;
     private String curData;
-    private List<R> cachedData;
+    private List<R> cachedData = new ArrayList<>();
 
     private LinkedHashMap<String, DataSource<R>> getSource() {
         synchronized (multiAbleDataSource) {
@@ -37,11 +37,15 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
         if (ds != null) {
             List<R> lst = adapter.onBuildData(ds.getData());
             if (lst != null && !lst.isEmpty()) {
+                List<R> old = new ArrayList<>(cachedData);
                 cachedData = lst;
+                if (isResetData) adapter.getAdapter().notifyDataSetChanged();
+                else syncData(old, lst);
+            } else {
+                cachedData.clear();
+                adapter.getAdapter().notifyDataSetChanged();
             }
         }
-        if (isResetData) adapter.onSourceSet(cachedData, curData);
-        else adapter.onDataChanged(cachedData);
     }
 
     private List<R> getDataList() {
@@ -83,7 +87,9 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
         if (hasExits) {
             boolean set = ds.put(r);
             if (name.equals(curData)) {
-                adapter.onDataSet(r, payloads);
+                int i = cachedData.lastIndexOf(r);
+                cachedData.set(i, r);
+                adapter.getAdapter().notifyItemChanged(i);
             }
         }
         return hasExits || add(name, r);
@@ -93,7 +99,6 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
         boolean isFirstPush = checkIsDefault();
         DataSource<R> ds = getOrCreateDs(name);
         if (ds != null) {
-            if (ds.contains(r)) ds.remove(r);
             boolean add = ds.put(r);
             if (isFirstPush) {
                 changeSource(name);
@@ -177,6 +182,80 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
         changeSource(newName);
     }
 
+    public int getSize() {
+        return (cachedData == null) ? 0 : cachedData.size();
+    }
+
+    public List<R> getData() {
+        return (cachedData == null) ? new ArrayList<R>() : cachedData;
+    }
+
+    protected boolean isEqual(R d1, R d2) {
+        return d1.isDataEquals(d2);
+    }
+
+    private void syncData(List<R> data, List<R> curData) {
+        int nlen = data.size();
+        int olen = curData.size();
+        int previousIndex = 0;
+        int step = Math.max(nlen, olen);
+        for (int i = 0; i < step; i++) {
+            boolean eq = false;
+            boolean in = i < olen && i < nlen;
+            if (in) {
+                eq = isEqual(curData.get(i), data.get(i));
+            }
+            boolean nextEq = false;
+            boolean nextIn = i + 1 < olen && i + 1 < nlen;
+            if (nextIn) {
+                nextEq = isEqual(curData.get(i + 1), data.get(i + 1));
+            }
+            if (in) {
+                if (nextIn) {
+                    if (eq) {
+                        previousIndex = i + 1;
+                    } else {
+                        if (nextEq) {
+                            if (i - previousIndex > 0) {
+                                adapter.getAdapter().notifyItemRangeChanged(previousIndex, i);
+                            } else {
+                                adapter.getAdapter().notifyItemChanged(previousIndex);
+                            }
+                            previousIndex = i + 1;
+                        }
+                    }
+                } else {
+                    if (!eq) {
+                        if (i - previousIndex > 0) {
+                            adapter.getAdapter().notifyItemRangeChanged(previousIndex, i);
+                        } else {
+                            adapter.getAdapter().notifyItemChanged(previousIndex);
+                        }
+                        previousIndex = i + 1;
+                    }
+                }
+            } else {
+                if (i == step - 1) {
+                    if (i >= olen)
+                        if (i - previousIndex > 0) {
+                            adapter.getAdapter().notifyItemRangeInserted(previousIndex + 1, step);
+                        } else {
+                            adapter.getAdapter().notifyItemInserted(previousIndex + 1);
+                        }
+                    if (i >= nlen) {
+                        if (i - previousIndex > 0) {
+                            adapter.getAdapter().notifyItemRangeRemoved(previousIndex, step);
+                            adapter.getAdapter().notifyItemRangeChanged(0, step);
+                        } else {
+                            adapter.getAdapter().notifyItemRemoved(previousIndex);
+                            adapter.getAdapter().notifyItemRangeChanged(0, step);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void clear(String name) {
         DataSource<R> ds = getOrCreateDs(name);
         if (ds != null) {
@@ -184,12 +263,14 @@ public class MultiDataSource<R extends MultiAbleData<R>, T extends AdapterDataSe
         }
         getSource().remove(name);
         if (name.equals(curData)) {
-            adapter.onDataCleared();
+            cachedData.clear();
+            adapter.getAdapter().notifyDataSetChanged();
         }
     }
 
     public void clearAll() {
-        adapter.onDataCleared();
         getSource().clear();
+        cachedData.clear();
+        adapter.getAdapter().notifyDataSetChanged();
     }
 }

@@ -12,12 +12,14 @@ object TeamManager {
     private var info: LoginInfo? = null
         get() {
             if (field == null) {
-                val s = SPUtils_Proxy.getLoginInfo("-")
-                val obj = JSON.parseObject(s, LoginInfo::class.java)
-                if (obj == null) {
-                    getCachedInfoError()
-                } else {
-                    field = obj
+                val s = SPUtils_Proxy.getLoginInfo("")
+                if (!s.isNullOrEmpty()) {
+                    val obj = JSON.parseObject(s, LoginInfo::class.java)
+                    if (obj == null) {
+                        getCachedInfoError()
+                    } else {
+                        field = obj
+                    }
                 }
             }
             return field

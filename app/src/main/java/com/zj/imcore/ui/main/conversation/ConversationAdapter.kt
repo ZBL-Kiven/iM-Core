@@ -69,14 +69,15 @@ class ConversationAdapter(val listener: (type: Int, data: DialogInfo, pos: Int, 
 
         fun initSubDetail() {
             MessageRepository.queryLast(data.dialogId) {
+                if (it == null) return@queryLast
                 mainHandler.post {
                     subDetail?.text = if (data.draft != null) "[草稿] ${data.draft}" else {
                         if (it.text.isNullOrEmpty()) "" else {
-                            "${if (it?.sendMsgState == SendMsgState.SENDING.type) "← " else ""}${it.text}"
+                            "${if (it.sendMsgState == SendMsgState.SENDING.type) "← " else ""}${it.text}"
                         }
                     }
                     time?.context?.let { ctx ->
-                        var ts = it?.localCreateTs ?: 0
+                        var ts = it.localCreateTs
                         if (ts <= 0) ts = data.updated
                         if (ts <= 0) ts = data.created
                         time.text = TimeLineInflateModel.getTimeString(ctx, ts)

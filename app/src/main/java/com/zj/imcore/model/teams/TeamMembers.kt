@@ -11,7 +11,7 @@ class TeamMembers {
     var name: String? = "" //"w",
     var type: String? = "" //"normal",
     var created: String? = "" //"2019-12-25T12:19:50Z",
-    var title: String? = "" //null,
+    var title: String? = null //null,
     var hidden: Boolean = false //false,
     var id: String = "" //2,
     var avatar: String? = "" //null,

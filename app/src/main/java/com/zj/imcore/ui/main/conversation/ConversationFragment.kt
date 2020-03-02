@@ -48,11 +48,7 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
             blv?.setMode(BaseLoadingView.DisplayMode.NORMAL)
             if (activity?.isFinishing == true) return@listen
             if (d != null) {
-                if (!payload.isNullOrEmpty()) {
-                    adapter?.data()?.set(d, normal, payload)
-                } else {
-                    adapter?.data()?.add(normal, d)
-                }
+                adapter?.data()?.set(d, normal, payload)
             }
             if (!lst.isNullOrEmpty()) {
                 adapter?.data()?.addAll(normal, lst)

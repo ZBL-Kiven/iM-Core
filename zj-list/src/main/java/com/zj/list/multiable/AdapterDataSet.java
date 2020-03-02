@@ -1,19 +1,14 @@
 package com.zj.list.multiable;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 interface AdapterDataSet<T> {
 
+    RecyclerView.Adapter<?> getAdapter();
+
     @Nullable
     List<T> onBuildData(List<T> data);
-
-    void onSourceSet(List<T> data, String name);
-
-    void onDataSet(T data, Object payloads);
-
-    void onDataChanged(List<T> data);
-
-    void onDataCleared();
 }

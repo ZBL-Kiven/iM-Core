@@ -6,7 +6,6 @@ import com.zj.list.utlis.QuickSort;
 
 import java.util.*;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
 class DataSource<T extends MultiAbleData<T>>{
 
     private boolean isDefault;
@@ -44,11 +43,7 @@ class DataSource<T extends MultiAbleData<T>>{
     }
 
     int maxPosition() {
-        return size() - 1;
-    }
-
-    int size() {
-        return data.size();
+        return data.size() - 1;
     }
 
     boolean contains(@NonNull T t) {

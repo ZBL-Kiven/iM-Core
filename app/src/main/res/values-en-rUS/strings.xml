@@ -77,6 +77,7 @@
     <string name="app_act_teams_error">couldn`t load teams info ,please try to relogin</string>
     <string name="app_act_teams_re_select_teams">get team info error ,please reselection the current team</string>
     <string name="app_act_teams_select">select a team in your joined ,to start FruitChat</string>
+    <string name="app_act_teams_relogin">relogin</string>
 
     <!--user info-->
     <string name="app_act_user_info_title_default">%s \'s \information</string>

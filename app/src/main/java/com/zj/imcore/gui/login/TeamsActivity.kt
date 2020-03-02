@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.zj.base.utils.DPUtils
+import com.zj.base.view.BaseTitleView
 import com.zj.imcore.R
 import com.zj.imcore.base.FCActivity
 import com.zj.imcore.base.FCApplication
@@ -26,15 +27,16 @@ class TeamsActivity : FCActivity() {
         }
     }
 
-
     override fun getContentId(): Int {
         return R.layout.app_act_teams_content
     }
 
+    private var titleView: BaseTitleView? = null
     private var gv: EmptyRecyclerView<TeamInfo>? = null
     private var blv: BaseLoadingView? = null
 
     override fun initView() {
+        titleView = find(R.id.app_act_teams_title)
         gv = find(R.id.app_act_teams_rv)
         blv = find(R.id.app_act_teams_blv)
     }
@@ -68,7 +70,10 @@ class TeamsActivity : FCActivity() {
     }
 
     override fun initListener() {
-
+        titleView?.setLeftClickListener {
+            this@TeamsActivity.startActivity(Intent(this@TeamsActivity, LoginActivity::class.java))
+            finish()
+        }
     }
 
     private fun startMainAct() {

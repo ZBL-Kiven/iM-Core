@@ -94,6 +94,8 @@
                 android:textColor="@color/app_base_text_color_666"
                 android:paddingStart="15dp"
                 android:paddingEnd="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="20dp"
                 android:lineSpacingExtra="2.4dp"
                 android:layout_below="@id/app_fragment_setting_ll_contact_bar"/>
     </RelativeLayout>

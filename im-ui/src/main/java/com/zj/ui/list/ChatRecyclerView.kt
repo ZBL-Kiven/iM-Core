@@ -70,10 +70,6 @@ abstract class ChatRecyclerView<T : MultiAbleData<T>> @JvmOverloads constructor(
                 }
             }
 
-            override fun isEqual(d1: T, d2: T): Boolean {
-                return !isNeedToRefresh(d1, d2)
-            }
-
             override fun initData(itemView: View, data: T, position: Int, payloads: MutableList<Any>?) {
                 (itemView as? ChatItemView)?.let {
                     val option = this@ChatRecyclerView.createOptions(data)

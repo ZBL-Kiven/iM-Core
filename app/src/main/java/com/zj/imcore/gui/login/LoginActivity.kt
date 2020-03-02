@@ -1,22 +1,17 @@
 package com.zj.imcore.gui.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
-import com.cf.im.db.databases.AppDatabase
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.zj.base.utils.storage.sp.SPUtils_Proxy
 import com.zj.imcore.R
 import com.zj.imcore.apis.user.UserApi
 import com.zj.imcore.base.FCApplication
 import com.zj.imcore.gui.login.pager.LoginViewPager
-import com.zj.imcore.model.login.LoginInfo
-import com.zj.imcore.ui.main.MainActivity
 import com.zj.imcore.ui.views.LoadingButton
 import retrofit2.HttpException
 import java.lang.Exception

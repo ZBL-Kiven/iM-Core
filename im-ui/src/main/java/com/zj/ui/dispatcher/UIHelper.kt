@@ -172,7 +172,7 @@ internal class UIOptions<T : Any, R : Any>(owner: LifecycleOwner, private val un
     }
 
     private fun postData(data: T?, lst: Collection<T>?, payload: String?) {
-        if (data == null) {
+        if (data == null && lst.isNullOrEmpty()) {
             log("why are you post a null data and also register a type-null observer?");return
         }
         executors.submit(UIExecutor(creator, data, lst, payload) { d, ls, p ->
