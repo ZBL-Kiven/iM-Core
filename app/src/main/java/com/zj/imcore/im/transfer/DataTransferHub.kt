@@ -6,6 +6,7 @@ import com.cf.im.db.repositorys.MessageRepository
 import com.zj.im.chat.enums.SendMsgState
 import com.zj.ui.dispatcher.UIStore
 import com.zj.model.chat.ProgressInfo
+import com.zj.ui.log
 
 object DataTransferHub {
 

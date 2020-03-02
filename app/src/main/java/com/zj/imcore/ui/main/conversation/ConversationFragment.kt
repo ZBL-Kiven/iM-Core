@@ -60,7 +60,7 @@ class ConversationFragment : BaseLinkageFragment(), ((Int, DialogInfo, Int, View
         blv?.setMode(BaseLoadingView.DisplayMode.LOADING)
         DataTransferHub.queryDialogInDb(TeamManager.getCurrentTeamId()) {
             mainHandler.post {
-                blv?.setMode(BaseLoadingView.DisplayMode.NO_DATA)
+                blv?.setMode(BaseLoadingView.DisplayMode.NO_DATA.delay(500))
             }
         }
     }

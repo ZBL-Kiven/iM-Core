@@ -6,10 +6,12 @@ import com.cf.im.db.repositorys.MessageRepository
 import com.zbl.api.BaseApi
 import com.zbl.api.base.BaseRetrofit
 import com.zj.base.utils.storage.sp.SPUtils_Proxy
+import com.zj.imcore.Constance
 import com.zj.ui.dispatcher.UIStore
 import com.zj.imcore.apis.APIs.getDefaultApi
 import com.zj.imcore.im.transfer.DialogTransfer
 import com.zj.imcore.im.transfer.MsgInfoTransfer
+import com.zj.imcore.model.member.EventMod
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 
@@ -29,7 +31,7 @@ object FetcherApi {
                 val dialogs = obj["dialogs"].toString()
                 SPUtils_Proxy.setDialogSyncSince(ts)
                 DialogRepository.insertOrUpdates(dialogs) {
-                    UIStore.postData(DialogTransfer.transform(it))
+                    UIStore.postData(EventMod(Constance.REG_RESULT_CONTANCT, "fetch dialogs"))
                     completed.invoke(true, null)
                 }
             } else {

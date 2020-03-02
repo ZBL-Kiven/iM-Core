@@ -15,7 +15,6 @@ import com.zj.cf.fragments.BaseLinkageFragment
 import com.zj.ui.dispatcher.addReceiveObserver
 import com.zj.imcore.Constance
 import com.zj.imcore.R
-import com.zj.imcore.model.GroupInfo
 import com.zj.imcore.model.member.EventMod
 import com.zj.imcore.model.member.contact.ContactGroupInfo
 import com.zj.imcore.ui.main.contact.group.GroupInfoActivity
